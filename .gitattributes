@@ -1,0 +1,3 @@
+# Preserve original bytes in Windows reference captures.
+docs/research/evidence/**/*.mof -text -diff
+docs/research/evidence/**/*.bin -text -diff

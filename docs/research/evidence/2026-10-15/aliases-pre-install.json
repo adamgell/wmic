@@ -1,0 +1,343 @@
+{
+  "Phase": "WMIC optional component installation in progress",
+  "ComputerName": "DESKTOP-N4H9E7R",
+  "AliasCount": 81,
+  "SchemaClasses": [
+    "MSFT_CliAlias",
+    "MSFT_CliConnection",
+    "MSFT_CliFormat",
+    "MSFT_CliParam",
+    "MSFT_CliProperty",
+    "MSFT_CliQualifier",
+    "MSFT_CliSeeAlso",
+    "MSFT_CliTranslateTable",
+    "MSFT_CliTranslateTableEntry",
+    "MSFT_CliVerb"
+  ],
+  "AliasMap": [
+    {
+      "FriendlyName": "Alias",
+      "Target": "Select * from Msft_CliAlias"
+    },
+    {
+      "FriendlyName": "BaseBoard",
+      "Target": "Select * from Win32_BaseBoard"
+    },
+    {
+      "FriendlyName": "BIOS",
+      "Target": "Select * from Win32_BIOS"
+    },
+    {
+      "FriendlyName": "BootConfig",
+      "Target": "Select * from Win32_BootConfiguration"
+    },
+    {
+      "FriendlyName": "CDROM",
+      "Target": "Select * from Win32_CDROMDrive"
+    },
+    {
+      "FriendlyName": "ComputerSystem",
+      "Target": "Select * from Win32_ComputerSystem"
+    },
+    {
+      "FriendlyName": "CPU",
+      "Target": "Select * from WIN32_PROCESSOR"
+    },
+    {
+      "FriendlyName": "CSProduct",
+      "Target": "Select * from Win32_ComputerSystemProduct"
+    },
+    {
+      "FriendlyName": "DataFile",
+      "Target": "Select * from CIM_DataFile"
+    },
+    {
+      "FriendlyName": "DCOMAPP",
+      "Target": "Select * from WIN32_DCOMApplication"
+    },
+    {
+      "FriendlyName": "DESKTOP",
+      "Target": "Select * from WIN32_DESKTOP"
+    },
+    {
+      "FriendlyName": "DesktopMonitor",
+      "Target": "Select * from WIN32_DESKTOPMONITOR"
+    },
+    {
+      "FriendlyName": "DeviceMemoryAddress",
+      "Target": "Select * from Win32_DeviceMemoryAddress"
+    },
+    {
+      "FriendlyName": "DiskDrive",
+      "Target": "Select * from Win32_DiskDrive"
+    },
+    {
+      "FriendlyName": "DiskQuota",
+      "Target": "Select * from Win32_DiskQuota"
+    },
+    {
+      "FriendlyName": "DMAChannel",
+      "Target": "Select * from Win32_DMAChannel"
+    },
+    {
+      "FriendlyName": "Environment",
+      "Target": "Select * from Win32_Environment"
+    },
+    {
+      "FriendlyName": "FSDir",
+      "Target": "Select * from Win32_Directory"
+    },
+    {
+      "FriendlyName": "Group",
+      "Target": "Select * from Win32_Group"
+    },
+    {
+      "FriendlyName": "IDECONTROLLER",
+      "Target": "Select * from Win32_IDEController"
+    },
+    {
+      "FriendlyName": "IRQ",
+      "Target": "Select * from Win32_IRQResource"
+    },
+    {
+      "FriendlyName": "Job",
+      "Target": "Select * from Win32_ScheduledJob"
+    },
+    {
+      "FriendlyName": "LoadOrder",
+      "Target": "Select * from Win32_LoadOrderGroup"
+    },
+    {
+      "FriendlyName": "LogicalDisk",
+      "Target": "Select * from Win32_LogicalDisk"
+    },
+    {
+      "FriendlyName": "LOGON",
+      "Target": "Select * from Win32_LogonSession"
+    },
+    {
+      "FriendlyName": "MEMCACHE",
+      "Target": "Select * from WIN32_CACHEMEMORY"
+    },
+    {
+      "FriendlyName": "MemoryChip",
+      "Target": "Select * from Win32_PhysicalMemory"
+    },
+    {
+      "FriendlyName": "MemPhysical",
+      "Target": "Select * from Win32_PhysicalMemoryArray"
+    },
+    {
+      "FriendlyName": "NetClient",
+      "Target": "Select * from WIN32_NetworkClient"
+    },
+    {
+      "FriendlyName": "NetLogin",
+      "Target": "Select * from Win32_NetworkLoginProfile"
+    },
+    {
+      "FriendlyName": "NetProtocol",
+      "Target": "Select * from Win32_NetworkProtocol"
+    },
+    {
+      "FriendlyName": "NetUse",
+      "Target": "Select * from Win32_NetworkConnection"
+    },
+    {
+      "FriendlyName": "NIC",
+      "Target": "Select * from Win32_NetworkAdapter"
+    },
+    {
+      "FriendlyName": "NICConfig",
+      "Target": "Select * from Win32_NetworkAdapterConfiguration"
+    },
+    {
+      "FriendlyName": "NTDOMAIN",
+      "Target": "Select * from Win32_NTDomain"
+    },
+    {
+      "FriendlyName": "NTEvent",
+      "Target": "Select * from Win32_NTLogEvent"
+    },
+    {
+      "FriendlyName": "NTEventLog",
+      "Target": "Select * from Win32_NTEventlogFile"
+    },
+    {
+      "FriendlyName": "OnBoardDevice",
+      "Target": "Select * from Win32_OnBoardDevice"
+    },
+    {
+      "FriendlyName": "OS",
+      "Target": "Select * from Win32_OperatingSystem"
+    },
+    {
+      "FriendlyName": "PageFile",
+      "Target": "Select * from Win32_PageFileUsage"
+    },
+    {
+      "FriendlyName": "PageFileSet",
+      "Target": "Select * from Win32_PageFileSetting"
+    },
+    {
+      "FriendlyName": "Partition",
+      "Target": "Select * from Win32_DiskPartition"
+    },
+    {
+      "FriendlyName": "Port",
+      "Target": "Select * from Win32_PortResource"
+    },
+    {
+      "FriendlyName": "PortConnector",
+      "Target": "Select * from Win32_PortConnector"
+    },
+    {
+      "FriendlyName": "Printer",
+      "Target": "Select * from Win32_Printer"
+    },
+    {
+      "FriendlyName": "PrinterConfig",
+      "Target": "Select * from Win32_PrinterConfiguration"
+    },
+    {
+      "FriendlyName": "PrintJob",
+      "Target": "Select * from Win32_PrintJob"
+    },
+    {
+      "FriendlyName": "Process",
+      "Target": "Select * from Win32_Process"
+    },
+    {
+      "FriendlyName": "Product",
+      "Target": "Select * from Win32_Product"
+    },
+    {
+      "FriendlyName": "QFE",
+      "Target": "Select * from Win32_QuickFixEngineering"
+    },
+    {
+      "FriendlyName": "QuotaSetting",
+      "Target": "Select * from Win32_QuotaSetting"
+    },
+    {
+      "FriendlyName": "RDAccount",
+      "Target": "Select * from Win32_TSAccount"
+    },
+    {
+      "FriendlyName": "RDNIC",
+      "Target": "Select * from Win32_TSNetworkAdapterSetting"
+    },
+    {
+      "FriendlyName": "RDPermissions",
+      "Target": "Select * from Win32_TSPermissionsSetting"
+    },
+    {
+      "FriendlyName": "RDToggle",
+      "Target": "Select * from Win32_TerminalServiceSetting"
+    },
+    {
+      "FriendlyName": "RecoverOS",
+      "Target": "Select * from Win32_OSRecoveryConfiguration"
+    },
+    {
+      "FriendlyName": "Registry",
+      "Target": "Select * from Win32_Registry"
+    },
+    {
+      "FriendlyName": "SCSICONTROLLER",
+      "Target": "Select * from Win32_SCSIController"
+    },
+    {
+      "FriendlyName": "Server",
+      "Target": "Select * from Win32_PerfRawData_PerfNet_Server"
+    },
+    {
+      "FriendlyName": "Service",
+      "Target": "Select * from Win32_Service"
+    },
+    {
+      "FriendlyName": "ShadowCopy",
+      "Target": "Select * from Win32_ShadowCopy"
+    },
+    {
+      "FriendlyName": "ShadowStorage",
+      "Target": "Select * from Win32_ShadowStorage"
+    },
+    {
+      "FriendlyName": "Share",
+      "Target": "Select * from Win32_Share"
+    },
+    {
+      "FriendlyName": "SoftwareElement",
+      "Target": "Select * from Win32_SoftwareElement"
+    },
+    {
+      "FriendlyName": "SoftwareFeature",
+      "Target": "Select * from Win32_SoftwareFeature"
+    },
+    {
+      "FriendlyName": "SoundDev",
+      "Target": "Select * from WIN32_SoundDevice"
+    },
+    {
+      "FriendlyName": "Startup",
+      "Target": "Select * from Win32_StartupCommand"
+    },
+    {
+      "FriendlyName": "SysAccount",
+      "Target": "Select * from Win32_SystemAccount"
+    },
+    {
+      "FriendlyName": "SysDriver",
+      "Target": "Select * from Win32_SystemDriver"
+    },
+    {
+      "FriendlyName": "SystemEnclosure",
+      "Target": "Select * from Win32_SystemEnclosure"
+    },
+    {
+      "FriendlyName": "SystemSlot",
+      "Target": "Select * from Win32_SystemSlot"
+    },
+    {
+      "FriendlyName": "TapeDrive",
+      "Target": "Select * from Win32_TapeDrive"
+    },
+    {
+      "FriendlyName": "Temperature",
+      "Target": "Select * from Win32_TemperatureProbe"
+    },
+    {
+      "FriendlyName": "TimeZone",
+      "Target": "Select * from Win32_TimeZone"
+    },
+    {
+      "FriendlyName": "UPS",
+      "Target": "Select * from Win32_UninterruptiblePowerSupply"
+    },
+    {
+      "FriendlyName": "UserAccount",
+      "Target": "Select * from Win32_UserAccount"
+    },
+    {
+      "FriendlyName": "Voltage",
+      "Target": "Select * from Win32_VoltageProbe"
+    },
+    {
+      "FriendlyName": "Volume",
+      "Target": "Select * from Win32_Volume"
+    },
+    {
+      "FriendlyName": "VolumeQuotaSetting",
+      "Target": "Select * from Win32_VolumeQuotaSetting"
+    },
+    {
+      "FriendlyName": "VolumeUserQuota",
+      "Target": "Select * from Win32_VolumeUserQuota"
+    },
+    {
+      "FriendlyName": "WMISet",
+      "Target": "Select * from Win32_WMISetting"
+    }
+  ]
+}

@@ -1,0 +1,92 @@
+
+class MSFT_CliAlias
+{
+	MSFT_CliConnection Connection;
+	String Description;
+	MSFT_CliFormat Formats[];
+	[key] STRING FriendlyName;
+	STRING PWhere;
+	MSFT_CliQualifier Qualifiers[];
+	STRING Target;
+	MSFT_CliVerb Verbs[];
+};
+
+
+class MSFT_CliConnection
+{
+	STRING Authority;
+	STRING Locale;
+	STRING NameSpace;
+	STRING Password;
+	STRING Server;
+	STRING User;
+};
+
+
+class MSFT_CliFormat
+{
+	STRING Format;
+	STRING Name;
+	MSFT_CliProperty Properties[];
+};
+
+
+class MSFT_CliParam
+{
+	STRING Default;
+	String Description;
+	BOOLEAN Optional;
+	STRING ParaId;
+	MSFT_CliQualifier Qualifiers[];
+	STRING Type;
+};
+
+
+class MSFT_CliProperty
+{
+	STRING Derivation;
+	String Description;
+	STRING Name;
+	MSFT_CliQualifier Qualifiers[];
+};
+
+
+class MSFT_CliQualifier
+{
+	STRING Name;
+	STRING QualifierValue[];
+};
+
+[association]
+class MSFT_CliSeeAlso
+{
+	String Description;
+	[key] MSFT_CliAlias ref Original;
+	[key] MSFT_CliAlias ref Related;
+};
+
+
+class MSFT_CliTranslateTable
+{
+	[key] string Name;
+	MSFT_CliTranslateTableEntry Tbl[];
+};
+
+[Abstract]
+class MSFT_CliTranslateTableEntry
+{
+	string FromValue;
+	string ToValue;
+};
+
+
+class MSFT_CliVerb
+{
+	STRING Derivation;
+	String Description;
+	STRING Name;
+	MSFT_CliParam Parameters[];
+	MSFT_CliQualifier Qualifiers[];
+	uint32 VerbType;
+	String Usage;
+};
