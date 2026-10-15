@@ -1,0 +1,103 @@
+{
+  "ProfileId": "wmic-10.0.26100.1-arm64-en-US-system-pipe",
+  "CaptureDate": "2026-10-15",
+  "TimeZone": "America/New_York",
+  "Transport": "Parallels Tools via prlctl exec; Windows PowerShell stdin for discovery only",
+  "ExecutionIdentity": "nt authority\\system",
+  "Environment": {
+    "ComputerName": "DESKTOP-N4H9E7R",
+    "Identity": "nt authority\\system",
+    "DisplayVersion": "25H2",
+    "Build": "26200",
+    "UBR": 8037,
+    "Architecture": "ARM64",
+    "Culture": "en-US",
+    "UICulture": "en-US",
+    "PipeOutputCodePage": 437,
+    "WmicFiles": [
+      {
+        "Path": "C:\\WINDOWS\\System32\\wbem\\WMIC.exe",
+        "Version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "Length": 517120,
+        "SHA256": "2EF794C4940AFEA56C6D6D3B9BC9E66965BC7333E79C5DCB2DEF3C0E36F0834C",
+        "PEMachine": "0xAA64",
+        "Signature": "Valid",
+        "Signer": "CN=Microsoft Windows, O=Microsoft Corporation, L=Redmond, S=Washington, C=US"
+      },
+      {
+        "Path": "C:\\WINDOWS\\SysWOW64\\wbem\\WMIC.exe",
+        "Version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "Length": 406528,
+        "SHA256": "4AFE43FF64AD20475D75D9816A269FC03E10C492033B67E60C9886F3512E900E",
+        "PEMachine": "0x014C",
+        "Signature": "Valid",
+        "Signer": "CN=Microsoft Windows, O=Microsoft Corporation, L=Redmond, S=Washington, C=US"
+      }
+    ],
+    "Resources": [
+      {
+        "Path": "C:\\WINDOWS\\System32\\wbem\\rawxml.xsl",
+        "Length": 623,
+        "SHA256": "D2ECB9C04A584489548A8F4FDFD656ABBC3F7F163083B007EFBE744368CE68F1"
+      },
+      {
+        "Path": "C:\\WINDOWS\\System32\\wbem\\texttable.xsl",
+        "Length": 6278,
+        "SHA256": "402ADC48C7A0BB166108C3BAD4B950F4E177B8E55C089540D2FD919E61C8E840"
+      },
+      {
+        "Path": "C:\\WINDOWS\\System32\\wbem\\textvaluelist.xsl",
+        "Length": 2766,
+        "SHA256": "D7F6A65E64534DD362E6A5D44C67C184A67627F7CFD0D69F6BA9E642A470AD57"
+      },
+      {
+        "Path": "C:\\WINDOWS\\System32\\wbem\\en-US\\csv.xsl",
+        "Length": 2496,
+        "SHA256": "CB88C3BC35334DE33B7548B98B4ECF83127A47BBF8407858FCF834D007FC655B"
+      },
+      {
+        "Path": "C:\\WINDOWS\\System32\\wbem\\en-US\\hform.xsl",
+        "Length": 4930,
+        "SHA256": "69BA30A8D4D2F44EEAABFFB9B629FBFA2B7E9B5486820DF33AB6115DF53E7BCE"
+      },
+      {
+        "Path": "C:\\WINDOWS\\System32\\wbem\\en-US\\htable.xsl",
+        "Length": 4594,
+        "SHA256": "50866E024E226986680B1C43C49FF105CCA03193F241A49A9351E634E4F8DF2D"
+      },
+      {
+        "Path": "C:\\WINDOWS\\System32\\wbem\\en-US\\mof.xsl",
+        "Length": 11386,
+        "SHA256": "9AE0FFF4D0DF14496E69D841963D5E8B3A13DB01E69BE4A2B24524CE8BA3C2A0"
+      },
+      {
+        "Path": "C:\\WINDOWS\\System32\\wbem\\en-US\\xml.xsl",
+        "Length": 1847,
+        "SHA256": "3F4A2D2ABCB9A652DA6E26A15F6B561C0F59B8A53644E23BE6886A80E015BF16"
+      },
+      {
+        "Path": "C:\\WINDOWS\\System32\\wbem\\xsl-mappings.xml",
+        "Length": 2866,
+        "SHA256": "C136476A60D3874A281E89AC4DBB814C692B40EC6A0BD34F3815A4CDA943FA77"
+      }
+    ]
+  },
+  "Installation": {
+    "Capability": [
+      {
+        "Name": "WMIC~~~~",
+        "State": "Installed"
+      }
+    ],
+    "DismExitStatus": 0,
+    "Command": "dism.exe /Online /Add-Capability /CapabilityName:WMIC~~~~ /NoRestart",
+    "AutomaticRestartDisabled": true
+  },
+  "SelectedExecutableSHA256": "2EF794C4940AFEA56C6D6D3B9BC9E66965BC7333E79C5DCB2DEF3C0E36F0834C",
+  "OutputMode": "redirected native pipes",
+  "PreliminaryCaseCount": 23,
+  "AliasMetadataMatchesEarlierCapture": true,
+  "PostInstallAliasCount": 81,
+  "PostInstallAliasSHA256": "225355073d5ea037e5bce16548e6f02a487efcadec41fceaa34953089eb41af3",
+  "CaptureLimit": "Preliminary ProcessStartInfo pipe captures with argument text preserved; console, file redirection, normal-user, remote, and other architectures are not established by these cases."
+}

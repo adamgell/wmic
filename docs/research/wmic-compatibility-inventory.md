@@ -31,8 +31,37 @@ properties of the Windows environment.
   [the evidence directory](evidence/2026-10-15/). These captures were taken
   while optional component installation was in progress, before validating
   an installed WMIC executable.
-- The user has indicated that installation of the WMIC optional component may
-  be needed. Component availability and installation are being checked.
+- The user indicated that installation of the WMIC optional component might
+  be needed. The advertised `WMIC~~~~` capability was installed through DISM
+  with `/NoRestart`; DISM returned success.
+- Microsoft-signed ARM64 and x86 executables are now present, both file version
+  `10.0.26100.1`. Nine native XSL/mapping resources were inventoried. See the
+  environment evidence for their paths, sizes, hashes and signature status.
+- The post-installation capability query reports `Installed`. The 81 alias
+  definitions are byte-identical to the earlier export.
+- Captured 23 preliminary native ARM64 pipe cases, preserving independent raw
+  stdout/stderr and full 32-bit process status. See
+  [the capture manifest](evidence/2026-10-15/pipe-capture.json) and
+  [the reference profile](evidence/2026-10-15/reference-profile.json).
+
+## Initial observed behaviors
+
+These observations apply to the recorded ARM64, en-US, SYSTEM, redirected-pipe
+profile. They do not establish console or explicit output-file encodings.
+
+| Case | Observed behavior |
+| --- | --- |
+| `os get Caption,Version` | Output lines end with `CR CR LF`, including trailing blank lines |
+| Reverse requested property order | `Version,Caption` yields the same output bytes as `Caption,Version` for this pair |
+| Case variants and direct `PATH` query | Selected equivalent queries produce identical output bytes |
+| Valid query with no matches | Process status `0`; stderr contains `No Instance(s) Available.`; stdout contains blank lines |
+| Invalid selected property | Process status `0x80041017`; stderr reports invalid query |
+| Missing direct-path class | Process status `0x80041002`; stderr reports not found |
+| Unknown alias | Process status `0xAC67`; stderr reports alias not found |
+| Unknown global switch | Process status `0xAC5D`; stderr reports invalid global switch |
+
+In particular, do not derive a process exit code solely from whether stderr
+contains text, and do not replace all CLI failures with a generic exit code.
 
 ## Command surface to enumerate
 

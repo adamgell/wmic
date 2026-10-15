@@ -1,0 +1,502 @@
+{
+  "ProfileId": "wmic-10.0.26100.1-arm64-en-US-system-pipe",
+  "Capability": [
+    {
+      "Name": "WMIC~~~~",
+      "State": "Installed"
+    }
+  ],
+  "ComputerName": "DESKTOP-N4H9E7R",
+  "Identity": "nt authority\\system",
+  "ExecutableSHA256": "2EF794C4940AFEA56C6D6D3B9BC9E66965BC7333E79C5DCB2DEF3C0E36F0834C",
+  "OutputMode": "redirected native pipes",
+  "Cases": [
+    {
+      "Id": "global-help",
+      "Executable": "C:\\WINDOWS\\System32\\wbem\\WMIC.exe",
+      "Arguments": "/?",
+      "ArgumentsUtf16Base64": "LwA/AA==",
+      "LaunchAPI": "System.Diagnostics.ProcessStartInfo",
+      "Stdin": "closed",
+      "State": "completed",
+      "ExitStatus": 0,
+      "DurationMs": 176,
+      "stdout": {
+        "file": "pipe-cases/global-help.stdout.bin",
+        "bytes": 7379,
+        "sha256": "1fc2344de7fe22b0b10891888dbed20494bffffb0e842c44953e6594fa0b50d5"
+      },
+      "stderr": {
+        "file": "pipe-cases/global-help.stderr.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "Id": "context",
+      "Executable": "C:\\WINDOWS\\System32\\wbem\\WMIC.exe",
+      "Arguments": "context",
+      "ArgumentsUtf16Base64": "YwBvAG4AdABlAHgAdAA=",
+      "LaunchAPI": "System.Diagnostics.ProcessStartInfo",
+      "Stdin": "closed",
+      "State": "completed",
+      "ExitStatus": 0,
+      "DurationMs": 81,
+      "stdout": {
+        "file": "pipe-cases/context.stdout.bin",
+        "bytes": 534,
+        "sha256": "762a6351bfd56046441bfe1ad07db3b896129415d69bba302f517f4635a6b567"
+      },
+      "stderr": {
+        "file": "pipe-cases/context.stderr.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "Id": "os-help",
+      "Executable": "C:\\WINDOWS\\System32\\wbem\\WMIC.exe",
+      "Arguments": "os /?",
+      "ArgumentsUtf16Base64": "bwBzACAALwA/AA==",
+      "LaunchAPI": "System.Diagnostics.ProcessStartInfo",
+      "Stdin": "closed",
+      "State": "completed",
+      "ExitStatus": 0,
+      "DurationMs": 95,
+      "stdout": {
+        "file": "pipe-cases/os-help.stdout.bin",
+        "bytes": 422,
+        "sha256": "0f33420f5c18f19d0f8e58bf5d561c149877ff9690beec31844405012301c991"
+      },
+      "stderr": {
+        "file": "pipe-cases/os-help.stderr.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "Id": "os-get-help",
+      "Executable": "C:\\WINDOWS\\System32\\wbem\\WMIC.exe",
+      "Arguments": "os get /?",
+      "ArgumentsUtf16Base64": "bwBzACAAZwBlAHQAIAAvAD8A",
+      "LaunchAPI": "System.Diagnostics.ProcessStartInfo",
+      "Stdin": "closed",
+      "State": "completed",
+      "ExitStatus": 0,
+      "DurationMs": 92,
+      "stdout": {
+        "file": "pipe-cases/os-get-help.stdout.bin",
+        "bytes": 4626,
+        "sha256": "74a70fbaf56110f62fbfcfc553896786ae0153ee7d3c8c6bc9552e20a4781205"
+      },
+      "stderr": {
+        "file": "pipe-cases/os-get-help.stderr.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "Id": "os-list-help",
+      "Executable": "C:\\WINDOWS\\System32\\wbem\\WMIC.exe",
+      "Arguments": "os list /?",
+      "ArgumentsUtf16Base64": "bwBzACAAbABpAHMAdAAgAC8APwA=",
+      "LaunchAPI": "System.Diagnostics.ProcessStartInfo",
+      "Stdin": "closed",
+      "State": "completed",
+      "ExitStatus": 0,
+      "DurationMs": 100,
+      "stdout": {
+        "file": "pipe-cases/os-list-help.stdout.bin",
+        "bytes": 2177,
+        "sha256": "c6cdda3df37f5040c4128b424777b5d97f167e8190ce85a08494190e34763e03"
+      },
+      "stderr": {
+        "file": "pipe-cases/os-list-help.stderr.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "Id": "process-call-help",
+      "Executable": "C:\\WINDOWS\\System32\\wbem\\WMIC.exe",
+      "Arguments": "process call /?",
+      "ArgumentsUtf16Base64": "cAByAG8AYwBlAHMAcwAgAGMAYQBsAGwAIAAvAD8A",
+      "LaunchAPI": "System.Diagnostics.ProcessStartInfo",
+      "Stdin": "closed",
+      "State": "completed",
+      "ExitStatus": 0,
+      "DurationMs": 93,
+      "stdout": {
+        "file": "pipe-cases/process-call-help.stdout.bin",
+        "bytes": 955,
+        "sha256": "42a039f83c3bd8e0800e3f93787c3dbd4b486e9a0ed21c5eeb182b917e860398"
+      },
+      "stderr": {
+        "file": "pipe-cases/process-call-help.stderr.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "Id": "os-get",
+      "Executable": "C:\\WINDOWS\\System32\\wbem\\WMIC.exe",
+      "Arguments": "os get Caption,Version",
+      "ArgumentsUtf16Base64": "bwBzACAAZwBlAHQAIABDAGEAcAB0AGkAbwBuACwAVgBlAHIAcwBpAG8AbgA=",
+      "LaunchAPI": "System.Diagnostics.ProcessStartInfo",
+      "Stdin": "closed",
+      "State": "completed",
+      "ExitStatus": 0,
+      "DurationMs": 190,
+      "stdout": {
+        "file": "pipe-cases/os-get.stdout.bin",
+        "bytes": 85,
+        "sha256": "96ed17ca852287fc0093bbe89f0502c8a09ed5fac1e7e02441b2af874ab32c83"
+      },
+      "stderr": {
+        "file": "pipe-cases/os-get.stderr.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "Id": "os-get-reversed",
+      "Executable": "C:\\WINDOWS\\System32\\wbem\\WMIC.exe",
+      "Arguments": "os get Version,Caption",
+      "ArgumentsUtf16Base64": "bwBzACAAZwBlAHQAIABWAGUAcgBzAGkAbwBuACwAQwBhAHAAdABpAG8AbgA=",
+      "LaunchAPI": "System.Diagnostics.ProcessStartInfo",
+      "Stdin": "closed",
+      "State": "completed",
+      "ExitStatus": 0,
+      "DurationMs": 116,
+      "stdout": {
+        "file": "pipe-cases/os-get-reversed.stdout.bin",
+        "bytes": 85,
+        "sha256": "96ed17ca852287fc0093bbe89f0502c8a09ed5fac1e7e02441b2af874ab32c83"
+      },
+      "stderr": {
+        "file": "pipe-cases/os-get-reversed.stderr.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "Id": "os-get-value",
+      "Executable": "C:\\WINDOWS\\System32\\wbem\\WMIC.exe",
+      "Arguments": "os get Caption,Version /value",
+      "ArgumentsUtf16Base64": "bwBzACAAZwBlAHQAIABDAGEAcAB0AGkAbwBuACwAVgBlAHIAcwBpAG8AbgAgAC8AdgBhAGwAdQBlAA==",
+      "LaunchAPI": "System.Diagnostics.ProcessStartInfo",
+      "Stdin": "closed",
+      "State": "completed",
+      "ExitStatus": 0,
+      "DurationMs": 116,
+      "stdout": {
+        "file": "pipe-cases/os-get-value.stdout.bin",
+        "bytes": 71,
+        "sha256": "f08b77e14f281f380bb9dae4b63a1faf115d80dfe913c920fa1d427742e7d610"
+      },
+      "stderr": {
+        "file": "pipe-cases/os-get-value.stderr.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "Id": "os-list-brief",
+      "Executable": "C:\\WINDOWS\\System32\\wbem\\WMIC.exe",
+      "Arguments": "os list brief",
+      "ArgumentsUtf16Base64": "bwBzACAAbABpAHMAdAAgAGIAcgBpAGUAZgA=",
+      "LaunchAPI": "System.Diagnostics.ProcessStartInfo",
+      "Stdin": "closed",
+      "State": "completed",
+      "ExitStatus": 0,
+      "DurationMs": 123,
+      "stdout": {
+        "file": "pipe-cases/os-list-brief.stdout.bin",
+        "bytes": 211,
+        "sha256": "21749cc9d3b44ab1882894f2a7ce9a93787071a533974747c467d3ee5cbc4c3b"
+      },
+      "stderr": {
+        "file": "pipe-cases/os-list-brief.stderr.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "Id": "os-get-csv",
+      "Executable": "C:\\WINDOWS\\System32\\wbem\\WMIC.exe",
+      "Arguments": "os get Caption,Version /format:csv",
+      "ArgumentsUtf16Base64": "bwBzACAAZwBlAHQAIABDAGEAcAB0AGkAbwBuACwAVgBlAHIAcwBpAG8AbgAgAC8AZgBvAHIAbQBhAHQAOgBjAHMAdgA=",
+      "LaunchAPI": "System.Diagnostics.ProcessStartInfo",
+      "Stdin": "closed",
+      "State": "completed",
+      "ExitStatus": 0,
+      "DurationMs": 103,
+      "stdout": {
+        "file": "pipe-cases/os-get-csv.stdout.bin",
+        "bytes": 80,
+        "sha256": "462ee9668c57e687d254961fb74f82e0e0126fe44d93cccc53a96fc949258e4b"
+      },
+      "stderr": {
+        "file": "pipe-cases/os-get-csv.stderr.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "Id": "os-get-rawxml",
+      "Executable": "C:\\WINDOWS\\System32\\wbem\\WMIC.exe",
+      "Arguments": "os get Caption,Version /format:rawxml",
+      "ArgumentsUtf16Base64": "bwBzACAAZwBlAHQAIABDAGEAcAB0AGkAbwBuACwAVgBlAHIAcwBpAG8AbgAgAC8AZgBvAHIAbQBhAHQAOgByAGEAdwB4AG0AbAA=",
+      "LaunchAPI": "System.Diagnostics.ProcessStartInfo",
+      "Stdin": "closed",
+      "State": "completed",
+      "ExitStatus": 0,
+      "DurationMs": 89,
+      "stdout": {
+        "file": "pipe-cases/os-get-rawxml.stdout.bin",
+        "bytes": 1036,
+        "sha256": "882dfe5189196a3786d6218a63b37a346fb487456ffe972440470d6d82e10dd2"
+      },
+      "stderr": {
+        "file": "pipe-cases/os-get-rawxml.stderr.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "Id": "os-get-mof",
+      "Executable": "C:\\WINDOWS\\System32\\wbem\\WMIC.exe",
+      "Arguments": "os get Caption,Version /format:mof",
+      "ArgumentsUtf16Base64": "bwBzACAAZwBlAHQAIABDAGEAcAB0AGkAbwBuACwAVgBlAHIAcwBpAG8AbgAgAC8AZgBvAHIAbQBhAHQAOgBtAG8AZgA=",
+      "LaunchAPI": "System.Diagnostics.ProcessStartInfo",
+      "Stdin": "closed",
+      "State": "completed",
+      "ExitStatus": 0,
+      "DurationMs": 102,
+      "stdout": {
+        "file": "pipe-cases/os-get-mof.stdout.bin",
+        "bytes": 841,
+        "sha256": "fb97a4bb9a365187c4008b247eea19811870fc99c46ab9a354f23c494ce8a5d9"
+      },
+      "stderr": {
+        "file": "pipe-cases/os-get-mof.stderr.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "Id": "os-get-list",
+      "Executable": "C:\\WINDOWS\\System32\\wbem\\WMIC.exe",
+      "Arguments": "os get Caption,Version /format:list",
+      "ArgumentsUtf16Base64": "bwBzACAAZwBlAHQAIABDAGEAcAB0AGkAbwBuACwAVgBlAHIAcwBpAG8AbgAgAC8AZgBvAHIAbQBhAHQAOgBsAGkAcwB0AA==",
+      "LaunchAPI": "System.Diagnostics.ProcessStartInfo",
+      "Stdin": "closed",
+      "State": "completed",
+      "ExitStatus": 0,
+      "DurationMs": 98,
+      "stdout": {
+        "file": "pipe-cases/os-get-list.stdout.bin",
+        "bytes": 71,
+        "sha256": "f08b77e14f281f380bb9dae4b63a1faf115d80dfe913c920fa1d427742e7d610"
+      },
+      "stderr": {
+        "file": "pipe-cases/os-get-list.stderr.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "Id": "os-casefold",
+      "Executable": "C:\\WINDOWS\\System32\\wbem\\WMIC.exe",
+      "Arguments": "OS GeT cApTiOn,vErSiOn",
+      "ArgumentsUtf16Base64": "TwBTACAARwBlAFQAIABjAEEAcABUAGkATwBuACwAdgBFAHIAUwBpAE8AbgA=",
+      "LaunchAPI": "System.Diagnostics.ProcessStartInfo",
+      "Stdin": "closed",
+      "State": "completed",
+      "ExitStatus": 0,
+      "DurationMs": 98,
+      "stdout": {
+        "file": "pipe-cases/os-casefold.stdout.bin",
+        "bytes": 85,
+        "sha256": "96ed17ca852287fc0093bbe89f0502c8a09ed5fac1e7e02441b2af874ab32c83"
+      },
+      "stderr": {
+        "file": "pipe-cases/os-casefold.stderr.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "Id": "path-os-get",
+      "Executable": "C:\\WINDOWS\\System32\\wbem\\WMIC.exe",
+      "Arguments": "path Win32_OperatingSystem get Caption,Version",
+      "ArgumentsUtf16Base64": "cABhAHQAaAAgAFcAaQBuADMAMgBfAE8AcABlAHIAYQB0AGkAbgBnAFMAeQBzAHQAZQBtACAAZwBlAHQAIABDAGEAcAB0AGkAbwBuACwAVgBlAHIAcwBpAG8AbgA=",
+      "LaunchAPI": "System.Diagnostics.ProcessStartInfo",
+      "Stdin": "closed",
+      "State": "completed",
+      "ExitStatus": 0,
+      "DurationMs": 105,
+      "stdout": {
+        "file": "pipe-cases/path-os-get.stdout.bin",
+        "bytes": 85,
+        "sha256": "96ed17ca852287fc0093bbe89f0502c8a09ed5fac1e7e02441b2af874ab32c83"
+      },
+      "stderr": {
+        "file": "pipe-cases/path-os-get.stderr.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "Id": "os-where",
+      "Executable": "C:\\WINDOWS\\System32\\wbem\\WMIC.exe",
+      "Arguments": "os where \"Version like '10.%'\" get Caption,Version",
+      "ArgumentsUtf16Base64": "bwBzACAAdwBoAGUAcgBlACAAIgBWAGUAcgBzAGkAbwBuACAAbABpAGsAZQAgACcAMQAwAC4AJQAnACIAIABnAGUAdAAgAEMAYQBwAHQAaQBvAG4ALABWAGUAcgBzAGkAbwBuAA==",
+      "LaunchAPI": "System.Diagnostics.ProcessStartInfo",
+      "Stdin": "closed",
+      "State": "completed",
+      "ExitStatus": 0,
+      "DurationMs": 131,
+      "stdout": {
+        "file": "pipe-cases/os-where.stdout.bin",
+        "bytes": 85,
+        "sha256": "96ed17ca852287fc0093bbe89f0502c8a09ed5fac1e7e02441b2af874ab32c83"
+      },
+      "stderr": {
+        "file": "pipe-cases/os-where.stderr.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "Id": "os-empty",
+      "Executable": "C:\\WINDOWS\\System32\\wbem\\WMIC.exe",
+      "Arguments": "os where \"Version='__WMIC_RESEARCH_NO_MATCH__'\" get Caption",
+      "ArgumentsUtf16Base64": "bwBzACAAdwBoAGUAcgBlACAAIgBWAGUAcgBzAGkAbwBuAD0AJwBfAF8AVwBNAEkAQwBfAFIARQBTAEUAQQBSAEMASABfAE4ATwBfAE0AQQBUAEMASABfAF8AJwAiACAAZwBlAHQAIABDAGEAcAB0AGkAbwBuAA==",
+      "LaunchAPI": "System.Diagnostics.ProcessStartInfo",
+      "Stdin": "closed",
+      "State": "completed",
+      "ExitStatus": 0,
+      "DurationMs": 107,
+      "stdout": {
+        "file": "pipe-cases/os-empty.stdout.bin",
+        "bytes": 6,
+        "sha256": "44d77e47b3618da142fc59ae22795fb2005824045758fa4f4dbbc64d9ab44453"
+      },
+      "stderr": {
+        "file": "pipe-cases/os-empty.stderr.bin",
+        "bytes": 28,
+        "sha256": "0356a869fc7e6495bac33303b002935c317166d0ea5d403be162573cf01055d8"
+      }
+    },
+    {
+      "Id": "alias-os-brief",
+      "Executable": "C:\\WINDOWS\\System32\\wbem\\WMIC.exe",
+      "Arguments": "alias os list brief",
+      "ArgumentsUtf16Base64": "YQBsAGkAYQBzACAAbwBzACAAbABpAHMAdAAgAGIAcgBpAGUAZgA=",
+      "LaunchAPI": "System.Diagnostics.ProcessStartInfo",
+      "Stdin": "closed",
+      "State": "completed",
+      "ExitStatus": 0,
+      "DurationMs": 105,
+      "stdout": {
+        "file": "pipe-cases/alias-os-brief.stdout.bin",
+        "bytes": 127,
+        "sha256": "4a7de465fb018d2cf9591e455c704bbadae469abc3a45e9a949bae951c78e707"
+      },
+      "stderr": {
+        "file": "pipe-cases/alias-os-brief.stderr.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "Id": "error-property",
+      "Executable": "C:\\WINDOWS\\System32\\wbem\\WMIC.exe",
+      "Arguments": "os get WmicResearchPropertyDoesNotExist",
+      "ArgumentsUtf16Base64": "bwBzACAAZwBlAHQAIABXAG0AaQBjAFIAZQBzAGUAYQByAGMAaABQAHIAbwBwAGUAcgB0AHkARABvAGUAcwBOAG8AdABFAHgAaQBzAHQA",
+      "LaunchAPI": "System.Diagnostics.ProcessStartInfo",
+      "Stdin": "closed",
+      "State": "completed",
+      "ExitStatus": 2147749911,
+      "DurationMs": 111,
+      "stdout": {
+        "file": "pipe-cases/error-property.stdout.bin",
+        "bytes": 6,
+        "sha256": "44d77e47b3618da142fc59ae22795fb2005824045758fa4f4dbbc64d9ab44453"
+      },
+      "stderr": {
+        "file": "pipe-cases/error-property.stderr.bin",
+        "bytes": 64,
+        "sha256": "1f57dbbd9635b184972a5d57b4bbaa8ab74dac051d3dfdbf93d95823a5d5ccea"
+      }
+    },
+    {
+      "Id": "error-class",
+      "Executable": "C:\\WINDOWS\\System32\\wbem\\WMIC.exe",
+      "Arguments": "path WmicResearchClassDoesNotExist get Name",
+      "ArgumentsUtf16Base64": "cABhAHQAaAAgAFcAbQBpAGMAUgBlAHMAZQBhAHIAYwBoAEMAbABhAHMAcwBEAG8AZQBzAE4AbwB0AEUAeABpAHMAdAAgAGcAZQB0ACAATgBhAG0AZQA=",
+      "LaunchAPI": "System.Diagnostics.ProcessStartInfo",
+      "Stdin": "closed",
+      "State": "completed",
+      "ExitStatus": 2147749890,
+      "DurationMs": 176,
+      "stdout": {
+        "file": "pipe-cases/error-class.stdout.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "file": "pipe-cases/error-class.stderr.bin",
+        "bytes": 35,
+        "sha256": "6846bf4365133830ac9edea65d405015cf6d7020bd1478aeb25544edb8eaedca"
+      }
+    },
+    {
+      "Id": "error-alias",
+      "Executable": "C:\\WINDOWS\\System32\\wbem\\WMIC.exe",
+      "Arguments": "WmicResearchAliasDoesNotExist get Name",
+      "ArgumentsUtf16Base64": "VwBtAGkAYwBSAGUAcwBlAGEAcgBjAGgAQQBsAGkAYQBzAEQAbwBlAHMATgBvAHQARQB4AGkAcwB0ACAAZwBlAHQAIABOAGEAbQBlAA==",
+      "LaunchAPI": "System.Diagnostics.ProcessStartInfo",
+      "Stdin": "closed",
+      "State": "completed",
+      "ExitStatus": 44135,
+      "DurationMs": 86,
+      "stdout": {
+        "file": "pipe-cases/error-alias.stdout.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "file": "pipe-cases/error-alias.stderr.bin",
+        "bytes": 51,
+        "sha256": "a27e09461b93c74bd6660fc75c0d798411f42f62e0eae7cb16e78fea5b822178"
+      }
+    },
+    {
+      "Id": "error-switch",
+      "Executable": "C:\\WINDOWS\\System32\\wbem\\WMIC.exe",
+      "Arguments": "/wmic_research_invalid:1 os get Caption",
+      "ArgumentsUtf16Base64": "LwB3AG0AaQBjAF8AcgBlAHMAZQBhAHIAYwBoAF8AaQBuAHYAYQBsAGkAZAA6ADEAIABvAHMAIABnAGUAdAAgAEMAYQBwAHQAaQBvAG4A",
+      "LaunchAPI": "System.Diagnostics.ProcessStartInfo",
+      "Stdin": "closed",
+      "State": "completed",
+      "ExitStatus": 44125,
+      "DurationMs": 74,
+      "stdout": {
+        "file": "pipe-cases/error-switch.stdout.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "file": "pipe-cases/error-switch.stderr.bin",
+        "bytes": 25,
+        "sha256": "1edf8f8f0d529fde2b0228e74e7e4eab15149496b64ee3bb8acbb15d1978f220"
+      }
+    }
+  ],
+  "PostInstallAliasCount": 81,
+  "PostInstallAliasSHA256": "225355073d5ea037e5bce16548e6f02a487efcadec41fceaa34953089eb41af3",
+  "PostInstallAliasBytes": 1173509,
+  "AliasMetadataMatchesEarlierCapture": true
+}

@@ -34,3 +34,35 @@ The original WMIC executable was absent at the initial environment check.
 
 The evidence is local research material. No remote repository or publication
 destination has been configured for this project.
+
+## Installed reference and preliminary behavior captures
+
+DISM completed the `WMIC~~~~` installation successfully with `/NoRestart`.
+The subsequent capability query reports `Installed`. Original Microsoft-signed
+ARM64 and x86 WMIC executables are present, both version `10.0.26100.1`.
+`reference-profile.json` records their hashes, PE architectures, signature
+status, environment, resource inventory, and the installation result.
+`environment-during-install.json` retains the earlier executable/resource
+discovery exactly as recorded while servicing was finishing.
+
+`pipe-capture.json` describes 23 native ARM64 invocations and references 46
+raw files under `pipe-cases/`. The original executable was launched through
+`System.Diagnostics.ProcessStartInfo` with redirected native stdout/stderr;
+their base streams were drained independently into memory and base64-encoded
+before transport. Stdin was closed. The argument string and its UTF-16 bytes
+are recorded; a canonical raw-command-line capture tool has not yet been
+implemented. Each raw stream has a recorded size and SHA-256.
+
+All 23 processes completed within the probe's 20-second per-case bound; no
+timeouts occurred. Nineteen returned zero and four returned the recorded
+nonzero Windows statuses. A valid query returning no instances is among the
+zero-status cases even though its stderr contains a message. These counts
+describe original WMIC behavior, not replacement tests passing.
+
+After installation, the alias count remained 81 and its serialized MOF hash
+remained `225355073d5ea037e5bce16548e6f02a487efcadec41fceaa34953089eb41af3`.
+The complete export is therefore not duplicated under a post-install filename.
+
+Only the native ARM64 executable has been exercised by this initial case set.
+Console output, shell file redirection, x86/x64 behavior, normal-user execution,
+remote connections, and write operations have not been established by it.

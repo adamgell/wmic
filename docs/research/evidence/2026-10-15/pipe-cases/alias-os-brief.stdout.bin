@@ -1,0 +1,3 @@
+FriendlyName  PWhere  Target                               
+OS                    Select * from Win32_OperatingSystem  
+

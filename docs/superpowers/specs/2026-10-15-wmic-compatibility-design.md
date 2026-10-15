@@ -2,9 +2,9 @@
 
 Date: 2026-10-15, America/New_York.
 
-Status: proposed written specification, following approval of the architecture.
-Implementation has not started. Written-specification review remains required
-before the implementation plan is prepared.
+Status: architecture and written specification approved by the user on
+2026-10-15. Implementation has not started. The implementation plan is being
+prepared for review and execution-method selection.
 
 ## Intended outcome
 
@@ -44,10 +44,12 @@ yet been validated for this project.
 
 Initial inspection found the WMIC executable absent but the `root\cli`
 repository present. It contains 81 alias definitions and 10 `MSFT_Cli*` schema
-classes. The user indicated that WMIC installation might be necessary, and
-installation of the exact advertised `WMIC~~~~` capability is in progress with
-automatic restart disabled. Installation success, executable identity, and
-resources must be verified before treating it as a behavioral reference.
+classes. Installation of the exact advertised `WMIC~~~~` capability completed
+successfully with automatic restart disabled. Microsoft-signed ARM64 and x86
+executables are present, both file version `10.0.26100.1`, with nine XSL/mapping
+resources found in the inspected native WBEM locations. Executable hashes and
+PE architectures are recorded in the reference evidence. Behavioral capture
+uses explicit executable paths and remains separate from installation success.
 
 Pin each reference profile by executable SHA-256, file version, PE architecture,
 Windows build, locale, account, and resource inventory. Documentation describes
@@ -365,7 +367,8 @@ the discovered surface and primary documentation. The
 
 Measurements still needed before the associated implementations are accepted:
 
-- Installed executable identity and complete help/resource surface.
+- Complete contextual help/resource behavior beyond the initial identity and
+  resource inventory.
 - Argument parsing, alias/switch precedence, and derived-verb semantics.
 - Destination-specific encodings and format/XML/XSL details.
 - Reference differences across normal-user versus SYSTEM execution.
