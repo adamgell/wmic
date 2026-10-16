@@ -58,3 +58,18 @@ pub fn listener_port() -> u16 {
 pub fn wide(text: &str) -> WideText {
     text.into()
 }
+
+pub mod catalog;
+pub mod client;
+pub mod convert;
+pub mod fault;
+pub mod manage;
+pub mod parse;
+pub mod path;
+pub mod record;
+pub mod soap;
+#[cfg(target_os = "macos")]
+pub use crate::backend::macos::schema;
+#[cfg(not(target_os = "macos"))]
+#[path = "../macos/schema.rs"]
+pub mod schema;

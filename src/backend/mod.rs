@@ -68,12 +68,14 @@ pub trait Management {
 mod convert;
 pub use convert::*;
 #[cfg(target_os = "macos")]
+pub mod dispatch;
+#[cfg(target_os = "macos")]
 pub mod macos;
-#[cfg(not(windows))]
-pub mod wsman;
 #[cfg(windows)]
 pub mod windows;
 mod wql;
+#[cfg(not(windows))]
+pub mod wsman;
 pub use wql::*;
 
 pub mod methods;
