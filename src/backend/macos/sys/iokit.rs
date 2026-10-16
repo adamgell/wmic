@@ -16,7 +16,7 @@ use std::ffi::CString;
 const DEFAULT_PORT: u32 = 0;
 
 /// Owned IORegistry entry, released on drop.
-pub struct Entry(io_object_t);
+pub struct Entry(pub(super) io_object_t);
 
 impl Drop for Entry {
     fn drop(&mut self) {
