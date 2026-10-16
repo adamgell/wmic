@@ -162,3 +162,10 @@ mod live {
         assert_eq!(command.cim_type, 8);
     }
 }
+#[test]
+fn uint32_retains_unsigned_bits_from_automation_i4() {
+    assert_eq!(
+        convert_value(AutomationValue::Signed(-1), 19).unwrap(),
+        CimValue::Uint32(u32::MAX)
+    );
+}

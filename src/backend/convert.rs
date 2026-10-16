@@ -50,7 +50,12 @@ pub fn convert_value(v: AutomationValue, ty: u32) -> Result<CimValue, Conversion
         16 => integer!(Sint8, i8),
         17 => integer!(Uint8, u8),
         18 => integer!(Uint16, u16),
-        19 => integer!(Uint32, u32),
+        19 => match v {
+            AutomationValue::Signed(n) if i32::try_from(n).is_ok() => {
+                Ok(CimValue::Uint32(n as i32 as u32))
+            }
+            _ => integer!(Uint32, u32),
+        },
         20 => integer!(Sint64, i64),
         21 => integer!(Uint64, u64),
         103 => integer!(Char16, u16),

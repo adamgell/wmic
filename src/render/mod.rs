@@ -124,7 +124,14 @@ pub fn render(input: RenderRequest<'_>) -> Result<RenderedOutput, RenderError> {
     })
 }
 pub fn render_parse_error(e: &ParseError) -> RenderedOutput {
-    diagnostic::text(&e.message, e.token.as_ref())
+    diagnostic::text(
+        &e.message,
+        if e.code == 0xABFD {
+            e.token.as_ref()
+        } else {
+            None
+        },
+    )
 }
 pub fn render_resolve_error(e: &crate::alias::ResolveError) -> RenderedOutput {
     diagnostic::text(&e.message, e.token.as_ref())

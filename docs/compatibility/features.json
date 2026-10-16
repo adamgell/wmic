@@ -70,29 +70,29 @@
       "id": "os-get",
       "documented": true,
       "observed": true,
-      "implemented": false,
-      "verified": false
+      "implemented": true,
+      "verified": true
     },
     {
       "id": "os-get-reversed",
       "documented": false,
       "observed": true,
-      "implemented": false,
-      "verified": false
+      "implemented": true,
+      "verified": true
     },
     {
       "id": "os-get-value",
       "documented": true,
       "observed": true,
-      "implemented": false,
-      "verified": false
+      "implemented": true,
+      "verified": true
     },
     {
       "id": "os-list-brief",
       "documented": true,
       "observed": true,
-      "implemented": false,
-      "verified": false
+      "implemented": true,
+      "verified": true
     },
     {
       "id": "os-get-csv",
@@ -119,71 +119,71 @@
       "id": "os-get-list",
       "documented": true,
       "observed": true,
-      "implemented": false,
-      "verified": false
+      "implemented": true,
+      "verified": true
     },
     {
       "id": "os-casefold",
       "documented": false,
       "observed": true,
-      "implemented": false,
-      "verified": false
+      "implemented": true,
+      "verified": true
     },
     {
       "id": "path-os-get",
       "documented": true,
       "observed": true,
-      "implemented": false,
-      "verified": false
+      "implemented": true,
+      "verified": true
     },
     {
       "id": "os-where",
       "documented": true,
       "observed": true,
-      "implemented": false,
-      "verified": false
+      "implemented": true,
+      "verified": true
     },
     {
       "id": "os-empty",
       "documented": true,
       "observed": true,
-      "implemented": false,
-      "verified": false
+      "implemented": true,
+      "verified": true
     },
     {
       "id": "alias-os-brief",
       "documented": true,
       "observed": true,
-      "implemented": false,
-      "verified": false
+      "implemented": true,
+      "verified": true
     },
     {
       "id": "error-property",
       "documented": false,
       "observed": true,
-      "implemented": false,
-      "verified": false
+      "implemented": true,
+      "verified": true
     },
     {
       "id": "error-class",
       "documented": false,
       "observed": true,
-      "implemented": false,
-      "verified": false
+      "implemented": true,
+      "verified": true
     },
     {
       "id": "error-alias",
       "documented": false,
       "observed": true,
-      "implemented": false,
-      "verified": false
+      "implemented": true,
+      "verified": true
     },
     {
       "id": "error-switch",
       "documented": false,
       "observed": true,
-      "implemented": false,
-      "verified": false
+      "implemented": true,
+      "verified": true
     }
   ],
   "tooling": {
@@ -193,7 +193,7 @@
     "reference_cases": 23,
     "help_cases": 344,
     "syntax_cases": 19,
-    "replacement_implemented": false
+    "replacement_implemented": true
   },
   "global_switches": [
     {
@@ -887,7 +887,7 @@
     },
     "native_backend": {
       "implemented": true,
-      "portable_tests": 5,
+      "portable_tests": 6,
       "native_tests": 3,
       "native_profile": "ARM64 en-US SYSTEM",
       "operations_verified": [
@@ -898,7 +898,11 @@
       "other_operations": "pending"
     },
     "executable": {
-      "implemented": false
+      "implemented": true,
+      "native_basic_cases_passed": 14,
+      "native_shell_cases_passed": 3,
+      "profile": "ARM64 en-US SYSTEM",
+      "remaining_corpus_differences": 9
     }
   }
 }

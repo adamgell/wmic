@@ -203,7 +203,7 @@ later operations must return a tracked unsupported result until implemented.
 Staged artifacts live under `C:\ProgramData\WmicCompat\artifacts\<SHA256>\`.
 The staging tool verifies the file hash and never overwrites the original WMIC.
 
-- [ ] Add `unknown_switch_is_not_ignored`, `empty_result_keeps_reference_status`, `quoted_wql_reaches_backend_unchanged`, and `stderr_is_not_merged_into_stdout` using a recording backend/sink. Assert resolved operations, bytes and `u32` process status separately.
+- [x] Add `unknown_switch_is_not_ignored`, `empty_result_keeps_reference_status`, `quoted_wql_reaches_backend_unchanged`, and `stderr_is_not_merged_into_stdout` using a recording backend/sink. Assert resolved operations, bytes and `u32` process status separately.
 
   ```rust
   assert_eq!(unknown_switch.exit_status, 0xAC5D);
@@ -211,9 +211,9 @@ The staging tool verifies the file hash and never overwrites the original WMIC.
   assert_eq!(captured_stderr.as_slice(), b"Invalid Global Switch.\r\r\n");
   ```
 
-- [ ] Run `cargo test --test session --test conformance`; verify the new execution cases fail before orchestration is implemented.
-- [ ] Wire parser, resolver, backend and renderer. Use the correct Windows API for the full 32-bit exit code. Provide an explicit unsupported-platform result on non-Windows while keeping portable tests available.
-- [ ] Cross-build ARM64, stage only the test-owned executable, and run Task 1's query cases against both executables. Run real `cmd.exe`/batch and PowerShell cases as well as direct launch. Expected: stage-case parity with all mismatches reported. Commit the working partial CLI as `feat: run native WMIC-compatible local query commands`.
+- [x] Run `cargo test --test session --test conformance`; verify the new execution cases fail before orchestration is implemented.
+- [x] Wire parser, resolver, backend and renderer. Use the correct Windows API for the full 32-bit exit code. Provide an explicit unsupported-platform result on non-Windows while keeping portable tests available.
+- [x] Cross-build ARM64, stage only the test-owned executable, and run Task 1's query cases against both executables. Run real `cmd.exe`/batch and PowerShell cases as well as direct launch. Expected: stage-case parity with all mismatches reported. Commit the working partial CLI as `feat: run native WMIC-compatible local query commands`.
 
 ## Task 7: remote settings and ordered multi-node execution — Stage 2
 

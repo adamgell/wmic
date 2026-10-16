@@ -1,0 +1,85 @@
+{
+  "profile": {
+    "role": "candidate",
+    "executable": "C:\\ProgramData\\WmicCompat\\artifacts\\08B9133590258FBB2D8368DF1EACFEB3344BB878065494FCAD59B2C3DEA73506\\wmic.exe",
+    "executable_sha256": "08B9133590258FBB2D8368DF1EACFEB3344BB878065494FCAD59B2C3DEA73506",
+    "version": null,
+    "signature": "NotSigned",
+    "computer": "DESKTOP-N4H9E7R",
+    "identity": "NT AUTHORITY\\SYSTEM",
+    "launcher_architecture": "ARM64",
+    "culture": "en-US",
+    "ui_culture": "en-US",
+    "ansi_codepage": 1252,
+    "oem_codepage": 437,
+    "console_output_codepage": 437,
+    "directory": "C:\\",
+    "launch_api": "CreateProcessW",
+    "output_mode": "native pipes"
+  },
+  "matched_cases": [
+    "os-get",
+    "os-get-reversed",
+    "os-get-value",
+    "os-list-brief",
+    "os-get-list",
+    "os-casefold",
+    "path-os-get",
+    "os-where",
+    "os-empty",
+    "alias-os-brief",
+    "error-property",
+    "error-class",
+    "error-alias",
+    "error-switch"
+  ],
+  "pending_cases": {
+    "global-help": [
+      "global-help: exit_status: 0 != 2147749900",
+      "global-help: stdout: 7379 != 0 bytes; first difference at 0",
+      "global-help: stderr: 0 != 16 bytes; first difference at 0"
+    ],
+    "context": [
+      "context: exit_status: 0 != 2147749900",
+      "context: stdout: 534 != 0 bytes; first difference at 0",
+      "context: stderr: 0 != 16 bytes; first difference at 0"
+    ],
+    "os-help": [
+      "os-help: exit_status: 0 != 2147749900",
+      "os-help: stdout: 422 != 0 bytes; first difference at 0",
+      "os-help: stderr: 0 != 16 bytes; first difference at 0"
+    ],
+    "os-get-help": [
+      "os-get-help: exit_status: 0 != 2147749900",
+      "os-get-help: stdout: 4626 != 0 bytes; first difference at 0",
+      "os-get-help: stderr: 0 != 16 bytes; first difference at 0"
+    ],
+    "os-list-help": [
+      "os-list-help: exit_status: 0 != 2147749900",
+      "os-list-help: stdout: 2177 != 0 bytes; first difference at 0",
+      "os-list-help: stderr: 0 != 16 bytes; first difference at 0"
+    ],
+    "process-call-help": [
+      "process-call-help: exit_status: 0 != 2147749900",
+      "process-call-help: stdout: 955 != 0 bytes; first difference at 0",
+      "process-call-help: stderr: 0 != 16 bytes; first difference at 0"
+    ],
+    "os-get-csv": [
+      "os-get-csv: exit_status: 0 != 44210",
+      "os-get-csv: stdout: 80 != 0 bytes; first difference at 0",
+      "os-get-csv: stderr: 0 != 37 bytes; first difference at 0"
+    ],
+    "os-get-rawxml": [
+      "os-get-rawxml: exit_status: 0 != 44210",
+      "os-get-rawxml: stdout: 1028 != 0 bytes; first difference at 0",
+      "os-get-rawxml: stderr: 0 != 37 bytes; first difference at 0"
+    ],
+    "os-get-mof": [
+      "os-get-mof: exit_status: 0 != 44210",
+      "os-get-mof: stdout: 841 != 0 bytes; first difference at 0",
+      "os-get-mof: stderr: 0 != 37 bytes; first difference at 0"
+    ]
+  },
+  "scope": "Task 6 basic local queries; help/context and structured formats belong to later tasks",
+  "shell_cases": "shell-conformance.json"
+}
