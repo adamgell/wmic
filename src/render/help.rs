@@ -277,7 +277,7 @@ pub fn render_help(req: HelpRequest<'_>) -> Result<RenderedOutput, RenderError> 
             let alias = req
                 .aliases
                 .find(name)
-                .ok_or_else(|| RenderError("Alias not found.".into()))?;
+                .ok_or_else(|| RenderError::new("Alias not found."))?;
             if !c.verb_explicit {
                 let name = alias.friendly_name.to_ascii_uppercase();
                 line(&mut out, "");
@@ -330,7 +330,7 @@ pub fn render_help(req: HelpRequest<'_>) -> Result<RenderedOutput, RenderError> 
                     Verb::List => list_help(&mut out, alias, c, req.schema),
                     Verb::Assoc => push(&mut out, &m.others["assoc"]),
                     Verb::Call => method_help(&mut out, alias, c),
-                    _ => return Err(RenderError("Not supported".into())),
+                    _ => return Err(RenderError::new("Not supported")),
                 }
             }
         }

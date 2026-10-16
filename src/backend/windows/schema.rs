@@ -107,6 +107,7 @@ pub fn class_schema(object: &IWbemClassObject) -> Result<ClassSchema> {
         end?;
     }
     Ok(ClassSchema {
+        wmi_xml: None,
         name: record.class,
         properties,
         methods,

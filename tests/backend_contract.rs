@@ -30,6 +30,8 @@ fn decimal_uint64_does_not_round_through_f64() {
 #[test]
 fn embedded_objects_preserve_types() {
     let record = Record {
+        wmi_xml: None,
+        result_node: None,
         class: wide("Inner"),
         path: None,
         server: None,
@@ -43,6 +45,8 @@ fn embedded_objects_preserve_types() {
 #[test]
 fn enumeration_error_preserves_partial_records_and_hresult() {
     let r = Record {
+        wmi_xml: None,
+        result_node: None,
         class: wide("Sample"),
         path: None,
         server: None,

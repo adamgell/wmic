@@ -99,5 +99,16 @@
   "AliasMetadataMatchesEarlierCapture": true,
   "PostInstallAliasCount": 81,
   "PostInstallAliasSHA256": "225355073d5ea037e5bce16548e6f02a487efcadec41fceaa34953089eb41af3",
-  "CaptureLimit": "Preliminary ProcessStartInfo pipe captures with argument text preserved; console, file redirection, normal-user, remote, and other architectures are not established by these cases."
+  "CaptureLimit": "Preliminary ProcessStartInfo pipe captures with argument text preserved; console, file redirection, normal-user, remote, and other architectures are not established by these cases.",
+  "FormattingEngine": {
+    "identity": "MSXML6 DOMDocument60 and XSLTemplate60, with XSL script enabled",
+    "candidate_builtin_assets": "Original implementation under assets/formats; no installed WMIC stylesheet dependency",
+    "probes": [
+      "xsl-default",
+      "chain-4",
+      "chain-5",
+      "xsl-script"
+    ],
+    "native_tests": "14 ARM64 native library tests passed"
+  }
 }

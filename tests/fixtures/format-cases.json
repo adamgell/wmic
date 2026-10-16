@@ -1,0 +1,312 @@
+{
+  "schema_version": 1,
+  "reference_sha256": "2EF794C4940AFEA56C6D6D3B9BC9E66965BC7333E79C5DCB2DEF3C0E36F0834C",
+  "cases": [
+    {
+      "id": "format-csv",
+      "arguments": "os get Caption,Version /format:csv",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "format-rawxml",
+      "arguments": "os get Caption,Version /format:rawxml",
+      "operation": "read_only",
+      "timeout_ms": 10000,
+      "normalizations": [
+        {
+          "stream": "stdout",
+          "kind": "wmic-command-starttime"
+        }
+      ]
+    },
+    {
+      "id": "format-xml",
+      "arguments": "os get Caption,Version /format:xml",
+      "operation": "read_only",
+      "timeout_ms": 10000,
+      "normalizations": [
+        {
+          "stream": "stdout",
+          "kind": "wmic-html-command-starttime"
+        }
+      ]
+    },
+    {
+      "id": "format-mof",
+      "arguments": "os get Caption,Version /format:mof",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "format-htable",
+      "arguments": "os get Caption,Version /format:htable",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "format-hform",
+      "arguments": "os get Caption,Version /format:hform",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "format-value",
+      "arguments": "os get Caption,Version /format:value",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "format-texttable",
+      "arguments": "os get Caption,Version /format:texttable",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "format-texttablewsys",
+      "arguments": "os get Caption,Version /format:texttablewsys",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "format-wmiclivalueformat",
+      "arguments": "os get Caption,Version /format:wmiclivalueformat",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "format-htable-sortby",
+      "arguments": "os get Caption,Version /format:htable-sortby",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "format-types-csv",
+      "arguments": "os get MUILanguages,Primary,OtherTypeDescription /format:csv",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "format-types-rawxml",
+      "arguments": "os get MUILanguages,Primary,OtherTypeDescription /format:rawxml",
+      "operation": "read_only",
+      "timeout_ms": 10000,
+      "normalizations": [
+        {
+          "stream": "stdout",
+          "kind": "wmic-command-starttime"
+        }
+      ]
+    },
+    {
+      "id": "format-types-xml",
+      "arguments": "os get MUILanguages,Primary,OtherTypeDescription /format:xml",
+      "operation": "read_only",
+      "timeout_ms": 10000,
+      "normalizations": [
+        {
+          "stream": "stdout",
+          "kind": "wmic-html-command-starttime"
+        }
+      ]
+    },
+    {
+      "id": "format-types-mof",
+      "arguments": "os get MUILanguages,Primary,OtherTypeDescription /format:mof",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "format-rawxml-system",
+      "arguments": "os list system /format:rawxml",
+      "operation": "read_only",
+      "timeout_ms": 10000,
+      "normalizations": [
+        {
+          "stream": "stdout",
+          "kind": "wmic-command-starttime"
+        }
+      ]
+    },
+    {
+      "id": "format-missing",
+      "arguments": "os get Caption /format:WmicCompatMissingFormat",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "translation-before-csv",
+      "arguments": "os get MUILanguages /translate:NoComma /format:csv",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "translation-after-csv",
+      "arguments": "os get MUILanguages /format:csv /translate:NoComma",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "translation-missing",
+      "arguments": "os get Caption /translate:WmicCompatMissingTable",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "format-multiple",
+      "arguments": "os get Caption /format:csv /format:list",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "xsl-default",
+      "arguments": "os get Caption /format:\"\\\\Mac\\Home\\Documents\\ChatGPT\\wmic-dropinrepalcement\\tests\\fixtures\\xsl\\parameters.xsl\"",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "xsl-param-0",
+      "arguments": "os get Caption /format:\"\\\\Mac\\Home\\Documents\\ChatGPT\\wmic-dropinrepalcement\\tests\\fixtures\\xsl\\parameters.xsl\":greeting=hello",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "xsl-param-1",
+      "arguments": "os get Caption /format:\"\\\\Mac\\Home\\Documents\\ChatGPT\\wmic-dropinrepalcement\\tests\\fixtures\\xsl\\parameters.xsl\":greeting=\"hello\"",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "xsl-param-2",
+      "arguments": "os get Caption /format:\"\\\\Mac\\Home\\Documents\\ChatGPT\\wmic-dropinrepalcement\\tests\\fixtures\\xsl\\parameters.xsl\",greeting=hello",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "xsl-param-3",
+      "arguments": "os get Caption /format:\"\\\\Mac\\Home\\Documents\\ChatGPT\\wmic-dropinrepalcement\\tests\\fixtures\\xsl\\parameters.xsl\"(greeting=hello)",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "chain-0",
+      "arguments": "os get Caption /format:csv,rawxml",
+      "operation": "read_only",
+      "timeout_ms": 10000,
+      "normalizations": [
+        {
+          "stream": "stdout",
+          "kind": "wmic-command-starttime"
+        }
+      ]
+    },
+    {
+      "id": "chain-1",
+      "arguments": "os get Caption /format:csv,list",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "chain-2",
+      "arguments": "os get Caption /format:WmicCompatMissing,csv",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "chain-3",
+      "arguments": "os get Caption /format:csv:\"foo=bar\"",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "chain-4",
+      "arguments": "os get Caption /format:\"\\\\Mac\\Home\\Documents\\ChatGPT\\wmic-dropinrepalcement\\tests\\fixtures\\xsl\\parameters.xsl\":\"greeting=hello\"",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "chain-5",
+      "arguments": "os get Caption /format:\"\\\\Mac\\Home\\Documents\\ChatGPT\\wmic-dropinrepalcement\\tests\\fixtures\\xsl\\parameters.xsl\":\"greeting=hello:unused=value\"",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "reference-rawxml",
+      "arguments": "path Win32_SystemOperatingSystem get GroupComponent,PartComponent /format:rawxml",
+      "operation": "read_only",
+      "timeout_ms": 10000,
+      "normalizations": [
+        {
+          "stream": "stdout",
+          "kind": "wmic-command-starttime"
+        }
+      ]
+    },
+    {
+      "id": "reference-table",
+      "arguments": "path Win32_SystemOperatingSystem get GroupComponent,PartComponent",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "reference-csv",
+      "arguments": "path Win32_SystemOperatingSystem get GroupComponent,PartComponent /format:csv",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "object-rawxml",
+      "arguments": "alias OS get Connection /format:rawxml",
+      "operation": "read_only",
+      "timeout_ms": 10000,
+      "normalizations": [
+        {
+          "stream": "stdout",
+          "kind": "wmic-command-starttime"
+        }
+      ]
+    },
+    {
+      "id": "object-table",
+      "arguments": "alias OS get Connection",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "object-csv",
+      "arguments": "alias OS get Connection /format:csv",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "system-csv",
+      "arguments": "os get __DERIVATION /format:csv",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "property-order-csv",
+      "arguments": "os get CodeSet,CSDVersion,CSName /format:csv",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "xsl-script",
+      "arguments": "os get Caption /format:\"\\\\Mac\\Home\\Documents\\ChatGPT\\wmic-dropinrepalcement\\tests\\fixtures\\xsl\\script.xsl\"",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "translate-request",
+      "arguments": "os get Caption,Version /translate:NoComma /format:rawxml",
+      "operation": "read_only",
+      "timeout_ms": 10000,
+      "normalizations": [
+        {
+          "stream": "stdout",
+          "kind": "wmic-command-starttime"
+        }
+      ]
+    }
+  ]
+}

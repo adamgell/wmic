@@ -73,6 +73,22 @@ class ReferenceTests(unittest.TestCase):
         actual["stdout_base64"] = base64.b64encode(b'<COMMAND STARTTIME="b"><VALUE>STARTTIME="b"</VALUE></COMMAND>').decode()
         self.assertTrue(compare.compare_cases(expected, actual))
 
+    def test_html_timestamp_policy_is_anchored_to_root_command_metadata(self):
+        expected = sample_case()
+        actual = copy.deepcopy(expected)
+        prefix = b'<DIV STYLE="font-family:Courier; font-size:10pt; margin-bottom:2em">\r\r\n<DIV STYLE="margin-left:1em">\r\r\n<SPAN STYLE="color:gray">&lt;COMMAND<SPAN STYLE="color:navy">SEQUENCENUM="<SPAN STYLE="color:black">1</SPAN>"</SPAN>\r\r\n<SPAN STYLE="color:navy">ISSUEDFROM="<SPAN STYLE="color:black">HOST</SPAN>"</SPAN>\r\r\n<SPAN STYLE="color:navy">STARTTIME="<SPAN STYLE="color:black">'
+        suffix = b'</SPAN>"</SPAN><VALUE>unchanged</VALUE>'
+        expected["stdout_base64"] = base64.b64encode(prefix+b"a"+suffix).decode()
+        actual["stdout_base64"] = base64.b64encode(prefix+b"b"+suffix).decode()
+        self.assertTrue(compare.compare_cases(expected, actual))
+        expected["normalizations"] = [{"stream":"stdout", "kind":"wmic-html-command-starttime"}]
+        self.assertEqual(compare.compare_cases(expected, actual), [])
+        actual["stdout_base64"] = base64.b64encode(prefix+b"b"+suffix.replace(b"unchanged", b"changed")).decode()
+        self.assertTrue(compare.compare_cases(expected, actual))
+        expected["stdout_base64"] = base64.b64encode(b"<DATA>"+prefix+b"a"+suffix).decode()
+        actual["stdout_base64"] = base64.b64encode(b"<DATA>"+prefix+b"b"+suffix).decode()
+        self.assertTrue(compare.compare_cases(expected, actual))
+
     def test_stderr_is_not_merged_with_stdout(self):
         expected = sample_case()
         actual = copy.deepcopy(expected)

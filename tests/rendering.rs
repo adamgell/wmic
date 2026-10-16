@@ -33,6 +33,8 @@ fn property(name: &str, value: CimValue, ty: u32) -> Property {
 fn result(props: Vec<Property>) -> ManagementResult {
     ManagementResult::Objects(ObjectSet {
         objects: vec![Record {
+            wmi_xml: None,
+            result_node: None,
             class: wide("Win32_OperatingSystem"),
             server: Some(wide("DESKTOP-N4H9E7R")),
             properties: props,
@@ -166,6 +168,8 @@ fn empty_association_matches_source_row_and_diagnostic() {
     let q = request("os assoc /resultclass:WmicResearchMissingClass");
     let r = ManagementResult::Associations(vec![AssociationGroup {
         source: Record {
+            wmi_xml: None,
+            result_node: None,
             class: wide("Win32_OperatingSystem"),
             path: Some(wide(
                 r"\\DESKTOP-N4H9E7R\ROOT\CIMV2:Win32_OperatingSystem=@",
@@ -190,13 +194,13 @@ fn empty_association_matches_source_row_and_diagnostic() {
     );
 }
 #[test]
-fn multiple_array_values_use_native_separator() {
+fn multiple_value_array_values_use_native_separator() {
     assert_eq!(
         wmic_compat::render::display_value(&CimValue::Array(vec![
             CimValue::String(wide("one")),
             CimValue::String(wide("two"))
         ])),
-        wide("{\"one\", \"two\"}")
+        wide("{\"one\",\"two\"}")
     );
 }
 #[test]

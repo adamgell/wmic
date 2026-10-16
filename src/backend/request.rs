@@ -17,6 +17,10 @@ pub struct ConnectionOptions {
 
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
 pub struct ResolvedRequest {
+    #[serde(default)]
+    pub format_spec: Option<crate::model::FormatSpec>,
+    #[serde(default)]
+    pub render_context: Option<crate::model::RenderContext>,
     pub connection: ConnectionOptions,
     pub class_name: WideText,
     pub instance_path: Option<WideText>,

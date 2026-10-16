@@ -44,6 +44,7 @@ pub struct NodeOutcome {
     pub exit_status: u32,
 }
 pub struct Session {
+    sequence: u32,
     pub settings: SessionSettings,
     pub aliases: AliasStore,
     pub local_node: WideText,
@@ -51,6 +52,7 @@ pub struct Session {
 impl Session {
     pub fn new(local_node: WideText) -> Result<Self, ResolveError> {
         Ok(Self {
+            sequence: 0,
             settings: SessionSettings::default(),
             aliases: AliasStore::stock()?,
             local_node,
@@ -111,8 +113,11 @@ impl Session {
                 }
             },
         };
+        self.sequence = self.sequence.saturating_add(1);
+        let mut every_count = 0;
         loop {
-            let outcome = self.execute_once(raw, mode, backend, sink);
+            let outcome = self.execute_once(raw, mode, backend, sink, every_count);
+            every_count += 1;
             if outcome.exit_requested
                 || outcome.interactive_requested
                 || interval.is_none()
@@ -175,6 +180,7 @@ impl Session {
                                 };
                             }
                             let mut child = Session {
+                                sequence: 0,
                                 settings: SessionSettings::default(),
                                 aliases: self.aliases.clone(),
                                 local_node: self.local_node.clone(),
@@ -220,6 +226,7 @@ impl Session {
         mode: EntryMode,
         backend: &mut dyn Management,
         sink: &mut dyn OutputSink,
+        every_count: u32,
     ) -> CommandOutcome {
         let parsed = match parse_command(raw, mode) {
             Ok(p) => p,
@@ -378,6 +385,25 @@ impl Session {
             }
         }
         configure_connection(&mut request, &settings);
+        request.render_context = Some(super::presentation::context(
+            &parsed,
+            &settings,
+            &self.local_node,
+            self.sequence,
+            every_count,
+        ));
+        if matches!(request.verb, Verb::Get | Verb::List | Verb::Assoc)
+            && let Err(error) = super::presentation::prepare(&mut request, &settings, backend)
+        {
+            return CommandOutcome {
+                exit_status: emit_render_error(sink, error),
+                ..Default::default()
+            };
+        }
+        let components = super::presentation::components(&parsed, &request, &self.aliases);
+        if let Some(context) = &mut request.render_context {
+            context.components_xml = components;
+        }
         let mut outcomes = vec![];
         let mut status = 0;
         let mut combined = vec![];
@@ -407,7 +433,7 @@ impl Session {
                     break;
                 }
             }
-            let result =
+            let mut result =
                 if settings.failfast && !backend.reachable(&node, settings.failfast_timeout_ms) {
                     Err(ManagementError {
                         code: 0xABE3,
@@ -420,6 +446,14 @@ impl Session {
                 } else {
                     backend.execute_with_confirmation(&request, &mut SinkConfirmation(sink))
                 };
+            match &mut result {
+                Ok(value) => mark_node(value, &node),
+                Err(error) => {
+                    if let Some(value) = &mut error.partial {
+                        mark_node(value, &node)
+                    }
+                }
+            }
             had_objects |= matches!(result, Ok(ManagementResult::Objects(_)));
             let code = result.as_ref().err().map_or(0, |e| e.code);
             outcomes.push(NodeOutcome {
@@ -495,7 +529,8 @@ impl Session {
     }
 }
 fn emit_render_error(sink: &mut dyn OutputSink, error: render::RenderError) -> u32 {
-    let mut stderr = error.0;
+    let code = error.code;
+    let mut stderr = error.message;
     stderr.0.extend("\r\r\n".encode_utf16());
     emit(
         sink,
@@ -503,7 +538,7 @@ fn emit_render_error(sink: &mut dyn OutputSink, error: render::RenderError) -> u
             stderr,
             ..Default::default()
         },
-        0xACB2,
+        code,
     )
     .exit_status
 }
@@ -544,6 +579,7 @@ fn configure_connection(request: &mut crate::backend::ResolvedRequest, settings:
         request.modifiers.insert(
             0,
             Modifier {
+                raw_value: None,
                 name: "interactive".into(),
                 value: SwitchValue::Value("on".into()),
                 scope: ModifierScope::Global,
@@ -580,9 +616,9 @@ impl crate::backend::Confirmation for SinkConfirmation<'_> {
             node: &request.connection.node,
         })
         .map_err(|e| ManagementError {
-            code: 0xACB2,
+            code: e.code,
             target: request.class_name.clone(),
-            message: e.0,
+            message: e.message,
             operation: "input".into(),
             extended: vec![],
             partial: None,
@@ -628,5 +664,24 @@ impl crate::backend::Confirmation for SinkConfirmation<'_> {
                 extended: vec![],
                 partial: None,
             })
+    }
+}
+
+fn mark_node(result: &mut ManagementResult, node: &WideText) {
+    match result {
+        ManagementResult::Objects(set) => {
+            for object in &mut set.objects {
+                object.result_node = Some(node.clone())
+            }
+        }
+        ManagementResult::Associations(groups) => {
+            for group in groups {
+                group.source.result_node = Some(node.clone());
+                for object in &mut group.associated {
+                    object.result_node = Some(node.clone())
+                }
+            }
+        }
+        _ => {}
     }
 }

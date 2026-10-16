@@ -1,0 +1,135 @@
+{
+  "sha256": "a67c0c8276df06f25cf5d078c3c36a1208d1d37dad9b1a7597535618d58bae50",
+  "suites": {
+    "reference": {
+      "passed": [
+        "global-help",
+        "os-help",
+        "os-get-help",
+        "os-list-help",
+        "process-call-help",
+        "os-get",
+        "os-get-reversed",
+        "os-get-value",
+        "os-list-brief",
+        "os-get-csv",
+        "os-get-rawxml",
+        "os-get-mof",
+        "os-get-list",
+        "os-casefold",
+        "path-os-get",
+        "os-where",
+        "os-empty",
+        "alias-os-brief",
+        "error-property",
+        "error-class",
+        "error-alias",
+        "error-switch"
+      ],
+      "differences": {
+        "context": [
+          "context: exit_status: 0 != 2147749900",
+          "context: stdout: 534 != 0 bytes; first difference at 0",
+          "context: stderr: 0 != 16 bytes; first difference at 0"
+        ]
+      }
+    },
+    "format": {
+      "passed": [
+        "format-csv",
+        "format-rawxml",
+        "format-xml",
+        "format-mof",
+        "format-htable",
+        "format-hform",
+        "format-value",
+        "format-texttable",
+        "format-texttablewsys",
+        "format-wmiclivalueformat",
+        "format-htable-sortby",
+        "format-types-csv",
+        "format-types-rawxml",
+        "format-types-xml",
+        "format-types-mof",
+        "format-rawxml-system",
+        "format-missing",
+        "translation-before-csv",
+        "translation-after-csv",
+        "translation-missing",
+        "format-multiple",
+        "xsl-default",
+        "xsl-param-0",
+        "xsl-param-1",
+        "xsl-param-2",
+        "xsl-param-3",
+        "chain-0",
+        "chain-1",
+        "chain-2",
+        "chain-3",
+        "chain-4",
+        "chain-5",
+        "reference-rawxml",
+        "reference-table",
+        "reference-csv",
+        "object-rawxml",
+        "object-table",
+        "object-csv",
+        "system-csv",
+        "property-order-csv",
+        "xsl-script",
+        "translate-request"
+      ],
+      "differences": {}
+    },
+    "schema": {
+      "passed": [
+        "path-instance",
+        "class-get",
+        "class-get-class",
+        "class-list-brief",
+        "class-list-full",
+        "class-get-help",
+        "class-help",
+        "assoc-computer",
+        "assoc-empty",
+        "os-system",
+        "os-writable-help",
+        "path-help",
+        "method-help",
+        "property-help",
+        "existing-role-missing-class",
+        "assoc-help",
+        "get-acronyms",
+        "os-writeable",
+        "class-value",
+        "path-instance-quoted",
+        "list-path",
+        "global-value-help",
+        "os-full",
+        "alias-object-relative",
+        "os-object-relative",
+        "alias-object-qualified",
+        "os-list-default",
+        "property-help-valid",
+        "path-property-help"
+      ],
+      "differences": {
+        "os-default": [
+          "os-default: stdout: 2607 != 2607 bytes; first difference at 1729"
+        ],
+        "os-get-default": [
+          "os-get-default: stdout: 2607 != 2607 bytes; first difference at 1729"
+        ]
+      }
+    }
+  },
+  "native_tests": {
+    "passed": 14,
+    "failed": 0
+  },
+  "owned_string_cases": {
+    "passed": 12,
+    "failed": 0,
+    "cleanup": true
+  }
+}

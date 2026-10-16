@@ -1,3 +1,4 @@
+mod csv;
 mod diagnostic;
 mod encoding;
 mod method;
@@ -14,10 +15,27 @@ pub struct RenderedOutput {
     pub record: Option<WideText>,
 }
 #[derive(Debug)]
-pub struct RenderError(pub WideText);
+pub struct RenderError {
+    pub code: u32,
+    pub message: WideText,
+}
+impl RenderError {
+    pub fn new(message: impl Into<WideText>) -> Self {
+        Self {
+            code: 0xACB2,
+            message: message.into(),
+        }
+    }
+    pub fn status(code: u32, message: impl Into<WideText>) -> Self {
+        Self {
+            code,
+            message: message.into(),
+        }
+    }
+}
 impl std::fmt::Display for RenderError {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        self.0.fmt(f)
+        self.message.fmt(f)
     }
 }
 impl std::error::Error for RenderError {}
@@ -140,6 +158,21 @@ pub fn render(input: RenderRequest<'_>) -> Result<RenderedOutput, RenderError> {
             return Ok(output);
         }
     };
+    #[cfg(windows)]
+    if let (Some(context), Some(spec)) = (&req.render_context, &req.format_spec) {
+        let schema_default = matches!(result, ManagementResult::Schema(_))
+            && !req.modifiers.iter().any(|m| {
+                m.name.eq_ascii_ignore_case("format") || m.name.eq_ascii_ignore_case("translate")
+            });
+        let empty = matches!(result,ManagementResult::Objects(s) if s.objects.is_empty());
+        let association_default = matches!(result, ManagementResult::Associations(_))
+            && !req.modifiers.iter().any(|m| {
+                m.name.eq_ascii_ignore_case("format") || m.name.eq_ascii_ignore_case("translate")
+            });
+        if !schema_default && !empty && !association_default {
+            return transform(&to_command_xml(result, context, input.node)?, spec);
+        }
+    }
     if let ManagementResult::Operation(operation) = result {
         return Ok(operation::render(
             operation,
@@ -171,7 +204,7 @@ pub fn render(input: RenderRequest<'_>) -> Result<RenderedOutput, RenderError> {
         return Ok(association::render(groups));
     }
     let ManagementResult::Objects(set) = result else {
-        return Err(RenderError("Not supported".into()));
+        return Err(RenderError::new("Not supported"));
     };
     if set.objects.is_empty() {
         return Ok(RenderedOutput {
@@ -203,11 +236,25 @@ pub fn render(input: RenderRequest<'_>) -> Result<RenderedOutput, RenderError> {
                 .format
                 .as_ref()
                 .is_some_and(|f| f.eq_ascii_ignore_case("list")));
+    if let Some(f) = format {
+        if f.eq_ascii_ignore_case("csv") {
+            return Ok(RenderedOutput {
+                stdout: csv::render(&set.objects, &cols, input.node),
+                ..Default::default()
+            });
+        }
+        if f.eq_ascii_ignore_case("mof") {
+            return Ok(RenderedOutput {
+                stdout: mof::instances(&set.objects, &cols),
+                ..Default::default()
+            });
+        }
+    }
     if let Some(f) = format
         && !f.eq_ascii_ignore_case("list")
         && !f.eq_ascii_ignore_case("table")
     {
-        return Err(RenderError("Invalid XSL format (or) file name.".into()));
+        return Err(RenderError::new("Invalid XSL format (or) file name."));
     }
     Ok(RenderedOutput {
         stdout: if list {
@@ -276,3 +323,12 @@ pub(crate) fn system_property_order() -> [&'static str; 10] {
         "__GENUS",
     ]
 }
+
+mod xml;
+pub use xml::{to_command_xml, to_wmi_xml};
+
+mod builtin;
+pub use builtin::{builtin_source, logical_format_name};
+
+mod pipeline;
+pub use pipeline::*;

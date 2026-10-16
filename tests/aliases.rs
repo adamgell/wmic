@@ -74,6 +74,8 @@ fn alias_seealso_expands_to_derived_command() {
         assert_eq!(d.template, wide("wmic Alias #__PATH assoc"));
         assert_eq!(
             d.expand(&Record {
+                wmi_xml: None,
+                result_node: None,
                 class: wide("MSFT_CliAlias"),
                 path: Some(wide(r#"MSFT_CliAlias.FriendlyName="OS""#)),
                 server: None,

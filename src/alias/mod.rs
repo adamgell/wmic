@@ -200,6 +200,8 @@ impl AliasStore {
             return Ok(ResolvedCommand::Control(command.verb));
         };
         let mut req = ResolvedRequest {
+            render_context: None,
+            format_spec: None,
             connection: ConnectionOptions {
                 node: settings
                     .nodes

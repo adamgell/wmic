@@ -16,6 +16,13 @@ pub trait Confirmation {
     fn confirm(&mut self, prompt: &crate::model::WideText) -> Result<bool, ManagementError>;
 }
 pub trait Management {
+    fn load_translation(
+        &mut self,
+        _role: &crate::model::WideText,
+        _name: &crate::model::WideText,
+    ) -> Result<Option<crate::render::TranslationEntries>, crate::alias::ResolveError> {
+        Ok(None)
+    }
     fn launch_external(
         &mut self,
         command: &crate::model::WideText,

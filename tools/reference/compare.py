@@ -37,10 +37,17 @@ def compare_cases(expected: dict, actual: dict, expected_root: Path | None = Non
         left = read_stream(expected, stream, expected_root)
         right = read_stream(actual, stream, actual_root)
         for rule in expected.get("normalizations", []):
-            if rule.get("kind") != "wmic-command-starttime" or rule.get("stream") not in ("stdout", "stderr"):
+            if rule.get("kind") not in ("wmic-command-starttime", "wmic-html-command-starttime") or rule.get("stream") not in ("stdout", "stderr"):
                 raise ValueError("unknown reference normalization policy")
             if rule["stream"] == stream:
-                pattern = rb'\A(<COMMAND\b[^>\r\n]*\bSTARTTIME=")[^"]*(")'
+                if rule["kind"] == "wmic-command-starttime":
+                    pattern = rb'\A(<COMMAND\b[^>\r\n]*\bSTARTTIME=")[^"]*(")'
+                else:
+                    pattern = (rb'\A(<DIV STYLE="font-family:Courier; font-size:10pt; margin-bottom:2em">\r\r\n'
+                               rb'<DIV STYLE="margin-left:1em">\r\r\n<SPAN STYLE="color:gray">&lt;COMMAND'
+                               rb'<SPAN STYLE="color:navy">SEQUENCENUM="<SPAN STYLE="color:black">[^<]*</SPAN>"</SPAN>\r\r\n'
+                               rb'<SPAN STYLE="color:navy">ISSUEDFROM="<SPAN STYLE="color:black">[^<]*</SPAN>"</SPAN>\r\r\n'
+                               rb'<SPAN STYLE="color:navy">STARTTIME="<SPAN STYLE="color:black">)[^<]*(</SPAN>"</SPAN>)')
                 replace = lambda match: match.group(1) + b"{STARTTIME}" + match.group(2)
                 left = re.sub(pattern, replace, left, count=1)
                 right = re.sub(pattern, replace, right, count=1)

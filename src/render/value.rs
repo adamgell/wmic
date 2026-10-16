@@ -1,9 +1,27 @@
 use super::*;
 pub fn display_value(value: &CimValue) -> WideText {
+    format_value(value, true)
+}
+pub(crate) fn raw_display_value(value: &CimValue) -> WideText {
+    format_value(value, false)
+}
+fn format_value(value: &CimValue, escaped: bool) -> WideText {
     match value {
         CimValue::Empty | CimValue::Null => WideText::default(),
-        CimValue::String(s) | CimValue::DateTime(s) | CimValue::Reference(s) => escape_text(s),
-        CimValue::Char16(u) => escape_text(&WideText(vec![*u])),
+        CimValue::String(s) | CimValue::DateTime(s) | CimValue::Reference(s) => {
+            if escaped {
+                escape_text(s)
+            } else {
+                s.clone()
+            }
+        }
+        CimValue::Char16(u) => {
+            if escaped {
+                escape_text(&WideText(vec![*u]))
+            } else {
+                WideText(vec![*u])
+            }
+        }
         CimValue::Boolean(b) => (if *b { "TRUE" } else { "FALSE" }).into(),
         CimValue::Sint8(v) => v.to_string().into(),
         CimValue::Uint8(v) => v.to_string().into(),
@@ -20,7 +38,7 @@ pub fn display_value(value: &CimValue) -> WideText {
             let mut out: WideText = "{".into();
             for (i, item) in items.iter().enumerate() {
                 if i > 0 {
-                    push(&mut out, ", ");
+                    push(&mut out, if escaped { "," } else { ", " });
                 }
                 let quoted = matches!(
                     item,
@@ -32,7 +50,7 @@ pub fn display_value(value: &CimValue) -> WideText {
                 if quoted {
                     push(&mut out, "\"");
                 }
-                append(&mut out, &display_value(item));
+                append(&mut out, &format_value(item, escaped));
                 if quoted {
                     push(&mut out, "\"");
                 }

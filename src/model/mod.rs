@@ -7,3 +7,6 @@ pub use cim::*;
 pub use command::*;
 pub use error::*;
 pub use wide::WideText;
+
+mod format;
+pub use format::*;

@@ -43,6 +43,8 @@ fn value(v: &CimValue) -> Result<Value, ResolveError> {
 }
 fn request(options: ConnectionOptions, class: &str) -> ResolvedRequest {
     ResolvedRequest {
+        render_context: None,
+        format_spec: None,
         connection: options,
         class_name: class.into(),
         instance_path: None,
@@ -147,4 +149,62 @@ pub fn load(
         aliases.push(alias);
     }
     Ok(Some(aliases))
+}
+
+pub fn translation(
+    role: &WideText,
+    name: &WideText,
+) -> Result<Option<Vec<(WideText, WideText)>>, ResolveError> {
+    let options = ConnectionOptions {
+        namespace: role.clone(),
+        ..Default::default()
+    };
+    let svc = match connect::connect(&options) {
+        Ok(s) => s,
+        Err(e) if e.code().0 as u32 == 0x8004100e => return Ok(None),
+        Err(e) => return Err(resolve_error(e.code().0 as u32)),
+    };
+    let mut query: WideText = "SELECT * FROM MSFT_CliTranslateTable WHERE Name=".into();
+    query.0.extend(literal(name).0);
+    let records = match query::query_text(&svc, &request(options, "MSFT_CliTranslateTable"), &query)
+    {
+        Ok(s) => s,
+        Err(e) if e.code == 0x80041010 => return Ok(None),
+        Err(e) => return Err(resolve_error(e.code)),
+    };
+    let Some(record) = records.objects.first() else {
+        return Err(ResolveError {
+            code: 0xABED,
+            message: "Translate table does not exists in Alias Namespace.".into(),
+            token: None,
+        });
+    };
+    let Some(Property {
+        value: CimValue::Array(entries),
+        ..
+    }) = record
+        .properties
+        .iter()
+        .find(|p| p.name.eq_ascii_ignore_case("Tbl"))
+    else {
+        return Ok(Some(vec![]));
+    };
+    let mut out = vec![];
+    for entry in entries {
+        if let CimValue::Object(r) = entry {
+            let get = |name: &str| {
+                r.properties
+                    .iter()
+                    .find(|p| p.name.eq_ascii_ignore_case(name))
+                    .and_then(|p| match &p.value {
+                        CimValue::String(v) => Some(v.clone()),
+                        _ => None,
+                    })
+            };
+            if let (Some(from), Some(to)) = (get("FromValue"), get("ToValue")) {
+                out.push((from, to))
+            }
+        }
+    }
+    Ok(Some(out))
 }

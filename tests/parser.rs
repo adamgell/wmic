@@ -261,3 +261,12 @@ fn named_method_parameters_are_space_separated() {
         0xADDC
     );
 }
+
+#[test]
+fn presentation_command_line_keeps_spacing_and_redacts_global_password() {
+    let parsed=parse_command(&wide(r#""C:\program files\wmic.exe"   /user:test /password:"test secret" os get Caption /format:rawxml"#),EntryMode::Process).unwrap();
+    assert_eq!(
+        parsed.command_line,
+        wide("   /user:test /password:<redacted> os get Caption /format:rawxml")
+    );
+}

@@ -83,3 +83,39 @@ fn stderr_is_not_merged_into_stdout() {
     assert_eq!(sink.stderr, b"No Instance(s) Available.\r\r\n");
     assert_eq!(sink.stdout, b"\r\r\n\r\r\n");
 }
+
+#[test]
+fn session_supplies_a_sanitized_xml_presentation_context() {
+    struct Provider;
+    impl Management for Provider {
+        fn execute(&mut self, r: &ResolvedRequest) -> Result<ManagementResult, ManagementError> {
+            let context = r
+                .render_context
+                .as_ref()
+                .expect("presentation context missing");
+            assert_eq!(
+                context.command_line,
+                wide(" /password:<redacted> os get Caption")
+            );
+            assert_eq!(context.issued_from, wide("HOST"));
+            assert_eq!(context.nodes, vec![wide("HOST")]);
+            assert_eq!(context.sequence, 1);
+            assert_eq!(context.every_count, 0);
+            assert!(
+                !context
+                    .settings
+                    .iter()
+                    .any(|(key, _)| key.eq_ascii_ignore_case("password"))
+            );
+            Ok(ManagementResult::Objects(ObjectSet::default()))
+        }
+    }
+    let mut sink = Sink::default();
+    let out = Session::new(wide("HOST")).unwrap().execute(
+        &wide("wmic.exe /password:test-only-secret os get Caption"),
+        EntryMode::Process,
+        &mut Provider,
+        &mut sink,
+    );
+    assert_eq!(out.exit_status, 0);
+}

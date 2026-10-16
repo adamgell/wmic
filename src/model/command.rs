@@ -44,6 +44,8 @@ pub enum SwitchValue {
 
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
 pub struct Modifier {
+    #[serde(default)]
+    pub raw_value: Option<WideText>,
     pub name: WideText,
     pub value: SwitchValue,
     pub scope: ModifierScope,
@@ -51,6 +53,9 @@ pub struct Modifier {
 
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
 pub struct ParsedCommand {
+    /// Original post-executable spacing, with credential values redacted for presentation.
+    #[serde(default)]
+    pub command_line: WideText,
     pub raw: WideText,
     pub target: Option<Target>,
     pub selector: Option<WideText>,
@@ -70,6 +75,7 @@ pub struct ParsedCommand {
 impl ParsedCommand {
     pub(crate) fn empty(raw: WideText) -> Self {
         Self {
+            command_line: raw.clone(),
             raw,
             target: None,
             selector: None,

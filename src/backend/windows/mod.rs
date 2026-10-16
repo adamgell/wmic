@@ -9,6 +9,7 @@ mod privileges;
 mod query;
 mod schema;
 mod write;
+mod xml;
 use crate::{
     backend::{Management, ResolvedRequest},
     model::*,
@@ -76,6 +77,13 @@ impl WindowsManagement {
     }
 }
 impl Management for WindowsManagement {
+    fn load_translation(
+        &mut self,
+        role: &WideText,
+        name: &WideText,
+    ) -> Result<Option<crate::render::TranslationEntries>, crate::alias::ResolveError> {
+        aliases::translation(role, name)
+    }
     fn launch_external(&mut self, command: &WideText) -> Result<u32, ManagementError> {
         external::launch(command)
     }
@@ -115,9 +123,13 @@ impl WindowsManagement {
                 if r.class_mode {
                     let schema_obj =
                         get_object(&svc, &r.class_name).map_err(|e| failure(e, r, "class"))?;
-                    return schema::class_schema(&schema_obj)
-                        .map(ManagementResult::Schema)
-                        .map_err(|e| failure(e, r, "schema"));
+                    let mut schema =
+                        schema::class_schema(&schema_obj).map_err(|e| failure(e, r, "schema"))?;
+                    if xml::requested(r) {
+                        schema.wmi_xml =
+                            Some(xml::text(&schema_obj, r).map_err(|e| failure(e, r, "XML"))?);
+                    }
+                    return Ok(ManagementResult::Schema(schema));
                 }
                 if r.query.is_none() {
                     get_object(&svc, &r.class_name).map_err(|e| failure(e, r, "class"))?;

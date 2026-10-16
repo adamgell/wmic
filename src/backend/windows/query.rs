@@ -139,6 +139,8 @@ fn record_depth(object: &IWbemClassObject, depth: usize) -> Result<Record> {
                 })
         };
         Ok(Record {
+            wmi_xml: None,
+            result_node: None,
             class: get("__CLASS").unwrap_or_default(),
             path: get("__PATH"),
             server: get("__SERVER"),
@@ -180,7 +182,19 @@ pub(super) fn query_text(
                 break;
             }
             if let Some(object) = objects[0].take() {
-                match record(&object) {
+                let converted = (|| {
+                    // GetText must run before intrinsic property enumeration, which can
+                    // materialize lazy __PATH/__SERVER values absent from the projection.
+                    let xml = if xml::requested(r) {
+                        Some(xml::text(&object, r)?)
+                    } else {
+                        None
+                    };
+                    let mut object = record(&object)?;
+                    object.wmi_xml = xml;
+                    Ok(object)
+                })();
+                match converted {
                     Ok(o) => items.push(Ok(o)),
                     Err(e) => {
                         items.push(Err(failure(e, r, "convert")));
@@ -270,4 +284,37 @@ pub(super) fn associations(
         }
     }
     Ok(groups)
+}
+
+#[cfg(test)]
+mod xml_tests {
+    use super::*;
+    #[test]
+    #[ignore = "requires native Windows WMI"]
+    fn projected_xml_retains_propagated_property_metadata() {
+        let mut backend = WindowsManagement::new().unwrap();
+        let parsed = crate::parse::parse_command(
+            &"os get MUILanguages,OtherTypeDescription,Primary /format:rawxml".into(),
+            EntryMode::Interactive,
+        )
+        .unwrap();
+        let crate::alias::ResolvedCommand::Management(request) = crate::alias::AliasStore::stock()
+            .unwrap()
+            .resolve(&parsed, &crate::session::SessionSettings::default())
+            .unwrap()
+        else {
+            panic!()
+        };
+        let ManagementResult::Objects(set) = backend.execute(&request).unwrap() else {
+            panic!()
+        };
+        let xml = set.objects[0]
+            .wmi_xml
+            .as_ref()
+            .expect("native origin metadata was lost");
+        assert!(xml.to_string_lossy().contains("PROPAGATED=\"true\""));
+        assert!(xml.to_string_lossy().contains("OtherTypeDescription"));
+        assert!(xml.to_string_lossy().contains("PROPERTY.ARRAY"));
+        assert!(!xml.to_string_lossy().contains("NAME=\"__GENUS\""));
+    }
 }

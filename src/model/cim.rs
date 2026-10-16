@@ -42,6 +42,11 @@ pub struct Property {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
 pub struct Record {
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub result_node: Option<WideText>,
+    /// Native WMI CIM DTD text retains origin/propagation metadata for presentation.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub wmi_xml: Option<WideText>,
     pub class: WideText,
     pub path: Option<WideText>,
     pub server: Option<WideText>,
@@ -75,6 +80,8 @@ pub struct MethodSchema {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
 pub struct ClassSchema {
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub wmi_xml: Option<WideText>,
     pub name: WideText,
     pub properties: Vec<PropertySchema>,
     pub methods: Vec<MethodSchema>,

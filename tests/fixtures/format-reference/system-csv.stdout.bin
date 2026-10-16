@@ -1,0 +1,3 @@
+
+Node,__PATH,__NAMESPACE,__SERVER,__DERIVATION,__PROPERTY_COUNT,__RELPATH,__DYNASTY,__SUPERCLASS,__CLASS,__GENUS
+DESKTOP-N4H9E7R,,,,{CIM_OperatingSystem;CIM_LogicalElement;CIM_ManagedSystemElement},0,Win32_OperatingSystem=@,,CIM_OperatingSystem,Win32_OperatingSystem,2

@@ -61,6 +61,19 @@ pub fn parse_command(raw: &WideText, mode: EntryMode) -> Result<ParsedCommand, P
         command.modifiers.push(switch);
         i += 1;
     }
+    let mut presented = units.to_vec();
+    for span in spans[..i].iter().rev() {
+        let token = &units[span.clone()];
+        if let Some(colon) = token.iter().position(|u| *u == 58)
+            && WideText(token[1..colon].to_vec()).eq_ascii_ignore_case("password")
+        {
+            presented.splice(
+                span.start + colon + 1..span.end,
+                "<redacted>".encode_utf16(),
+            );
+        }
+    }
+    command.command_line = WideText(presented);
     if i == spans.len() {
         if command.help {
             command.verb = Verb::Help;
@@ -231,6 +244,15 @@ pub fn parse_command(raw: &WideText, mode: EntryMode) -> Result<ParsedCommand, P
         command.help |= switch.name.eq_ascii_ignore_case("?");
         command.modifiers.push(switch);
         i += 1;
+    }
+    if !command.help {
+        for m in &command.modifiers {
+            if m.name.eq_ascii_ignore_case("format")
+                && let SwitchValue::Value(v) = &m.value
+            {
+                super::parse_format_spec(m.raw_value.as_ref().unwrap_or(v))?;
+            }
+        }
     }
     Ok(command)
 }

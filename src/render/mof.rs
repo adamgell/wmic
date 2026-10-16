@@ -123,3 +123,92 @@ pub fn class(schema: &ClassSchema) -> WideText {
     push(&mut out, NL);
     out
 }
+
+pub fn instances(objects: &[Record], cols: &[(WideText, WideText)]) -> WideText {
+    let mut out = WideText::default();
+    for object in objects {
+        line(&mut out, "<DIV CLASS=\"mofinstance\">");
+        line(&mut out, "<SPAN CLASS=\"mofqualifierset\"> <br /></SPAN>");
+        span(&mut out, "mofkeyword", "instance of");
+        push(&mut out, " ");
+        named(&mut out, &object.class);
+        line(
+            &mut out,
+            " <SPAN CLASS=\"mofsymbol\">{</SPAN><BR /> <DL> <DD>",
+        );
+        let mut properties: Vec<_> = cols
+            .iter()
+            .filter_map(|(_, source)| object.properties.iter().find(|p| p.name == *source))
+            .collect();
+        properties.sort_by_key(|p| {
+            (
+                p.cim_type & 0x2000 != 0,
+                p.name.to_string_lossy().to_ascii_lowercase(),
+            )
+        });
+        for (i, p) in properties.iter().enumerate() {
+            if i > 0 {
+                line(&mut out, "<DD>")
+            }
+            line(&mut out, "<DIV CLASS=\"mofproperty\">");
+            line(&mut out, "<SPAN CLASS=\"mofqualifierset\"> </SPAN>");
+            span(&mut out, "mofkeyword", cim_type_name(p.cim_type));
+            push(&mut out, NL);
+            push(&mut out, "<SPAN CLASS=\"mofproperty\">");
+            named(&mut out, &p.name);
+            line(&mut out, "</SPAN>");
+            if p.cim_type & 0x2000 != 0 {
+                line(
+                    &mut out,
+                    "<SPAN CLASS=\"mofsymbol\">[</SPAN><SPAN CLASS=\"mofsymbol\">]</SPAN>",
+                )
+            }
+            if !matches!(p.value, CimValue::Null | CimValue::Empty) {
+                span(&mut out, "mofsymbol", "=");
+                instance_value(&mut out, &p.value);
+                if p.cim_type & 0x2000 != 0 {
+                    push(&mut out, NL)
+                }
+            }
+            line(&mut out, "<SPAN CLASS=\"mofsymbol\">;</SPAN><BR />");
+            line(&mut out, "</DIV>");
+            line(&mut out, "</DD>");
+        }
+        line(&mut out, "</DL>");
+        line(&mut out, "<SPAN CLASS=\"mofsymbol\">};</SPAN>");
+        line(&mut out, "</DIV>");
+    }
+    push(&mut out, NL);
+    out
+}
+fn instance_value(out: &mut WideText, value: &CimValue) {
+    match value {
+        CimValue::Array(items) => {
+            span(out, "mofsymbol", "{");
+            for (i, item) in items.iter().enumerate() {
+                if i > 0 {
+                    span(out, "mofsymbol", ",")
+                }
+                instance_value(out, item)
+            }
+            span(out, "mofsymbol", "}")
+        }
+        CimValue::String(s) | CimValue::DateTime(s) | CimValue::Reference(s) => {
+            push(out, "<SPAN CLASS=\"mofstring\">\"");
+            for u in &s.0 {
+                match *u {
+                    38 => push(out, "&amp;"),
+                    60 => push(out, "&lt;"),
+                    62 => push(out, "&gt;"),
+                    _ => out.0.push(*u),
+                }
+            }
+            push(out, "\"</SPAN>")
+        }
+        _ => {
+            push(out, "<SPAN CLASS=\"mofvalue\">");
+            append(out, &display_value(value));
+            push(out, "</SPAN>")
+        }
+    }
+}

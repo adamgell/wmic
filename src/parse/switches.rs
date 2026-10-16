@@ -65,5 +65,10 @@ pub(super) fn modifier(
             }
         }
     };
-    Ok(Modifier { name, value, scope })
+    Ok(Modifier {
+        name,
+        value,
+        scope,
+        raw_value: colon.map(|i| WideText(units[i + 1..].to_vec())),
+    })
 }
