@@ -1,17 +1,5 @@
 use super::SessionSettings;
 use crate::model::*;
-fn route(command: &ParsedCommand, name: &str, default: &str) -> WideText {
-    command
-        .modifiers
-        .iter()
-        .rev()
-        .find(|m| m.scope == ModifierScope::Global && m.name.eq_ascii_ignore_case(name))
-        .and_then(|m| match &m.value {
-            SwitchValue::Value(v) => Some(v.clone()),
-            _ => None,
-        })
-        .unwrap_or_else(|| default.into())
-}
 fn on(value: bool) -> WideText {
     if value { "ON" } else { "OFF" }.into()
 }
@@ -60,11 +48,14 @@ pub(super) fn context(
             .into(),
         ),
         ("TRACE", on(settings.trace)),
-        ("RECORD", route(command, "record", "N/A")),
+        (
+            "RECORD",
+            settings.record.clone().unwrap_or_else(|| "N/A".into()),
+        ),
         ("INTERACTIVE", on(settings.interactive)),
         ("FAILFAST", on(settings.failfast)),
-        ("OUTPUT", route(command, "output", "STDOUT")),
-        ("APPEND", route(command, "append", "STDOUT")),
+        ("OUTPUT", settings.output.clone()),
+        ("APPEND", settings.append.clone()),
         (
             "USER",
             settings.user.clone().unwrap_or_else(|| "N/A".into()),

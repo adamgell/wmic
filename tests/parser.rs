@@ -270,3 +270,37 @@ fn presentation_command_line_keeps_spacing_and_redacts_global_password() {
         wide("   /user:test /password:<redacted> os get Caption /format:rawxml")
     );
 }
+
+#[test]
+fn global_value_can_follow_an_empty_colon_token() {
+    let p = parse_command(&wide("wmic /output: os get Caption"), EntryMode::Process).unwrap();
+    assert_eq!(p.modifiers[0].value, SwitchValue::Value(wide("os")));
+    assert_eq!(p.target, Some(Target::Alias(wide("get"))));
+    let p = parse_command(
+        &wide("wmic /output: /node:. os get Caption"),
+        EntryMode::Process,
+    )
+    .unwrap();
+    assert_eq!(p.modifiers[0].value, SwitchValue::Reset);
+}
+
+#[test]
+fn spaced_password_value_is_redacted_from_presentation() {
+    let parsed = parse_command(
+        &wide("wmic /user:x /password: SENSITIVE_VALUE os get Caption /format:rawxml"),
+        EntryMode::Process,
+    )
+    .unwrap();
+    assert!(
+        !parsed
+            .command_line
+            .to_string_lossy()
+            .contains("SENSITIVE_VALUE")
+    );
+    assert!(
+        parsed
+            .command_line
+            .to_string_lossy()
+            .contains("/password:<redacted>")
+    );
+}

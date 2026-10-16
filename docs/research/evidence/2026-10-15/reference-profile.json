@@ -110,5 +110,14 @@
       "xsl-script"
     ],
     "native_tests": "14 ARM64 native library tests passed"
+  },
+  "DestinationEncodings": {
+    "pipe": "console output code page, OEM fallback; selected profile437",
+    "output": "UTF16LE with BOM",
+    "append_new": "UTF16LE with BOM",
+    "append_existing_ansi": "ACP, strict conversion prefix plus CRLF",
+    "append_existing_utf8_bom": "UTF16LE append without another BOM (legacy behavior)",
+    "record": "UTF8 without BOM",
+    "clipboard": "CF_UNICODETEXT implemented, live unverified"
   }
 }

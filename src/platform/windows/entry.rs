@@ -12,7 +12,7 @@ pub fn run() -> ! {
         .unwrap_or_else(|| ".".into());
     let status = match (Session::new(node), WindowsManagement::new()) {
         (Ok(mut session), Ok(mut backend)) => {
-            let mut sink = super::output::NativeOutput;
+            let mut sink = crate::session::RoutedOutput::new(super::output::NativeOutput);
             session
                 .execute(&raw, EntryMode::Process, &mut backend, &mut sink)
                 .exit_status

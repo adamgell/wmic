@@ -3,9 +3,17 @@ use crate::{
     render::{DestinationProfile, OutputError, encode_output},
     session::{OutputSink, OutputStream},
 };
-use windows::Win32::{Globalization::GetACP, Storage::FileSystem::WriteFile, System::Console::*};
+use windows::Win32::{
+    Globalization::{GetACP, GetOEMCP},
+    Storage::FileSystem::WriteFile,
+    System::Console::*,
+};
 pub struct NativeOutput;
 impl OutputSink for NativeOutput {
+    fn clipboard(&mut self, text: &WideText) -> Result<(), OutputError> {
+        write_clipboard(text)
+    }
+
     fn read_line(&mut self) -> Result<Option<WideText>, OutputError> {
         read_input(false)
     }
@@ -34,7 +42,7 @@ impl OutputSink for NativeOutput {
             }
             return Ok(());
         }
-        let bytes = encode_output(text, &DestinationProfile::pipe(unsafe { GetACP() }))?;
+        let bytes = encode_output(text, &DestinationProfile::pipe(output_code_page()))?;
         let mut at = 0;
         while at < bytes.len() {
             let mut written = 0;
@@ -127,4 +135,76 @@ fn read_input(secret: bool) -> Result<Option<WideText>, OutputError> {
         unsafe { MultiByteToWideChar(GetACP(), flags, &out, Some(&mut text)) };
         Ok(Some(WideText(text)))
     }
+}
+
+fn write_clipboard(text: &WideText) -> Result<(), OutputError> {
+    use windows::Win32::{
+        Foundation::{GlobalFree, HANDLE},
+        System::{DataExchange::*, Memory::*},
+        UI::WindowsAndMessaging::*,
+    };
+    let result: windows::core::Result<()> = unsafe {
+        (|| {
+            let window = CreateWindowExW(
+                WINDOW_EX_STYLE(0),
+                windows::core::w!("STATIC"),
+                windows::core::w!(""),
+                WINDOW_STYLE(0),
+                0,
+                0,
+                0,
+                0,
+                None,
+                None,
+                None,
+                None,
+            )?;
+            struct Window(windows::Win32::Foundation::HWND);
+            impl Drop for Window {
+                fn drop(&mut self) {
+                    unsafe {
+                        let _ = DestroyWindow(self.0);
+                    }
+                }
+            }
+            let _window = Window(window);
+            let memory = GlobalAlloc(GMEM_MOVEABLE, (text.0.len() + 1) * 2)?;
+            let pointer = GlobalLock(memory).cast::<u16>();
+            if pointer.is_null() {
+                let _ = GlobalFree(Some(memory));
+                return Err(windows::core::Error::from_thread());
+            }
+            std::ptr::copy_nonoverlapping(text.0.as_ptr(), pointer, text.0.len());
+            *pointer.add(text.0.len()) = 0;
+            let _ = GlobalUnlock(memory);
+            if let Err(error) = OpenClipboard(Some(window)) {
+                let _ = GlobalFree(Some(memory));
+                return Err(error);
+            }
+            struct Close;
+            impl Drop for Close {
+                fn drop(&mut self) {
+                    unsafe {
+                        let _ = CloseClipboard();
+                    }
+                }
+            }
+            let _close = Close;
+            if let Err(error) = EmptyClipboard() {
+                let _ = GlobalFree(Some(memory));
+                return Err(error);
+            }
+            if let Err(error) = SetClipboardData(13, Some(HANDLE(memory.0))) {
+                let _ = GlobalFree(Some(memory));
+                return Err(error);
+            }
+            Ok(())
+        })()
+    };
+    result.map_err(|e| OutputError(e.to_string()))
+}
+
+fn output_code_page() -> u32 {
+    let cp = unsafe { GetConsoleOutputCP() };
+    if cp == 0 { unsafe { GetOEMCP() } } else { cp }
 }

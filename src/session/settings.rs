@@ -3,6 +3,9 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
 pub struct SessionSettings {
+    pub output: WideText,
+    pub append: WideText,
+    pub record: Option<WideText>,
     pub namespace: WideText,
     pub role: WideText,
     pub nodes: Vec<WideText>,
@@ -27,6 +30,9 @@ pub struct SessionSettings {
 impl Default for SessionSettings {
     fn default() -> Self {
         Self {
+            output: "STDOUT".into(),
+            append: "STDOUT".into(),
+            record: None,
             namespace: r"root\cimv2".into(),
             role: r"root\cli".into(),
             nodes: vec![".".into()],
@@ -74,6 +80,9 @@ impl SessionSettings {
             };
             let name = m.name.to_string_lossy().to_ascii_lowercase();
             match name.as_str() {
+                "output" => s.output = value.unwrap_or_else(|| "STDOUT".into()),
+                "append" => s.append = value.unwrap_or_else(|| "STDOUT".into()),
+                "record" => s.record = value,
                 "namespace" => {
                     s.explicit_namespace = value.is_some();
                     s.namespace = value.unwrap_or_else(|| defaults.namespace.clone());

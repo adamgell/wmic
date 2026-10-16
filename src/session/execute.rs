@@ -12,6 +12,30 @@ pub enum OutputStream {
     Stderr,
 }
 pub trait OutputSink {
+    fn configure(&mut self, _settings: &SessionSettings) -> Result<(), OutputError> {
+        Ok(())
+    }
+    fn command_context(&mut self, _context: &RenderContext) -> Result<(), OutputError> {
+        Ok(())
+    }
+    fn context(&mut self, _context: &RenderContext, _node: &WideText) -> Result<(), OutputError> {
+        Ok(())
+    }
+    fn finish(&mut self) -> Result<(), OutputError> {
+        Ok(())
+    }
+    fn clipboard(&mut self, _text: &WideText) -> Result<(), OutputError> {
+        Err(OutputError("Clipboard unavailable".into()))
+    }
+    fn record_user(&self) -> WideText {
+        format!(
+            "{}\\{}",
+            std::env::var("USERDOMAIN").unwrap_or_default(),
+            std::env::var("USERNAME").unwrap_or_default()
+        )
+        .into()
+    }
+
     fn read_line(&mut self) -> Result<Option<WideText>, OutputError> {
         Ok(None)
     }
@@ -68,6 +92,50 @@ impl Session {
         self.execute_with_scheduler(raw, mode, backend, sink, &mut ThreadScheduler)
     }
     pub fn execute_with_scheduler(
+        &mut self,
+        raw: &WideText,
+        mode: EntryMode,
+        backend: &mut dyn Management,
+        sink: &mut dyn OutputSink,
+        scheduler: &mut dyn RepeatScheduler,
+    ) -> CommandOutcome {
+        if let Ok(command) = parse_command(raw, mode)
+            && let Ok(settings) = self.settings.for_command(&command)
+        {
+            if sink.configure(&settings).is_err() {
+                return emit(
+                    sink,
+                    RenderedOutput {
+                        stderr: "Invalid file name.\r\r\n".into(),
+                        ..Default::default()
+                    },
+                    0xABF7,
+                );
+            }
+            let context = super::presentation::context(
+                &command,
+                &settings,
+                &self.local_node,
+                self.sequence + 1,
+                0,
+            );
+            if sink.command_context(&context).is_err() {
+                return CommandOutcome {
+                    exit_status: 0x80070005,
+                    ..Default::default()
+                };
+            }
+        }
+        let outcome = self.execute_repeated(raw, mode, backend, sink, scheduler);
+        if sink.finish().is_err() {
+            return CommandOutcome {
+                exit_status: 0x80070005,
+                ..outcome
+            };
+        }
+        outcome
+    }
+    fn execute_repeated(
         &mut self,
         raw: &WideText,
         mode: EntryMode,
@@ -420,6 +488,12 @@ impl Session {
             } else {
                 target.clone()
             };
+            if let Some(context) = &request.render_context
+                && sink.context(context, &node).is_err()
+            {
+                status = 0x80070005;
+                break;
+            }
             if settings.trace {
                 let trace = format!(
                     "IWbemServices request: node={} namespace={} authlevel={} implevel={}\r\n",

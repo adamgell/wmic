@@ -51,27 +51,36 @@ pub fn parse_command(raw: &WideText, mode: EntryMode) -> Result<ParsedCommand, P
     let spans = lex::tokens(units)?;
     let mut command = ParsedCommand::empty(raw.clone());
     let mut i = 0;
+    let mut redactions = vec![];
     while i < spans.len() && units[spans[i].start] == b'/' as u16 {
-        let switch = modifier(
+        let switch_start = spans[i].start;
+        let mut switch = modifier(
             &units[spans[i].clone()],
             ModifierScope::Global,
             Verb::Interactive,
         )?;
+        if switch.value == SwitchValue::Reset
+            && switch.raw_value.as_ref().is_some_and(|v| v.0.is_empty())
+            && i + 1 < spans.len()
+            && units[spans[i + 1].start] != 47
+        {
+            i += 1;
+            switch.value = SwitchValue::Value(unquote(&units[spans[i].clone()]));
+        }
+        if switch.name.eq_ascii_ignore_case("password")
+            && let Some(colon) = units[switch_start..spans[i].end]
+                .iter()
+                .position(|u| *u == 58)
+        {
+            redactions.push(switch_start + colon + 1..spans[i].end);
+        }
         command.help |= switch.name.eq_ascii_ignore_case("?");
         command.modifiers.push(switch);
         i += 1;
     }
     let mut presented = units.to_vec();
-    for span in spans[..i].iter().rev() {
-        let token = &units[span.clone()];
-        if let Some(colon) = token.iter().position(|u| *u == 58)
-            && WideText(token[1..colon].to_vec()).eq_ascii_ignore_case("password")
-        {
-            presented.splice(
-                span.start + colon + 1..span.end,
-                "<redacted>".encode_utf16(),
-            );
-        }
+    for span in redactions.into_iter().rev() {
+        presented.splice(span, "<redacted>".encode_utf16());
     }
     command.command_line = WideText(presented);
     if i == spans.len() {
