@@ -1,13 +1,43 @@
+use super::method::{code, integer_argument};
 use crate::{
     backend::macos::{
         context::Context,
-        provider::ClassProvider,
-        sys::{fs, host, mach, sysctl, time, users},
+        provider::{ClassProvider, MethodCall, MethodOutput},
+        sys::{fs, host, mach, power, sysctl, time, users},
     },
     model::{ManagementError, Record},
 };
 
 pub struct OperatingSystem;
+
+/// Product version such as `26.6.2`.
+pub(super) fn product_version() -> Option<String> {
+    sysctl::string("kern.osproductversion").filter(|v| !v.is_empty())
+}
+
+/// Caption such as `macOS 26.6.2`.
+fn caption() -> Option<String> {
+    product_version().map(|v| format!("macOS {v}"))
+}
+
+/// `Win32_OperatingSystem.Name`; `Win32_Process.OSName` repeats it.
+pub(super) fn os_name() -> Option<String> {
+    caption().map(|c| format!("{c}|/|/System"))
+}
+
+/// Power action named by `Win32Shutdown` flags: 1 shut down, 2 reboot, 8 power off, plus the
+/// force bit 4.
+fn flag_action(flags: Option<i128>) -> Option<power::Action> {
+    let flags = flags?;
+    if flags & !0xF != 0 {
+        return None;
+    }
+    match flags & !4 {
+        1 | 8 => Some(power::Action::Halt),
+        2 => Some(power::Action::Restart),
+        _ => None,
+    }
+}
 
 fn architecture() -> &'static str {
     if cfg!(target_arch = "aarch64") {
@@ -45,9 +75,42 @@ impl ClassProvider for OperatingSystem {
         "Win32_OperatingSystem"
     }
 
+    fn implemented_methods(&self) -> &'static [&'static str] {
+        &[
+            "Reboot",
+            "Shutdown",
+            "Win32Shutdown",
+            "Win32ShutdownTracker",
+        ]
+    }
+
+    fn call(&self, ctx: &Context, call: &MethodCall<'_>) -> Result<MethodOutput, ManagementError> {
+        let action = match call
+            .method
+            .name
+            .to_string_lossy()
+            .to_ascii_lowercase()
+            .as_str()
+        {
+            "reboot" => Some(power::Action::Restart),
+            "shutdown" => Some(power::Action::Halt),
+            "win32shutdown" | "win32shutdowntracker" => {
+                flag_action(integer_argument(call, "Flags"))
+            }
+            _ => return Err(ctx.not_supported("method")),
+        };
+        let Some(action) = action else {
+            return Ok(code(87));
+        };
+        if !power::is_root() {
+            return Ok(code(5));
+        }
+        Ok(code(power::request(action)))
+    }
+
     fn instances(&self, ctx: &Context) -> Result<Vec<Record>, ManagementError> {
-        let version = sysctl::string("kern.osproductversion").filter(|v| !v.is_empty());
-        let caption = version.as_ref().map(|v| format!("macOS {v}"));
+        let version = product_version();
+        let caption = caption();
         let boot_device = fs::mounted_from("/");
         let memory =
             sysctl::unsigned("hw.memsize_usable").or_else(|| sysctl::unsigned("hw.memsize"));
@@ -62,8 +125,8 @@ impl ClassProvider for OperatingSystem {
         let language = locale();
         Ok(vec![
             ctx.record("Win32_OperatingSystem")
-                .set("Caption", caption.clone())
-                .set("Name", caption.as_ref().map(|c| format!("{c}|/|/System")))
+                .set("Caption", caption)
+                .set("Name", os_name())
                 .set("Version", version)
                 .set("BuildNumber", sysctl::string("kern.osversion"))
                 .set("Manufacturer", "Apple Inc.")

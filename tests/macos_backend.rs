@@ -466,7 +466,9 @@ fn methods_bind_by_schema_and_report_shapes() {
     assert_eq!(e.message, wide("WmicNoSuchMethod - Invalid alias verb."));
     let e = failure(&request("path Win32_OperatingSystem call Reboot 1"));
     assert_eq!((e.code, operation(&e)), (0xADE6, "input".into()));
-    let e = failure(&request("path Win32_OperatingSystem call Reboot"));
+    let e = failure(&request(
+        "path Win32_OperatingSystem call SetDateTime 20260101000000.000000+000",
+    ));
     assert_eq!(
         (e.code, e.message.to_string_lossy(), operation(&e)),
         (0x8004100c, "Not supported".into(), "method".into())
