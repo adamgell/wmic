@@ -120,7 +120,7 @@ when the selected fields/bytes match.
 are `Option<WideText>`. Preserve ordered modifiers and raw spans;
 keyword case folding must not rewrite user values.
 
-- [ ] Add `parser_preserves_wql_quotes`, `parser_preserves_unpaired_utf16`, `parser_distinguishes_reset_from_omitted`, and `parser_does_not_split_quoted_commas`. Assert the exact UTF-16 units, selector, properties and switch order against manually reviewed fixtures derived from Task 1.
+- [x] Add `parser_preserves_wql_quotes`, `parser_preserves_unpaired_utf16`, `parser_distinguishes_reset_from_omitted`, and `parser_does_not_split_quoted_commas`. Assert the exact UTF-16 units, selector, properties and switch order against manually reviewed fixtures derived from Task 1.
 
   ```rust
   assert_eq!(parsed.selector.as_ref().unwrap(), &wide("Version like '10.%'"));
@@ -128,9 +128,9 @@ keyword case folding must not rewrite user values.
   assert_eq!(parsed.modifiers, expected_ordered_modifiers);
   ```
 
-- [ ] Run `cargo test --test parser`; confirm the new cases fail before implementing their behavior.
-- [ ] Implement the lexer/parser and model contracts above. Pin Rust `1.98.1`; enable Windows APIs only for Windows targets. Keep `serde`/`serde_json` metadata separate from raw UTF-16 fixture fields. Add no WMI-dependent parsing.
-- [ ] Run `cargo test --test parser` and `cargo fmt --check`; expected: all parser cases pass without Windows or PowerShell. Commit as `feat: parse classic WMIC commands without losing UTF-16 syntax`.
+- [x] Run `cargo test --test parser`; confirm the new cases fail before implementing their behavior.
+- [x] Implement the lexer/parser and model contracts above. Pin Rust `1.98.1`; enable Windows APIs only for Windows targets. Keep `serde`/`serde_json` metadata separate from raw UTF-16 fixture fields. Add no WMI-dependent parsing.
+- [x] Run `cargo test --test parser` and `cargo fmt --check`; expected: all parser cases pass without Windows or PowerShell. Commit as `feat: parse classic WMIC commands without losing UTF-16 syntax`.
 
 ## Task 3: alias metadata, views, substitutions and fallback — Stage 1
 

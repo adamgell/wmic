@@ -873,5 +873,21 @@
       "implemented": false,
       "verified": false
     }
-  ]
+  ],
+  "components": {
+    "parser": {
+      "implemented": true,
+      "portable_tests": 20,
+      "native_runtime_verified": false
+    },
+    "alias_resolver": {
+      "implemented": false
+    },
+    "native_backend": {
+      "implemented": false
+    },
+    "executable": {
+      "implemented": false
+    }
+  }
 }
