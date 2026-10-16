@@ -10,6 +10,7 @@ import json
 from pathlib import Path
 import re
 import subprocess
+import time
 
 
 def validate_manifest(manifest: dict, allow_writes: bool = False) -> None:
@@ -64,17 +65,25 @@ def write_capture(payload: dict, out: Path) -> dict:
     return manifest
 
 
-def run_guest_script(vm: str, script: str, timeout: int = 300) -> bytes:
-    result = subprocess.run(
-        ["prlctl", "exec", vm, "powershell.exe", "-NoProfile", "-NonInteractive", "-Command", "-"],
-        input=script.encode("utf-8"), capture_output=True, timeout=timeout,
-    )
-    if result.returncode:
-        raise RuntimeError(result.stderr.decode("utf-8", errors="replace") or result.stdout.decode("utf-8", errors="replace"))
-    return result.stdout
+def run_guest_script(vm: str, script: str, timeout: int = 300, *, replay_safe: bool = False) -> bytes:
+    for attempt in range(3 if replay_safe else 1):
+        result = subprocess.run(
+            ["prlctl", "exec", vm, "powershell.exe", "-NoProfile", "-NonInteractive", "-Command", "-"],
+            input=script.encode("utf-8"), capture_output=True, timeout=timeout,
+        )
+        if not result.returncode:
+            return result.stdout
+        failure = result.stderr.decode("utf-8", errors="replace") or result.stdout.decode("utf-8", errors="replace")
+        # A lost job result gives no evidence whether a guest script ran. Never replay
+        # arbitrary scripts: callers must explicitly establish idempotence/read-only scope.
+        transient = any(marker in failure for marker in ("PrlJob_GetResult: Invalid argument", "PrlJob_GetRetCode: Invalid argument"))
+        if not replay_safe or not transient or attempt == 2:
+            raise RuntimeError(failure)
+        time.sleep(0.2 * (attempt + 1))
+    raise RuntimeError("Unreachable transport retry state")
 
 
-def capture(vm: str, executable: str, manifest: dict, role: str = "reference", expected_sha256: str | None = None) -> dict:
+def capture(vm: str, executable: str, manifest: dict, role: str = "reference", expected_sha256: str | None = None, *, replay_safe: bool = False) -> dict:
     validate_manifest(manifest)
     expected = expected_sha256 or manifest.get("reference_sha256", "")
     if not re.fullmatch(r"[a-fA-F0-9]{64}", expected):
@@ -83,7 +92,7 @@ def capture(vm: str, executable: str, manifest: dict, role: str = "reference", e
     request = base64.b64encode(json.dumps(manifest, ensure_ascii=True).encode()).decode()
     exe = base64.b64encode(executable.encode("utf-16le", errors="surrogatepass")).decode()
     script = "& {\n" + source + "\n} -ManifestJson ([Text.Encoding]::UTF8.GetString([Convert]::FromBase64String('" + request + "'))) -Executable ([Text.Encoding]::Unicode.GetString([Convert]::FromBase64String('" + exe + "'))) -ExpectedSha256 '" + expected + "' -Role '" + role + "'\n\n"
-    encoded = run_guest_script(vm, script, timeout=manifest.get("timeout_seconds", 300)).strip()
+    encoded = run_guest_script(vm, script, timeout=manifest.get("timeout_seconds", 300), replay_safe=replay_safe).strip()
     return json.loads(base64.b64decode(encoded, validate=True).decode("utf-8"))
 
 

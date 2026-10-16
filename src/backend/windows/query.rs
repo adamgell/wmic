@@ -169,7 +169,7 @@ pub fn query(
                 None,
             )
             .map_err(|e| failure(e, r, "query"))?;
-        connect::secure(&en).map_err(|e| failure(e, r, "enumeration security"))?;
+        connect::secure(&en, &r.connection).map_err(|e| failure(e, r, "enumeration security"))?;
         let mut items = vec![];
         loop {
             let mut objects = [None];

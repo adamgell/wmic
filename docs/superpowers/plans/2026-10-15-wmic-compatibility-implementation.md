@@ -223,7 +223,7 @@ The staging tool verifies the file hash and never overwrites the original WMIC.
 authority, authentication/impersonation, locale and privilege settings. Keep
 secrets out of serialized diagnostics. Produce `load_nodes(&WideText) -> Result<Vec<WideText>, InputError>` and ordered per-node outcomes.
 
-- [ ] Add tests for node-list files, switch resets, authentication/authority conflicts, per-interface security application, and first-node success followed by a second-node enumeration failure. Assert preserved order, partial output and redacted secrets.
+- [x] Add tests for node-list files, switch resets, authentication/authority conflicts, per-interface security application, and first-node success followed by a second-node enumeration failure. Assert preserved order, partial output and redacted secrets.
 
   ```rust
   assert_eq!(visited_targets, vec![wide("node-a"), wide("node-b")]);
@@ -231,9 +231,9 @@ secrets out of serialized diagnostics. Produce `load_nodes(&WideText) -> Result<
   assert!(!persisted_trace.contains("test-only-secret"));
   ```
 
-- [ ] Run the relevant session/backend tests; confirm new connection cases fail first.
-- [ ] Implement measured remote/security switches, credential prompts, proxy configuration, node-list syntax, trace output, fail-fast checks and aggregation. Preserve locale/privilege settings and supply the repeated-query loop needed by `/EVERY`; Task 12 adds its interactive and cancellation behavior. Set no invented timeout. Use only explicitly selected remote endpoints for live tests.
-- [ ] Run portable tests and authorized live remote cases. If no second endpoint is authorized, record remote implementation as unverified and leave the live acceptance item open. Commit as `feat: support WMIC connection settings and ordered node execution`.
+- [x] Run the relevant session/backend tests; confirm new connection cases fail first.
+- [x] Implement measured remote/security switches, credential prompts, proxy configuration, node-list syntax, trace output, fail-fast checks and aggregation. Preserve locale/privilege settings and supply the repeated-query loop needed by `/EVERY`; Task 12 adds its interactive and cancellation behavior. Set no invented timeout. Use only explicitly selected remote endpoints for live tests.
+- [x] Run portable tests and authorized live remote cases. If no second endpoint is authorized, record remote implementation as unverified and leave the live acceptance item open. Commit as `feat: support WMIC connection settings and ordered node execution`.
 
 ## Task 8: association, direct schema and contextual help completion — Stage 2
 

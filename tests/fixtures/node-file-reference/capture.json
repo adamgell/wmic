@@ -1,0 +1,63 @@
+{
+  "schema_version": 1,
+  "profile": {
+    "role": "reference",
+    "executable": "C:\\Windows\\System32\\wbem\\WMIC.exe",
+    "executable_sha256": "2EF794C4940AFEA56C6D6D3B9BC9E66965BC7333E79C5DCB2DEF3C0E36F0834C",
+    "version": "10.0.26100.1 (WinBuild.160101.0800)",
+    "signature": "Valid",
+    "computer": "DESKTOP-N4H9E7R",
+    "identity": "NT AUTHORITY\\SYSTEM",
+    "launcher_architecture": "ARM64",
+    "culture": "en-US",
+    "ui_culture": "en-US",
+    "ansi_codepage": 1252,
+    "oem_codepage": 437,
+    "console_output_codepage": 437,
+    "directory": "C:\\",
+    "launch_api": "CreateProcessW",
+    "output_mode": "native pipes"
+  },
+  "cases": [
+    {
+      "id": "nodes-file-ascii",
+      "arguments_utf16_base64": "LwBuAG8AZABlADoAQAAiAFwAXABNAGEAYwBcAEgAbwBtAGUAXABEAG8AYwB1AG0AZQBuAHQAcwBcAEMAaABhAHQARwBQAFQAXAB3AG0AaQBjAC0AZAByAG8AcABpAG4AcgBlAHAAYQBsAGMAZQBtAGUAbgB0AFwAdABlAHMAdABzAFwAZgBpAHgAdAB1AHIAZQBzAFwAYwBvAG4AbgBlAGMAdABpAG8AbgBzAFwAYQBzAGMAaQBpAC4AbgBvAGQAZQBzACIAIABvAHMAIABnAGUAdAAgAEMAYQBwAHQAaQBvAG4A",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiACAALwBuAG8AZABlADoAQAAiAFwAXABNAGEAYwBcAEgAbwBtAGUAXABEAG8AYwB1AG0AZQBuAHQAcwBcAEMAaABhAHQARwBQAFQAXAB3AG0AaQBjAC0AZAByAG8AcABpAG4AcgBlAHAAYQBsAGMAZQBtAGUAbgB0AFwAdABlAHMAdABzAFwAZgBpAHgAdAB1AHIAZQBzAFwAYwBvAG4AbgBlAGMAdABpAG8AbgBzAFwAYQBzAGMAaQBpAC4AbgBvAGQAZQBzACIAIABvAHMAIABnAGUAdAAgAEMAYQBwAHQAaQBvAG4A",
+      "state": "completed",
+      "exit_status": 0,
+      "duration_ms": 82,
+      "process_id": 14740,
+      "normalizations": [],
+      "stdout": {
+        "file": "nodes-file-ascii.stdout.bin",
+        "bytes": 90,
+        "sha256": "ddd57ab72be0eb6e218470303d11e55621e9d3569d94965b9da76249686eb8e1"
+      },
+      "stderr": {
+        "file": "nodes-file-ascii.stderr.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "id": "nodes-file-utf16",
+      "arguments_utf16_base64": "LwBuAG8AZABlADoAQAAiAFwAXABNAGEAYwBcAEgAbwBtAGUAXABEAG8AYwB1AG0AZQBuAHQAcwBcAEMAaABhAHQARwBQAFQAXAB3AG0AaQBjAC0AZAByAG8AcABpAG4AcgBlAHAAYQBsAGMAZQBtAGUAbgB0AFwAdABlAHMAdABzAFwAZgBpAHgAdAB1AHIAZQBzAFwAYwBvAG4AbgBlAGMAdABpAG8AbgBzAFwAdQB0AGYAMQA2AC4AbgBvAGQAZQBzACIAIABvAHMAIABnAGUAdAAgAEMAYQBwAHQAaQBvAG4A",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiACAALwBuAG8AZABlADoAQAAiAFwAXABNAGEAYwBcAEgAbwBtAGUAXABEAG8AYwB1AG0AZQBuAHQAcwBcAEMAaABhAHQARwBQAFQAXAB3AG0AaQBjAC0AZAByAG8AcABpAG4AcgBlAHAAYQBsAGMAZQBtAGUAbgB0AFwAdABlAHMAdABzAFwAZgBpAHgAdAB1AHIAZQBzAFwAYwBvAG4AbgBlAGMAdABpAG8AbgBzAFwAdQB0AGYAMQA2AC4AbgBvAGQAZQBzACIAIABvAHMAIABnAGUAdAAgAEMAYQBwAHQAaQBvAG4A",
+      "state": "completed",
+      "exit_status": 0,
+      "duration_ms": 67,
+      "process_id": 13756,
+      "normalizations": [],
+      "stdout": {
+        "file": "nodes-file-utf16.stdout.bin",
+        "bytes": 90,
+        "sha256": "ddd57ab72be0eb6e218470303d11e55621e9d3569d94965b9da76249686eb8e1"
+      },
+      "stderr": {
+        "file": "nodes-file-utf16.stderr.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    }
+  ]
+}

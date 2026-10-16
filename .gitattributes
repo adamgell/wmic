@@ -2,3 +2,5 @@
 docs/research/evidence/**/*.mof -text -diff
 docs/research/evidence/**/*.bin -text -diff
 tests/fixtures/**/*.bin -text -diff
+
+tests/fixtures/connections/*.nodes -text

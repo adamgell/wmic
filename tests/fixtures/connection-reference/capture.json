@@ -1,0 +1,283 @@
+{
+  "schema_version": 1,
+  "profile": {
+    "role": "reference",
+    "executable": "C:\\Windows\\System32\\wbem\\WMIC.exe",
+    "executable_sha256": "2EF794C4940AFEA56C6D6D3B9BC9E66965BC7333E79C5DCB2DEF3C0E36F0834C",
+    "version": "10.0.26100.1 (WinBuild.160101.0800)",
+    "signature": "Valid",
+    "computer": "DESKTOP-N4H9E7R",
+    "identity": "NT AUTHORITY\\SYSTEM",
+    "launcher_architecture": "ARM64",
+    "culture": "en-US",
+    "ui_culture": "en-US",
+    "ansi_codepage": 1252,
+    "oem_codepage": 437,
+    "console_output_codepage": 437,
+    "directory": "C:\\",
+    "launch_api": "CreateProcessW",
+    "output_mode": "native pipes"
+  },
+  "cases": [
+    {
+      "id": "bad-auth",
+      "arguments_utf16_base64": "LwBhAHUAdABoAGwAZQB2AGUAbAA6AGIAbwBnAHUAcwAgAGMAbwBuAHQAZQB4AHQA",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiACAALwBhAHUAdABoAGwAZQB2AGUAbAA6AGIAbwBnAHUAcwAgAGMAbwBuAHQAZQB4AHQA",
+      "state": "completed",
+      "exit_status": 44105,
+      "duration_ms": 38,
+      "process_id": 11004,
+      "normalizations": [],
+      "stdout": {
+        "file": "bad-auth.stdout.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "file": "bad-auth.stderr.bin",
+        "bytes": 32,
+        "sha256": "983e094daaae133c207804b9e3fe046b80ed438566a5e2b3192321ec924618a0"
+      }
+    },
+    {
+      "id": "bad-imp",
+      "arguments_utf16_base64": "LwBpAG0AcABsAGUAdgBlAGwAOgBiAG8AZwB1AHMAIABjAG8AbgB0AGUAeAB0AA==",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiACAALwBpAG0AcABsAGUAdgBlAGwAOgBiAG8AZwB1AHMAIABjAG8AbgB0AGUAeAB0AA==",
+      "state": "completed",
+      "exit_status": 44104,
+      "duration_ms": 37,
+      "process_id": 13120,
+      "normalizations": [],
+      "stdout": {
+        "file": "bad-imp.stdout.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "file": "bad-imp.stderr.bin",
+        "bytes": 31,
+        "sha256": "aa90d7e9b28eb65995acd9e21b331c0d15253b549c47180429887d205b07f38e"
+      }
+    },
+    {
+      "id": "bad-priv",
+      "arguments_utf16_base64": "LwBwAHIAaQB2AGkAbABlAGcAZQBzADoAYgBvAGcAdQBzACAAYwBvAG4AdABlAHgAdAA=",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiACAALwBwAHIAaQB2AGkAbABlAGcAZQBzADoAYgBvAGcAdQBzACAAYwBvAG4AdABlAHgAdAA=",
+      "state": "completed",
+      "exit_status": 44126,
+      "duration_ms": 37,
+      "process_id": 14600,
+      "normalizations": [],
+      "stdout": {
+        "file": "bad-priv.stdout.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "file": "bad-priv.stderr.bin",
+        "bytes": 61,
+        "sha256": "8e06e2ca54e45c5ffb4be2232d529ac4905dd68c273cb22593ba59835319ea28"
+      }
+    },
+    {
+      "id": "trace",
+      "arguments_utf16_base64": "LwB0AHIAYQBjAGUAOgBvAG4AIABvAHMAIABnAGUAdAAgAEMAYQBwAHQAaQBvAG4A",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiACAALwB0AHIAYQBjAGUAOgBvAG4AIABvAHMAIABnAGUAdAAgAEMAYQBwAHQAaQBvAG4A",
+      "state": "completed",
+      "exit_status": 0,
+      "duration_ms": 91,
+      "process_id": 2152,
+      "normalizations": [],
+      "stdout": {
+        "file": "trace.stdout.bin",
+        "bytes": 61,
+        "sha256": "bc1b2ef2608f7afb80262bf378d545ab4aca257d0298f84069ed1a5e1f8680b3"
+      },
+      "stderr": {
+        "file": "trace.stderr.bin",
+        "bytes": 22113,
+        "sha256": "ad9929fbf6a1615f428ad7f7a8c002ce0703d09d76ccb17a8fb97f6ed20153b8"
+      }
+    },
+    {
+      "id": "duplicates-aggregate",
+      "arguments_utf16_base64": "LwBuAG8AZABlADoALgAsAC4AIABvAHMAIABnAGUAdAAgAEMAYQBwAHQAaQBvAG4A",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiACAALwBuAG8AZABlADoALgAsAC4AIABvAHMAIABnAGUAdAAgAEMAYQBwAHQAaQBvAG4A",
+      "state": "completed",
+      "exit_status": 0,
+      "duration_ms": 52,
+      "process_id": 10060,
+      "normalizations": [],
+      "stdout": {
+        "file": "duplicates-aggregate.stdout.bin",
+        "bytes": 61,
+        "sha256": "bc1b2ef2608f7afb80262bf378d545ab4aca257d0298f84069ed1a5e1f8680b3"
+      },
+      "stderr": {
+        "file": "duplicates-aggregate.stderr.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "id": "duplicates-separate",
+      "arguments_utf16_base64": "LwBhAGcAZwByAGUAZwBhAHQAZQA6AG8AZgBmACAALwBuAG8AZABlADoALgAsAC4AIABvAHMAIABnAGUAdAAgAEMAYQBwAHQAaQBvAG4A",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiACAALwBhAGcAZwByAGUAZwBhAHQAZQA6AG8AZgBmACAALwBuAG8AZABlADoALgAsAC4AIABvAHMAIABnAGUAdAAgAEMAYQBwAHQAaQBvAG4A",
+      "state": "completed",
+      "exit_status": 0,
+      "duration_ms": 56,
+      "process_id": 3292,
+      "normalizations": [],
+      "stdout": {
+        "file": "duplicates-separate.stdout.bin",
+        "bytes": 61,
+        "sha256": "bc1b2ef2608f7afb80262bf378d545ab4aca257d0298f84069ed1a5e1f8680b3"
+      },
+      "stderr": {
+        "file": "duplicates-separate.stderr.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "id": "failfast-local",
+      "arguments_utf16_base64": "LwBmAGEAaQBsAGYAYQBzAHQAOgBvAG4AIABvAHMAIABnAGUAdAAgAEMAYQBwAHQAaQBvAG4A",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiACAALwBmAGEAaQBsAGYAYQBzAHQAOgBvAG4AIABvAHMAIABnAGUAdAAgAEMAYQBwAHQAaQBvAG4A",
+      "state": "completed",
+      "exit_status": 0,
+      "duration_ms": 81,
+      "process_id": 2660,
+      "normalizations": [],
+      "stdout": {
+        "file": "failfast-local.stdout.bin",
+        "bytes": 61,
+        "sha256": "bc1b2ef2608f7afb80262bf378d545ab4aca257d0298f84069ed1a5e1f8680b3"
+      },
+      "stderr": {
+        "file": "failfast-local.stderr.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "id": "disable-priv",
+      "arguments_utf16_base64": "LwBwAHIAaQB2AGkAbABlAGcAZQBzADoAZABpAHMAYQBiAGwAZQAgAG8AcwAgAGcAZQB0ACAAQwBhAHAAdABpAG8AbgA=",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiACAALwBwAHIAaQB2AGkAbABlAGcAZQBzADoAZABpAHMAYQBiAGwAZQAgAG8AcwAgAGcAZQB0ACAAQwBhAHAAdABpAG8AbgA=",
+      "state": "completed",
+      "exit_status": 0,
+      "duration_ms": 60,
+      "process_id": 7656,
+      "normalizations": [],
+      "stdout": {
+        "file": "disable-priv.stdout.bin",
+        "bytes": 61,
+        "sha256": "bc1b2ef2608f7afb80262bf378d545ab4aca257d0298f84069ed1a5e1f8680b3"
+      },
+      "stderr": {
+        "file": "disable-priv.stderr.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "id": "auth-conflict",
+      "arguments_utf16_base64": "LwBhAHUAdABoAG8AcgBpAHQAeQA6AE4AVABMAE0ARABPAE0AQQBJAE4AOgBXAG0AaQBjAFIAZQBzAGUAYQByAGMAaAAgAC8AdQBzAGUAcgA6AFcAbQBpAGMAUgBlAHMAZQBhAHIAYwBoAFwATgBvAGIAbwBkAHkAIABjAG8AbgB0AGUAeAB0AA==",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiACAALwBhAHUAdABoAG8AcgBpAHQAeQA6AE4AVABMAE0ARABPAE0AQQBJAE4AOgBXAG0AaQBjAFIAZQBzAGUAYQByAGMAaAAgAC8AdQBzAGUAcgA6AFcAbQBpAGMAUgBlAHMAZQBhAHIAYwBoAFwATgBvAGIAbwBkAHkAIABjAG8AbgB0AGUAeAB0AA==",
+      "state": "completed",
+      "exit_status": 0,
+      "duration_ms": 41,
+      "process_id": 9324,
+      "normalizations": [],
+      "stdout": {
+        "file": "auth-conflict.stdout.bin",
+        "bytes": 570,
+        "sha256": "094d24e702d97d4a618d6a190eec025ee561eff79d297b84ac50898e8229e484"
+      },
+      "stderr": {
+        "file": "auth-conflict.stderr.bin",
+        "bytes": 20,
+        "sha256": "5f4b157392bcd6017d465680acfd00829e022a73e9368498d91ce3fbc0c0baaf"
+      }
+    },
+    {
+      "id": "selected-ip",
+      "arguments_utf16_base64": "LwBuAG8AZABlADoAMQA5ADIALgAxADYAOAAuADIALgAxADAANwAgAG8AcwAgAGcAZQB0ACAAQwBhAHAAdABpAG8AbgA=",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiACAALwBuAG8AZABlADoAMQA5ADIALgAxADYAOAAuADIALgAxADAANwAgAG8AcwAgAGcAZQB0ACAAQwBhAHAAdABpAG8AbgA=",
+      "state": "completed",
+      "exit_status": 0,
+      "duration_ms": 65,
+      "process_id": 10464,
+      "normalizations": [],
+      "stdout": {
+        "file": "selected-ip.stdout.bin",
+        "bytes": 61,
+        "sha256": "bc1b2ef2608f7afb80262bf378d545ab4aca257d0298f84069ed1a5e1f8680b3"
+      },
+      "stderr": {
+        "file": "selected-ip.stderr.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "id": "selected-ip-and-local",
+      "arguments_utf16_base64": "LwBuAG8AZABlADoAMQA5ADIALgAxADYAOAAuADIALgAxADAANwAsAC4AIABvAHMAIABnAGUAdAAgAEMAYQBwAHQAaQBvAG4A",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiACAALwBuAG8AZABlADoAMQA5ADIALgAxADYAOAAuADIALgAxADAANwAsAC4AIABvAHMAIABnAGUAdAAgAEMAYQBwAHQAaQBvAG4A",
+      "state": "completed",
+      "exit_status": 0,
+      "duration_ms": 59,
+      "process_id": 3840,
+      "normalizations": [],
+      "stdout": {
+        "file": "selected-ip-and-local.stdout.bin",
+        "bytes": 90,
+        "sha256": "ddd57ab72be0eb6e218470303d11e55621e9d3569d94965b9da76249686eb8e1"
+      },
+      "stderr": {
+        "file": "selected-ip-and-local.stderr.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "id": "bad-address-failfast",
+      "arguments_utf16_base64": "LwBmAGEAaQBsAGYAYQBzAHQAOgBvAG4AIAAvAG4AbwBkAGUAOgAiAFsAXQAiACAAbwBzACAAZwBlAHQAIABDAGEAcAB0AGkAbwBuAA==",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiACAALwBmAGEAaQBsAGYAYQBzAHQAOgBvAG4AIAAvAG4AbwBkAGUAOgAiAFsAXQAiACAAbwBzACAAZwBlAHQAIABDAGEAcAB0AGkAbwBuAA==",
+      "state": "completed",
+      "exit_status": 2147944122,
+      "duration_ms": 67,
+      "process_id": 8464,
+      "normalizations": [],
+      "stdout": {
+        "file": "bad-address-failfast.stdout.bin",
+        "bytes": 6,
+        "sha256": "44d77e47b3618da142fc59ae22795fb2005824045758fa4f4dbbc64d9ab44453"
+      },
+      "stderr": {
+        "file": "bad-address-failfast.stderr.bin",
+        "bytes": 68,
+        "sha256": "5749bff8a5458431297ca7ff8a047ca60277ad3cdbdac04bda336546d31415c0"
+      }
+    },
+    {
+      "id": "selected-separate",
+      "arguments_utf16_base64": "LwBhAGcAZwByAGUAZwBhAHQAZQA6AG8AZgBmACAALwBuAG8AZABlADoAMQA5ADIALgAxADYAOAAuADIALgAxADAANwAsAC4AIABvAHMAIABnAGUAdAAgAEMAYQBwAHQAaQBvAG4A",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiACAALwBhAGcAZwByAGUAZwBhAHQAZQA6AG8AZgBmACAALwBuAG8AZABlADoAMQA5ADIALgAxADYAOAAuADIALgAxADAANwAsAC4AIABvAHMAIABnAGUAdAAgAEMAYQBwAHQAaQBvAG4A",
+      "state": "completed",
+      "exit_status": 0,
+      "duration_ms": 82,
+      "process_id": 7708,
+      "normalizations": [],
+      "stdout": {
+        "file": "selected-separate.stdout.bin",
+        "bytes": 122,
+        "sha256": "2b9cee32baac40a8dc481ce5b66e384665134606e130878d22458a100a69b554"
+      },
+      "stderr": {
+        "file": "selected-separate.stderr.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    }
+  ]
+}

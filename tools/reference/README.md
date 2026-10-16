@@ -34,3 +34,5 @@ The initial 23 cases were recaptured through `CreateProcessW` on the selected
 ARM64 guest and repeated. They match after the one declared XML timestamp
 normalization. Console and file-output encodings require their own tests;
 these captures establish native pipe behavior only.
+
+Parallels occasionally reports `PrlJob_GetResult` or `PrlJob_GetRetCode: Invalid argument` despite a responsive guest. `run_guest_script(..., replay_safe=True)` permits up to three attempts for only those errors. The default never replays scripts. Hash-verified artifact staging opts in because it is idempotent. `capture(..., replay_safe=True)` requires an explicit caller choice; do not opt in for controlled writes or commands whose side effects are uncertain. Guest application failures are never retried by this mechanism.

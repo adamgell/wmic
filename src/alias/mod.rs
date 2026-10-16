@@ -212,6 +212,7 @@ impl AliasStore {
                     .unwrap_or_else(|| ".".into()),
                 namespace: settings.namespace.clone(),
                 locale: None,
+                ..Default::default()
             },
             class_name: WideText::default(),
             instance_path: None,
@@ -235,6 +236,8 @@ impl AliasStore {
                 req.connection.namespace = ns.as_str().into();
             }
             req.connection.locale = a.connection.locale.as_deref().map(Into::into);
+            req.connection.user = a.connection.user.as_deref().map(Into::into);
+            req.connection.authority = a.connection.authority.as_deref().map(Into::into);
             let mut pos = command.positionals.clone();
             let mut method = command.method.clone();
             if !command.verb_explicit

@@ -129,5 +129,30 @@ class ReferenceTests(unittest.TestCase):
             self.assertIn(b"stderr", result.stdout)
 
 
+
+class TransportTests(unittest.TestCase):
+    def test_known_transport_failure_can_replay_explicitly_safe_script(self):
+        from unittest.mock import patch
+        failed = subprocess.CompletedProcess([], 1, b'', b'PrlJob_GetRetCode: Invalid argument.')
+        success = subprocess.CompletedProcess([], 0, b'exact bytes\r\n', b'')
+        with patch.object(parallels.subprocess, 'run', side_effect=[failed,success]) as run:
+            self.assertEqual(parallels.run_guest_script('selected-vm','read-only script',replay_safe=True), b'exact bytes\r\n')
+            self.assertEqual(run.call_count,2)
+
+    def test_script_is_not_replayed_without_explicit_safety_flag(self):
+        from unittest.mock import patch
+        failed = subprocess.CompletedProcess([], 1, b'', b'PrlJob_GetResult: Invalid argument.')
+        with patch.object(parallels.subprocess, 'run', return_value=failed) as run:
+            with self.assertRaises(RuntimeError): parallels.run_guest_script('selected-vm','mutation script')
+            self.assertEqual(run.call_count,1)
+
+    def test_guest_failure_is_not_replayed(self):
+        from unittest.mock import patch
+        failed = subprocess.CompletedProcess([], 1, b'', b'Application failed')
+        with patch.object(parallels.subprocess, 'run', return_value=failed) as run:
+            with self.assertRaises(RuntimeError): parallels.run_guest_script('selected-vm','read-only script',replay_safe=True)
+            self.assertEqual(run.call_count,1)
+
+
 if __name__ == "__main__":
     unittest.main()

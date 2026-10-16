@@ -1,0 +1,84 @@
+{
+  "schema_version": 1,
+  "reference_sha256": "2EF794C4940AFEA56C6D6D3B9BC9E66965BC7333E79C5DCB2DEF3C0E36F0834C",
+  "cases": [
+    {
+      "id": "bad-auth",
+      "arguments": "/authlevel:bogus context",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "bad-imp",
+      "arguments": "/implevel:bogus context",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "bad-priv",
+      "arguments": "/privileges:bogus context",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "trace",
+      "arguments": "/trace:on os get Caption",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "duplicates-aggregate",
+      "arguments": "/node:.,. os get Caption",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "duplicates-separate",
+      "arguments": "/aggregate:off /node:.,. os get Caption",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "failfast-local",
+      "arguments": "/failfast:on os get Caption",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "disable-priv",
+      "arguments": "/privileges:disable os get Caption",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "auth-conflict",
+      "arguments": "/authority:NTLMDOMAIN:WmicResearch /user:WmicResearch\\Nobody context",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "selected-ip",
+      "arguments": "/node:192.168.2.107 os get Caption",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "selected-ip-and-local",
+      "arguments": "/node:192.168.2.107,. os get Caption",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "bad-address-failfast",
+      "arguments": "/failfast:on /node:\"[]\" os get Caption",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "selected-separate",
+      "arguments": "/aggregate:off /node:192.168.2.107,. os get Caption",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    }
+  ]
+}

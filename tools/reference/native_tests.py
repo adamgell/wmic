@@ -11,7 +11,7 @@ def stage_artifact(vm: str, source: Path, name: str = 'wmic.exe') -> tuple[str,s
     sha = hashlib.sha256(source.read_bytes()).hexdigest()
     stage = (Path(__file__).resolve().parents[1] / 'windows/stage-artifact.ps1').read_text()
     script = "& {\n" + stage + "\n} -SourcePath '" + guest_source.replace("'", "''") + "' -ExpectedSha256 '" + sha + "' -FileName '" + name.replace("'", "''") + "'\n\n"
-    path = run_guest_script(vm, script, 120).decode().strip()
+    path = run_guest_script(vm, script, 120, replay_safe=True).decode().strip()
     expected = 'C:\\ProgramData\\WmicCompat\\artifacts\\' + sha.upper() + '\\' + name
     if path != expected:
         raise RuntimeError('Unexpected artifact staging result: ' + path)
