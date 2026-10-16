@@ -61,6 +61,8 @@ pub struct ParsedCommand {
     pub view: Option<WideText>,
     pub method: Option<WideText>,
     pub arguments: Vec<WideText>,
+    #[serde(default)]
+    pub raw_arguments: Vec<WideText>,
     pub positionals: Vec<WideText>,
     pub modifiers: Vec<Modifier>,
 }
@@ -78,6 +80,7 @@ impl ParsedCommand {
             view: None,
             method: None,
             arguments: vec![],
+            raw_arguments: vec![],
             positionals: vec![],
             modifiers: vec![],
         }

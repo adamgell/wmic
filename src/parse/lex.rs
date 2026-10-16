@@ -51,9 +51,9 @@ pub(super) fn tokens(units: &[u16]) -> Result<Vec<Range<usize>>, ParseError> {
                 }
             } else if matches!(unit, 34 | 39) && !escaped(units, i) {
                 quote = Some(unit);
-            } else if unit == b'(' as u16 {
+            } else if matches!(unit, 40 | 91 | 123) {
                 depth += 1;
-            } else if unit == b')' as u16 && depth > 0 {
+            } else if matches!(unit, 41 | 93 | 125) && depth > 0 {
                 depth -= 1;
             } else if space(unit) && depth == 0 {
                 break;

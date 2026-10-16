@@ -76,6 +76,9 @@ public static class WmicReferenceCapture {
         char[] units=new char[bytes.Length/2]; Buffer.BlockCopy(bytes,0,units,0,bytes.Length); return new string(units);
     }
     public static WmicCaptureResult Run(string executable, string arguments, int timeoutMs) {
+        return RunWithInput(executable,arguments,timeoutMs,new byte[0]);
+    }
+    public static WmicCaptureResult RunWithInput(string executable, string arguments, int timeoutMs, byte[] inputBytes) {
         if (timeoutMs<=0 || executable.IndexOf('"')>=0 || executable.IndexOf('\0')>=0 || arguments.IndexOf('\0')>=0) throw new ArgumentException("Invalid launch arguments");
         string raw="\""+executable+"\""+(arguments.Length==0 ? "" : " "+arguments);
         if (raw.Length>=32767) throw new ArgumentException("Command line exceeds Windows limit");
@@ -91,18 +94,24 @@ public static class WmicReferenceCapture {
             var startup=new StartupInfo(); startup.cb=Marshal.SizeOf(startup); startup.flags=0x100;
             startup.stdin=inR; startup.stdout=outW; startup.stderr=errW;
             Check(CreateProcessW(executable,new StringBuilder(raw),IntPtr.Zero,IntPtr.Zero,true,0x08000000,IntPtr.Zero,null,ref startup,out process));
-            Close(ref process.thread); Close(ref outW); Close(ref errW); Close(ref inR); Close(ref inW);
+            Close(ref process.thread); Close(ref outW); Close(ref errW); Close(ref inR);
             using(var output=new FileStream(new SafeFileHandle(outR,true),FileAccess.Read,4096,false))
             using(var error=new FileStream(new SafeFileHandle(errR,true),FileAccess.Read,4096,false))
             using(var stdout=new MemoryStream())
             using(var stderr=new MemoryStream()) {
                 outR=IntPtr.Zero; errR=IntPtr.Zero;
+                IntPtr inputHandle=inW; inW=IntPtr.Zero;
+                Task inTask=Task.Run(() => {
+                    using (var input=new FileStream(new SafeFileHandle(inputHandle,true),FileAccess.Write,4096,false)) {
+                        try {input.Write(inputBytes,0,inputBytes.Length);} catch(IOException e) {if ((e.HResult & 65535)!=109 && (e.HResult & 65535)!=232) throw;}
+                    }
+                });
                 Task outTask=output.CopyToAsync(stdout), errTask=error.CopyToAsync(stderr);
                 uint wait=WaitForSingleObject(process.process,(uint)timeoutMs);
                 bool completed=wait==0;
                 if (wait==258) { Check(TerminateProcess(process.process,1460)); if (WaitForSingleObject(process.process,5000)!=0) throw new TimeoutException("Child would not terminate"); }
                 else if (!completed) throw new Win32Exception(Marshal.GetLastWin32Error());
-                if (!Task.WaitAll(new Task[]{outTask,errTask},5000)) throw new TimeoutException("Inherited output handles remain open");
+                if (!Task.WaitAll(new Task[]{outTask,errTask,inTask},5000)) throw new TimeoutException("Inherited output handles remain open");
                 uint exit; Check(GetExitCodeProcess(process.process,out exit)); timer.Stop();
                 return new WmicCaptureResult {
                     arguments_utf16_base64=WideBase64(arguments), command_line_utf16_base64=WideBase64(raw),
@@ -126,7 +135,9 @@ public static class WmicReferenceCapture {
         if ($arguments -match '(?i)/password\s*:') { throw 'Credential arguments cannot be recorded.' }
         $timeout = 20000
         if ($case.timeout_ms) { $timeout = [int]$case.timeout_ms }
-        $result = [WmicReferenceCapture]::Run($file.FullName, $arguments, $timeout)
+        $inputBytes=[byte[]]@()
+        if ($case.stdin_base64) {$inputBytes=[Convert]::FromBase64String($case.stdin_base64)}
+        $result = [WmicReferenceCapture]::RunWithInput($file.FullName, $arguments, $timeout, $inputBytes)
         $result.id = $case.id
         $result.normalizations = @()
         if ($case.normalizations) { $result.normalizations = @($case.normalizations) }

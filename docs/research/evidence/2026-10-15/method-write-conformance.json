@@ -1,0 +1,36 @@
+{
+  "sha256": "a7dcc65d46a000ebe9f1e151eb539f06e88d07ab88bbf64f1c7b5162fa7a920c",
+  "suites": {
+    "method": {
+      "cases": 13,
+      "differences": []
+    },
+    "reference": {
+      "cases": 23,
+      "differences": [
+        "context: exit_status: 0 != 2147749900",
+        "context: stdout: 534 != 0 bytes; first difference at 0",
+        "context: stderr: 0 != 16 bytes; first difference at 0",
+        "os-get-csv: exit_status: 0 != 44210",
+        "os-get-csv: stdout: 80 != 0 bytes; first difference at 0",
+        "os-get-csv: stderr: 0 != 37 bytes; first difference at 0",
+        "os-get-mof: exit_status: 0 != 44210",
+        "os-get-mof: stdout: 841 != 0 bytes; first difference at 0",
+        "os-get-mof: stderr: 0 != 37 bytes; first difference at 0",
+        "os-get-rawxml: exit_status: 0 != 44210",
+        "os-get-rawxml: stdout: 1028 != 0 bytes; first difference at 0",
+        "os-get-rawxml: stderr: 0 != 37 bytes; first difference at 0"
+      ]
+    }
+  },
+  "controlled_cases_passed": 11,
+  "negative_method_probes_passed": 1,
+  "native_library_tests_passed": 4,
+  "native_profile": "ARM64 en-US SYSTEM",
+  "unexercised": [
+    "Destructive service/account/security/reboot methods",
+    "Non-owned process methods",
+    "Class repository writes"
+  ],
+  "comparison_notes": "Only exact owned PID fields are mapped for lifecycle comparisons. Original and candidate raw bytes are retained. Provider ReturnValue8 for named NULL directory is separate from COM/process status0."
+}

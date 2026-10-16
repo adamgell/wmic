@@ -1,5 +1,7 @@
 mod diagnostic;
 mod encoding;
+mod method;
+mod operation;
 mod table;
 mod value;
 use crate::{backend::ResolvedRequest, model::*};
@@ -89,7 +91,42 @@ pub fn render(input: RenderRequest<'_>) -> Result<RenderedOutput, RenderError> {
     let result = match input.result {
         Ok(r) => r,
         Err(e) => {
+            if e.operation.eq_ascii_ignore_case("input") {
+                return Ok(diagnostic::text(&e.message, None));
+            }
             let mut output = diagnostic::management(e, input.node);
+            if e.operation.eq_ascii_ignore_case("method") {
+                if !crate::backend::write::interactive(req) {
+                    output.stdout =
+                        method::start(&e.target, &req.method.clone().unwrap_or_default());
+                }
+                if let Some(partial) = &e.partial
+                    && let ManagementResult::Methods(methods) = partial.as_ref()
+                {
+                    let mut completed = method::render(
+                        methods,
+                        &req.method.clone().unwrap_or_default(),
+                        !crate::backend::write::interactive(req),
+                    );
+                    append(&mut completed.stdout, &output.stdout);
+                    append(&mut completed.stderr, &output.stderr);
+                    output = completed;
+                }
+            }
+            if e.operation.eq_ascii_ignore_case("update")
+                || e.operation.eq_ascii_ignore_case("delete")
+            {
+                if let Some(partial) = &e.partial
+                    && let ManagementResult::Operation(operation) = partial.as_ref()
+                {
+                    output.stdout =
+                        operation::render(operation, crate::backend::write::interactive(req))
+                            .stdout;
+                }
+                if !crate::backend::write::interactive(req) || req.verb == Verb::Delete {
+                    append(&mut output.stdout, &operation::start(req.verb, &e.target));
+                }
+            }
             if !output.stdout.0.is_empty()
                 && req.verb == Verb::List
                 && req.view.is_some()
@@ -103,6 +140,19 @@ pub fn render(input: RenderRequest<'_>) -> Result<RenderedOutput, RenderError> {
             return Ok(output);
         }
     };
+    if let ManagementResult::Operation(operation) = result {
+        return Ok(operation::render(
+            operation,
+            crate::backend::write::interactive(req),
+        ));
+    }
+    if let ManagementResult::Methods(methods) = result {
+        return Ok(method::render(
+            methods,
+            &req.method.clone().unwrap_or_default(),
+            !crate::backend::write::interactive(req),
+        ));
+    }
     if let ManagementResult::Schema(schema) = result {
         let value = req
             .modifiers

@@ -23,6 +23,8 @@ def validate_manifest(manifest: dict, allow_writes: bool = False) -> None:
         if not isinstance(name, str) or not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9_-]*", name) or name in seen:
             raise ValueError("invalid or duplicate case ID: " + repr(name))
         seen.add(name)
+        if "stdin_base64" in case:
+            base64.b64decode(case["stdin_base64"], validate=True)
         arguments = case.get("arguments", "")
         if "arguments_utf16_base64" in case:
             raw = base64.b64decode(case["arguments_utf16_base64"], validate=True)

@@ -2434,12 +2434,90 @@
       "observed": true,
       "implemented": true,
       "verified": true
+    },
+    {
+      "id": "getowner-pid0",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "getowner-empty",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "getowner-invalid",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "getowner-positional",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "getowner-static",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "invalid-method",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "derived-seealso",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "derived-seealso-bare",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "call-missing-method",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "set-empty-selection",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "interactive-method-declined",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "interactive-method-multiple",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "invalid-interactive",
+      "observed": true,
+      "implemented": true,
+      "verified": true
     }
   ],
   "tooling": {
     "native_capture_implemented": true,
     "native_capture_verified": true,
-    "python_tests": 15,
+    "python_tests": 21,
     "reference_cases": 23,
     "help_cases": 344,
     "syntax_cases": 19,
@@ -3250,6 +3328,16 @@
       "native_stable_schema_cases_passed": 29,
       "volatile_data_probes": 2,
       "profile": "ARM64 en-US SYSTEM"
+    },
+    "methods_and_writes": {
+      "implemented": true,
+      "native_method_cases_passed": 13,
+      "controlled_lifecycle_cases_passed": 11,
+      "negative_method_probes_passed": 1,
+      "native_input_arrays_and_embedded_objects_verified_in_memory": true,
+      "required_argument_prompts": "pending Task 12",
+      "other_destructive_methods": "unexercised",
+      "class_repository_writes": "unexercised"
     }
   }
 }

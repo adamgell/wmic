@@ -21,6 +21,7 @@ pub struct SessionSettings {
     pub failfast: bool,
     pub failfast_timeout_ms: u32,
     pub aggregate: bool,
+    pub interactive: bool,
 }
 
 impl Default for SessionSettings {
@@ -43,6 +44,7 @@ impl Default for SessionSettings {
             failfast: false,
             failfast_timeout_ms: 5000,
             aggregate: true,
+            interactive: false,
         }
     }
 }
@@ -141,6 +143,14 @@ impl SessionSettings {
                                 )
                             })?;
                     }
+                }
+                "interactive" => {
+                    s.interactive = toggle(value.as_ref(), "on", "off", false).ok_or_else(|| {
+                        setting_error(
+                            0xAC66,
+                            "Invalid Interactive Option Value (ON|OFF expected).",
+                        )
+                    })?
                 }
                 "trace" | "aggregate" => {
                     let v = toggle(value.as_ref(), "on", "off", name == "aggregate")

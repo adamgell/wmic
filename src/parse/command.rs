@@ -169,11 +169,44 @@ pub fn parse_command(raw: &WideText, mode: EntryMode) -> Result<ParsedCommand, P
                         &units[spans[i + 1].start..spans[body_end - 1].end],
                         true,
                     );
+                    command.raw_arguments = lex::split_commas(
+                        &units[spans[i + 1].start..spans[body_end - 1].end],
+                        false,
+                    );
+                    let first = &units[spans[i + 1].clone()];
+                    let named = first
+                        .iter()
+                        .position(|u| *u == 61)
+                        .is_some_and(|at| !first[..at].iter().any(|u| matches!(u, 34 | 39)));
+                    if named {
+                        let args: Vec<_> = spans[i + 1..body_end]
+                            .iter()
+                            .map(|span| WideText(units[span.clone()].to_vec()))
+                            .collect();
+                        if args.iter().any(|arg| {
+                            !arg.0.contains(&61) || lex::split_commas(&arg.0, false).len() != 1
+                        }) {
+                            return Err(ParseError::new(
+                                0xADDC,
+                                "Invalid named parameter list.\r\r\nHint: <named param list> ::= <named param> | <named param> <named param list> where <named param> ::= <param name>=<param value>",
+                                None,
+                            ));
+                        }
+                        command.arguments = args.clone();
+                        command.raw_arguments = args;
+                    }
                 }
             }
         }
         Verb::Create | Verb::Set => command.arguments = lex::split_commas(body, false),
         _ => {}
+    }
+    if command.verb == Verb::Call
+        && command.method.is_none()
+        && body_end == spans.len()
+        && !command.help
+    {
+        return Err(ParseError::new(0xABE2, "Incomplete Command.", None));
     }
     i = body_end;
     while i < spans.len() {

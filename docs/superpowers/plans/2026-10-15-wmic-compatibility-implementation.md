@@ -261,7 +261,7 @@ filters, direct class operations, and `HelpRequest` schema/alias/verb contexts.
 with independent return/out parameters, and supported derived/external command
 dispatch. Controlled fixtures return their exact owned identifiers for cleanup.
 
-- [ ] Add `method_return_failure_is_not_com_failure`, positional/named/optional argument conversion cases, static versus instance dispatch, confirmation behavior, and a recorded test-owned process/environment-variable lifecycle. Assert target IDs before each change and cleanup after failure.
+- [x] Add `method_return_failure_is_not_com_failure`, positional/named/optional argument conversion cases, static versus instance dispatch, confirmation behavior, and a recorded test-owned process/environment-variable lifecycle. Assert target IDs before each change and cleanup after failure.
 
   ```rust
   assert!(synthetic_com_invocation.is_ok());
@@ -269,9 +269,9 @@ dispatch. Controlled fixtures return their exact owned identifiers for cleanup.
   assert_eq!(changed_object_id, owned_fixture_id);
   ```
 
-- [ ] Run the relevant portable tests; confirm missing conversions and dispatch fail first. Keep live write cases explicitly selected and separate from default discovery.
-- [ ] Implement schema-driven native methods and writes, derived command expansion and required class operations. Never invoke every provider method as a discovery strategy.
-- [ ] Run controlled tests on the selected guest, operating only on recorded owned objects. Expected: reference effects/output/status match, cleanup succeeds, and unrelated state is untouched. Record unexercised destructive methods. Commit as `feat: execute WMIC methods and controlled instance changes`.
+- [x] Run the relevant portable tests; confirm missing conversions and dispatch fail first. Keep live write cases explicitly selected and separate from default discovery.
+- [x] Implement schema-driven native methods and writes, derived command expansion and required class operations. Never invoke every provider method as a discovery strategy.
+- [x] Run controlled tests on the selected guest, operating only on recorded owned objects. Expected: reference effects/output/status match, cleanup succeeds, and unrelated state is untouched. Record unexercised destructive methods. Commit as `feat: execute WMIC methods and controlled instance changes`.
 
 ## Task 10: CSV, XML, MOF, HTML, XSL and translation — Stage 4
 

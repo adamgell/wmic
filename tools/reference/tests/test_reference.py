@@ -95,6 +95,10 @@ class ReferenceTests(unittest.TestCase):
                 parallels.write_capture({"cases": [dict(sample_case(), stdout_base64="%%%not-base64")]}, Path(tmp))
             self.assertEqual(list(Path(tmp).iterdir()), [])
 
+    def test_invalid_stdin_base64_is_rejected_before_launch(self):
+        with self.assertRaises(ValueError):
+            parallels.validate_manifest({"cases": [{"id": "stdin", "arguments": "", "stdin_base64": "%%%"}]})
+
     def test_refuses_persisting_password_arguments(self):
         manifest = {"cases": [{"id": "secret", "arguments": "/password:real-secret os get Caption", "operation": "read_only"}]}
         with self.assertRaises(ValueError):

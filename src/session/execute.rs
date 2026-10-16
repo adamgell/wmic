@@ -12,6 +12,9 @@ pub enum OutputStream {
     Stderr,
 }
 pub trait OutputSink {
+    fn read_line(&mut self) -> Result<Option<WideText>, OutputError> {
+        Ok(None)
+    }
     fn read_secret(&mut self) -> Result<Option<WideText>, OutputError> {
         Ok(None)
     }
@@ -117,6 +120,98 @@ impl Session {
             {
                 return outcome;
             }
+        }
+    }
+    fn execute_derived(
+        &mut self,
+        command: crate::alias::DerivedCommand,
+        settings: &SessionSettings,
+        backend: &mut dyn Management,
+        sink: &mut dyn OutputSink,
+        external: bool,
+    ) -> CommandOutcome {
+        let mut selection = *command.selection.clone();
+        selection.verb = Verb::Get;
+        selection.method = None;
+        selection.properties.clear();
+        configure_connection(&mut selection, settings);
+        let nodes = if settings.explicit_nodes {
+            settings.nodes.clone()
+        } else {
+            vec![selection.connection.node.clone()]
+        };
+        let mut status = 0;
+        for node in nodes {
+            selection.connection.node = node.clone();
+            let result = backend.execute_with_confirmation(&selection, &mut SinkConfirmation(sink));
+            match result {
+                Ok(ManagementResult::Objects(set)) => {
+                    for object in set.objects {
+                        let expanded = match command.expand(&object) {
+                            Ok(s) => s,
+                            Err(e) => return emit(sink, render::render_resolve_error(&e), e.code),
+                        };
+                        if external {
+                            match backend.launch_external(&expanded) {
+                                Ok(code) => status = code,
+                                Err(e) => {
+                                    return emit(
+                                        sink,
+                                        render::render(render::RenderRequest {
+                                            request: &selection,
+                                            result: Err(&e),
+                                            node: &node,
+                                        })
+                                        .unwrap_or_default(),
+                                        e.code,
+                                    );
+                                }
+                            }
+                        } else {
+                            if sink.write(OutputStream::Stdout, &"\r\n".into()).is_err() {
+                                return CommandOutcome {
+                                    exit_status: 0x80070005,
+                                    ..Default::default()
+                                };
+                            }
+                            let mut child = Session {
+                                settings: SessionSettings::default(),
+                                aliases: self.aliases.clone(),
+                                local_node: self.local_node.clone(),
+                            };
+                            let _ = child.execute(&expanded, EntryMode::Process, backend, sink);
+                            if sink.write(OutputStream::Stdout, &"\r\n".into()).is_err() {
+                                return CommandOutcome {
+                                    exit_status: 0x80070005,
+                                    ..Default::default()
+                                };
+                            }
+                        }
+                    }
+                }
+                Err(e) => {
+                    return emit(
+                        sink,
+                        render::render(render::RenderRequest {
+                            request: &selection,
+                            result: Err(&e),
+                            node: &node,
+                        })
+                        .unwrap_or_default(),
+                        e.code,
+                    );
+                }
+                _ => {
+                    return CommandOutcome {
+                        exit_status: 0x8004100c,
+                        ..Default::default()
+                    };
+                }
+            }
+        }
+        CommandOutcome {
+            exit_status: status,
+            ..Default::default()
         }
     }
     fn execute_once(
@@ -240,6 +335,15 @@ impl Session {
             Ok(r) => r,
             Err(e) => return emit(sink, render::render_resolve_error(&e), e.code),
         };
+        let resolved = match resolved {
+            ResolvedCommand::Derived(command) => {
+                return self.execute_derived(command, &settings, backend, sink, false);
+            }
+            ResolvedCommand::External(command) => {
+                return self.execute_derived(command, &settings, backend, sink, true);
+            }
+            other => other,
+        };
         let ResolvedCommand::Management(mut request) = resolved else {
             return emit(
                 sink,
@@ -314,7 +418,7 @@ impl Session {
                         partial: None,
                     })
                 } else {
-                    backend.execute(&request)
+                    backend.execute_with_confirmation(&request, &mut SinkConfirmation(sink))
                 };
             had_objects |= matches!(result, Ok(ManagementResult::Objects(_)));
             let code = result.as_ref().err().map_or(0, |e| e.code);
@@ -436,6 +540,16 @@ impl crate::alias::RoleLoader for BackendRoleLoader<'_> {
 }
 
 fn configure_connection(request: &mut crate::backend::ResolvedRequest, settings: &SessionSettings) {
+    if settings.interactive {
+        request.modifiers.insert(
+            0,
+            Modifier {
+                name: "interactive".into(),
+                value: SwitchValue::Value("on".into()),
+                scope: ModifierScope::Global,
+            },
+        );
+    }
     request.connection.authentication = settings.authentication;
     request.connection.impersonation = settings.impersonation;
     request.connection.privileges = settings.privileges;
@@ -446,5 +560,73 @@ fn configure_connection(request: &mut crate::backend::ResolvedRequest, settings:
     }
     if settings.authority.is_some() {
         request.connection.authority = settings.authority.clone();
+    }
+}
+
+struct SinkConfirmation<'a>(&'a mut dyn OutputSink);
+impl crate::backend::Confirmation for SinkConfirmation<'_> {
+    fn streams_methods(&self) -> bool {
+        true
+    }
+    fn method_completed(
+        &mut self,
+        request: &crate::backend::ResolvedRequest,
+        result: &MethodResult,
+    ) -> Result<(), ManagementError> {
+        let value = ManagementResult::Methods(vec![result.clone()]);
+        let output = render::render(render::RenderRequest {
+            request,
+            result: Ok(&value),
+            node: &request.connection.node,
+        })
+        .map_err(|e| ManagementError {
+            code: 0xACB2,
+            target: request.class_name.clone(),
+            message: e.0,
+            operation: "input".into(),
+            extended: vec![],
+            partial: None,
+        })?;
+        let outcome = emit(self.0, output, 0);
+        if outcome.exit_status != 0 {
+            return Err(ManagementError {
+                code: outcome.exit_status,
+                target: request.class_name.clone(),
+                message: "Output failed".into(),
+                operation: "input".into(),
+                extended: vec![],
+                partial: None,
+            });
+        }
+        Ok(())
+    }
+    fn confirm(&mut self, prompt: &WideText) -> Result<bool, ManagementError> {
+        let result: Result<Option<WideText>, OutputError> = (|| {
+            loop {
+                self.0.write(OutputStream::Stderr, prompt)?;
+                let answer = self.0.read_line()?;
+                if answer
+                    .as_ref()
+                    .is_some_and(|a| a.trim_ascii().eq_ascii_ignore_case("?"))
+                {
+                    self.0.write(
+                        OutputStream::Stderr,
+                        &"Invalid XSL format (or) file name.\r\r\n".into(),
+                    )?;
+                } else {
+                    break Ok(answer);
+                }
+            }
+        })();
+        result
+            .map(|answer| answer.is_some_and(|a| a.trim_ascii().eq_ascii_ignore_case("y")))
+            .map_err(|e| ManagementError {
+                code: 0x80070005,
+                target: WideText::default(),
+                message: e.to_string().into(),
+                operation: "input".into(),
+                extended: vec![],
+                partial: None,
+            })
     }
 }

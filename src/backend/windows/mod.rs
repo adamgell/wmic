@@ -2,10 +2,13 @@
 mod aliases;
 mod com;
 mod connect;
+mod external;
+mod methods;
 mod ping;
 mod privileges;
 mod query;
 mod schema;
+mod write;
 use crate::{
     backend::{Management, ResolvedRequest},
     model::*,
@@ -49,7 +52,7 @@ pub(crate) fn failure(
     ManagementError {
         code: e.code().0 as u32,
         target: r.connection.node.clone(),
-        message: diagnostic(e.code().0 as u32).into(),
+        message: methods::status_text(e.code().0 as u32),
         operation: operation.into(),
         extended,
         partial: None,
@@ -73,6 +76,9 @@ impl WindowsManagement {
     }
 }
 impl Management for WindowsManagement {
+    fn launch_external(&mut self, command: &WideText) -> Result<u32, ManagementError> {
+        external::launch(command)
+    }
     fn load_aliases(
         &mut self,
         role: &WideText,
@@ -85,6 +91,22 @@ impl Management for WindowsManagement {
         ping::reachable(node, timeout_ms)
     }
     fn execute(&mut self, r: &ResolvedRequest) -> Result<ManagementResult, ManagementError> {
+        self.run(r, None)
+    }
+    fn execute_with_confirmation(
+        &mut self,
+        r: &ResolvedRequest,
+        c: &mut dyn crate::backend::Confirmation,
+    ) -> Result<ManagementResult, ManagementError> {
+        self.run(r, Some(c))
+    }
+}
+impl WindowsManagement {
+    fn run(
+        &mut self,
+        r: &ResolvedRequest,
+        confirmation: Option<&mut dyn crate::backend::Confirmation>,
+    ) -> Result<ManagementResult, ManagementError> {
         let _privileges = privileges::PrivilegeGuard::new(r.connection.privileges)
             .map_err(|e| failure(e, r, "privileges"))?;
         let svc = connect::connect(&r.connection).map_err(|e| failure(e, r, "query"))?;
@@ -102,6 +124,8 @@ impl Management for WindowsManagement {
                 }
                 query::query(&svc, r).map(ManagementResult::Objects)
             }
+            Verb::Create | Verb::Set | Verb::Delete => write::execute(&svc, r, confirmation),
+            Verb::Call => methods::execute(&svc, r, confirmation),
             Verb::Assoc => query::associations(&svc, r).map(ManagementResult::Associations),
             _ => Err(ManagementError {
                 code: 0x8004100c,

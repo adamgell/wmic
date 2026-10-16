@@ -2,8 +2,8 @@ use super::*;
 pub fn display_value(value: &CimValue) -> WideText {
     match value {
         CimValue::Empty | CimValue::Null => WideText::default(),
-        CimValue::String(s) | CimValue::DateTime(s) | CimValue::Reference(s) => s.clone(),
-        CimValue::Char16(u) => WideText(vec![*u]),
+        CimValue::String(s) | CimValue::DateTime(s) | CimValue::Reference(s) => escape_text(s),
+        CimValue::Char16(u) => escape_text(&WideText(vec![*u])),
         CimValue::Boolean(b) => (if *b { "TRUE" } else { "FALSE" }).into(),
         CimValue::Sint8(v) => v.to_string().into(),
         CimValue::Uint8(v) => v.to_string().into(),
@@ -57,5 +57,18 @@ pub fn list(objects: &[Record], cols: &[(WideText, WideText)]) -> WideText {
         push(&mut out, NL);
     }
     push(&mut out, NL);
+    out
+}
+
+fn escape_text(text: &WideText) -> WideText {
+    let mut out = WideText::default();
+    for u in &text.0 {
+        match *u {
+            38 => push(&mut out, "&amp;"),
+            60 => push(&mut out, "&lt;"),
+            62 => push(&mut out, "&gt;"),
+            _ => out.0.push(*u),
+        }
+    }
     out
 }

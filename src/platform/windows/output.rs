@@ -6,8 +6,11 @@ use crate::{
 use windows::Win32::{Globalization::GetACP, Storage::FileSystem::WriteFile, System::Console::*};
 pub struct NativeOutput;
 impl OutputSink for NativeOutput {
+    fn read_line(&mut self) -> Result<Option<WideText>, OutputError> {
+        read_input(false)
+    }
     fn read_secret(&mut self) -> Result<Option<WideText>, OutputError> {
-        read_password()
+        read_input(true)
     }
     fn write(&mut self, stream: OutputStream, text: &WideText) -> Result<(), OutputError> {
         if text.0.is_empty() {
@@ -46,7 +49,7 @@ impl OutputSink for NativeOutput {
     }
 }
 
-fn read_password() -> Result<Option<WideText>, OutputError> {
+fn read_input(secret: bool) -> Result<Option<WideText>, OutputError> {
     use windows::Win32::{Foundation::HANDLE, Storage::FileSystem::ReadFile};
     let handle =
         unsafe { GetStdHandle(STD_INPUT_HANDLE) }.map_err(|e| OutputError(e.to_string()))?;
@@ -70,8 +73,10 @@ fn read_password() -> Result<Option<WideText>, OutputError> {
         mode: is_console.then_some(mode),
     };
     if is_console {
-        unsafe { SetConsoleMode(handle, CONSOLE_MODE(mode.0 & !ENABLE_ECHO_INPUT.0)) }
-            .map_err(|e| OutputError(e.to_string()))?;
+        if secret {
+            unsafe { SetConsoleMode(handle, CONSOLE_MODE(mode.0 & !ENABLE_ECHO_INPUT.0)) }
+                .map_err(|e| OutputError(e.to_string()))?;
+        }
         let mut out = vec![];
         loop {
             let mut buffer = [0u16; 512];

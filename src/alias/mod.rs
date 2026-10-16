@@ -222,7 +222,11 @@ impl AliasStore {
             },
             properties: command.properties.clone(),
             method: command.method.clone(),
-            arguments: command.arguments.clone(),
+            arguments: if command.raw_arguments.is_empty() {
+                command.arguments.clone()
+            } else {
+                command.raw_arguments.clone()
+            },
             modifiers: command
                 .modifiers
                 .iter()
@@ -348,7 +352,11 @@ impl AliasStore {
                         let d = DerivedCommand {
                             template: v.derivation.as_str().into(),
                             selection: Box::new(req),
-                            arguments: command.arguments.clone(),
+                            arguments: if command.raw_arguments.is_empty() {
+                                command.arguments.clone()
+                            } else {
+                                command.raw_arguments.clone()
+                            },
                         };
                         let first = v.derivation.split_whitespace().next().unwrap_or("");
                         return Ok(

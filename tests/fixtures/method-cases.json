@@ -1,0 +1,83 @@
+{
+  "schema_version": 1,
+  "reference_sha256": "2EF794C4940AFEA56C6D6D3B9BC9E66965BC7333E79C5DCB2DEF3C0E36F0834C",
+  "cases": [
+    {
+      "id": "getowner-pid0",
+      "arguments": "process where ProcessId=0 call GetOwner",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "getowner-empty",
+      "arguments": "process where ProcessId=4294967295 call GetOwner",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "getowner-invalid",
+      "arguments": "process where ProcessId=0 call GetOwner User=\"test\"",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "getowner-positional",
+      "arguments": "process where ProcessId=0 call GetOwner \"NULL\"",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "getowner-static",
+      "arguments": "class Win32_Process call GetOwner",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "invalid-method",
+      "arguments": "os call WmicCompatMissingMethod",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "derived-seealso",
+      "arguments": "alias OS call SeeAlso",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "derived-seealso-bare",
+      "arguments": "alias OS SeeAlso",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "call-missing-method",
+      "arguments": "process call",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "set-empty-selection",
+      "arguments": "path Win32_Environment where \"Name='WmicCompatProbeAbsent_78d8cf569b279ef07e5bc6322b8009b1c90a01f8'\" get Name",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "interactive-method-declined",
+      "arguments": "/interactive:on process where ProcessId=0 call GetOwner",
+      "operation": "read_only",
+      "stdin_base64": "Tg0K"
+    },
+    {
+      "id": "interactive-method-multiple",
+      "arguments": "/interactive:on process where \"ProcessId=0 OR ProcessId=4\" call GetOwner",
+      "operation": "read_only",
+      "stdin_base64": "WQ0KWQ0K"
+    },
+    {
+      "id": "invalid-interactive",
+      "arguments": "/interactive:bogus context",
+      "operation": "read_only"
+    }
+  ]
+}

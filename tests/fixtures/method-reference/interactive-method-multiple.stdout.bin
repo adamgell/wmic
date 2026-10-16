@@ -1,0 +1,14 @@
+Method execution successful.
+Out Parameters:
+instance of __PARAMETERS
+{
+	ReturnValue = 2;
+};
+Method execution successful.
+Out Parameters:
+instance of __PARAMETERS
+{
+	Domain = "NT AUTHORITY";
+	ReturnValue = 0;
+	User = "SYSTEM";
+};

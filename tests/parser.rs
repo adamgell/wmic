@@ -239,3 +239,25 @@ fn embedded_nul_is_rejected_without_truncation() {
     input.extend([0, b'x' as u16]);
     assert!(parse_command(&WideText(input), EntryMode::Process).is_err());
 }
+
+#[test]
+fn named_method_parameters_are_space_separated() {
+    let parsed = parse_command(
+        &wide("process call Create CurrentDirectory=NULL CommandLine=\"a,b\""),
+        EntryMode::Interactive,
+    )
+    .unwrap();
+    assert_eq!(
+        parsed.raw_arguments,
+        vec![wide("CurrentDirectory=NULL"), wide("CommandLine=\"a,b\"")]
+    );
+    assert_eq!(
+        parse_command(
+            &wide("process call Create CurrentDirectory=NULL,CommandLine=\"test\""),
+            EntryMode::Interactive
+        )
+        .unwrap_err()
+        .code,
+        0xADDC
+    );
+}

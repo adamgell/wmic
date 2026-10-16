@@ -92,6 +92,9 @@ pub struct MethodResult {
     pub path: WideText,
     pub return_value: Option<CimValue>,
     pub out_parameters: Vec<Property>,
+    /// Optional native MOF text preserves WMI provider serialization.
+    #[serde(default)]
+    pub text: Option<WideText>,
 }
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
