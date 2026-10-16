@@ -69,6 +69,8 @@ mod convert;
 pub use convert::*;
 #[cfg(target_os = "macos")]
 pub mod macos;
+#[cfg(not(windows))]
+pub mod wsman;
 #[cfg(windows)]
 pub mod windows;
 mod wql;
