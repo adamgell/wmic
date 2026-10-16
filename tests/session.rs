@@ -119,3 +119,60 @@ fn session_supplies_a_sanitized_xml_presentation_context() {
     );
     assert_eq!(out.exit_status, 0);
 }
+
+#[test]
+fn delayed_association_error_keeps_groups_before_the_diagnostic_with_both_aggregation_settings() {
+    struct Provider;
+    impl Management for Provider {
+        fn execute(&mut self, _: &ResolvedRequest) -> Result<ManagementResult, ManagementError> {
+            Err(ManagementError {
+                code: 0x80041003,
+                target: "source-2".into(),
+                message: "Access denied".into(),
+                operation: "enumerate".into(),
+                extended: vec![],
+                partial: Some(Box::new(ManagementResult::Associations(vec![
+                    AssociationGroup {
+                        source: Record {
+                            path: Some("source-1".into()),
+                            ..Default::default()
+                        },
+                        associated: vec![Record {
+                            properties: vec![Property {
+                                name: "Name".into(),
+                                cim_type: 8,
+                                value: CimValue::String("retrieved-before-failure".into()),
+                                system: false,
+                                qualifiers: vec![],
+                            }],
+                            ..Default::default()
+                        }],
+                    },
+                ]))),
+            })
+        }
+    }
+    for aggregate in [false, true] {
+        let mut session = Session::new("HOST".into()).unwrap();
+        session.settings.aggregate = aggregate;
+        let mut sink = Sink::default();
+        let out = session.execute(
+            &"os assoc".into(),
+            EntryMode::Interactive,
+            &mut Provider,
+            &mut sink,
+        );
+        assert_eq!(out.exit_status, 0x80041003);
+        let text = String::from_utf8(sink.stdout).unwrap();
+        assert!(text.contains("source-1"), "completed source was lost");
+        assert!(
+            text.contains("retrieved-before-failure"),
+            "retrieved association was lost"
+        );
+        assert!(
+            String::from_utf8(sink.stderr)
+                .unwrap()
+                .contains("Access denied")
+        );
+    }
+}

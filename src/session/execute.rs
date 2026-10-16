@@ -286,6 +286,12 @@ impl Session {
             }
             let outcome = self.execute_once(raw, mode, backend, sink, scheduler, &mut frame);
             frame.every_count += 1;
+            if scheduler.cancelled() {
+                return CommandOutcome {
+                    exit_status: 0xC000013A,
+                    ..outcome
+                };
+            }
             if interval.is_none()
                 && sink.console_input()
                 && command
@@ -756,9 +762,14 @@ impl Session {
             }
             if let Err(error) = &result
                 && let Some(partial) = &error.partial
-                && let ManagementResult::Objects(set) = partial.as_ref()
+                && matches!(
+                    partial.as_ref(),
+                    ManagementResult::Objects(_) | ManagementResult::Associations(_)
+                )
             {
-                if settings.aggregate {
+                if settings.aggregate
+                    && let ManagementResult::Objects(set) = partial.as_ref()
+                {
                     combined.extend(set.objects.clone());
                 } else {
                     match render::render(render::RenderRequest {

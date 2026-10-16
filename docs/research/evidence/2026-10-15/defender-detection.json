@@ -1,0 +1,19 @@
+{
+  "status": "unresolved historical detection; later successful execution is not clearance",
+  "quarantined_candidate_sha256": "4a349fa5611eb48daf6018846ccbfaef9f7495b17648908b083b24da63ed766c",
+  "protection_settings_changed": false,
+  "detections": [
+    {
+      "ThreatID": 2147731250,
+      "ThreatName": "Trojan:Win32/Bearfoos.A!ml",
+      "InitialDetectionTime": "/Date(1792118434753)/",
+      "LastThreatStatusChangeTime": "/Date(1792118448990)/",
+      "ActionSuccess": true,
+      "ThreatStatusID": 3,
+      "ProcessName": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+      "Resources": [
+        "file:_C:\\ProgramData\\WmicCompat\\artifacts\\4A349FA5611EB48DAF6018846CCBFAEF9F7495B17648908B083B24DA63ED766C\\wmic.exe"
+      ]
+    }
+  ]
+}

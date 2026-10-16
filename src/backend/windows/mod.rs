@@ -42,6 +42,9 @@ pub(crate) fn failure(
     r: &ResolvedRequest,
     operation: &str,
 ) -> ManagementError {
+    if crate::platform::windows::console::interrupted() {
+        return cancelled(r, None);
+    }
     let extended = unsafe {
         // Error owns IErrorInfo for this borrow; WMI errors can also expose IWbemClassObject.
         IUnknown::from_raw_borrowed(&e.as_ptr())
@@ -123,6 +126,9 @@ impl WindowsManagement {
         r: &ResolvedRequest,
         confirmation: Option<&mut dyn crate::backend::Confirmation>,
     ) -> Result<ManagementResult, ManagementError> {
+        if crate::platform::windows::console::interrupted() {
+            return Err(cancelled(r, None));
+        }
         let _privileges = privileges::PrivilegeGuard::new(r.connection.privileges)
             .map_err(|e| failure(e, r, "privileges"))?;
         let svc = connect::connect(&r.connection).map_err(|e| failure(e, r, "query"))?;
@@ -174,5 +180,16 @@ pub(crate) fn get_object(
         object.ok_or_else(|| {
             windows::core::Error::from_hresult(windows::core::HRESULT(0x80041002u32 as i32))
         })
+    }
+}
+
+pub(super) fn cancelled(r: &ResolvedRequest, partial: Option<ManagementResult>) -> ManagementError {
+    ManagementError {
+        code: 0xC000013A,
+        target: r.connection.node.clone(),
+        message: "Operation cancelled".into(),
+        operation: "cancel".into(),
+        extended: vec![],
+        partial: partial.map(Box::new),
     }
 }

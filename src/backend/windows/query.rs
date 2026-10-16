@@ -171,6 +171,10 @@ pub(super) fn query_text(
         connect::secure(&en, &r.connection).map_err(|e| failure(e, r, "enumeration security"))?;
         let mut items = vec![];
         loop {
+            if crate::platform::windows::console::interrupted() {
+                items.push(Err(cancelled(r, None)));
+                break;
+            }
             let mut objects = [None];
             let mut returned = 0;
             let hr = en.Next(-1, &mut objects, &mut returned);
@@ -238,15 +242,14 @@ pub(super) fn associations(
 ) -> std::result::Result<Vec<AssociationGroup>, ManagementError> {
     let sources = if r.class_mode {
         let object = get_object(svc, &r.class_name).map_err(|e| failure(e, r, "class"))?;
-        ObjectSet {
+        Ok(ObjectSet {
             objects: vec![record(&object).map_err(|e| failure(e, r, "convert"))?],
             schema: None,
-        }
+        })
     } else {
-        query(svc, r)?
+        query(svc, r)
     };
-    let mut groups = vec![];
-    for source in sources.objects {
+    crate::backend::collect_associations(sources, |source| {
         let path = source.path.as_ref().ok_or_else(|| {
             failure(
                 Error::from_hresult(HRESULT(0x80041002u32 as i32)),
@@ -270,20 +273,8 @@ pub(super) fn associations(
                 .encode_utf16(),
             );
         }
-        match query_text(svc, r, &query) {
-            Ok(set) => groups.push(AssociationGroup {
-                source,
-                associated: set.objects,
-            }),
-            Err(mut e) => {
-                if !groups.is_empty() {
-                    e.partial = Some(Box::new(ManagementResult::Associations(groups)));
-                }
-                return Err(e);
-            }
-        }
-    }
-    Ok(groups)
+        query_text(svc, r, &query)
+    })
 }
 
 #[cfg(test)]
@@ -316,5 +307,34 @@ mod xml_tests {
         assert!(xml.to_string_lossy().contains("OtherTypeDescription"));
         assert!(xml.to_string_lossy().contains("PROPERTY.ARRAY"));
         assert!(!xml.to_string_lossy().contains("NAME=\"__GENUS\""));
+    }
+}
+
+#[cfg(test)]
+mod cancellation_tests {
+    use super::*;
+
+    #[test]
+    #[ignore = "explicit selected Windows guest; read-only event enumeration"]
+    fn control_c_unblocks_an_outstanding_synchronous_wmi_wait() {
+        let _backend = WindowsManagement::new().unwrap();
+        let services = connect::connect(&crate::backend::ConnectionOptions::default()).unwrap();
+        let events=unsafe{services.ExecNotificationQuery(&BSTR::from("WQL"),&BSTR::from("SELECT * FROM __InstanceCreationEvent WITHIN 1 WHERE TargetInstance ISA 'Win32_Process' AND TargetInstance.Name='WmicCompatNeverCreated.exe'"),WBEM_GENERIC_FLAG_TYPE(0x30),None)}.unwrap();
+        connect::secure(&events, &crate::backend::ConnectionOptions::default()).unwrap();
+        let _guard = crate::platform::windows::console::InterruptGuard::install().unwrap();
+        let sender = std::thread::spawn(|| {
+            std::thread::sleep(std::time::Duration::from_millis(150));
+            crate::platform::windows::console::request_cancel_for_test();
+        });
+        let start = std::time::Instant::now();
+        let mut objects = [None];
+        let mut returned = 0;
+        let result = unsafe { events.Next(4000, &mut objects, &mut returned) };
+        sender.join().unwrap();
+        assert!(crate::platform::windows::console::interrupted());
+        assert!(
+            start.elapsed() < std::time::Duration::from_secs(2),
+            "cancellation left the caller blocked: {result:?}"
+        );
     }
 }

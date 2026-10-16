@@ -75,3 +75,70 @@ pub use wql::*;
 pub mod methods;
 
 pub mod write;
+
+/// Check cancellation lazily before handing each target to a mutation loop.
+pub fn cancellable_targets<T>(
+    targets: impl IntoIterator<Item = T>,
+    mut cancelled: impl FnMut() -> bool,
+) -> impl Iterator<Item = Result<T, u32>> {
+    let mut stopped = false;
+    targets.into_iter().map_while(move |target| {
+        if stopped {
+            return None;
+        }
+        if cancelled() {
+            stopped = true;
+            Some(Err(0xC000013A))
+        } else {
+            Some(Ok(target))
+        }
+    })
+}
+/// Association errors must carry both completed sources and the current partial group.
+pub fn collect_associations(
+    sources: Result<crate::model::ObjectSet, ManagementError>,
+    mut query: impl FnMut(&crate::model::Record) -> Result<crate::model::ObjectSet, ManagementError>,
+) -> Result<Vec<crate::model::AssociationGroup>, ManagementError> {
+    use crate::model::*;
+    let (sources, mut source_error) = match sources {
+        Ok(set) => (set, None),
+        Err(mut error) => {
+            let set = match error.partial.take().map(|p| *p) {
+                Some(ManagementResult::Objects(set)) => set,
+                _ => ObjectSet::default(),
+            };
+            (set, Some(error))
+        }
+    };
+    let mut groups = vec![];
+    for source in sources.objects {
+        match query(&source) {
+            Ok(set) => groups.push(AssociationGroup {
+                source,
+                associated: set.objects,
+            }),
+            Err(mut error) => {
+                if let Some(ManagementResult::Objects(set)) = error.partial.take().map(|p| *p)
+                    && !set.objects.is_empty()
+                {
+                    groups.push(AssociationGroup {
+                        source,
+                        associated: set.objects,
+                    });
+                }
+                if !groups.is_empty() {
+                    error.partial = Some(Box::new(ManagementResult::Associations(groups)));
+                }
+                return Err(error);
+            }
+        }
+    }
+    if let Some(mut error) = source_error.take() {
+        if !groups.is_empty() {
+            error.partial = Some(Box::new(ManagementResult::Associations(groups)));
+        }
+        Err(error)
+    } else {
+        Ok(groups)
+    }
+}

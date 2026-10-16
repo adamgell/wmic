@@ -286,3 +286,29 @@ fn association_cells_keep_table_array_separators() {
             .contains("{\"one\", \"two\"}")
     );
 }
+
+#[test]
+fn cancellation_with_no_completed_mutations_does_not_invent_an_empty_selection() {
+    let mut r = request("os get Caption");
+    r.verb = Verb::Delete;
+    let e = ManagementError {
+        code: 0xC000013A,
+        target: "HOST".into(),
+        message: "Operation cancelled".into(),
+        operation: "cancel".into(),
+        extended: vec![],
+        partial: Some(Box::new(ManagementResult::Operation(OperationResult {
+            action: Verb::Delete,
+            paths: vec![],
+            instances: vec![],
+        }))),
+    };
+    let out = render(RenderRequest {
+        request: &r,
+        result: Err(&e),
+        node: &"HOST".into(),
+    })
+    .unwrap();
+    assert!(out.stdout.0.is_empty());
+    assert!(out.stderr.0.is_empty());
+}

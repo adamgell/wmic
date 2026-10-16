@@ -1,0 +1,12 @@
+# Whole-branch review and dispositions
+
+On 2026-10-16 a fresh `gpt-6-astra` reviewer examined `cb8e025..5a02ec5` read-only against the approved plan/specification and every recorded ruling. It independently ran all152 portable tests successfully and performed no guest execution or source changes. Its assessment was **With fixes**: no Critical findings, four Important findings, and no Minor findings. The author accepted all four findings and applied one regression-tested fix pass; no second review was requested.
+
+| Finding | Regression and resulting behavior |
+| --- | --- |
+| Cancellation swallowed during the only backend call, or later instance mutations continuing | One-node cancellation now returns `0xC000013A`. Backend target loops stop before subsequent actions. The console guard enables COM call cancellation and requests `CoCancelCall` on its owner thread. A native secured WMI event-wait test first remained blocked4seconds, then unblocked after the fix. Cancellation does not undo provider-side changes already accepted. |
+| Malformed quoted password echoed to stderr and inherited record | A test using dummy credentials first exposed the token. Credential-bearing parse errors now suppress unsafe tokens before rendering; tests inspect all output and the complete recording. |
+| Delayed ASSOC failure loses prior/current partial groups | A session regression first lost the completed source. The association collector now preserves prior groups, partial associated objects and partial source enumeration; both aggregation modes render those results before the diagnostic and retain node/HRESULT. |
+| Invalid conversion arguments for append under UTF8 ACP | Explicit native65001/54936/1252/invalid-page tests. GB18030 first reproduced silent empty output; UTF8 happened to accept the old invalid call on this build. Both Unicode code pages now receive valid API arguments; conversion failure returns an error, and legacy unrepresentable-character truncation remains for ANSI pages. No system locale was changed. |
+
+The final portable/native checks and post-fix executable hashes are in `docs/compatibility.md` and its linked evidence. The review's13 declined-to-judge surfaces are each resolved explicitly in `docs/research/implementation-decisions.md`, including the limits that remain unverified. The known TRACE difference, credential redaction, volatile rows, and unresolved historical Defender detection are retained visibly.

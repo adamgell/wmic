@@ -47,6 +47,20 @@ fn command_units(raw: &WideText, mode: EntryMode) -> Result<&[u16], ParseError> 
 }
 
 pub fn parse_command(raw: &WideText, mode: EntryMode) -> Result<ParsedCommand, ParseError> {
+    parse_command_inner(raw, mode).map_err(|mut error| {
+        if raw
+            .to_string_lossy()
+            .to_ascii_lowercase()
+            .contains("/password")
+        {
+            // Lexing can fail before a credential switch has been recognized.
+            // No error token from such an input is safe to echo or record.
+            error.token = None;
+        }
+        error
+    })
+}
+fn parse_command_inner(raw: &WideText, mode: EntryMode) -> Result<ParsedCommand, ParseError> {
     let units = command_units(raw, mode)?;
     let spans = lex::tokens(units)?;
     let mut command = ParsedCommand::empty(raw.clone());

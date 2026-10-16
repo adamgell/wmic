@@ -230,3 +230,34 @@ fn repetition_applies_global_changes_and_password_prompt_once() {
     assert_eq!(out.exit_status, 0);
     assert_eq!(sink.0, 1);
 }
+
+#[test]
+fn cancellation_during_the_only_backend_call_returns_control_c() {
+    use std::{cell::Cell, rc::Rc};
+    struct Clock(Rc<Cell<bool>>);
+    impl RepeatScheduler for Clock {
+        fn cancelled(&self) -> bool {
+            self.0.get()
+        }
+        fn wait(&mut self, _: u32) -> bool {
+            panic!("one-shot must not wait")
+        }
+    }
+    struct Provider(Rc<Cell<bool>>);
+    impl Management for Provider {
+        fn execute(&mut self, _: &ResolvedRequest) -> Result<ManagementResult, ManagementError> {
+            self.0.set(true);
+            Ok(ManagementResult::Objects(ObjectSet::default()))
+        }
+    }
+    let flag = Rc::new(Cell::new(false));
+    let out = Session::new("HOST".into()).unwrap().execute_with_scheduler(
+        &"os get Caption".into(),
+        EntryMode::Interactive,
+        &mut Provider(flag.clone()),
+        &mut Sink::default(),
+        &mut Clock(flag),
+    );
+    assert_eq!(out.exit_status, 0xC000013A);
+    assert_eq!(out.nodes.len(), 1);
+}

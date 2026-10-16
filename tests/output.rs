@@ -190,3 +190,43 @@ fn parser_error_is_recorded_once_and_quit_preserves_the_output_file() {
     assert_eq!(xml.matches("Invalid Global Switch.").count(), 1);
     fs::remove_dir_all(dir).unwrap();
 }
+
+#[test]
+fn malformed_password_never_reaches_stderr_or_the_complete_record() {
+    use wmic_compat::backend::{Management, ResolvedRequest};
+    struct Provider;
+    impl Management for Provider {
+        fn execute(&mut self, _: &ResolvedRequest) -> Result<ManagementResult, ManagementError> {
+            panic!("invalid input must not execute")
+        }
+    }
+    for command in [
+        "/password:\"DO_NOT_LOG_TEST_SECRET",
+        "/password: \"DO_NOT_LOG_TEST_SECRET",
+        "/PASSWORD:\"DO_NOT_LOG_TEST_SECRET",
+    ] {
+        let dir = directory();
+        let record = dir.join("record.xml");
+        let mut session = Session::new("HOST".into()).unwrap();
+        session.settings.record = Some(record.to_str().unwrap().into());
+        let mut sink = RoutedOutput::new(Capture::default());
+        let out = session.execute(
+            &command.into(),
+            EntryMode::Interactive,
+            &mut Provider,
+            &mut sink,
+        );
+        assert_eq!(out.exit_status, 0xABFD);
+        let output: Vec<_> = sink.inner.0.iter().flat_map(|(_, s)| s.0.clone()).collect();
+        assert!(
+            !String::from_utf16_lossy(&output).contains("DO_NOT_LOG_TEST_SECRET"),
+            "diagnostic leaked a password"
+        );
+        let xml = fs::read_to_string(record).unwrap();
+        assert!(
+            !xml.contains("DO_NOT_LOG_TEST_SECRET"),
+            "record leaked a password"
+        );
+        fs::remove_dir_all(dir).unwrap();
+    }
+}

@@ -1,6 +1,6 @@
 # Implementation decisions
 
-Decisions recorded during the approved 13-task native implementation. Later decisions explicitly supersede earlier ones where stated. Each preserves its reason and compatibility cost.
+Decisions recorded during the approved13-task native implementation and its final independent review. Later decisions explicitly supersede earlier ones where stated. Each preserves its reason and compatibility cost.
 
 1. Ruling: Work in the current clean codex/wmic-compatibility-spec checkout because the user explicitly selected execution here and this branch contains only this project's research/specification — do not request another environment approval — cost if wrong: changes could mix if another process edits this checkout; inspect status before each commit.
 
@@ -43,3 +43,33 @@ Decisions recorded during the approved 13-task native implementation. Later deci
 20. Task 13: Ruling: Use bundled default-role metadata for read-only local ALIAS introspection when root\cli is absent, including an explicitly selected default role — the approved replacement must retain its alias catalog without the legacy namespace — cost if wrong: this virtual provider is immutable and its advanced/system-property representation remains unverified on a genuinely missing-namespace profile; custom absent roles still error. The captured provider enumeration order is data, kept separately from the sorted catalog.
 
 21. Task 13: Ruling: Compare the x64 executable under ARM64 emulation against the installed ARM64 reference, labeling it as a cross-architecture comparison; compare x86 against the installed x86 reference — no x64 Microsoft executable/native x64 Windows host is available — cost if wrong: x64-specific legacy differences and native x64 hardware behavior remain unverified.
+
+22. Task 13: Ruling: Commit Task13 provisionally for whole-branch review, and record task completion only after review fixes and final evidence — Task13 itself requires the review, so its task-done gate cannot precede that work — cost if wrong: Task13 spans multiple commits instead of one, with the original BASE retained for its completion range.
+
+23. Final: Ruling: Final corpus/package documentation was pending during review — finish and bind reports to the final executable hashes before delivery — cost if wrong: packages could carry stale evidence, so regenerate their documents and verify manifests last.
+
+24. Final: Ruling: TRACE byte equality stays intentionally implementation-specific — a Rust implementation must not fabricate Microsoft's internal C++ trace — cost if wrong: trace-consuming scripts remain incompatible.
+
+25. Final: Ruling: Plaintext password parity remains superseded by credential redaction, now including malformed-input diagnostics — do not expose passwords merely to match legacy bytes — cost if wrong: credential-bearing XML/record/error bytes differ from legacy output.
+
+26. Final: Ruling: Keep both volatile OS probes as visible raw mismatches — do not normalize changing provider values away — cost if wrong: these two rows have no exact byte-equivalence claim.
+
+27. Final: Ruling: Native AMD64, other Windows/language profiles, and ordinary-user acceptance stay unverified — compilation and SYSTEM/emulation captures do not establish these behaviors — cost if wrong: provider, permission, architecture and localization differences remain possible.
+
+28. Final: Ruling: Authenticated additional endpoints and IPv6 fail-fast stay unverified — the selected guest is the authorized runtime, and no additional credentials/endpoints were supplied — cost if wrong: remote authentication/transport edge cases may remain.
+
+29. Final: Ruling: Clipboard acceptance and class-repository writes remain implemented but unexercised — avoid replacing the user's clipboard or altering repository classes without a dedicated acceptance scope — cost if wrong: these live effects may have undetected defects.
+
+30. Final: Ruling: Destructive/provider-specific methods and Win32_Product instance inventory remain unexercised — controlled owned-object lifecycles and safe schema reads are the available evidence — cost if wrong: provider-specific behavior is not certified.
+
+31. Final: Ruling: The historical Defender detection remains unresolved — later corpus success does not clear or disprove an earlier quarantine, and protection stays unchanged — cost if wrong: broader deployment could expose a security or reputation issue.
+
+32. Final: Ruling: Keep measured direct instance-expression forwarding into WQL — existing native-derived tests pin the observed legacy path — cost if wrong: other object-path/provider forms may differ on untested profiles.
+
+33. Final: Ruling: Preserve measured stock formatting limits and quirks — no independently established mismatch justifies changing legacy output — cost if wrong: unusual sizes or values outside the corpus remain unverified.
+
+34. Final: Ruling: Custom-role localization fallback, arbitrary derived-command parameter substitution/routing, and embedded-object CLI argument syntax need further targeted reference probes — implemented paths lack sufficient native semantics evidence for full certification — cost if wrong: those less common command forms may be incompatible.
+
+35. Final: Ruling: Retain script-enabled custom XSL as a caller-selected legacy capability — safe reference script tests establish it, and callers explicitly choose the stylesheet — cost if wrong: a supplied stylesheet can execute script with the caller's rights, as the compatible feature permits.
+
+Deferred minors: none.

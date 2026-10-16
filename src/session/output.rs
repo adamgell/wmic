@@ -442,30 +442,38 @@ fn ansi_prefix(text: &WideText, code_page: u32) -> Result<Vec<u8>, OutputError> 
             let mut storage = [0u16; 2];
             let units = ch.encode_utf16(&mut storage);
             let mut default = BOOL(0);
+            let unicode = matches!(code_page, 65000 | 65001 | 54936);
+            let flags = if unicode { 0 } else { WC_NO_BEST_FIT_CHARS };
             let count = unsafe {
                 WideCharToMultiByte(
                     code_page,
-                    WC_NO_BEST_FIT_CHARS,
+                    flags,
                     units,
                     None,
                     PCSTR::null(),
-                    Some(&mut default),
+                    if unicode { None } else { Some(&mut default) },
                 )
             };
-            if count == 0 || default.as_bool() {
+            if count == 0 {
+                return Err(OutputError("Append code page conversion failed".into()));
+            }
+            if default.as_bool() {
                 break;
             }
             let mut bytes = vec![0; count as usize];
-            unsafe {
+            let written = unsafe {
                 WideCharToMultiByte(
                     code_page,
-                    WC_NO_BEST_FIT_CHARS,
+                    flags,
                     units,
                     Some(&mut bytes),
                     PCSTR::null(),
-                    Some(&mut default),
+                    if unicode { None } else { Some(&mut default) },
                 )
             };
+            if written != count || default.as_bool() {
+                return Err(OutputError("Append code page conversion failed".into()));
+            }
             out.extend(bytes);
         }
         Ok(out)
@@ -473,5 +481,25 @@ fn ansi_prefix(text: &WideText, code_page: u32) -> Result<Vec<u8>, OutputError> 
     #[cfg(not(windows))]
     {
         encode_output(text, &DestinationProfile::pipe(code_page))
+    }
+}
+
+#[cfg(all(test, windows))]
+mod encoding_regression_tests {
+    use super::*;
+    #[test]
+    #[ignore = "explicit native encoding regression"]
+    fn ansi_append_accepts_utf8_and_gb18030_and_reports_invalid_code_pages() {
+        let text: WideText = "AéΩ字😀e\u{301}".into();
+        assert_eq!(
+            ansi_prefix(&text, 65001).unwrap(),
+            "AéΩ字😀e\u{301}".as_bytes()
+        );
+        assert_eq!(
+            ansi_prefix(&text, 54936).unwrap(),
+            crate::render::encode_output(&text, &DestinationProfile::pipe(54936)).unwrap()
+        );
+        assert!(ansi_prefix(&text, 999999).is_err());
+        assert_eq!(ansi_prefix(&text, 1252).unwrap(), vec![b'A', 0xe9]);
     }
 }

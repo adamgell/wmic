@@ -35,8 +35,14 @@ pub(super) fn execute(
                 }));
             }
         }
+        if crate::platform::windows::console::interrupted() {
+            return Err(cancelled(r, None));
+        }
         let instance = unsafe { class.SpawnInstance(0) }.map_err(|e| failure(e, r, "create"))?;
         methods::put_properties(&instance, &bound, svc).map_err(|e| failure(e, r, "create"))?;
+        if crate::platform::windows::console::interrupted() {
+            return Err(cancelled(r, None));
+        }
         unsafe { svc.PutInstance(&instance, WBEM_GENERIC_FLAG_TYPE(2), None, None) }
             .map_err(|e| failure(e, r, "create"))?;
         return Ok(ManagementResult::Operation(OperationResult {
@@ -64,7 +70,20 @@ pub(super) fn execute(
         })
         .collect();
     let mut paths = vec![];
-    for record in selected.objects {
+    for record in crate::backend::cancellable_targets(
+        selected.objects,
+        crate::platform::windows::console::interrupted,
+    ) {
+        let record = record.map_err(|_| {
+            cancelled(
+                r,
+                Some(ManagementResult::Operation(OperationResult {
+                    action: r.verb,
+                    paths: paths.clone(),
+                    instances: vec![],
+                })),
+            )
+        })?;
         let path = record.path.ok_or_else(|| {
             failure(
                 Error::from_hresult(HRESULT(0x80041002u32 as i32)),
@@ -94,6 +113,16 @@ pub(super) fn execute(
                 continue;
             }
         }
+        if crate::platform::windows::console::interrupted() {
+            return Err(cancelled(
+                r,
+                Some(ManagementResult::Operation(OperationResult {
+                    action: r.verb,
+                    paths,
+                    instances: vec![],
+                })),
+            ));
+        }
         let result: windows::core::Result<()> = (|| {
             if r.verb == Verb::Delete {
                 if r.class_mode {
@@ -108,6 +137,9 @@ pub(super) fn execute(
             } else {
                 let instance = get_object(svc, &path)?;
                 methods::put_properties(&instance, &bound, svc)?;
+                if crate::platform::windows::console::interrupted() {
+                    return Err(Error::from_hresult(HRESULT(0xC000013Au32 as i32)));
+                }
                 if r.class_mode {
                     unsafe { svc.PutClass(&instance, WBEM_GENERIC_FLAG_TYPE(1), None, None) }
                 } else {

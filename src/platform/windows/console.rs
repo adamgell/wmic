@@ -1,13 +1,24 @@
 //! Console cancellation does not impose a timeout on a WMI operation.
-use std::sync::atomic::{AtomicBool, Ordering};
+use std::sync::atomic::{AtomicBool, AtomicU32, Ordering};
+use windows::Win32::System::{
+    Com::{CoCancelCall, CoDisableCallCancellation, CoEnableCallCancellation},
+    Threading::GetCurrentThreadId,
+};
 use windows::{Win32::System::Console::*, core::BOOL};
 static INTERRUPTED: AtomicBool = AtomicBool::new(false);
+static CALL_THREAD: AtomicU32 = AtomicU32::new(0);
 pub fn interrupted() -> bool {
     INTERRUPTED.load(Ordering::Relaxed)
 }
 unsafe extern "system" fn handler(event: u32) -> BOOL {
     if event == CTRL_C_EVENT || event == CTRL_BREAK_EVENT {
         INTERRUPTED.store(true, Ordering::Relaxed);
+        let target = CALL_THREAD.load(Ordering::Acquire);
+        if target != 0 {
+            unsafe {
+                let _ = CoCancelCall(target, 0);
+            }
+        }
         BOOL(1)
     } else {
         BOOL(0)
@@ -17,7 +28,17 @@ pub struct InterruptGuard;
 impl InterruptGuard {
     pub fn install() -> windows::core::Result<Self> {
         INTERRUPTED.store(false, Ordering::Relaxed);
-        unsafe { SetConsoleCtrlHandler(Some(handler), true)? };
+        unsafe {
+            CoEnableCallCancellation(None)?;
+        }
+        CALL_THREAD.store(unsafe { GetCurrentThreadId() }, Ordering::Release);
+        if let Err(error) = unsafe { SetConsoleCtrlHandler(Some(handler), true) } {
+            CALL_THREAD.store(0, Ordering::Release);
+            unsafe {
+                let _ = CoDisableCallCancellation(None);
+            }
+            return Err(error);
+        }
         Ok(Self)
     }
 }
@@ -25,6 +46,9 @@ impl Drop for InterruptGuard {
     fn drop(&mut self) {
         unsafe {
             let _ = SetConsoleCtrlHandler(Some(handler), false);
+            CALL_THREAD.store(0, Ordering::Release);
+            let _ = CoDisableCallCancellation(None);
+            INTERRUPTED.store(false, Ordering::Relaxed);
         }
     }
 }
@@ -101,5 +125,12 @@ impl Drop for LayoutGuard {
         unsafe {
             let _ = SetConsoleScreenBufferSize(self.handle, self.original);
         }
+    }
+}
+
+#[cfg(test)]
+pub(crate) fn request_cancel_for_test() {
+    unsafe {
+        let _ = handler(CTRL_C_EVENT);
     }
 }

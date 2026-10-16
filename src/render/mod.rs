@@ -109,6 +109,21 @@ pub fn render(input: RenderRequest<'_>) -> Result<RenderedOutput, RenderError> {
     let result = match input.result {
         Ok(r) => r,
         Err(e) => {
+            if e.code == 0xC000013A {
+                return match e.partial.as_deref() {
+                    Some(partial)
+                        if matches!(partial, ManagementResult::Methods(methods) if !methods.is_empty())
+                            || matches!(partial, ManagementResult::Operation(operation) if !operation.paths.is_empty()) =>
+                    {
+                        render(RenderRequest {
+                            request: req,
+                            result: Ok(partial),
+                            node: input.node,
+                        })
+                    }
+                    _ => Ok(RenderedOutput::default()),
+                };
+            }
             if e.operation.eq_ignore_case("input") {
                 return Ok(diagnostic::text(&e.message, None));
             }

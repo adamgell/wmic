@@ -171,7 +171,11 @@ pub(super) fn execute(
     let had_targets = !targets.is_empty();
     let streamed = confirmation.as_ref().is_some_and(|c| c.streams_methods());
     let interactive = crate::backend::write::interactive(r);
-    for path in targets {
+    for path in
+        crate::backend::cancellable_targets(targets, crate::platform::windows::console::interrupted)
+    {
+        let path =
+            path.map_err(|_| cancelled(r, Some(ManagementResult::Methods(results.clone()))))?;
         if interactive {
             let mut prompt: WideText = "Execute (".into();
             prompt.0.extend(&path.0);
@@ -190,6 +194,9 @@ pub(super) fn execute(
             if !c.confirm(&prompt)? {
                 continue;
             }
+        }
+        if crate::platform::windows::console::interrupted() {
+            return Err(cancelled(r, Some(ManagementResult::Methods(results))));
         }
         let mut output = None;
         let result = unsafe {
