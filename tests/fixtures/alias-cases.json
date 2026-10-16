@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "reference_sha256": "2EF794C4940AFEA56C6D6D3B9BC9E66965BC7333E79C5DCB2DEF3C0E36F0834C",
+  "cases": [
+    {
+      "id": "missing-role",
+      "arguments": "/role:root\\WmicResearchMissingRole os get Caption",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "namespace-override",
+      "arguments": "/namespace:root\\default os get Caption",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "seealso-call",
+      "arguments": "alias OS call SeeAlso",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "seealso-bare",
+      "arguments": "alias OS SeeAlso",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    }
+  ]
+}

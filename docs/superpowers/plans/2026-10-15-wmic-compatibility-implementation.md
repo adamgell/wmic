@@ -141,7 +141,7 @@ Alias entries retain connection defaults, target, `PWhere`, formats, derived
 properties, verbs, parameters and qualifiers. Stock definitions operate without
 the original installation; live metadata is supplied through a testable loader.
 
-- [ ] Add `stock_aliases_work_without_root_cli`, `missing_explicit_role_does_not_fallback`, `alias_positional_selector_uses_pwhere`, and `alias_seealso_expands_to_derived_command`. Assert exact resolved targets and UTF-16 substitutions from the captured alias definitions.
+- [x] Add `stock_aliases_work_without_root_cli`, `missing_explicit_role_does_not_fallback`, `alias_positional_selector_uses_pwhere`, and `alias_seealso_expands_to_derived_command`. Assert exact resolved targets and UTF-16 substitutions from the captured alias definitions.
 
   ```rust
   assert_eq!(effective_class, wide("Win32_OperatingSystem"));
@@ -149,9 +149,9 @@ the original installation; live metadata is supplied through a testable loader.
   assert_eq!(expanded_command, expected_seealso_command);
   ```
 
-- [ ] Run `cargo test --test aliases`; verify the new behavior fails before implementation.
-- [ ] Implement resolution, metadata validation, packaged stock definitions and measured precedence rules. Determine and test observed `VerbType` semantics before dispatching them. Include all 81 selected-profile stock aliases; do not make runtime access query those providers during startup.
-- [ ] Run `cargo test --test aliases`; expected: the selected alias corpus resolves and absent/custom-role behavior matches its fixtures. Commit as `feat: resolve WMIC aliases and stock metadata independently`.
+- [x] Run `cargo test --test aliases`; verify the new behavior fails before implementation.
+- [x] Implement resolution, metadata validation, packaged stock definitions and measured precedence rules. Determine and test observed `VerbType` semantics before dispatching them. Include all 81 selected-profile stock aliases; do not make runtime access query those providers during startup.
+- [x] Run `cargo test --test aliases`; expected: the selected alias corpus resolves and absent/custom-role behavior matches its fixtures. Commit as `feat: resolve WMIC aliases and stock metadata independently`.
 
 ## Task 4: native local connection, schema and query adapter — Stage 1
 

@@ -21,4 +21,7 @@ pub struct ResolvedRequest {
     pub method: Option<WideText>,
     pub arguments: Vec<WideText>,
     pub modifiers: Vec<Modifier>,
+    pub view: Option<WideText>,
+    pub display: Vec<(WideText, WideText)>,
+    pub format: Option<WideText>,
 }

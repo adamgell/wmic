@@ -1,0 +1,103 @@
+{
+  "schema_version": 1,
+  "profile": {
+    "role": "reference",
+    "executable": "C:\\Windows\\System32\\wbem\\WMIC.exe",
+    "executable_sha256": "2EF794C4940AFEA56C6D6D3B9BC9E66965BC7333E79C5DCB2DEF3C0E36F0834C",
+    "version": "10.0.26100.1 (WinBuild.160101.0800)",
+    "signature": "Valid",
+    "computer": "DESKTOP-N4H9E7R",
+    "identity": "NT AUTHORITY\\SYSTEM",
+    "launcher_architecture": "ARM64",
+    "culture": "en-US",
+    "ui_culture": "en-US",
+    "ansi_codepage": 1252,
+    "oem_codepage": 437,
+    "console_output_codepage": 437,
+    "directory": "C:\\",
+    "launch_api": "CreateProcessW",
+    "output_mode": "native pipes"
+  },
+  "cases": [
+    {
+      "id": "missing-role",
+      "arguments_utf16_base64": "LwByAG8AbABlADoAcgBvAG8AdABcAFcAbQBpAGMAUgBlAHMAZQBhAHIAYwBoAE0AaQBzAHMAaQBuAGcAUgBvAGwAZQAgAG8AcwAgAGcAZQB0ACAAQwBhAHAAdABpAG8AbgA=",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiACAALwByAG8AbABlADoAcgBvAG8AdABcAFcAbQBpAGMAUgBlAHMAZQBhAHIAYwBoAE0AaQBzAHMAaQBuAGcAUgBvAGwAZQAgAG8AcwAgAGcAZQB0ACAAQwBhAHAAdABpAG8AbgA=",
+      "state": "completed",
+      "exit_status": 2147749902,
+      "duration_ms": 53,
+      "process_id": 5656,
+      "normalizations": [],
+      "stdout": {
+        "file": "missing-role.stdout.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "file": "missing-role.stderr.bin",
+        "bytes": 43,
+        "sha256": "ec5b3b755dd8ce2d0ac3664438f888c2facab6c84cb3748fdd7e6b8b57fd343c"
+      }
+    },
+    {
+      "id": "namespace-override",
+      "arguments_utf16_base64": "LwBuAGEAbQBlAHMAcABhAGMAZQA6AHIAbwBvAHQAXABkAGUAZgBhAHUAbAB0ACAAbwBzACAAZwBlAHQAIABDAGEAcAB0AGkAbwBuAA==",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiACAALwBuAGEAbQBlAHMAcABhAGMAZQA6AHIAbwBvAHQAXABkAGUAZgBhAHUAbAB0ACAAbwBzACAAZwBlAHQAIABDAGEAcAB0AGkAbwBuAA==",
+      "state": "completed",
+      "exit_status": 0,
+      "duration_ms": 107,
+      "process_id": 11580,
+      "normalizations": [],
+      "stdout": {
+        "file": "namespace-override.stdout.bin",
+        "bytes": 61,
+        "sha256": "bc1b2ef2608f7afb80262bf378d545ab4aca257d0298f84069ed1a5e1f8680b3"
+      },
+      "stderr": {
+        "file": "namespace-override.stderr.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "id": "seealso-call",
+      "arguments_utf16_base64": "YQBsAGkAYQBzACAATwBTACAAYwBhAGwAbAAgAFMAZQBlAEEAbABzAG8A",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiACAAYQBsAGkAYQBzACAATwBTACAAYwBhAGwAbAAgAFMAZQBlAEEAbABzAG8A",
+      "state": "completed",
+      "exit_status": 0,
+      "duration_ms": 102,
+      "process_id": 12392,
+      "normalizations": [],
+      "stdout": {
+        "file": "seealso-call.stdout.bin",
+        "bytes": 4,
+        "sha256": "dba5166ad9db9ba648c1032ebbd34dcd0d085b50023b839ef5c68ca1db93a563"
+      },
+      "stderr": {
+        "file": "seealso-call.stderr.bin",
+        "bytes": 35,
+        "sha256": "2d46c542862cb3fc9f22bb3eb29e1efe31aa02b438a40d62485470981f58cbd3"
+      }
+    },
+    {
+      "id": "seealso-bare",
+      "arguments_utf16_base64": "YQBsAGkAYQBzACAATwBTACAAUwBlAGUAQQBsAHMAbwA=",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiACAAYQBsAGkAYQBzACAATwBTACAAUwBlAGUAQQBsAHMAbwA=",
+      "state": "completed",
+      "exit_status": 0,
+      "duration_ms": 96,
+      "process_id": 11484,
+      "normalizations": [],
+      "stdout": {
+        "file": "seealso-bare.stdout.bin",
+        "bytes": 4,
+        "sha256": "dba5166ad9db9ba648c1032ebbd34dcd0d085b50023b839ef5c68ca1db93a563"
+      },
+      "stderr": {
+        "file": "seealso-bare.stderr.bin",
+        "bytes": 35,
+        "sha256": "2d46c542862cb3fc9f22bb3eb29e1efe31aa02b438a40d62485470981f58cbd3"
+      }
+    }
+  ]
+}
