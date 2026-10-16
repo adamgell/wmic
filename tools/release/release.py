@@ -10,6 +10,7 @@ from pathlib import Path
 import re
 import subprocess
 import tomllib
+from urllib.parse import quote
 import zipfile
 import package
 
@@ -81,9 +82,24 @@ def verify_bundle(directory,context,publisher):
     return {'verified_archives':3,**context}
 
 
+def verify_available(context):
+    # Require successful complete API reads. A transport/auth failure is not absence.
+    base='repos/adamgell/wmic/'
+    releases=json.loads(subprocess.check_output(['gh','api','--paginate','--slurp',base+'releases?per_page=100'],text=True))
+    refs=json.loads(subprocess.check_output(['gh','api','--paginate','--slurp',base+'git/matching-refs/tags/'+quote(context['tag'],safe='')],text=True))
+    for pages,key,value in [(releases,'tag_name',context['tag']),(refs,'ref','refs/tags/'+context['tag'])]:
+        if not isinstance(pages,list) or not pages:raise ValueError('missing version inventory')
+        for page in pages:
+            if not isinstance(page,list):raise ValueError('invalid version inventory page')
+            for item in page:
+                if not isinstance(item,dict) or not isinstance(item.get(key),str):raise ValueError('invalid version inventory entry')
+                if item[key]==value:raise ValueError('release version or tag already exists; refusing to reuse it')
+    return {'available_tag':context['tag']}
+
+
 def main():
     parser=argparse.ArgumentParser(description=__doc__);sub=parser.add_subparsers(dest='command',required=True)
-    for name in ('preflight','stage','verify-inputs','verify-bundle'):
+    for name in ('preflight','stage','verify-inputs','verify-bundle','verify-available'):
         command=sub.add_parser(name);command.add_argument('--root',type=Path,default=Path.cwd());command.add_argument('--tag',required=True)
         if name=='stage':
             command.add_argument('--target',choices=package.TARGETS,required=True);command.add_argument('--binary',type=Path,required=True);command.add_argument('--out',type=Path,required=True)
@@ -95,6 +111,7 @@ def main():
         if args.command=='stage':result=stage(args.binary,args.target,args.out,context)
         elif args.command=='verify-inputs':result=verify_inputs(args.directory,context)
         elif args.command=='verify-bundle':result=verify_bundle(args.directory,context,args.publisher)
+        elif args.command=='verify-available':result=verify_available(context)
         else:result=context
         print(json.dumps(result));return 0
     except (OSError,ValueError,KeyError,TypeError,zipfile.BadZipFile,subprocess.SubprocessError) as error:parser.exit(1,str(error)+'\n')

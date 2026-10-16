@@ -2,6 +2,8 @@ import copy, hashlib, json, os, subprocess, sys, tempfile, unittest, zipfile
 from pathlib import Path
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]))
 import package
+import release
+from unittest.mock import patch
 from test_package import pe
 SCRIPT=Path(__file__).resolve().parents[1]/'release.py'
 SHA='0123456789abcdef0123456789abcdef01234567'
@@ -60,6 +62,20 @@ class ReleaseContextTests(ReleaseFixture):
             with self.subTest(changes=changes):self.assertNotEqual(self.run_cli(**changes).returncode,0)
         for tag in ['v0.2.0','v0.1.0-dev\nmalicious','../../release']:
             with self.subTest(tag=tag):self.assertNotEqual(self.run_cli(tag).returncode,0)
+    def test_new_version_requires_successful_api_reads_and_absent_release_and_tag(self):
+        context={'tag':'v0.1.0-dev'}
+        with patch.object(release.subprocess,'check_output',side_effect=['[[]]','[[]]']):
+            self.assertEqual(release.verify_available(context),{'available_tag':'v0.1.0-dev'})
+        for replies in [
+            ['[[{"tag_name":"v0.1.0-dev"}]]','[[]]'],
+            ['[[]]','[[{"ref":"refs/tags/v0.1.0-dev"}]]'],
+            ['[]','[[]]'], ['[null]','[[]]'], ['[[{}]]','[[]]'],
+            ['[[]]','[[{}]]'], ['not json','[[]]']
+        ]:
+            with self.subTest(replies=replies),patch.object(release.subprocess,'check_output',side_effect=replies),self.assertRaises(ValueError):
+                release.verify_available(context)
+        with patch.object(release.subprocess,'check_output',side_effect=subprocess.CalledProcessError(1,'gh')),self.assertRaises(subprocess.SubprocessError):
+            release.verify_available(context)
 
 class ReleaseBundleTests(ReleaseFixture):
     def command(self,*arguments):

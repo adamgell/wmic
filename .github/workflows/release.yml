@@ -30,6 +30,10 @@ jobs:
         with:
           python-version: '3.12'
       - run: python tools/release/release.py preflight --tag "$RELEASE_TAG"
+      - name: Require an unused version before building
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python tools/release/release.py verify-available --tag "$RELEASE_TAG"
       - run: cargo fmt --check
       - run: cargo clippy --locked --all-targets -- -D warnings
       - run: cargo test --locked
@@ -176,12 +180,5 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
         run: |
-          if gh release view "$RELEASE_TAG" >/dev/null 2>&1; then
-            echo 'A release already exists for this version; refusing to replace it.' >&2
-            exit 1
-          fi
-          if git ls-remote --exit-code --tags "https://github.com/$GH_REPO.git" "refs/tags/$RELEASE_TAG" >/dev/null 2>&1; then
-            echo 'A tag already exists for this version; refusing to reuse it.' >&2
-            exit 1
-          fi
+          python tools/release/release.py verify-available --tag "$RELEASE_TAG"
           gh release create "$RELEASE_TAG" artifacts/packages/* --target "$GITHUB_SHA" --draft --prerelease --title "WMIC $RELEASE_TAG (development)" --notes-file docs/release-notes.md
