@@ -171,7 +171,6 @@ pub fn render(input: RenderRequest<'_>) -> Result<RenderedOutput, RenderError> {
             return Ok(output);
         }
     };
-    #[cfg(windows)]
     if let (Some(context), Some(spec)) = (&req.render_context, &req.format_spec) {
         let schema_default = matches!(result, ManagementResult::Schema(_))
             && !req
@@ -185,6 +184,13 @@ pub fn render(input: RenderRequest<'_>) -> Result<RenderedOutput, RenderError> {
                 .iter()
                 .any(|m| m.name.eq_ignore_case("format") || m.name.eq_ignore_case("translate"));
         if !schema_default && !empty && !association_default {
+            let narrowed;
+            let result = if let ManagementResult::Objects(set) = result {
+                narrowed = ManagementResult::Objects(restrict::selected(req, set));
+                &narrowed
+            } else {
+                result
+            };
             return transform(&to_command_xml(result, context, input.node)?, spec);
         }
     }
@@ -318,6 +324,7 @@ pub(crate) fn system_property_names() -> Vec<&'static str> {
 }
 
 mod association;
+mod restrict;
 pub(crate) fn system_property_order() -> [&'static str; 10] {
     [
         "__PATH",
@@ -337,7 +344,9 @@ mod xml;
 pub use xml::{to_command_xml, to_wmi_xml};
 
 mod builtin;
-pub use builtin::{builtin_source, logical_format_name};
+pub use builtin::{BuiltinKind, builtin_kind, builtin_source, logical_format_name};
+
+pub mod native;
 
 mod pipeline;
 pub use pipeline::*;
