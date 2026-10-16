@@ -4,7 +4,7 @@ A native Rust Windows CLI named `wmic.exe`, built to reproduce classic WMIC comm
 
 This is a development compatibility build. The [compatibility report](docs/compatibility.md) separates verified behavior, known differences, and unverified platforms. Full classic compatibility is not yet claimed.
 
-Source and release drafts are hosted at [adamgell/wmic](https://github.com/adamgell/wmic). The [signing workflow](https://github.com/adamgell/wmic/blob/main/docs/signing.md) builds ARM64, x64, and x86, signs through Azure Artifact Signing using OIDC, verifies signatures on Windows, and creates a draft prerelease. A successful run is required before a package can be described as signed.
+Download signed ARM64, x64, and x86 packages from [GitHub Releases](https://github.com/adamgell/wmic/releases). Each package includes `wmic.exe`, usage and compatibility documents, and SHA-256 manifests. See the [signing documentation](https://github.com/adamgell/wmic/blob/main/docs/signing.md) for signature verification and release provenance.
 
 ## Use
 
@@ -53,9 +53,9 @@ External metadata verbs launch their referenced programs only when invoked. Avai
 
 ## Validation and limits
 
-The reference machine is the selected Windows 11 ARM64 Parallels guest. Read-only captures preserve raw bytes, UTF-16 arguments, executable hashes, independent streams, and full exit statuses. Controlled writes use uniquely owned environment variables and processes, verify identity before mutations, and check cleanup.
+Compatibility is checked against classic Microsoft WMIC using captures of raw output bytes, UTF-16 arguments, executable hashes, independent streams, and full exit statuses. Controlled write tests verify the identity and cleanup of their own test objects. The [compatibility report](docs/compatibility.md) describes the tested Windows profile and the evidence behind each result.
 
-Known differences include implementation-specific `/TRACE` text and intentional credential redaction in XML/record command metadata. Volatile OS data remains visible as strict byte differences. Clipboard APIs are implemented, but live clipboard acceptance is pending. Cross-machine authenticated access, other Windows releases, other languages, and class-repository writes are not certified by the selected guest's tests.
+Known differences include implementation-specific `/TRACE` text and intentional credential redaction in XML/record command metadata. Volatile OS data remains visible as strict byte differences. Clipboard APIs are implemented, but live clipboard acceptance is pending. Cross-machine authenticated access, additional Windows releases and languages, and class-repository writes remain unverified.
 
 An earlier unsigned development build was quarantined by Windows Defender as `Trojan:Win32/Bearfoos.A!ml`. Protection was left enabled and unchanged. Later builds completed the corpus, which does not resolve the earlier detection or establish a false positive. See the compatibility report before broader deployment.
 
@@ -93,19 +93,7 @@ pwsh -File tools/release/tests/signature-policy.Tests.ps1
 
 The reviewed application baseline passes 158 portable Rust tests and 21 native Windows tests. The [compatibility report](docs/compatibility.md) pins the measured baseline executable hashes, corpus results, and remaining acceptance limits. Release automation requires Python 3.11 or later; CI uses Python 3.12.
 
-For the selected Parallels guest, run the read-only corpus against a release build:
-
-```sh
-python3 tools/reference/run_corpus.py \
-  --vm '{ec3bc428-7a31-4f17-8424-7ce78923f7f3}' \
-  --target aarch64-pc-windows-msvc \
-  --binary target/aarch64-pc-windows-msvc/release/wmic.exe \
-  --out artifacts/recheck-arm64
-```
-
-The report retains known differences; it does not turn them into passing comparisons. Use a fresh output directory for each measured build. x86 runs capture the installed x86 original first; x64 runs use the ARM64 original and remain cross-architecture comparisons.
-
-Windows-only integration tests are ignored by default and require the reference fixtures and a selected guest. The source under `tools/windows` contains the controlled harnesses; read their scope before running them. The CLI itself does not require Python or PowerShell for ordinary WMI operations.
+Reference capture and Windows integration tests require the appropriate fixtures and an explicitly selected test environment. See the [reference tooling](https://github.com/adamgell/wmic/tree/main/tools/reference) and [controlled Windows harnesses](https://github.com/adamgell/wmic/tree/main/tools/windows) for their setup and scope. The CLI itself does not require Python or PowerShell for ordinary WMI operations.
 
 ```sh
 python3 tools/release/package.py \
