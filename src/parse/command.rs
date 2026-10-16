@@ -15,7 +15,7 @@ fn verb(word: &WideText) -> Option<Verb> {
         ("set", Verb::Set),
     ]
     .into_iter()
-    .find_map(|(name, value)| word.eq_ascii_ignore_case(name).then_some(value))
+    .find_map(|(name, value)| word.eq_ignore_case(name).then_some(value))
 }
 
 fn command_units(raw: &WideText, mode: EntryMode) -> Result<&[u16], ParseError> {
@@ -67,14 +67,14 @@ pub fn parse_command(raw: &WideText, mode: EntryMode) -> Result<ParsedCommand, P
             i += 1;
             switch.value = SwitchValue::Value(unquote(&units[spans[i].clone()]));
         }
-        if switch.name.eq_ascii_ignore_case("password")
+        if switch.name.eq_ignore_case("password")
             && let Some(colon) = units[switch_start..spans[i].end]
                 .iter()
                 .position(|u| *u == 58)
         {
             redactions.push(switch_start + colon + 1..spans[i].end);
         }
-        command.help |= switch.name.eq_ascii_ignore_case("?");
+        command.help |= switch.name.eq_ignore_case("?");
         command.modifiers.push(switch);
         i += 1;
     }
@@ -90,11 +90,11 @@ pub fn parse_command(raw: &WideText, mode: EntryMode) -> Result<ParsedCommand, P
         return Ok(command);
     }
     let first = unquote(&units[spans[i].clone()]);
-    if first.eq_ascii_ignore_case("context")
-        || first.eq_ascii_ignore_case("quit")
-        || first.eq_ascii_ignore_case("exit")
+    if first.eq_ignore_case("context")
+        || first.eq_ignore_case("quit")
+        || first.eq_ignore_case("exit")
     {
-        command.verb = if first.eq_ascii_ignore_case("context") {
+        command.verb = if first.eq_ignore_case("context") {
             Verb::Context
         } else {
             Verb::Exit
@@ -102,8 +102,8 @@ pub fn parse_command(raw: &WideText, mode: EntryMode) -> Result<ParsedCommand, P
         command.verb_explicit = true;
         i += 1;
     } else {
-        if first.eq_ascii_ignore_case("path") || first.eq_ascii_ignore_case("class") {
-            let class = first.eq_ascii_ignore_case("class");
+        if first.eq_ignore_case("path") || first.eq_ignore_case("class") {
+            let class = first.eq_ignore_case("class");
             i += 1;
             let name = if i < spans.len() && units[spans[i].start] != b'/' as u16 {
                 let value = unquote(&units[spans[i].clone()]);
@@ -124,7 +124,7 @@ pub fn parse_command(raw: &WideText, mode: EntryMode) -> Result<ParsedCommand, P
         command.verb = Verb::List;
         while i < spans.len() {
             let word = unquote(&units[spans[i].clone()]);
-            if word.eq_ascii_ignore_case("where") {
+            if word.eq_ignore_case("where") {
                 i += 1;
                 if i == spans.len() {
                     return Err(ParseError::new(0xABFD, "Invalid alias verb.", None));
@@ -253,13 +253,13 @@ pub fn parse_command(raw: &WideText, mode: EntryMode) -> Result<ParsedCommand, P
                 return Err(error);
             }
         };
-        command.help |= switch.name.eq_ascii_ignore_case("?");
+        command.help |= switch.name.eq_ignore_case("?");
         command.modifiers.push(switch);
         i += 1;
     }
     if !command.help {
         for m in &command.modifiers {
-            if m.name.eq_ascii_ignore_case("format")
+            if m.name.eq_ignore_case("format")
                 && let SwitchValue::Value(v) = &m.value
             {
                 super::parse_format_spec(m.raw_value.as_ref().unwrap_or(v))?;

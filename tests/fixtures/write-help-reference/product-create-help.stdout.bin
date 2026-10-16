@@ -1,0 +1,24 @@
+
+Creates a new instance and sets the property values for the new instance.
+USAGE:
+
+CREATE <assign list>
+NOTE: <assign list> can be more than one property name separated by commas.
+Each property name should be followed by '=' and its value.
+
+NOTE: Create cannot be used to create a new class.
+
+The following properties are available:
+Property				Type			Operation
+========				====			=========
+Description                        	N/A                 	N/A       
+IdentifyingNumber                  	N/A                 	N/A       
+InstallDate                        	N/A                 	N/A       
+InstallLocation                    	N/A                 	N/A       
+InstallState                       	N/A                 	N/A       
+Name                               	N/A                 	N/A       
+PackageCache                       	N/A                 	N/A       
+SKUNumber                          	N/A                 	N/A       
+Vendor                             	N/A                 	N/A       
+Version                            	N/A                 	N/A       
+

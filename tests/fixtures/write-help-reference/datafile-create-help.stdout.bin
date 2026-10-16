@@ -1,0 +1,47 @@
+
+Creates a new instance and sets the property values for the new instance.
+USAGE:
+
+CREATE <assign list>
+NOTE: <assign list> can be more than one property name separated by commas.
+Each property name should be followed by '=' and its value.
+
+NOTE: Create cannot be used to create a new class.
+
+The following properties are available:
+Property				Type			Operation
+========				====			=========
+Access Rights                      	N/A                 	N/A       
+Caption                            	N/A                 	N/A       
+Class Name                         	N/A                 	N/A       
+Compressed                         	N/A                 	N/A       
+Compression Method                 	N/A                 	N/A       
+Computer System Class Name         	N/A                 	N/A       
+Computer System Name               	N/A                 	N/A       
+Creation Date                      	N/A                 	N/A       
+Current File Open Count            	N/A                 	N/A       
+Description                        	N/A                 	N/A       
+Drive                              	N/A                 	N/A       
+Eight Dot Three File Name          	N/A                 	N/A       
+Encrypted                          	N/A                 	N/A       
+Encryption Method                  	N/A                 	N/A       
+File Extension                     	N/A                 	N/A       
+File Name                          	N/A                 	N/A       
+File System Class Name             	N/A                 	N/A       
+File System Name                   	N/A                 	N/A       
+File Type                          	N/A                 	N/A       
+Hidden                             	N/A                 	N/A       
+Install Date                       	N/A                 	N/A       
+Last Accessed                      	N/A                 	N/A       
+Last Modified                      	N/A                 	N/A       
+Manufacturer                       	N/A                 	N/A       
+Name                               	N/A                 	N/A       
+Path                               	N/A                 	N/A       
+Readable                           	N/A                 	N/A       
+Should Be Archived                 	N/A                 	N/A       
+Size                               	N/A                 	N/A       
+Status                             	N/A                 	N/A       
+System File                        	N/A                 	N/A       
+Version                            	N/A                 	N/A       
+Writeable                          	N/A                 	N/A       
+

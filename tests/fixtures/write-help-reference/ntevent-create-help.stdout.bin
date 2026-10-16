@@ -1,0 +1,30 @@
+
+Creates a new instance and sets the property values for the new instance.
+USAGE:
+
+CREATE <assign list>
+NOTE: <assign list> can be more than one property name separated by commas.
+Each property name should be followed by '=' and its value.
+
+NOTE: Create cannot be used to create a new class.
+
+The following properties are available:
+Property				Type			Operation
+========				====			=========
+Category                           	N/A                 	N/A       
+CategoryString                     	N/A                 	N/A       
+ComputerName                       	N/A                 	N/A       
+Data                               	N/A                 	N/A       
+EventCode                          	N/A                 	N/A       
+EventIdentifier                    	N/A                 	N/A       
+InsertionStrings                   	N/A                 	N/A       
+LogFile                            	N/A                 	N/A       
+Message                            	N/A                 	N/A       
+RecordNumber                       	N/A                 	N/A       
+SourceName                         	N/A                 	N/A       
+TimeGenerated                      	N/A                 	N/A       
+TimeWritten                        	N/A                 	N/A       
+Type                               	N/A                 	N/A       
+TypeEvent                          	N/A                 	N/A       
+UserName                           	N/A                 	N/A       
+

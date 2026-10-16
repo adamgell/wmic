@@ -1,0 +1,54 @@
+
+Creates a new instance and sets the property values for the new instance.
+USAGE:
+
+CREATE <assign list>
+NOTE: <assign list> can be more than one property name separated by commas.
+Each property name should be followed by '=' and its value.
+
+NOTE: Create cannot be used to create a new class.
+
+The following properties are available:
+Property				Type			Operation
+========				====			=========
+CSName                             	N/A                 	N/A       
+CommandLine                        	N/A                 	N/A       
+Description                        	N/A                 	N/A       
+ExecutablePath                     	N/A                 	N/A       
+ExecutionState                     	N/A                 	N/A       
+Handle                             	N/A                 	N/A       
+HandleCount                        	N/A                 	N/A       
+InstallDate                        	N/A                 	N/A       
+KernelModeTime                     	N/A                 	N/A       
+MaximumWorkingSetSize              	N/A                 	N/A       
+MinimumWorkingSetSize              	N/A                 	N/A       
+Name                               	N/A                 	N/A       
+OSName                             	N/A                 	N/A       
+OtherOperationCount                	N/A                 	N/A       
+OtherTransferCount                 	N/A                 	N/A       
+PageFaults                         	N/A                 	N/A       
+PageFileUsage                      	N/A                 	N/A       
+ParentProcessId                    	N/A                 	N/A       
+PeakPageFileUsage                  	N/A                 	N/A       
+PeakVirtualSize                    	N/A                 	N/A       
+PeakWorkingSetSize                 	N/A                 	N/A       
+Priority                           	N/A                 	N/A       
+PrivatePageCount                   	N/A                 	N/A       
+ProcessId                          	N/A                 	N/A       
+QuotaNonPagedPoolUsage             	N/A                 	N/A       
+QuotaPagedPoolUsage                	N/A                 	N/A       
+QuotaPeakNonPagedPoolUsage         	N/A                 	N/A       
+QuotaPeakPagedPoolUsage            	N/A                 	N/A       
+ReadOperationCount                 	N/A                 	N/A       
+ReadTransferCount                  	N/A                 	N/A       
+SessionId                          	N/A                 	N/A       
+Status                             	N/A                 	N/A       
+TerminationDate                    	N/A                 	N/A       
+ThreadCount                        	N/A                 	N/A       
+UserModeTime                       	N/A                 	N/A       
+VirtualSize                        	N/A                 	N/A       
+WindowsVersion                     	N/A                 	N/A       
+WorkingSetSize                     	N/A                 	N/A       
+WriteOperationCount                	N/A                 	N/A       
+WriteTransferCount                 	N/A                 	N/A       
+

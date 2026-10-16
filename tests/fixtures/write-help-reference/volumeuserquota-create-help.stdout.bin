@@ -1,0 +1,20 @@
+
+Creates a new instance and sets the property values for the new instance.
+USAGE:
+
+CREATE <assign list>
+NOTE: <assign list> can be more than one property name separated by commas.
+Each property name should be followed by '=' and its value.
+
+NOTE: Create cannot be used to create a new class.
+
+The following properties are available:
+Property				Type			Operation
+========				====			=========
+Account                            	N/A                 	N/A       
+Disk Space Used                    	N/A                 	N/A       
+Limit                              	N/A                 	N/A       
+Status                             	N/A                 	N/A       
+Volume                             	N/A                 	N/A       
+Warning Limit                      	N/A                 	N/A       
+

@@ -52,7 +52,7 @@ pub(super) fn modifier(
             _ => &["?"],
         },
     };
-    if !allowed.iter().any(|word| name.eq_ascii_ignore_case(word)) {
+    if !allowed.iter().any(|word| name.eq_ignore_case(word)) {
         let (code, message) = if scope == ModifierScope::Global {
             (0xAC5D, "Invalid Global Switch.")
         } else if verb == Verb::Get {

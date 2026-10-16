@@ -1,0 +1,3 @@
+FriendlyName  Target                               
+OS            Select * from Win32_OperatingSystem  
+

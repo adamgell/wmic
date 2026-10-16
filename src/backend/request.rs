@@ -100,7 +100,7 @@ impl ConnectionOptions {
             .authority
             .as_ref()
             .filter(|a| {
-                a.0.len() >= 11 && WideText(a.0[..11].to_vec()).eq_ascii_ignore_case("NTLMDOMAIN:")
+                a.0.len() >= 11 && WideText(a.0[..11].to_vec()).eq_ignore_case("NTLMDOMAIN:")
             })
             .map(|a| WideText(a.0[11..].to_vec()))
             .unwrap_or_default();

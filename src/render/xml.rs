@@ -58,7 +58,13 @@ fn property(
     ty: u32,
     v: Option<&CimValue>,
 ) -> Result<(), RenderError> {
-    let tag = if ty & 0x2000 != 0 {
+    let tag = if ty & 0xfff == 13 {
+        if ty & 0x2000 != 0 {
+            "PROPERTY.OBJECTARRAY"
+        } else {
+            "PROPERTY.OBJECT"
+        }
+    } else if ty & 0x2000 != 0 {
         "PROPERTY.ARRAY"
     } else if ty & 0xfff == 102 {
         "PROPERTY.REFERENCE"
@@ -68,12 +74,22 @@ fn property(
     out.0.push(60);
     push(out, tag);
     attribute(out, "NAME", name);
-    if ty & 0xfff != 102 {
+    if !matches!(ty & 0xfff, 102 | 13) {
         attribute(out, "TYPE", &mof::cim_type_name(ty).into());
     }
     out.0.push(62);
     if let Some(v) = v {
-        value(out, v)?
+        if ty == (13 | 0x2000)
+            && let CimValue::Array(items) = v
+        {
+            push(out, "<VALUE.OBJECTARRAY>");
+            for item in items {
+                value(out, item)?
+            }
+            push(out, "</VALUE.OBJECTARRAY>");
+        } else {
+            value(out, v)?
+        }
     }
     push(out, "</");
     push(out, tag);

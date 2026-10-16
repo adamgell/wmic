@@ -6,6 +6,7 @@ use wmic_compat::{
 };
 fn parameter(name: &str, ty: u32, id: u32) -> ParameterSchema {
     ParameterSchema {
+        cim_type_name: None,
         name: wide(name),
         cim_type: ty,
         id: Some(id),

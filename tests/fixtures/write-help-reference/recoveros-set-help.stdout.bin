@@ -1,0 +1,23 @@
+
+Property set operations.
+USAGE:
+
+SET <assign list>
+NOTE: <assign list> can be more than one property name separated by commas.
+Each property name should be followed by '=' and its value.
+
+The following writeable properties are available:
+Property				Type			Operation
+========				====			=========
+AutoReboot                         	boolean             	Read/Write
+DebugFilePath                      	string              	Read/Write
+DebugInfoType                      	uint32              	Read/Write
+ExpandedDebugFilePath              	string              	Read/Write
+ExpandedMiniDumpDirectory          	string              	Read/Write
+KernelDumpOnly                     	boolean             	Read/Write
+MiniDumpDirectory                  	string              	Read/Write
+OverwriteExistingDebugFile         	boolean             	Read/Write
+SendAdminAlert                     	boolean             	Read/Write
+WriteDebugInfo                     	boolean             	Read/Write
+WriteToSystemLog                   	boolean             	Read/Write
+

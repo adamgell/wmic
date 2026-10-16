@@ -200,7 +200,7 @@ fn repetition_applies_global_changes_and_password_prompt_once() {
                     .unwrap()
                     .settings
                     .iter()
-                    .find(|(n, _)| n.eq_ascii_ignore_case("namespace"))
+                    .find(|(n, _)| n.eq_ignore_case("namespace"))
                     .unwrap()
                     .1,
                 WideText::from("root\\cimv2\\relative")

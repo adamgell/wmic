@@ -16,6 +16,7 @@ pub fn bind_properties(
             .properties
             .iter()
             .map(|p| ParameterSchema {
+                cim_type_name: None,
                 name: p.name.clone(),
                 cim_type: p.cim_type,
                 id: None,
@@ -33,12 +34,12 @@ pub fn bind_properties(
 pub fn interactive(request: &super::ResolvedRequest) -> bool {
     let mut enabled = false;
     for m in &request.modifiers {
-        if m.name.eq_ascii_ignore_case("nointeractive") {
+        if m.name.eq_ignore_case("nointeractive") {
             enabled = false;
         }
-        if m.name.eq_ascii_ignore_case("interactive") {
+        if m.name.eq_ignore_case("interactive") {
             enabled = m.value == SwitchValue::Missing
-                || matches!(&m.value,SwitchValue::Value(v) if v.eq_ascii_ignore_case("on"));
+                || matches!(&m.value,SwitchValue::Value(v) if v.eq_ignore_case("on"));
         }
     }
     enabled

@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "reference_sha256": "2EF794C4940AFEA56C6D6D3B9BC9E66965BC7333E79C5DCB2DEF3C0E36F0834C",
+  "cases": [
+    {
+      "id": "switch-help-0",
+      "arguments": "os get /format /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "switch-help-1",
+      "arguments": "os get /format:?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "switch-help-2",
+      "arguments": "os get /every /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "switch-help-3",
+      "arguments": "os get /repeat /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "switch-help-4",
+      "arguments": "os get /translate /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "switch-help-5",
+      "arguments": "os list /format /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "switch-help-6",
+      "arguments": "os list /every /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "switch-help-7",
+      "arguments": "os assoc /assocclass /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "switch-help-8",
+      "arguments": "os delete /interactive /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+
+Property set operations.
+USAGE:
+
+SET <assign list>
+NOTE: <assign list> can be more than one property name separated by commas.
+Each property name should be followed by '=' and its value.
+
+The following writeable properties are available:
+Property				Type			Operation
+========				====			=========
+Disabled                           	boolean             	Read/Write
+FullName                           	string              	Read/Write
+Lockout                            	boolean             	Read/Write
+PasswordChangeable                 	boolean             	Read/Write
+PasswordExpires                    	boolean             	Read/Write
+PasswordRequired                   	boolean             	Read/Write
+

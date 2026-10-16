@@ -243,3 +243,41 @@ fn custom_role_empty_writeable_view_does_not_inherit_stock_properties() {
     .unwrap();
     assert!(!output.stdout.to_string_lossy().contains("QuantumLength"));
 }
+
+#[test]
+fn all_alias_write_help_contexts_match_original() {
+    let manifest: serde_json::Value =
+        serde_json::from_str(include_str!("fixtures/write-help-cases.json")).unwrap();
+    for case in manifest["cases"].as_array().unwrap() {
+        let id = case["id"].as_str().unwrap();
+        let expected = std::fs::read(format!(
+            "{}/tests/fixtures/write-help-reference/{id}.stdout.bin",
+            env!("CARGO_MANIFEST_DIR")
+        ))
+        .unwrap();
+        assert_eq!(help(case["arguments"].as_str().unwrap()), expected, "{id}");
+    }
+}
+#[test]
+fn verb_switch_help_uses_its_own_context() {
+    assert_eq!(
+        help("os get /format /?"),
+        include_bytes!("fixtures/switch-help-reference/switch-help-0.stdout.bin")
+    );
+    assert_eq!(
+        help("os get /every /?"),
+        include_bytes!("fixtures/switch-help-reference/switch-help-2.stdout.bin")
+    );
+    assert_eq!(
+        help("os delete /interactive /?"),
+        include_bytes!("fixtures/switch-help-reference/switch-help-8.stdout.bin")
+    );
+}
+
+#[test]
+fn brief_global_help_uses_the_native_description_limit() {
+    assert_eq!(
+        help("/?:BRIEF"),
+        include_bytes!("fixtures/syntax-reference/help-brief.stdout.bin")
+    );
+}

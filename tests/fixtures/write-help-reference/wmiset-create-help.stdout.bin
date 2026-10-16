@@ -1,0 +1,40 @@
+
+Creates a new instance and sets the property values for the new instance.
+USAGE:
+
+CREATE <assign list>
+NOTE: <assign list> can be more than one property name separated by commas.
+Each property name should be followed by '=' and its value.
+
+NOTE: Create cannot be used to create a new class.
+
+The following properties are available:
+Property				Type			Operation
+========				====			=========
+ASPScriptDefaultNamespace          	N/A                 	N/A       
+ASPScriptEnabled                   	N/A                 	N/A       
+AutoStartWin9X                     	N/A                 	N/A       
+AutorecoverMofs                    	N/A                 	N/A       
+BackupInterval                     	N/A                 	N/A       
+BackupLastTime                     	N/A                 	N/A       
+BuildVersion                       	N/A                 	N/A       
+DatabaseDirectory                  	N/A                 	N/A       
+DatabaseMaxSize                    	N/A                 	N/A       
+Description                        	N/A                 	N/A       
+EnableAnonWin9xConnections         	N/A                 	N/A       
+EnableEvents                       	N/A                 	N/A       
+EnableStartupHeapPreallocation     	N/A                 	N/A       
+HighThresholdOnClientObjects       	N/A                 	N/A       
+HighThresholdOnEvents              	N/A                 	N/A       
+InstallationDirectory              	N/A                 	N/A       
+LastStartupHeapPreallocation       	N/A                 	N/A       
+LoggingDirectory                   	N/A                 	N/A       
+LoggingLevel                       	N/A                 	N/A       
+LowThresholdOnClientObjects        	N/A                 	N/A       
+LowThresholdOnEvents               	N/A                 	N/A       
+MaxLogFileSize                     	N/A                 	N/A       
+MaxWaitOnClientObjects             	N/A                 	N/A       
+MaxWaitOnEvents                    	N/A                 	N/A       
+MofSelfInstallDirectory            	N/A                 	N/A       
+SettingID                          	N/A                 	N/A       
+

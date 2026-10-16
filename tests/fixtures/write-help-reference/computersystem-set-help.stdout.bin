@@ -1,0 +1,20 @@
+
+Property set operations.
+USAGE:
+
+SET <assign list>
+NOTE: <assign list> can be more than one property name separated by commas.
+Each property name should be followed by '=' and its value.
+
+The following writeable properties are available:
+Property				Type			Operation
+========				====			=========
+AutomaticResetBootOption           	boolean             	Read/Write
+CurrentTimeZone                    	sint16              	Read/Write
+EnableDaylightSavingsTime          	boolean             	Write     
+Roles                              	string              	Read/Write
+SystemStartupDelay                 	uint16              	Read/Write
+SystemStartupOptions               	string              	Read/Write
+SystemStartupSetting               	uint8               	Read/Write
+Workgroup                          	string              	Read/Write
+

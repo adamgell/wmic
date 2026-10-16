@@ -1,0 +1,46 @@
+
+Method execution operations.
+USAGE:
+
+CALL <method name> [<actual paramlist>]
+NOTE: <actual paramlist> ::= <actual param> | <actual param>,  <actual paramlist>
+
+The following verb(s)/method(s) are available:
+
+Call			[ In/Out ]Params&type			Status
+====			=====================			======
+AttachDebugger          [OUT]ReturnValue(uint32)            	Implemented    
+
+Create                  [IN ]CommandLine(string)            	Implemented    
+
+			[IN ]CurrentDirectory(string)       	
+
+			[IN ]ProcessStartupInformation(object:Win32_ProcessStartup)	
+
+			[OUT]ProcessId(uint32)              	
+
+			[OUT]ReturnValue(uint32)            	
+
+GetAvailableVirtualSize [OUT]AvailableVirtualSize(uint64)   	Implemented    
+
+			[OUT]ReturnValue(uint32)            	
+
+GetOwner                [OUT]Domain(string)                 	Implemented    
+
+			[OUT]ReturnValue(uint32)            	
+
+			[OUT]User(string)                   	
+
+GetOwnerSid             [OUT]ReturnValue(uint32)            	Implemented    
+
+			[OUT]Sid(string)                    	
+
+SetPriority             [IN ]Priority(sint32)               	Implemented    
+
+			[OUT]ReturnValue(uint32)            	
+
+Terminate               [IN ]Reason(uint32)                 	Implemented    
+
+			[OUT]ReturnValue(uint32)            	
+
+

@@ -1,0 +1,6 @@
+
+The ResultClass keyword indicates that the returned endpoints associated with the source object must belong to or be derived from the specified class.
+USAGE:
+
+/RESULTCLASS:<classname>
+

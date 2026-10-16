@@ -1,0 +1,6 @@
+
+Node,FriendlyName,Target
+DESKTOP-N4H9E7R,BIOS,Select * from Win32_BIOS
+DESKTOP-N4H9E7R,OS,Select * from Win32_OperatingSystem
+DESKTOP-N4H9E7R,SystemEnclosure,Select * from Win32_SystemEnclosure
+DESKTOP-N4H9E7R,RecoverOS,Select * from Win32_OSRecoveryConfiguration

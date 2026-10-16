@@ -1,0 +1,36 @@
+
+Creates a new instance and sets the property values for the new instance.
+USAGE:
+
+CREATE <assign list>
+NOTE: <assign list> can be more than one property name separated by commas.
+Each property name should be followed by '=' and its value.
+
+NOTE: Create cannot be used to create a new class.
+
+The following properties are available:
+Property				Type			Operation
+========				====			=========
+ConnectionlessService              	N/A                 	N/A       
+Description                        	N/A                 	N/A       
+GuaranteesDelivery                 	N/A                 	N/A       
+GuaranteesSequencing               	N/A                 	N/A       
+InstallDate                        	N/A                 	N/A       
+MaximumAddressSize                 	N/A                 	N/A       
+MaximumMessageSize                 	N/A                 	N/A       
+MessageOriented                    	N/A                 	N/A       
+MinimumAddressSize                 	N/A                 	N/A       
+Name                               	N/A                 	N/A       
+PseudoStreamOriented               	N/A                 	N/A       
+Status                             	N/A                 	N/A       
+SupportsBroadcasting               	N/A                 	N/A       
+SupportsConnectData                	N/A                 	N/A       
+SupportsDisconnectData             	N/A                 	N/A       
+SupportsEncryption                 	N/A                 	N/A       
+SupportsExpeditedData              	N/A                 	N/A       
+SupportsFragmentation              	N/A                 	N/A       
+SupportsGracefulClosing            	N/A                 	N/A       
+SupportsGuaranteedBandwidth        	N/A                 	N/A       
+SupportsMulticasting               	N/A                 	N/A       
+SupportsQualityofService           	N/A                 	N/A       
+

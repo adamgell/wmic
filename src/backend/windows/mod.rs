@@ -87,6 +87,14 @@ impl Management for WindowsManagement {
     fn launch_external(&mut self, command: &WideText) -> Result<u32, ManagementError> {
         external::launch(command)
     }
+    fn load_alias_inventory(
+        &mut self,
+        role: &WideText,
+        locale: &WideText,
+    ) -> std::result::Result<Option<Vec<crate::alias::AliasDefinition>>, crate::alias::ResolveError>
+    {
+        aliases::inventory(role, locale)
+    }
     fn load_aliases(
         &mut self,
         role: &WideText,

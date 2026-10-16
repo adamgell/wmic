@@ -1,0 +1,46 @@
+
+Creates a new instance and sets the property values for the new instance.
+USAGE:
+
+CREATE <assign list>
+NOTE: <assign list> can be more than one property name separated by commas.
+Each property name should be followed by '=' and its value.
+
+NOTE: Create cannot be used to create a new class.
+
+The following properties are available:
+Property				Type			Operation
+========				====			=========
+BitsPerPel                         	N/A                 	N/A       
+Collate                            	N/A                 	N/A       
+Color                              	N/A                 	N/A       
+Copies                             	N/A                 	N/A       
+Description                        	N/A                 	N/A       
+DeviceName                         	N/A                 	N/A       
+DisplayFlags                       	N/A                 	N/A       
+DisplayFrequency                   	N/A                 	N/A       
+DitherType                         	N/A                 	N/A       
+DriverVersion                      	N/A                 	N/A       
+Duplex                             	N/A                 	N/A       
+FormName                           	N/A                 	N/A       
+HorizontalResolution               	N/A                 	N/A       
+ICMIntent                          	N/A                 	N/A       
+ICMMethod                          	N/A                 	N/A       
+LogPixels                          	N/A                 	N/A       
+MediaType                          	N/A                 	N/A       
+Name                               	N/A                 	N/A       
+Orientation                        	N/A                 	N/A       
+PaperLength                        	N/A                 	N/A       
+PaperSize                          	N/A                 	N/A       
+PaperWidth                         	N/A                 	N/A       
+PelsHeight                         	N/A                 	N/A       
+PelsWidth                          	N/A                 	N/A       
+PrintQuality                       	N/A                 	N/A       
+Scale                              	N/A                 	N/A       
+SettingID                          	N/A                 	N/A       
+SpecificationVersion               	N/A                 	N/A       
+TTOption                           	N/A                 	N/A       
+VerticalResolution                 	N/A                 	N/A       
+XResolution                        	N/A                 	N/A       
+YResolution                        	N/A                 	N/A       
+

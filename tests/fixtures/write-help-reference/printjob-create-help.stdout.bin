@@ -1,0 +1,37 @@
+
+Creates a new instance and sets the property values for the new instance.
+USAGE:
+
+CREATE <assign list>
+NOTE: <assign list> can be more than one property name separated by commas.
+Each property name should be followed by '=' and its value.
+
+NOTE: Create cannot be used to create a new class.
+
+The following properties are available:
+Property				Type			Operation
+========				====			=========
+DataType                           	N/A                 	N/A       
+Description                        	N/A                 	N/A       
+Document                           	N/A                 	N/A       
+DriverName                         	N/A                 	N/A       
+ElapsedTime                        	N/A                 	N/A       
+HostPrintQueue                     	N/A                 	N/A       
+InstallDate                        	N/A                 	N/A       
+JobId                              	N/A                 	N/A       
+JobStatus                          	N/A                 	N/A       
+Name                               	N/A                 	N/A       
+Notify                             	N/A                 	N/A       
+Owner                              	N/A                 	N/A       
+PagesPrinted                       	N/A                 	N/A       
+Parameters                         	N/A                 	N/A       
+PrintProcessor                     	N/A                 	N/A       
+Priority                           	N/A                 	N/A       
+Size                               	N/A                 	N/A       
+StartTime                          	N/A                 	N/A       
+Status                             	N/A                 	N/A       
+StatusMask                         	N/A                 	N/A       
+TimeSubmitted                      	N/A                 	N/A       
+TotalPages                         	N/A                 	N/A       
+UntilTime                          	N/A                 	N/A       
+

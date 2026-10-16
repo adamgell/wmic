@@ -1,0 +1,34 @@
+
+Keyword/XSL filename to process XML results.
+USAGE:
+
+/FORMAT:<format specifier>
+NOTE: <formatspecifier> : ((<transformname>|<transformname> : <paramstring>)[,<formatspecifier>]).
+where <paramstring>:((<parametername>=<value>)[:<paramstring>]).
+
+NOTE: <transformname> is a <key word> or an <xsl file name>.
+  
+Keywords:
+
+CSV
+HFORM
+HTABLE
+LIST
+MOF
+RAWXML
+TABLE
+VALUE
+XML
+htable-sortby
+htable-sortby.xsl
+texttablewsys
+texttablewsys.xsl
+wmiclimofformat
+wmiclimofformat.xsl
+wmiclitableformat
+wmiclitableformat.xsl
+wmiclitableformatnosys
+wmiclitableformatnosys.xsl
+wmiclivalueformat
+wmiclivalueformat.xsl
+

@@ -1,0 +1,23 @@
+
+Creates a new instance and sets the property values for the new instance.
+USAGE:
+
+CREATE <assign list>
+NOTE: <assign list> can be more than one property name separated by commas.
+Each property name should be followed by '=' and its value.
+
+NOTE: Create cannot be used to create a new class.
+
+The following properties are available:
+Property				Type			Operation
+========				====			=========
+Caption                            	N/A                 	N/A       
+DefaultLimit                       	N/A                 	N/A       
+DefaultWarningLimit                	N/A                 	N/A       
+Description                        	N/A                 	N/A       
+ExceededNotification               	N/A                 	N/A       
+SettingID                          	N/A                 	N/A       
+State                              	N/A                 	N/A       
+VolumePath                         	N/A                 	N/A       
+WarningExceededNotification        	N/A                 	N/A       
+

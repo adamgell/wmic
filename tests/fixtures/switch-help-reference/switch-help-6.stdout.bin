@@ -1,0 +1,7 @@
+
+Executes the command and displays the output at every <interval> seconds.
+USAGE:
+
+/EVERY:<interval> [/REPEAT:<repeat count>]
+NOTE: Press any key to stop the cycle. 
+

@@ -28,7 +28,7 @@ fn keyword(text: &[u16], word: &str) -> Option<usize> {
         }
         if i + word.len() <= text.len()
             && WideText(text[i..i + word.len()].to_vec())
-                .eq_ascii_ignore_case(&String::from_utf16_lossy(&word))
+                .eq_ignore_case(&String::from_utf16_lossy(&word))
             && (i == 0 || !identifier(text[i - 1]))
             && (i + word.len() == text.len() || !identifier(text[i + word.len()]))
         {

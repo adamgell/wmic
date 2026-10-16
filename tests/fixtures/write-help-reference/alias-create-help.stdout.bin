@@ -1,0 +1,22 @@
+
+Creates a new instance and sets the property values for the new instance.
+USAGE:
+
+CREATE <assign list>
+NOTE: <assign list> can be more than one property name separated by commas.
+Each property name should be followed by '=' and its value.
+
+NOTE: Create cannot be used to create a new class.
+
+The following properties are available:
+Property				Type			Operation
+========				====			=========
+Connection                         	N/A                 	N/A       
+Description                        	N/A                 	N/A       
+Formats                            	N/A                 	N/A       
+FriendlyName                       	N/A                 	N/A       
+PWhere                             	N/A                 	N/A       
+Qualifiers                         	N/A                 	N/A       
+Target                             	N/A                 	N/A       
+Verbs                              	N/A                 	N/A       
+

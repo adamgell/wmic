@@ -62,6 +62,8 @@ pub struct PropertySchema {
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 pub struct ParameterSchema {
+    #[serde(default)]
+    pub cim_type_name: Option<WideText>,
     pub name: WideText,
     pub cim_type: u32,
     pub id: Option<u32>,

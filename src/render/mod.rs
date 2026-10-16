@@ -75,7 +75,7 @@ pub(crate) fn columns(request: &ResolvedRequest, objects: &[Record]) -> Vec<(Wid
                     let canonical = objects
                         .iter()
                         .flat_map(|r| &r.properties)
-                        .find(|p| p.name.eq_ascii_ignore_case(&name.to_string_lossy()))
+                        .find(|p| p.name.eq_ignore_case(&name.to_string_lossy()))
                         .map(|p| p.name.clone())
                         .unwrap_or_else(|| name.clone());
                     (canonical.clone(), canonical)
@@ -91,7 +91,7 @@ pub(crate) fn columns(request: &ResolvedRequest, objects: &[Record]) -> Vec<(Wid
         (
             system_property_order()
                 .iter()
-                .position(|n| name.eq_ascii_ignore_case(n))
+                .position(|n| name.eq_ignore_case(n))
                 .unwrap_or(10),
             name.to_string_lossy().to_ascii_lowercase(),
         )
@@ -101,7 +101,7 @@ pub(crate) fn columns(request: &ResolvedRequest, objects: &[Record]) -> Vec<(Wid
 pub(crate) fn lookup<'a>(r: &'a Record, name: &WideText) -> Option<&'a CimValue> {
     r.properties
         .iter()
-        .find(|p| p.name.eq_ascii_ignore_case(&name.to_string_lossy()))
+        .find(|p| p.name.eq_ignore_case(&name.to_string_lossy()))
         .map(|p| &p.value)
 }
 pub fn render(input: RenderRequest<'_>) -> Result<RenderedOutput, RenderError> {
@@ -109,11 +109,11 @@ pub fn render(input: RenderRequest<'_>) -> Result<RenderedOutput, RenderError> {
     let result = match input.result {
         Ok(r) => r,
         Err(e) => {
-            if e.operation.eq_ascii_ignore_case("input") {
+            if e.operation.eq_ignore_case("input") {
                 return Ok(diagnostic::text(&e.message, None));
             }
             let mut output = diagnostic::management(e, input.node);
-            if e.operation.eq_ascii_ignore_case("method") {
+            if e.operation.eq_ignore_case("method") {
                 if !crate::backend::write::interactive(req) {
                     output.stdout =
                         method::start(&e.target, &req.method.clone().unwrap_or_default());
@@ -131,9 +131,7 @@ pub fn render(input: RenderRequest<'_>) -> Result<RenderedOutput, RenderError> {
                     output = completed;
                 }
             }
-            if e.operation.eq_ascii_ignore_case("update")
-                || e.operation.eq_ascii_ignore_case("delete")
-            {
+            if e.operation.eq_ignore_case("update") || e.operation.eq_ignore_case("delete") {
                 if let Some(partial) = &e.partial
                     && let ManagementResult::Operation(operation) = partial.as_ref()
                 {
@@ -151,7 +149,7 @@ pub fn render(input: RenderRequest<'_>) -> Result<RenderedOutput, RenderError> {
                 && req
                     .format
                     .as_ref()
-                    .is_some_and(|f| f.eq_ascii_ignore_case("list"))
+                    .is_some_and(|f| f.eq_ignore_case("list"))
             {
                 push(&mut output.stdout, NL);
             }
@@ -161,14 +159,16 @@ pub fn render(input: RenderRequest<'_>) -> Result<RenderedOutput, RenderError> {
     #[cfg(windows)]
     if let (Some(context), Some(spec)) = (&req.render_context, &req.format_spec) {
         let schema_default = matches!(result, ManagementResult::Schema(_))
-            && !req.modifiers.iter().any(|m| {
-                m.name.eq_ascii_ignore_case("format") || m.name.eq_ascii_ignore_case("translate")
-            });
+            && !req
+                .modifiers
+                .iter()
+                .any(|m| m.name.eq_ignore_case("format") || m.name.eq_ignore_case("translate"));
         let empty = matches!(result,ManagementResult::Objects(s) if s.objects.is_empty());
         let association_default = matches!(result, ManagementResult::Associations(_))
-            && !req.modifiers.iter().any(|m| {
-                m.name.eq_ascii_ignore_case("format") || m.name.eq_ascii_ignore_case("translate")
-            });
+            && !req
+                .modifiers
+                .iter()
+                .any(|m| m.name.eq_ignore_case("format") || m.name.eq_ignore_case("translate"));
         if !schema_default && !empty && !association_default {
             return transform(&to_command_xml(result, context, input.node)?, spec);
         }
@@ -187,10 +187,7 @@ pub fn render(input: RenderRequest<'_>) -> Result<RenderedOutput, RenderError> {
         ));
     }
     if let ManagementResult::Schema(schema) = result {
-        let value = req
-            .modifiers
-            .iter()
-            .any(|m| m.name.eq_ascii_ignore_case("value"));
+        let value = req.modifiers.iter().any(|m| m.name.eq_ignore_case("value"));
         return Ok(RenderedOutput {
             stdout: if value {
                 "\r\r\n\r\r\n\r\r\n".into()
@@ -217,7 +214,7 @@ pub fn render(input: RenderRequest<'_>) -> Result<RenderedOutput, RenderError> {
     let format = req
         .modifiers
         .iter()
-        .filter(|m| m.name.eq_ascii_ignore_case("format"))
+        .filter(|m| m.name.eq_ignore_case("format"))
         .filter_map(|m| {
             if let SwitchValue::Value(v) = &m.value {
                 Some(v)
@@ -226,24 +223,21 @@ pub fn render(input: RenderRequest<'_>) -> Result<RenderedOutput, RenderError> {
             }
         })
         .next_back();
-    let list = req
-        .modifiers
-        .iter()
-        .any(|m| m.name.eq_ascii_ignore_case("value"))
-        || format.is_some_and(|f| f.eq_ascii_ignore_case("list"))
+    let list = req.modifiers.iter().any(|m| m.name.eq_ignore_case("value"))
+        || format.is_some_and(|f| f.eq_ignore_case("list"))
         || (req.view.is_some()
             && req
                 .format
                 .as_ref()
-                .is_some_and(|f| f.eq_ascii_ignore_case("list")));
+                .is_some_and(|f| f.eq_ignore_case("list")));
     if let Some(f) = format {
-        if f.eq_ascii_ignore_case("csv") {
+        if f.eq_ignore_case("csv") {
             return Ok(RenderedOutput {
                 stdout: csv::render(&set.objects, &cols, input.node),
                 ..Default::default()
             });
         }
-        if f.eq_ascii_ignore_case("mof") {
+        if f.eq_ignore_case("mof") {
             return Ok(RenderedOutput {
                 stdout: mof::instances(&set.objects, &cols),
                 ..Default::default()
@@ -251,8 +245,8 @@ pub fn render(input: RenderRequest<'_>) -> Result<RenderedOutput, RenderError> {
         }
     }
     if let Some(f) = format
-        && !f.eq_ascii_ignore_case("list")
-        && !f.eq_ascii_ignore_case("table")
+        && !f.eq_ignore_case("list")
+        && !f.eq_ignore_case("table")
     {
         return Err(RenderError::new("Invalid XSL format (or) file name."));
     }

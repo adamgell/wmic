@@ -1,0 +1,6 @@
+
+The AssocClass keyword indicates that the returned endpoints must be associated with the source through the specified class or one of its derived classes.
+USAGE:
+
+/ASSOCCLASS:<assocclass>
+

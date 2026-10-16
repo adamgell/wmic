@@ -1,0 +1,203 @@
+{
+  "schema_version": 1,
+  "profile": {
+    "role": "reference",
+    "executable": "C:\\Windows\\System32\\wbem\\WMIC.exe",
+    "executable_sha256": "2EF794C4940AFEA56C6D6D3B9BC9E66965BC7333E79C5DCB2DEF3C0E36F0834C",
+    "version": "10.0.26100.1 (WinBuild.160101.0800)",
+    "signature": "Valid",
+    "computer": "DESKTOP-N4H9E7R",
+    "identity": "NT AUTHORITY\\SYSTEM",
+    "launcher_architecture": "ARM64",
+    "culture": "en-US",
+    "ui_culture": "en-US",
+    "ansi_codepage": 1252,
+    "oem_codepage": 437,
+    "console_output_codepage": 437,
+    "directory": "C:\\",
+    "launch_api": "CreateProcessW",
+    "output_mode": "native pipes"
+  },
+  "cases": [
+    {
+      "id": "switch-help-0",
+      "arguments_utf16_base64": "bwBzACAAZwBlAHQAIAAvAGYAbwByAG0AYQB0ACAALwA/AA==",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiACAAbwBzACAAZwBlAHQAIAAvAGYAbwByAG0AYQB0ACAALwA/AA==",
+      "state": "completed",
+      "exit_status": 0,
+      "duration_ms": 73,
+      "process_id": 5500,
+      "normalizations": [],
+      "stdout": {
+        "file": "switch-help-0.stdout.bin",
+        "bytes": 669,
+        "sha256": "717ea9244e32638a567e952cf3a62b121210fb16b6d3329069ca9b6315adbaee"
+      },
+      "stderr": {
+        "file": "switch-help-0.stderr.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "id": "switch-help-1",
+      "arguments_utf16_base64": "bwBzACAAZwBlAHQAIAAvAGYAbwByAG0AYQB0ADoAPwA=",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiACAAbwBzACAAZwBlAHQAIAAvAGYAbwByAG0AYQB0ADoAPwA=",
+      "state": "completed",
+      "exit_status": 44210,
+      "duration_ms": 92,
+      "process_id": 13660,
+      "normalizations": [],
+      "stdout": {
+        "file": "switch-help-1.stdout.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "file": "switch-help-1.stderr.bin",
+        "bytes": 37,
+        "sha256": "82d3a4e857a2a213197a47e6f40c5d955dfcd3be4659f0265b6417de0ebe5735"
+      }
+    },
+    {
+      "id": "switch-help-2",
+      "arguments_utf16_base64": "bwBzACAAZwBlAHQAIAAvAGUAdgBlAHIAeQAgAC8APwA=",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiACAAbwBzACAAZwBlAHQAIAAvAGUAdgBlAHIAeQAgAC8APwA=",
+      "state": "completed",
+      "exit_status": 0,
+      "duration_ms": 64,
+      "process_id": 5308,
+      "normalizations": [],
+      "stdout": {
+        "file": "switch-help-2.stdout.bin",
+        "bytes": 181,
+        "sha256": "9ba01643f3b9a1e0f4a66e278e5f32c7bc1b94c180f12c494f624f86cd5013dc"
+      },
+      "stderr": {
+        "file": "switch-help-2.stderr.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "id": "switch-help-3",
+      "arguments_utf16_base64": "bwBzACAAZwBlAHQAIAAvAHIAZQBwAGUAYQB0ACAALwA/AA==",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiACAAbwBzACAAZwBlAHQAIAAvAHIAZQBwAGUAYQB0ACAALwA/AA==",
+      "state": "completed",
+      "exit_status": 45222,
+      "duration_ms": 67,
+      "process_id": 12228,
+      "normalizations": [],
+      "stdout": {
+        "file": "switch-help-3.stdout.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "file": "switch-help-3.stderr.bin",
+        "bytes": 52,
+        "sha256": "08e0f571692674d0ad51c5575d70c570be53fc07abe344ef15357f1018500bc5"
+      }
+    },
+    {
+      "id": "switch-help-4",
+      "arguments_utf16_base64": "bwBzACAAZwBlAHQAIAAvAHQAcgBhAG4AcwBsAGEAdABlACAALwA/AA==",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiACAAbwBzACAAZwBlAHQAIAAvAHQAcgBhAG4AcwBsAGEAdABlACAALwA/AA==",
+      "state": "completed",
+      "exit_status": 0,
+      "duration_ms": 69,
+      "process_id": 8360,
+      "normalizations": [],
+      "stdout": {
+        "file": "switch-help-4.stdout.bin",
+        "bytes": 182,
+        "sha256": "ad2b7590823d23d6475f1098ddb03e9a8444fdf7e1b62f09aae45411f1008ead"
+      },
+      "stderr": {
+        "file": "switch-help-4.stderr.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "id": "switch-help-5",
+      "arguments_utf16_base64": "bwBzACAAbABpAHMAdAAgAC8AZgBvAHIAbQBhAHQAIAAvAD8A",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiACAAbwBzACAAbABpAHMAdAAgAC8AZgBvAHIAbQBhAHQAIAAvAD8A",
+      "state": "completed",
+      "exit_status": 0,
+      "duration_ms": 65,
+      "process_id": 13908,
+      "normalizations": [],
+      "stdout": {
+        "file": "switch-help-5.stdout.bin",
+        "bytes": 669,
+        "sha256": "717ea9244e32638a567e952cf3a62b121210fb16b6d3329069ca9b6315adbaee"
+      },
+      "stderr": {
+        "file": "switch-help-5.stderr.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "id": "switch-help-6",
+      "arguments_utf16_base64": "bwBzACAAbABpAHMAdAAgAC8AZQB2AGUAcgB5ACAALwA/AA==",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiACAAbwBzACAAbABpAHMAdAAgAC8AZQB2AGUAcgB5ACAALwA/AA==",
+      "state": "completed",
+      "exit_status": 0,
+      "duration_ms": 61,
+      "process_id": 14096,
+      "normalizations": [],
+      "stdout": {
+        "file": "switch-help-6.stdout.bin",
+        "bytes": 181,
+        "sha256": "9ba01643f3b9a1e0f4a66e278e5f32c7bc1b94c180f12c494f624f86cd5013dc"
+      },
+      "stderr": {
+        "file": "switch-help-6.stderr.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "id": "switch-help-7",
+      "arguments_utf16_base64": "bwBzACAAYQBzAHMAbwBjACAALwBhAHMAcwBvAGMAYwBsAGEAcwBzACAALwA/AA==",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiACAAbwBzACAAYQBzAHMAbwBjACAALwBhAHMAcwBvAGMAYwBsAGEAcwBzACAALwA/AA==",
+      "state": "completed",
+      "exit_status": 0,
+      "duration_ms": 65,
+      "process_id": 4152,
+      "normalizations": [],
+      "stdout": {
+        "file": "switch-help-7.stdout.bin",
+        "bytes": 202,
+        "sha256": "dacf0bc52e3b2ef3957c0c94f69d43716c4f22b951b475c1ce3876bcd692c41a"
+      },
+      "stderr": {
+        "file": "switch-help-7.stderr.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "id": "switch-help-8",
+      "arguments_utf16_base64": "bwBzACAAZABlAGwAZQB0AGUAIAAvAGkAbgB0AGUAcgBhAGMAdABpAHYAZQAgAC8APwA=",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiACAAbwBzACAAZABlAGwAZQB0AGUAIAAvAGkAbgB0AGUAcgBhAGMAdABpAHYAZQAgAC8APwA=",
+      "state": "completed",
+      "exit_status": 0,
+      "duration_ms": 63,
+      "process_id": 3288,
+      "normalizations": [],
+      "stdout": {
+        "file": "switch-help-8.stdout.bin",
+        "bytes": 211,
+        "sha256": "47922a787c7861ccbe66ba1002724381a2e35d443ef18921ed5b84a0fc20e332"
+      },
+      "stderr": {
+        "file": "switch-help-8.stderr.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    }
+  ]
+}

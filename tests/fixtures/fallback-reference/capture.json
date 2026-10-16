@@ -1,0 +1,227 @@
+{
+  "schema_version": 1,
+  "profile": {
+    "role": "reference",
+    "executable": "C:\\Windows\\System32\\wbem\\WMIC.exe",
+    "executable_sha256": "2EF794C4940AFEA56C6D6D3B9BC9E66965BC7333E79C5DCB2DEF3C0E36F0834C",
+    "version": "10.0.26100.1 (WinBuild.160101.0800)",
+    "signature": "Valid",
+    "computer": "DESKTOP-N4H9E7R",
+    "identity": "NT AUTHORITY\\SYSTEM",
+    "launcher_architecture": "ARM64",
+    "culture": "en-US",
+    "ui_culture": "en-US",
+    "ansi_codepage": 1252,
+    "oem_codepage": 437,
+    "console_output_codepage": 437,
+    "directory": "C:\\",
+    "launch_api": "CreateProcessW",
+    "output_mode": "native pipes"
+  },
+  "cases": [
+    {
+      "id": "fallback-selected",
+      "arguments_utf16_base64": "YQBsAGkAYQBzACAATwBTACAAZwBlAHQAIABGAHIAaQBlAG4AZABsAHkATgBhAG0AZQAsAFQAYQByAGcAZQB0AA==",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiACAAYQBsAGkAYQBzACAATwBTACAAZwBlAHQAIABGAHIAaQBlAG4AZABsAHkATgBhAG0AZQAsAFQAYQByAGcAZQB0AA==",
+      "state": "completed",
+      "exit_status": 0,
+      "duration_ms": 103,
+      "process_id": 12312,
+      "normalizations": [],
+      "stdout": {
+        "file": "fallback-selected.stdout.bin",
+        "bytes": 111,
+        "sha256": "7e82c5672e16a856fcffa6d558cfade05bb2c3e4f641392d9f21ad45ff2de3c2"
+      },
+      "stderr": {
+        "file": "fallback-selected.stderr.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "id": "fallback-or",
+      "arguments_utf16_base64": "YQBsAGkAYQBzACAAdwBoAGUAcgBlACAAIgBGAHIAaQBlAG4AZABsAHkATgBhAG0AZQA9ACcATwBTACcAIABPAFIAIABGAHIAaQBlAG4AZABsAHkATgBhAG0AZQA9ACcAQwBQAFUAJwAiACAAZwBlAHQAIABGAHIAaQBlAG4AZABsAHkATgBhAG0AZQAsAFQAYQByAGcAZQB0AA==",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiACAAYQBsAGkAYQBzACAAdwBoAGUAcgBlACAAIgBGAHIAaQBlAG4AZABsAHkATgBhAG0AZQA9ACcATwBTACcAIABPAFIAIABGAHIAaQBlAG4AZABsAHkATgBhAG0AZQA9ACcAQwBQAFUAJwAiACAAZwBlAHQAIABGAHIAaQBlAG4AZABsAHkATgBhAG0AZQAsAFQAYQByAGcAZQB0AA==",
+      "state": "completed",
+      "exit_status": 0,
+      "duration_ms": 75,
+      "process_id": 11432,
+      "normalizations": [],
+      "stdout": {
+        "file": "fallback-or.stdout.bin",
+        "bytes": 165,
+        "sha256": "e88582ece1e913234995500f08d273348c59ecc1d016ef21a9dfcb0d49c78a1b"
+      },
+      "stderr": {
+        "file": "fallback-or.stderr.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "id": "fallback-null",
+      "arguments_utf16_base64": "YQBsAGkAYQBzACAAdwBoAGUAcgBlACAAIgBQAFcAaABlAHIAZQAgAEkAUwAgAE4AVQBMAEwAIABBAE4ARAAgAEYAcgBpAGUAbgBkAGwAeQBOAGEAbQBlACAATABJAEsARQAgACcATwAlACcAIgAgAGcAZQB0ACAARgByAGkAZQBuAGQAbAB5AE4AYQBtAGUA",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiACAAYQBsAGkAYQBzACAAdwBoAGUAcgBlACAAIgBQAFcAaABlAHIAZQAgAEkAUwAgAE4AVQBMAEwAIABBAE4ARAAgAEYAcgBpAGUAbgBkAGwAeQBOAGEAbQBlACAATABJAEsARQAgACcATwAlACcAIgAgAGcAZQB0ACAARgByAGkAZQBuAGQAbAB5AE4AYQBtAGUA",
+      "state": "completed",
+      "exit_status": 0,
+      "duration_ms": 82,
+      "process_id": 12224,
+      "normalizations": [],
+      "stdout": {
+        "file": "fallback-null.stdout.bin",
+        "bytes": 6,
+        "sha256": "44d77e47b3618da142fc59ae22795fb2005824045758fa4f4dbbc64d9ab44453"
+      },
+      "stderr": {
+        "file": "fallback-null.stderr.bin",
+        "bytes": 28,
+        "sha256": "0356a869fc7e6495bac33303b002935c317166d0ea5d403be162573cf01055d8"
+      }
+    },
+    {
+      "id": "fallback-not",
+      "arguments_utf16_base64": "YQBsAGkAYQBzACAAdwBoAGUAcgBlACAAIgBOAE8AVAAgACgARgByAGkAZQBuAGQAbAB5AE4AYQBtAGUAIABMAEkASwBFACAAJwAlAFMAJQAnACkAIABBAE4ARAAgAEYAcgBpAGUAbgBkAGwAeQBOAGEAbQBlAD0AJwBDAFAAVQAnACIAIABnAGUAdAAgAEYAcgBpAGUAbgBkAGwAeQBOAGEAbQBlAA==",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiACAAYQBsAGkAYQBzACAAdwBoAGUAcgBlACAAIgBOAE8AVAAgACgARgByAGkAZQBuAGQAbAB5AE4AYQBtAGUAIABMAEkASwBFACAAJwAlAFMAJQAnACkAIABBAE4ARAAgAEYAcgBpAGUAbgBkAGwAeQBOAGEAbQBlAD0AJwBDAFAAVQAnACIAIABnAGUAdAAgAEYAcgBpAGUAbgBkAGwAeQBOAGEAbQBlAA==",
+      "state": "completed",
+      "exit_status": 0,
+      "duration_ms": 92,
+      "process_id": 9468,
+      "normalizations": [],
+      "stdout": {
+        "file": "fallback-not.stdout.bin",
+        "bytes": 37,
+        "sha256": "7e6aed2279243ccef55416351513ab11b0ead0f0e42f2641f0913211a50bfee9"
+      },
+      "stderr": {
+        "file": "fallback-not.stderr.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "id": "fallback-brackets",
+      "arguments_utf16_base64": "YQBsAGkAYQBzACAAdwBoAGUAcgBlACAAIgBGAHIAaQBlAG4AZABsAHkATgBhAG0AZQAgAEwASQBLAEUAIAAnAFsATwBdAFMAJwAiACAAZwBlAHQAIABGAHIAaQBlAG4AZABsAHkATgBhAG0AZQA=",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiACAAYQBsAGkAYQBzACAAdwBoAGUAcgBlACAAIgBGAHIAaQBlAG4AZABsAHkATgBhAG0AZQAgAEwASQBLAEUAIAAnAFsATwBdAFMAJwAiACAAZwBlAHQAIABGAHIAaQBlAG4AZABsAHkATgBhAG0AZQA=",
+      "state": "completed",
+      "exit_status": 0,
+      "duration_ms": 77,
+      "process_id": 3772,
+      "normalizations": [],
+      "stdout": {
+        "file": "fallback-brackets.stdout.bin",
+        "bytes": 37,
+        "sha256": "6e43de7c7e5d0626257ee91dd642efd544c44e98e3fd80c984d7822f1df76680"
+      },
+      "stderr": {
+        "file": "fallback-brackets.stderr.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "id": "fallback-like",
+      "arguments_utf16_base64": "YQBsAGkAYQBzACAAdwBoAGUAcgBlACAAIgBGAHIAaQBlAG4AZABsAHkATgBhAG0AZQAgAEwASQBLAEUAIAAnACUATwBTACUAJwAiACAAZwBlAHQAIABGAHIAaQBlAG4AZABsAHkATgBhAG0AZQAsAFQAYQByAGcAZQB0ACAALwBmAG8AcgBtAGEAdAA6AGMAcwB2AA==",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiACAAYQBsAGkAYQBzACAAdwBoAGUAcgBlACAAIgBGAHIAaQBlAG4AZABsAHkATgBhAG0AZQAgAEwASQBLAEUAIAAnACUATwBTACUAJwAiACAAZwBlAHQAIABGAHIAaQBlAG4AZABsAHkATgBhAG0AZQAsAFQAYQByAGcAZQB0ACAALwBmAG8AcgBtAGEAdAA6AGMAcwB2AA==",
+      "state": "completed",
+      "exit_status": 0,
+      "duration_ms": 60,
+      "process_id": 13280,
+      "normalizations": [],
+      "stdout": {
+        "file": "fallback-like.stdout.bin",
+        "bytes": 277,
+        "sha256": "6a87b457108e0cd8083c56fc57971e63f4a533aee6bd4ddda96f4a5bdad970a9"
+      },
+      "stderr": {
+        "file": "fallback-like.stderr.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "id": "positional-and-where",
+      "arguments_utf16_base64": "YQBsAGkAYQBzACAATwBTACAAdwBoAGUAcgBlACAAIgBGAHIAaQBlAG4AZABsAHkATgBhAG0AZQA9ACcAQwBQAFUAJwAiACAAZwBlAHQAIABGAHIAaQBlAG4AZABsAHkATgBhAG0AZQA=",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiACAAYQBsAGkAYQBzACAATwBTACAAdwBoAGUAcgBlACAAIgBGAHIAaQBlAG4AZABsAHkATgBhAG0AZQA9ACcAQwBQAFUAJwAiACAAZwBlAHQAIABGAHIAaQBlAG4AZABsAHkATgBhAG0AZQA=",
+      "state": "completed",
+      "exit_status": 2147749911,
+      "duration_ms": 65,
+      "process_id": 2796,
+      "normalizations": [],
+      "stdout": {
+        "file": "positional-and-where.stdout.bin",
+        "bytes": 6,
+        "sha256": "44d77e47b3618da142fc59ae22795fb2005824045758fa4f4dbbc64d9ab44453"
+      },
+      "stderr": {
+        "file": "positional-and-where.stderr.bin",
+        "bytes": 64,
+        "sha256": "1f57dbbd9635b184972a5d57b4bbaa8ab74dac051d3dfdbf93d95823a5d5ccea"
+      }
+    },
+    {
+      "id": "fallback-all-order",
+      "arguments_utf16_base64": "YQBsAGkAYQBzACAAZwBlAHQAIABGAHIAaQBlAG4AZABsAHkATgBhAG0AZQA=",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiACAAYQBsAGkAYQBzACAAZwBlAHQAIABGAHIAaQBlAG4AZABsAHkATgBhAG0AZQA=",
+      "state": "completed",
+      "exit_status": 0,
+      "duration_ms": 74,
+      "process_id": 912,
+      "stdout_base64": "RnJpZW5kbHlOYW1lICAgICAgICAgDQ0KTklDQ29uZmlnICAgICAgICAgICAgDQ0KU3lzRHJpdmVyICAgICAgICAgICAgDQ0KVGFwZURyaXZlICAgICAgICAgICAgDQ0KTlRFdmVudExvZyAgICAgICAgICAgDQ0KVXNlckFjY291bnQgICAgICAgICAgDQ0KSm9iICAgICAgICAgICAgICAgICAgDQ0KU29mdHdhcmVFbGVtZW50ICAgICAgDQ0KVm9sdW1lICAgICAgICAgICAgICAgDQ0KTmV0UHJvdG9jb2wgICAgICAgICAgDQ0KUXVvdGFTZXR0aW5nICAgICAgICAgDQ0KR3JvdXAgICAgICAgICAgICAgICAgDQ0KQklPUyAgICAgICAgICAgICAgICAgDQ0KVVBTICAgICAgICAgICAgICAgICAgDQ0KU2VydmVyICAgICAgICAgICAgICAgDQ0KVm9sdW1lVXNlclF1b3RhICAgICAgDQ0KU2hhZG93Q29weSAgICAgICAgICAgDQ0KUkRBY2NvdW50ICAgICAgICAgICAgDQ0KUG9ydCAgICAgICAgICAgICAgICAgDQ0KUHJpbnRlckNvbmZpZyAgICAgICAgDQ0KRW52aXJvbm1lbnQgICAgICAgICAgDQ0KUmVnaXN0cnkgICAgICAgICAgICAgDQ0KQm9vdENvbmZpZyAgICAgICAgICAgDQ0KRGVza3RvcE1vbml0b3IgICAgICAgDQ0KUUZFICAgICAgICAgICAgICAgICAgDQ0KUHJpbnRKb2IgICAgICAgICAgICAgDQ0KRGlza0RyaXZlICAgICAgICAgICAgDQ0KVm9sdW1lUXVvdGFTZXR0aW5nICAgDQ0KUkRUb2dnbGUgICAgICAgICAgICAgDQ0KU3RhcnR1cCAgICAgICAgICAgICAgDQ0KT1MgICAgICAgICAgICAgICAgICAgDQ0KSVJRICAgICAgICAgICAgICAgICAgDQ0KU2hhcmUgICAgICAgICAgICAgICAgDQ0KQ29tcHV0ZXJTeXN0ZW0gICAgICAgDQ0KU2hhZG93U3RvcmFnZSAgICAgICAgDQ0KU2VydmljZSAgICAgICAgICAgICAgDQ0KUkROSUMgICAgICAgICAgICAgICAgDQ0KTE9HT04gICAgICAgICAgICAgICAgDQ0KTlRET01BSU4gICAgICAgICAgICAgDQ0KUkRQZXJtaXNzaW9ucyAgICAgICAgDQ0KUG9ydENvbm5lY3RvciAgICAgICAgDQ0KSURFQ09OVFJPTExFUiAgICAgICAgDQ0KTUVNQ0FDSEUgICAgICAgICAgICAgDQ0KVGltZVpvbmUgICAgICAgICAgICAgDQ0KTG9naWNhbERpc2sgICAgICAgICAgDQ0KTWVtb3J5Q2hpcCAgICAgICAgICAgDQ0KU291bmREZXYgICAgICAgICAgICAgDQ0KUHJvZHVjdCAgICAgICAgICAgICAgDQ0KRE1BQ2hhbm5lbCAgICAgICAgICAgDQ0KRGV2aWNlTWVtb3J5QWRkcmVzcyAgDQ0KRlNEaXIgICAgICAgICAgICAgICAgDQ0KTklDICAgICAgICAgICAgICAgICAgDQ0KVGVtcGVyYXR1cmUgICAgICAgICAgDQ0KREVTS1RPUCAgICAgICAgICAgICAgDQ0KRGlza1F1b3RhICAgICAgICAgICAgDQ0KRGF0YUZpbGUgICAgICAgICAgICAgDQ0KRENPTUFQUCAgICAgICAgICAgICAgDQ0KUHJvY2VzcyAgICAgICAgICAgICAgDQ0KQmFzZUJvYXJkICAgICAgICAgICAgDQ0KTG9hZE9yZGVyICAgICAgICAgICAgDQ0KUGFnZUZpbGVTZXQgICAgICAgICAgDQ0KUGFydGl0aW9uICAgICAgICAgICAgDQ0KU3lzQWNjb3VudCAgICAgICAgICAgDQ0KUGFnZUZpbGUgICAgICAgICAgICAgDQ0KU3lzdGVtU2xvdCAgICAgICAgICAgDQ0KU3lzdGVtRW5jbG9zdXJlICAgICAgDQ0KV01JU2V0ICAgICAgICAgICAgICAgDQ0KVm9sdGFnZSAgICAgICAgICAgICAgDQ0KUmVjb3Zlck9TICAgICAgICAgICAgDQ0KQ0RST00gICAgICAgICAgICAgICAgDQ0KTlRFdmVudCAgICAgICAgICAgICAgDQ0KUHJpbnRlciAgICAgICAgICAgICAgDQ0KT25Cb2FyZERldmljZSAgICAgICAgDQ0KU29mdHdhcmVGZWF0dXJlICAgICAgDQ0KTWVtUGh5c2ljYWwgICAgICAgICAgDQ0KTmV0VXNlICAgICAgICAgICAgICAgDQ0KQ1BVICAgICAgICAgICAgICAgICAgDQ0KQWxpYXMgICAgICAgICAgICAgICAgDQ0KTmV0TG9naW4gICAgICAgICAgICAgDQ0KTmV0Q2xpZW50ICAgICAgICAgICAgDQ0KU0NTSUNPTlRST0xMRVIgICAgICAgDQ0KQ1NQcm9kdWN0ICAgICAgICAgICAgDQ0KDQ0K",
+      "stderr_base64": "",
+      "normalizations": []
+    },
+    {
+      "id": "fallback-or-reversed",
+      "arguments_utf16_base64": "YQBsAGkAYQBzACAAdwBoAGUAcgBlACAAIgBGAHIAaQBlAG4AZABsAHkATgBhAG0AZQA9ACcAQwBQAFUAJwAgAE8AUgAgAEYAcgBpAGUAbgBkAGwAeQBOAGEAbQBlAD0AJwBPAFMAJwAiACAAZwBlAHQAIABGAHIAaQBlAG4AZABsAHkATgBhAG0AZQAsAFQAYQByAGcAZQB0AA==",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiACAAYQBsAGkAYQBzACAAdwBoAGUAcgBlACAAIgBGAHIAaQBlAG4AZABsAHkATgBhAG0AZQA9ACcAQwBQAFUAJwAgAE8AUgAgAEYAcgBpAGUAbgBkAGwAeQBOAGEAbQBlAD0AJwBPAFMAJwAiACAAZwBlAHQAIABGAHIAaQBlAG4AZABsAHkATgBhAG0AZQAsAFQAYQByAGcAZQB0AA==",
+      "state": "completed",
+      "exit_status": 0,
+      "duration_ms": 67,
+      "process_id": 6056,
+      "stdout_base64": "RnJpZW5kbHlOYW1lICBUYXJnZXQgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgDQ0KT1MgICAgICAgICAgICBTZWxlY3QgKiBmcm9tIFdpbjMyX09wZXJhdGluZ1N5c3RlbSAgDQ0KQ1BVICAgICAgICAgICBTZWxlY3QgKiBmcm9tIFdJTjMyX1BST0NFU1NPUiAgICAgICAgDQ0KDQ0K",
+      "stderr_base64": "",
+      "normalizations": []
+    },
+    {
+      "id": "fallback-object-table",
+      "arguments_utf16_base64": "YQBsAGkAYQBzACAATwBTACAAZwBlAHQAIABDAG8AbgBuAGUAYwB0AGkAbwBuAA==",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiACAAYQBsAGkAYQBzACAATwBTACAAZwBlAHQAIABDAG8AbgBuAGUAYwB0AGkAbwBuAA==",
+      "state": "completed",
+      "exit_status": 0,
+      "duration_ms": 56,
+      "process_id": 9080,
+      "normalizations": [],
+      "stdout": {
+        "file": "fallback-object-table.stdout.bin",
+        "bytes": 279,
+        "sha256": "91538f62dafa34b9fff33486c413bac6ab7fb58d8c644facf4e282feeec1285f"
+      },
+      "stderr": {
+        "file": "fallback-object-table.stderr.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "id": "fallback-object-csv",
+      "arguments_utf16_base64": "YQBsAGkAYQBzACAATwBTACAAZwBlAHQAIABDAG8AbgBuAGUAYwB0AGkAbwBuACAALwBmAG8AcgBtAGEAdAA6AGMAcwB2AA==",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiACAAYQBsAGkAYQBzACAATwBTACAAZwBlAHQAIABDAG8AbgBuAGUAYwB0AGkAbwBuACAALwBmAG8AcgBtAGEAdAA6AGMAcwB2AA==",
+      "state": "completed",
+      "exit_status": 0,
+      "duration_ms": 49,
+      "process_id": 7660,
+      "normalizations": [],
+      "stdout": {
+        "file": "fallback-object-csv.stdout.bin",
+        "bytes": 184,
+        "sha256": "ed0624b95f34f5ae1c8eb36060a701ddf5fda2be7670b6308636a55fdee7f4ed"
+      },
+      "stderr": {
+        "file": "fallback-object-csv.stderr.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    }
+  ]
+}

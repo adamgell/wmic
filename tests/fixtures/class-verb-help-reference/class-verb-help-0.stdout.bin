@@ -1,0 +1,7 @@
+
+Deletes the class specified.
+
+USAGE:
+/INTERACTIVE - verb invocation mode is interactive.
+/NOINTERACTIVE - verb invocation mode is non-interactive.
+

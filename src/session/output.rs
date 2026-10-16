@@ -170,15 +170,15 @@ impl<T: OutputSink> OutputSink for RoutedOutput<T> {
             && !command
                 .modifiers
                 .iter()
-                .any(|m| m.name.eq_ascii_ignore_case("every"));
+                .any(|m| m.name.eq_ignore_case("every"));
         self.inherited_output = !command
             .modifiers
             .iter()
-            .any(|m| m.scope == ModifierScope::Global && m.name.eq_ascii_ignore_case("output"));
+            .any(|m| m.scope == ModifierScope::Global && m.name.eq_ignore_case("output"));
         if command
             .modifiers
             .iter()
-            .any(|m| m.scope == ModifierScope::Global && m.name.eq_ascii_ignore_case("record"))
+            .any(|m| m.scope == ModifierScope::Global && m.name.eq_ignore_case("record"))
         {
             self.history.clear();
         }
@@ -204,13 +204,13 @@ impl<T: OutputSink> OutputSink for RoutedOutput<T> {
         self.empty = true;
         self.managed = false;
         self.append_name = None;
-        self.clipboard = s.output.eq_ascii_ignore_case("clipboard");
-        self.clipboard_append = s.append.eq_ascii_ignore_case("clipboard");
-        if !s.output.eq_ascii_ignore_case("stdout") && !self.clipboard {
+        self.clipboard = s.output.eq_ignore_case("clipboard");
+        self.clipboard_append = s.append.eq_ignore_case("clipboard");
+        if !s.output.eq_ignore_case("stdout") && !self.clipboard {
             self.output = Some(open_file(&s.output, false)?);
             self.output_name = Some(s.output.clone());
         }
-        if !s.append.eq_ascii_ignore_case("stdout") && !self.clipboard_append {
+        if !s.append.eq_ignore_case("stdout") && !self.clipboard_append {
             self.append_name = Some(s.append.clone());
         }
         if let Some(name) = &self.record_name {

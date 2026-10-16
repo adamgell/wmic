@@ -57,7 +57,7 @@ fn insert(nodes: &mut Vec<WideText>, node: WideText) {
     if !node.0.is_empty()
         && !nodes
             .iter()
-            .any(|n| n.eq_ascii_ignore_case(&node.to_string_lossy()))
+            .any(|n| n.eq_ignore_case(&node.to_string_lossy()))
     {
         nodes.push(node)
     }

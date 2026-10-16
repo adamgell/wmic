@@ -1,0 +1,60 @@
+
+Creates a new instance and sets the property values for the new instance.
+USAGE:
+
+CREATE <assign list>
+NOTE: <assign list> can be more than one property name separated by commas.
+Each property name should be followed by '=' and its value.
+
+NOTE: Create cannot be used to create a new class.
+
+The following properties are available:
+Property				Type			Operation
+========				====			=========
+Availability                       	N/A                 	N/A       
+BytesPerSector                     	N/A                 	N/A       
+Capabilities                       	N/A                 	N/A       
+CapabilityDescriptions             	N/A                 	N/A       
+CompressionMethod                  	N/A                 	N/A       
+ConfigManagerErrorCode             	N/A                 	N/A       
+ConfigManagerUserConfig            	N/A                 	N/A       
+DefaultBlockSize                   	N/A                 	N/A       
+Description                        	N/A                 	N/A       
+DeviceID                           	N/A                 	N/A       
+ErrorCleared                       	N/A                 	N/A       
+ErrorDescription                   	N/A                 	N/A       
+ErrorMethodology                   	N/A                 	N/A       
+Index                              	N/A                 	N/A       
+InstallDate                        	N/A                 	N/A       
+InterfaceType                      	N/A                 	N/A       
+LastErrorCode                      	N/A                 	N/A       
+Manufacturer                       	N/A                 	N/A       
+MaxBlockSize                       	N/A                 	N/A       
+MaxMediaSize                       	N/A                 	N/A       
+MediaLoaded                        	N/A                 	N/A       
+MediaType                          	N/A                 	N/A       
+MinBlockSize                       	N/A                 	N/A       
+Model                              	N/A                 	N/A       
+Name                               	N/A                 	N/A       
+NeedsCleaning                      	N/A                 	N/A       
+NumberOfMediaSupported             	N/A                 	N/A       
+PNPDeviceID                        	N/A                 	N/A       
+Partitions                         	N/A                 	N/A       
+PowerManagementCapabilities        	N/A                 	N/A       
+PowerManagementSupported           	N/A                 	N/A       
+SCSIBus                            	N/A                 	N/A       
+SCSILogicalUnit                    	N/A                 	N/A       
+SCSIPort                           	N/A                 	N/A       
+SCSITargetId                       	N/A                 	N/A       
+SectorsPerTrack                    	N/A                 	N/A       
+Signature                          	N/A                 	N/A       
+Size                               	N/A                 	N/A       
+Status                             	N/A                 	N/A       
+StatusInfo                         	N/A                 	N/A       
+SystemName                         	N/A                 	N/A       
+TotalCylinders                     	N/A                 	N/A       
+TotalHeads                         	N/A                 	N/A       
+TotalSectors                       	N/A                 	N/A       
+TotalTracks                        	N/A                 	N/A       
+TracksPerCylinder                  	N/A                 	N/A       
+

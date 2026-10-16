@@ -13,9 +13,9 @@ pub fn text(message: &WideText, token: Option<&WideText>) -> RenderedOutput {
     }
 }
 pub fn management(error: &ManagementError, node: &WideText) -> RenderedOutput {
-    let query = error.operation.eq_ascii_ignore_case("query")
-        || error.operation.eq_ascii_ignore_case("enumerate")
-        || error.operation.eq_ascii_ignore_case("convert");
+    let query = error.operation.eq_ignore_case("query")
+        || error.operation.eq_ignore_case("enumerate")
+        || error.operation.eq_ignore_case("convert");
     let mut stderr = WideText::default();
     if query {
         push(&mut stderr, "Node - ");

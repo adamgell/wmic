@@ -29,3 +29,6 @@ foreach ($alias in $data) {
 }
 $json = ConvertTo-Json -InputObject $data -Depth 100 -Compress
 [Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes($json))
+
+# Preserve the unmodified provider enumeration order separately from the sorted catalog:
+# Get-WmiObject -Namespace root\cli -Query "SELECT FriendlyName FROM MSFT_CliAlias" | ForEach-Object { $_.FriendlyName } | ConvertTo-Json

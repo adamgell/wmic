@@ -9,7 +9,7 @@ pub(super) fn requested(r: &ResolvedRequest) -> bool {
         || r.modifiers.iter().any(|m| {
             ["format", "translate", "record"]
                 .iter()
-                .any(|n| m.name.eq_ascii_ignore_case(n))
+                .any(|n| m.name.eq_ignore_case(n))
         })
 }
 pub(super) fn text(object: &IWbemClassObject, r: &ResolvedRequest) -> Result<WideText> {

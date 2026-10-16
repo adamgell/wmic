@@ -23,7 +23,7 @@ pub fn render(groups: &[AssociationGroup]) -> RenderedOutput {
                 if let Some(p) = record
                     .properties
                     .iter()
-                    .find(|p| p.name.eq_ascii_ignore_case(name))
+                    .find(|p| p.name.eq_ignore_case(name))
                 {
                     values.push(&p.value)
                 }
@@ -33,7 +33,7 @@ pub fn render(groups: &[AssociationGroup]) -> RenderedOutput {
             values.extend(regular.into_iter().map(|p| &p.value));
             let mut row = WideText::default();
             for value in values {
-                append(&mut row, &display_value(value));
+                append(&mut row, &value::raw_display_value(value));
                 push(&mut row, "  ")
             }
             row.0.truncate(row.0.len().saturating_sub(2));

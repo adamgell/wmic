@@ -5,6 +5,12 @@ use serde::Deserialize;
 use std::{collections::BTreeMap, sync::OnceLock};
 #[derive(Deserialize)]
 struct Messages {
+    verb_switches: BTreeMap<String, String>,
+    set_header: String,
+    create_header: String,
+    delete_alias: String,
+    delete_class: String,
+    schema_call_header: String,
     global_header: String,
     global_footer: String,
     get_header: String,
@@ -86,7 +92,7 @@ fn property_help(out: &mut WideText, alias: &AliasDefinition, command: &ParsedCo
         if command
             .properties
             .iter()
-            .any(|name| props.iter().any(|p| name.eq_ascii_ignore_case(&p.name)))
+            .any(|name| props.iter().any(|p| name.eq_ignore_case(&p.name)))
         {
             push(
                 out,
@@ -94,7 +100,7 @@ fn property_help(out: &mut WideText, alias: &AliasDefinition, command: &ParsedCo
             );
         }
         for name in &command.properties {
-            if let Some(p) = props.iter().find(|p| name.eq_ascii_ignore_case(&p.name)) {
+            if let Some(p) = props.iter().find(|p| name.eq_ignore_case(&p.name)) {
                 property_row(out, p)
             } else {
                 append(out, name);
@@ -143,7 +149,7 @@ fn method_help(out: &mut WideText, alias: &AliasDefinition, command: &ParsedComm
             command
                 .method
                 .as_ref()
-                .is_none_or(|n| n.eq_ascii_ignore_case(&v.name))
+                .is_none_or(|n| n.eq_ignore_case(&v.name))
         })
         .collect();
     verbs.sort_by_key(|v| &v.name);
@@ -211,7 +217,7 @@ fn list_help(
                             .iter()
                             .filter(|p| {
                                 p.qualifiers.iter().any(|q| {
-                                    q.name.eq_ascii_ignore_case("write")
+                                    q.name.eq_ignore_case("write")
                                         && q.value == CimValue::Boolean(true)
                                 })
                             })
@@ -235,12 +241,43 @@ pub fn render_help(req: HelpRequest<'_>) -> Result<RenderedOutput, RenderError> 
     let m = messages();
     let c = req.command;
     let mut out = WideText::default();
+    if let Some(at) = c
+        .modifiers
+        .iter()
+        .position(|m| m.name.eq_ignore_case("repeat"))
+        && !c.modifiers[..at]
+            .iter()
+            .any(|m| m.name.eq_ignore_case("every"))
+    {
+        return Err(RenderError::status(
+            0xB0A6,
+            "HINT: /REPEAT should always follow /EVERY switch.",
+        ));
+    }
+    if c.help
+        && let Some(modifier) = c
+            .modifiers
+            .iter()
+            .rev()
+            .find(|v| v.scope == ModifierScope::Verb && !v.name.eq_ignore_case("?"))
+    {
+        let key = modifier.name.to_string_lossy().to_ascii_lowercase();
+        if key == "nointeractive" {
+            return Err(RenderError::status(0xABE5, "Invalid command."));
+        }
+        if let Some(text) = m.verb_switches.get(&key) {
+            return Ok(RenderedOutput {
+                stdout: text.as_str().into(),
+                ..Default::default()
+            });
+        }
+    }
     let Some(target) = &c.target else {
         if c.verb == Verb::Context {
             push(&mut out, &m.others["context"])
         } else if let Some(switch) = c.modifiers.iter().rev().find(|s| {
             s.scope == ModifierScope::Global
-                && !s.name.eq_ascii_ignore_case("?")
+                && !s.name.eq_ignore_case("?")
                 && s.value == SwitchValue::Missing
         }) {
             let name = switch.name.to_string_lossy().to_ascii_lowercase();
@@ -252,16 +289,26 @@ pub fn render_help(req: HelpRequest<'_>) -> Result<RenderedOutput, RenderError> 
             let mut aliases: Vec<_> = req.aliases.definitions().iter().collect();
             aliases.sort_by_key(|a| a.friendly_name.to_ascii_uppercase());
             for alias in aliases {
+                let description = alias
+                    .localized_description
+                    .as_deref()
+                    .or(alias.description.as_deref())
+                    .unwrap_or("");
+                let brief = c.modifiers.iter().any(|m| {
+                    m.name.eq_ignore_case("?")
+                        && matches!(&m.value,SwitchValue::Value(v) if v.eq_ignore_case("brief"))
+                });
+                let mut description: WideText = description.into();
+                if brief && description.0.len() > 48 {
+                    description.0.truncate(48);
+                    description.0.extend("...".encode_utf16());
+                }
                 line(
                     &mut out,
                     &format!(
                         "{:<25}- {}",
                         alias.friendly_name.to_ascii_uppercase(),
-                        alias
-                            .localized_description
-                            .as_deref()
-                            .or(alias.description.as_deref())
-                            .unwrap_or("")
+                        description
                     ),
                 );
             }
@@ -330,12 +377,22 @@ pub fn render_help(req: HelpRequest<'_>) -> Result<RenderedOutput, RenderError> 
                     Verb::List => list_help(&mut out, alias, c, req.schema),
                     Verb::Assoc => push(&mut out, &m.others["assoc"]),
                     Verb::Call => method_help(&mut out, alias, c),
+                    Verb::Set | Verb::Create => {
+                        write_help(&mut out, Some(alias), req.schema, c.verb)
+                    }
+                    Verb::Delete => push(&mut out, &m.delete_alias),
                     _ => return Err(RenderError::new("Not supported")),
                 }
             }
         }
         Target::Class(name) => {
-            if c.verb == Verb::Get && c.verb_explicit {
+            if c.verb == Verb::Set || c.verb == Verb::Create {
+                write_help(&mut out, None, req.schema, c.verb)
+            } else if c.verb == Verb::Delete {
+                push(&mut out, &m.delete_class)
+            } else if c.verb == Verb::Call {
+                schema_method_help(&mut out, c, req.schema)
+            } else if c.verb == Verb::Get && c.verb_explicit {
                 push(&mut out, &m.schema_get_header);
                 push(&mut out, &m.get_footer)
             } else {
@@ -350,7 +407,13 @@ pub fn render_help(req: HelpRequest<'_>) -> Result<RenderedOutput, RenderError> 
             }
         }
         Target::Path(_) => {
-            if c.verb_explicit && c.verb == Verb::Get {
+            if c.verb == Verb::Set || c.verb == Verb::Create {
+                write_help(&mut out, None, req.schema, c.verb)
+            } else if c.verb == Verb::Delete {
+                push(&mut out, &m.delete_alias)
+            } else if c.verb == Verb::Call {
+                schema_method_help(&mut out, c, req.schema)
+            } else if c.verb_explicit && c.verb == Verb::Get {
                 schema_property_help(&mut out, c, req.schema)
             } else {
                 push(&mut out, &m.others["path"])
@@ -376,7 +439,7 @@ fn schema_property_help(out: &mut WideText, command: &ParsedCommand, schema: Opt
         if command.properties.iter().any(|name| {
             props
                 .iter()
-                .any(|p| name == &p.name || name.eq_ascii_ignore_case(&p.name.to_string_lossy()))
+                .any(|p| name == &p.name || name.eq_ignore_case(&p.name.to_string_lossy()))
         }) {
             push(
                 out,
@@ -389,7 +452,7 @@ fn schema_property_help(out: &mut WideText, command: &ParsedCommand, schema: Opt
             && !command
                 .properties
                 .iter()
-                .any(|name| name.eq_ascii_ignore_case(&p.name.to_string_lossy()))
+                .any(|name| name.eq_ignore_case(&p.name.to_string_lossy()))
         {
             continue;
         }
@@ -402,13 +465,13 @@ fn schema_property_help(out: &mut WideText, command: &ParsedCommand, schema: Opt
         let read = p
             .qualifiers
             .iter()
-            .find(|q| q.name.eq_ascii_ignore_case("read"))
+            .find(|q| q.name.eq_ignore_case("read"))
             .map(|q| q.value == CimValue::Boolean(true))
             .unwrap_or(true);
         let write = p
             .qualifiers
             .iter()
-            .any(|q| q.name.eq_ascii_ignore_case("write") && q.value == CimValue::Boolean(true));
+            .any(|q| q.name.eq_ignore_case("write") && q.value == CimValue::Boolean(true));
         let operation = match (read, write) {
             (true, true) => "Read/Write",
             (false, true) => "Write",
@@ -426,4 +489,224 @@ fn schema_property_help(out: &mut WideText, command: &ParsedCommand, schema: Opt
         );
     }
     push(out, &m.get_footer);
+}
+
+fn schema_property(property: &PropertySchema) -> AliasProperty {
+    let ty = if property.cim_type & 0x2000 != 0 {
+        format!("array of {}", mof::cim_type_name(property.cim_type))
+    } else {
+        mof::cim_type_name(property.cim_type).to_owned()
+    };
+    let write = property
+        .qualifiers
+        .iter()
+        .any(|q| q.name.eq_ignore_case("write") && q.value == CimValue::Boolean(true));
+    AliasProperty {
+        name: property.name.to_string_lossy(),
+        derivation: None,
+        description: None,
+        qualifiers: vec![
+            AliasQualifier {
+                name: "CIMTYPE".into(),
+                qualifier_value: vec![ty],
+            },
+            AliasQualifier {
+                name: "read".into(),
+                qualifier_value: vec!["true".into()],
+            },
+            AliasQualifier {
+                name: "write".into(),
+                qualifier_value: vec![write.to_string()],
+            },
+        ],
+    }
+}
+fn write_help(
+    out: &mut WideText,
+    alias: Option<&AliasDefinition>,
+    schema: Option<&ClassSchema>,
+    verb: Verb,
+) {
+    let m = messages();
+    let props: Vec<AliasProperty> = if let Some(alias) = alias {
+        if verb == Verb::Create {
+            full_properties(alias).into_iter().cloned().collect()
+        } else {
+            alias
+                .formats
+                .iter()
+                .find(|f| f.name.eq_ignore_ascii_case("writeable"))
+                .map(|f| f.properties.clone())
+                .unwrap_or_default()
+        }
+    } else {
+        schema
+            .map(|s| {
+                s.properties
+                    .iter()
+                    .filter(|p| {
+                        verb == Verb::Create
+                            || p.qualifiers.iter().any(|q| {
+                                q.name.eq_ignore_case("write") && q.value == CimValue::Boolean(true)
+                            })
+                    })
+                    .map(schema_property)
+                    .collect()
+            })
+            .unwrap_or_default()
+    };
+    let header = if verb == Verb::Create {
+        &m.create_header
+    } else {
+        &m.set_header
+    };
+    if props.is_empty() {
+        push(out, &header[..header.find("The following").unwrap()]);
+        if verb == Verb::Set {
+            line(
+                out,
+                "INFO: Writeable properties are not available for this alias or class.",
+            );
+            line(out, "");
+        }
+        return;
+    }
+    push(out, header);
+    let mut props = props.iter().collect::<Vec<_>>();
+    props.sort_by_key(|p| &p.name);
+    props.dedup_by(|a, b| a.name == b.name);
+    for property in props {
+        property_row(out, property)
+    }
+    line(out, "");
+}
+fn schema_method_help(out: &mut WideText, command: &ParsedCommand, schema: Option<&ClassSchema>) {
+    let m = messages();
+    if schema.is_none_or(|s| s.methods.is_empty()) && command.method.is_none() {
+        push(
+            out,
+            &m.schema_call_header[..m.schema_call_header.find("The following").unwrap()],
+        );
+        line(
+            out,
+            "User defined verb(s) or method(s) not available for the target WMI class.",
+        );
+        line(out, "");
+        return;
+    }
+    if command.method.is_none() {
+        push(out, &m.schema_call_header)
+    }
+    push(out, &m.method_heading);
+    let mut methods = schema
+        .map(|s| s.methods.iter().collect::<Vec<_>>())
+        .unwrap_or_default();
+    methods.sort_by_key(|m| &m.name);
+    for method in methods.into_iter().filter(|m| {
+        command
+            .method
+            .as_ref()
+            .is_none_or(|n| n.eq_ordinal_ignore_case(&m.name))
+    }) {
+        let status = method
+            .qualifiers
+            .iter()
+            .find(|q| q.name.eq_ignore_case("implemented"))
+            .map_or("Not Found", |q| {
+                if q.value == CimValue::Boolean(true) {
+                    "Implemented"
+                } else {
+                    "Not Implemented"
+                }
+            });
+        let mut input_names = method
+            .input
+            .iter()
+            .map(|p| p.name.clone())
+            .collect::<Vec<_>>();
+        input_names.sort();
+        input_names.dedup();
+        let mut all_names = method
+            .input
+            .iter()
+            .chain(&method.output)
+            .map(|p| p.name.clone())
+            .collect::<Vec<_>>();
+        all_names.sort();
+        all_names.dedup();
+        let mut indices = (0..input_names.len()).collect::<Vec<_>>();
+        indices.sort_by_key(usize::to_string);
+        let mut names = indices
+            .into_iter()
+            .map(|i| input_names[i].clone())
+            .collect::<Vec<_>>();
+        let mut outputs = method
+            .output
+            .iter()
+            .map(|p| p.name.clone())
+            .filter(|n| !input_names.contains(n))
+            .collect::<Vec<_>>();
+        outputs.sort();
+        outputs.dedup();
+        for name in outputs {
+            let at = (all_names.iter().position(|n| n == &name).unwrap() + 1).min(names.len());
+            names.insert(at, name);
+        }
+        let mut params = vec![];
+        for name in names {
+            let input = method.input.iter().find(|p| p.name == name);
+            let output = method.output.iter().find(|p| p.name == name);
+            let ty = input.or(output).unwrap().cim_type;
+            let ty = if ty & 0x2000 != 0 {
+                format!("array of {}", mof::cim_type_name(ty))
+            } else if ty & 0xfff == 101 {
+                "DateTime".into()
+            } else {
+                input
+                    .or(output)
+                    .and_then(|p| p.cim_type_name.as_ref())
+                    .filter(|_| ty & 0xfff == 13)
+                    .map(WideText::to_string_lossy)
+                    .unwrap_or_else(|| mof::cim_type_name(ty).to_owned())
+            };
+            params.push(format!(
+                "[{}]{}({ty})",
+                match (input.is_some(), output.is_some()) {
+                    (true, true) => "IN/OUT",
+                    (false, true) => "OUT",
+                    _ => "IN ",
+                },
+                name
+            ));
+        }
+        let indices = 0..params.len();
+        if params.is_empty() {
+            push(
+                out,
+                &format!(
+                    "{:<24}\t\t\t\t\t{status:<15}\r\n",
+                    method.name.to_string_lossy()
+                ),
+            );
+            push(out, NL);
+            push(out, NL)
+        } else {
+            for (row, index) in indices.into_iter().enumerate() {
+                if row == 0 {
+                    push(
+                        out,
+                        &format!(
+                            "{:<24}{:<36}\t{status:<15}\r\n",
+                            method.name.to_string_lossy(),
+                            params[index]
+                        ),
+                    );
+                } else {
+                    push(out, &format!("\t\t\t{:<36}\t\r\n", params[index]));
+                }
+                push(out, NL);
+            }
+        }
+    }
+    push(out, NL);
 }

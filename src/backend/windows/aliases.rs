@@ -78,6 +78,20 @@ pub fn load(
     selected: Option<&WideText>,
     locale: &WideText,
 ) -> Result<Option<Vec<AliasDefinition>>, ResolveError> {
+    load_impl(role, selected, locale, false)
+}
+pub fn inventory(
+    role: &WideText,
+    locale: &WideText,
+) -> Result<Option<Vec<AliasDefinition>>, ResolveError> {
+    load_impl(role, None, locale, true)
+}
+fn load_impl(
+    role: &WideText,
+    selected: Option<&WideText>,
+    locale: &WideText,
+    inventory: bool,
+) -> Result<Option<Vec<AliasDefinition>>, ResolveError> {
     let options = ConnectionOptions {
         namespace: role.clone(),
         locale: Some(locale.clone()),
@@ -94,7 +108,12 @@ pub fn load(
         Err(e) => return Err(resolve_error(e.code().0 as u32)),
     }
     let r = request(options.clone(), "MSFT_CliAlias");
-    let mut wql: WideText = "SELECT * FROM MSFT_CliAlias".into();
+    let mut wql: WideText = if inventory {
+        "SELECT Connection,Description,FriendlyName,PWhere,Target FROM MSFT_CliAlias"
+    } else {
+        "SELECT * FROM MSFT_CliAlias"
+    }
+    .into();
     if let Some(selected) = selected {
         wql.0.extend(" WHERE FriendlyName=".encode_utf16());
         wql.0.extend(literal(selected).0)
@@ -126,13 +145,13 @@ pub fn load(
             let rel = entry
                 .properties
                 .iter()
-                .find(|p| p.name.eq_ascii_ignore_case("RelPath"));
+                .find(|p| p.name.eq_ignore_case("RelPath"));
             let text = entry
                 .properties
                 .iter()
-                .find(|p| p.name.eq_ascii_ignore_case("Text"));
+                .find(|p| p.name.eq_ignore_case("Text"));
             if rel.is_some_and(
-                |p| matches!(&p.value,CimValue::String(s)if s.eq_ascii_ignore_case(&relpath)),
+                |p| matches!(&p.value,CimValue::String(s)if s.eq_ignore_case(&relpath)),
             ) && let Some(Property {
                 value: CimValue::Array(values),
                 ..
@@ -185,7 +204,7 @@ pub fn translation(
     }) = record
         .properties
         .iter()
-        .find(|p| p.name.eq_ascii_ignore_case("Tbl"))
+        .find(|p| p.name.eq_ignore_case("Tbl"))
     else {
         return Ok(Some(vec![]));
     };
@@ -195,7 +214,7 @@ pub fn translation(
             let get = |name: &str| {
                 r.properties
                     .iter()
-                    .find(|p| p.name.eq_ascii_ignore_case(name))
+                    .find(|p| p.name.eq_ignore_case(name))
                     .and_then(|p| match &p.value {
                         CimValue::String(v) => Some(v.clone()),
                         _ => None,

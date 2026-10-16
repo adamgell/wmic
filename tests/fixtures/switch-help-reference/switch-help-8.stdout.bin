@@ -1,0 +1,7 @@
+
+USAGE:
+/INTERACTIVE[:<property list>] - verb invocation mode is interactive.
+Displays properties if '?' is pressed.
+
+NOTE: <property list> ::= <property name> | <property name>,  <property list>
+

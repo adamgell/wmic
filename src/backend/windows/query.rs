@@ -129,7 +129,7 @@ fn record_depth(object: &IWbemClassObject, depth: usize) -> Result<Record> {
         let get = |name: &str| {
             props
                 .iter()
-                .find(|p| p.name.eq_ascii_ignore_case(name))
+                .find(|p| p.name.eq_ignore_case(name))
                 .and_then(|p| {
                     if let CimValue::String(s) | CimValue::Reference(s) = &p.value {
                         Some(s.clone())

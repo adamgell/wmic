@@ -1,0 +1,5 @@
+
+The ResultRole keyword indicates that the returned endpoints must play a particular role in their association with the source object.
+USAGE:
+
+/RESULTROLE:<rolename>

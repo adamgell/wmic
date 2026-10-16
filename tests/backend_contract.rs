@@ -146,7 +146,7 @@ mod live {
     fn local_schema_retains_static_method_and_parameter_id() {
         let result = WindowsManagement::new()
             .unwrap()
-            .execute(&request("class Win32_Process list"))
+            .execute(&request("class Win32_Process get"))
             .unwrap();
         let ManagementResult::Schema(s) = result else {
             panic!()
@@ -154,13 +154,13 @@ mod live {
         let create = s
             .methods
             .iter()
-            .find(|m| m.name.eq_ascii_ignore_case("Create"))
+            .find(|m| m.name.eq_ignore_case("Create"))
             .unwrap();
         assert!(create.is_static);
         let command = create
             .input
             .iter()
-            .find(|p| p.name.eq_ascii_ignore_case("CommandLine"))
+            .find(|p| p.name.eq_ignore_case("CommandLine"))
             .unwrap();
         assert_eq!(command.id, Some(0));
         assert_eq!(command.cim_type, 8);

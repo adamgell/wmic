@@ -61,7 +61,7 @@ fn integer(v: &str) -> Result<i128, InputError> {
 }
 pub fn convert_input(raw: &WideText, ty: u32) -> Result<CimValue, InputError> {
     let raw = raw.trim_ascii();
-    if raw.eq_ascii_ignore_case("NULL") {
+    if raw.eq_ignore_case("NULL") {
         return Ok(CimValue::Null);
     }
     if ty & 0x2000 != 0 {
@@ -82,8 +82,8 @@ pub fn convert_input(raw: &WideText, ty: u32) -> Result<CimValue, InputError> {
         101 => CimValue::DateTime(value),
         102 => CimValue::Reference(value),
         103 if value.0.len() == 1 => CimValue::Char16(value.0[0]),
-        11 if value.eq_ascii_ignore_case("TRUE") => CimValue::Boolean(true),
-        11 if value.eq_ascii_ignore_case("FALSE") => CimValue::Boolean(false),
+        11 if value.eq_ignore_case("TRUE") => CimValue::Boolean(true),
+        11 if value.eq_ignore_case("FALSE") => CimValue::Boolean(false),
         4 => CimValue::Real32(
             text.map_err(|_| invalid())?
                 .parse::<f32>()
@@ -147,7 +147,7 @@ pub(super) fn bind_parameters(
             let name = WideText(arg.0[..at].to_vec()).trim_ascii();
             let p = parameters
                 .iter()
-                .find(|p| name.eq_ascii_ignore_case(&p.name.to_string_lossy()))
+                .find(|p| name.eq_ignore_case(&p.name.to_string_lossy()))
                 .ok_or_else(|| not_input(name))?;
             (*p, WideText(arg.0[at + 1..].to_vec()).trim_ascii())
         } else {
@@ -156,15 +156,14 @@ pub(super) fn bind_parameters(
         if out.iter().any(|old| old.name == p.name) {
             return Err(invalid());
         }
-        let expr =
-            if named_null_literal && assignment.is_some() && expr.eq_ascii_ignore_case("NULL") {
-                let mut quoted: WideText = "\"".into();
-                quoted.0.extend(&expr.0);
-                quoted.0.push(34);
-                quoted
-            } else {
-                expr
-            };
+        let expr = if named_null_literal && assignment.is_some() && expr.eq_ignore_case("NULL") {
+            let mut quoted: WideText = "\"".into();
+            quoted.0.extend(&expr.0);
+            quoted.0.push(34);
+            quoted
+        } else {
+            expr
+        };
         out.push(Property {
             name: p.name.clone(),
             value: convert_input(&expr, p.cim_type)?,

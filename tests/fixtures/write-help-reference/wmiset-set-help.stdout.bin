@@ -1,0 +1,29 @@
+
+Property set operations.
+USAGE:
+
+SET <assign list>
+NOTE: <assign list> can be more than one property name separated by commas.
+Each property name should be followed by '=' and its value.
+
+The following writeable properties are available:
+Property				Type			Operation
+========				====			=========
+ASPScriptDefaultNamespace          	string              	Read/Write
+ASPScriptEnabled                   	boolean             	Read/Write
+AutoStartWin9X                     	uint32              	Read/Write
+BackupInterval                     	uint32              	Read/Write
+BackupLastTime                     	datetime            	Read/Write
+EnableAnonWin9xConnections         	boolean             	Read/Write
+EnableEvents                       	boolean             	Read/Write
+EnableStartupHeapPreallocation     	boolean             	Read/Write
+HighThresholdOnClientObjects       	uint32              	Read/Write
+HighThresholdOnEvents              	uint32              	Read/Write
+LoggingDirectory                   	string              	Read/Write
+LoggingLevel                       	uint32              	Read/Write
+LowThresholdOnClientObjects        	uint32              	Read/Write
+LowThresholdOnEvents               	uint32              	Read/Write
+MaxLogFileSize                     	uint32              	Read/Write
+MaxWaitOnClientObjects             	uint32              	Read/Write
+MaxWaitOnEvents                    	uint32              	Read/Write
+

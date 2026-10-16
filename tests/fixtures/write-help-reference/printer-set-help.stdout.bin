@@ -1,0 +1,40 @@
+
+Property set operations.
+USAGE:
+
+SET <assign list>
+NOTE: <assign list> can be more than one property name separated by commas.
+Each property name should be followed by '=' and its value.
+
+The following writeable properties are available:
+Property				Type			Operation
+========				====			=========
+Attributes                         	uint32              	Read/Write
+Comment                            	string              	Read/Write
+DefaultPriority                    	uint32              	Read/Write
+Direct                             	boolean             	Read/Write
+DoCompleteFirst                    	boolean             	Read/Write
+DriverName                         	string              	Read/Write
+EnableBIDI                         	boolean             	Read/Write
+EnableDevQueryPrint                	boolean             	Read/Write
+ErrorInformation                   	string              	Read/Write
+Hidden                             	boolean             	Read/Write
+KeepPrintedJobs                    	boolean             	Read/Write
+Local                              	boolean             	Read/Write
+Location                           	string              	Read/Write
+Network                            	boolean             	Read/Write
+Parameters                         	string              	Read/Write
+PortName                           	string              	Read/Write
+PrintJobDataType                   	string              	Read/Write
+PrintProcessor                     	string              	Read/Write
+Priority                           	uint32              	Read/Write
+Published                          	boolean             	Read/Write
+Queued                             	boolean             	Read/Write
+RawOnly                            	boolean             	Read/Write
+SeparatorFile                      	string              	Read/Write
+ShareName                          	string              	Read/Write
+Shared                             	boolean             	Read/Write
+StartTime                          	datetime            	Read/Write
+UntilTime                          	datetime            	Read/Write
+WorkOffline                        	boolean             	Read/Write
+

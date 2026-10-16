@@ -1,0 +1,49 @@
+
+Creates a new instance and sets the property values for the new instance.
+USAGE:
+
+CREATE <assign list>
+NOTE: <assign list> can be more than one property name separated by commas.
+Each property name should be followed by '=' and its value.
+
+NOTE: Create cannot be used to create a new class.
+
+The following properties are available:
+Property				Type			Operation
+========				====			=========
+Blocking Requests Rejected         	N/A                 	N/A       
+Bytes Received/sec                 	N/A                 	N/A       
+Bytes Total/sec                    	N/A                 	N/A       
+Bytes Transmitted/sec              	N/A                 	N/A       
+Caption                            	N/A                 	N/A       
+Context Blocks Queued/sec          	N/A                 	N/A       
+Description                        	N/A                 	N/A       
+Errors Access Permissions          	N/A                 	N/A       
+Errors Granted Access              	N/A                 	N/A       
+Errors Logon                       	N/A                 	N/A       
+Errors System                      	N/A                 	N/A       
+File Directory Searches            	N/A                 	N/A       
+Files Open                         	N/A                 	N/A       
+Files Opened Total                 	N/A                 	N/A       
+Frequency_Object                   	N/A                 	N/A       
+Frequency_PerfTime                 	N/A                 	N/A       
+Frequency_Sys100NS                 	N/A                 	N/A       
+Logon Total                        	N/A                 	N/A       
+Logon/sec                          	N/A                 	N/A       
+Name                               	N/A                 	N/A       
+Pool Nonpaged Bytes                	N/A                 	N/A       
+Pool Nonpaged Failures             	N/A                 	N/A       
+Pool Nonpaged Peak                 	N/A                 	N/A       
+Pool Paged Bytes                   	N/A                 	N/A       
+Pool Paged Failures                	N/A                 	N/A       
+Pool Paged Peak                    	N/A                 	N/A       
+Server Sessions                    	N/A                 	N/A       
+Sessions Errored Out               	N/A                 	N/A       
+Sessions Forced Off                	N/A                 	N/A       
+Sessions Logged Off                	N/A                 	N/A       
+Sessions Timed Out                 	N/A                 	N/A       
+Timestamp_Object                   	N/A                 	N/A       
+Timestamp_PerfTime                 	N/A                 	N/A       
+Timestamp_Sys100NS                 	N/A                 	N/A       
+Work Item Shortages                	N/A                 	N/A       
+

@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "reference_sha256": "2EF794C4940AFEA56C6D6D3B9BC9E66965BC7333E79C5DCB2DEF3C0E36F0834C",
+  "cases": [
+    {
+      "id": "fallback-selected",
+      "arguments": "alias OS get FriendlyName,Target",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "fallback-or",
+      "arguments": "alias where \"FriendlyName='OS' OR FriendlyName='CPU'\" get FriendlyName,Target",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "fallback-null",
+      "arguments": "alias where \"PWhere IS NULL AND FriendlyName LIKE 'O%'\" get FriendlyName",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "fallback-not",
+      "arguments": "alias where \"NOT (FriendlyName LIKE '%S%') AND FriendlyName='CPU'\" get FriendlyName",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "fallback-brackets",
+      "arguments": "alias where \"FriendlyName LIKE '[O]S'\" get FriendlyName",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "fallback-like",
+      "arguments": "alias where \"FriendlyName LIKE '%OS%'\" get FriendlyName,Target /format:csv",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "positional-and-where",
+      "arguments": "alias OS where \"FriendlyName='CPU'\" get FriendlyName",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "fallback-all-order",
+      "arguments": "alias get FriendlyName",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "fallback-or-reversed",
+      "arguments": "alias where \"FriendlyName='CPU' OR FriendlyName='OS'\" get FriendlyName,Target",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "fallback-object-table",
+      "arguments": "alias OS get Connection",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "fallback-object-csv",
+      "arguments": "alias OS get Connection /format:csv",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    }
+  ]
+}

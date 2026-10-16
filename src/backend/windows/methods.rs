@@ -127,7 +127,7 @@ pub(super) fn execute(
     let method = schema
         .methods
         .iter()
-        .find(|m| requested.eq_ascii_ignore_case(&m.name.to_string_lossy()))
+        .find(|m| requested.eq_ignore_case(&m.name.to_string_lossy()))
         .ok_or_else(|| {
             let mut msg = requested.clone();
             msg.0.extend(" - Invalid alias verb.".encode_utf16());
@@ -220,7 +220,7 @@ pub(super) fn execute(
         let ret = record
             .properties
             .iter()
-            .position(|p| p.name.eq_ascii_ignore_case("ReturnValue"))
+            .position(|p| p.name.eq_ignore_case("ReturnValue"))
             .map(|i| record.properties.remove(i).value);
         let text = output
             .as_ref()
@@ -332,23 +332,27 @@ mod value_tests {
         let property = output
             .properties
             .iter()
-            .find(|p| p.name.eq_ascii_ignore_case("ProcessStartupInformation"))
+            .find(|p| p.name.eq_ignore_case("ProcessStartupInformation"))
             .unwrap();
         let CimValue::Object(record) = &property.value else {
             panic!("embedded object lost")
         };
         assert!(
-            record.properties.iter().any(
-                |p| p.name.eq_ascii_ignore_case("ShowWindow") && p.value == CimValue::Uint16(0)
-            )
+            record
+                .properties
+                .iter()
+                .any(|p| p.name.eq_ignore_case("ShowWindow") && p.value == CimValue::Uint16(0))
         );
-        assert!(record.properties.iter().any(
-            |p| p.name.eq_ascii_ignore_case("EnvironmentVariables")
-                && p.value
-                    == CimValue::Array(vec![
-                        CimValue::String("WmicCompat=a,b".into()),
-                        CimValue::String("WmicCompat2=x&<y>".into())
-                    ])
-        ));
+        assert!(
+            record
+                .properties
+                .iter()
+                .any(|p| p.name.eq_ignore_case("EnvironmentVariables")
+                    && p.value
+                        == CimValue::Array(vec![
+                            CimValue::String("WmicCompat=a,b".into()),
+                            CimValue::String("WmicCompat2=x&<y>".into())
+                        ]))
+        );
     }
 }

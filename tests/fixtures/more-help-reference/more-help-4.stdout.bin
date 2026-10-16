@@ -1,0 +1,59 @@
+
+Creates a new instance and sets the property values for the new instance.
+USAGE:
+
+CREATE <assign list>
+NOTE: <assign list> can be more than one property name separated by commas.
+Each property name should be followed by '=' and its value.
+
+NOTE: Create cannot be used to create a new class.
+
+The following properties are available:
+Property				Type			Operation
+========				====			=========
+CSCreationClassName                	string              	Read      
+CSName                             	string              	Read      
+Caption                            	string              	Read      
+CommandLine                        	string              	Read      
+CreationClassName                  	string              	Read      
+CreationDate                       	datetime            	Read      
+Description                        	string              	Read      
+ExecutablePath                     	string              	Read      
+ExecutionState                     	uint16              	Read      
+Handle                             	string              	Read      
+HandleCount                        	uint32              	Read      
+InstallDate                        	datetime            	Read      
+KernelModeTime                     	uint64              	Read      
+MaximumWorkingSetSize              	uint32              	Read      
+MinimumWorkingSetSize              	uint32              	Read      
+Name                               	string              	Read      
+OSCreationClassName                	string              	Read      
+OSName                             	string              	Read      
+OtherOperationCount                	uint64              	Read      
+OtherTransferCount                 	uint64              	Read      
+PageFaults                         	uint32              	Read      
+PageFileUsage                      	uint32              	Read      
+ParentProcessId                    	uint32              	Read      
+PeakPageFileUsage                  	uint32              	Read      
+PeakVirtualSize                    	uint64              	Read      
+PeakWorkingSetSize                 	uint32              	Read      
+Priority                           	uint32              	Read      
+PrivatePageCount                   	uint64              	Read      
+ProcessId                          	uint32              	Read      
+QuotaNonPagedPoolUsage             	uint32              	Read      
+QuotaPagedPoolUsage                	uint32              	Read      
+QuotaPeakNonPagedPoolUsage         	uint32              	Read      
+QuotaPeakPagedPoolUsage            	uint32              	Read      
+ReadOperationCount                 	uint64              	Read      
+ReadTransferCount                  	uint64              	Read      
+SessionId                          	uint32              	Read      
+Status                             	string              	Read      
+TerminationDate                    	datetime            	Read      
+ThreadCount                        	uint32              	Read      
+UserModeTime                       	uint64              	Read      
+VirtualSize                        	uint64              	Read      
+WindowsVersion                     	string              	Read      
+WorkingSetSize                     	uint64              	Read      
+WriteOperationCount                	uint64              	Read      
+WriteTransferCount                 	uint64              	Read      
+

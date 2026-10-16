@@ -1,0 +1,34 @@
+
+Creates a new instance and sets the property values for the new instance.
+USAGE:
+
+CREATE <assign list>
+NOTE: <assign list> can be more than one property name separated by commas.
+Each property name should be followed by '=' and its value.
+
+NOTE: Create cannot be used to create a new class.
+
+The following properties are available:
+Property				Type			Operation
+========				====			=========
+BorderWidth                        	N/A                 	N/A       
+CoolSwitch                         	N/A                 	N/A       
+CursorBlinkRate                    	N/A                 	N/A       
+Description                        	N/A                 	N/A       
+DragFullWindows                    	N/A                 	N/A       
+GridGranularity                    	N/A                 	N/A       
+IconSpacing                        	N/A                 	N/A       
+IconTitleFaceName                  	N/A                 	N/A       
+IconTitleSize                      	N/A                 	N/A       
+IconTitleWrap                      	N/A                 	N/A       
+Name                               	N/A                 	N/A       
+Pattern                            	N/A                 	N/A       
+ScreenSaverActive                  	N/A                 	N/A       
+ScreenSaverExecutable              	N/A                 	N/A       
+ScreenSaverSecure                  	N/A                 	N/A       
+ScreenSaverTimeout                 	N/A                 	N/A       
+SettingID                          	N/A                 	N/A       
+Wallpaper                          	N/A                 	N/A       
+WallpaperStretched                 	N/A                 	N/A       
+WallpaperTiled                     	N/A                 	N/A       
+

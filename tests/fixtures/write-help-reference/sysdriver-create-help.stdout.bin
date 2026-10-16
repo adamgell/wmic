@@ -1,0 +1,33 @@
+
+Creates a new instance and sets the property values for the new instance.
+USAGE:
+
+CREATE <assign list>
+NOTE: <assign list> can be more than one property name separated by commas.
+Each property name should be followed by '=' and its value.
+
+NOTE: Create cannot be used to create a new class.
+
+The following properties are available:
+Property				Type			Operation
+========				====			=========
+AcceptPause                        	N/A                 	N/A       
+AcceptStop                         	N/A                 	N/A       
+Description                        	N/A                 	N/A       
+DesktopInteract                    	N/A                 	N/A       
+DisplayName                        	N/A                 	N/A       
+ErrorControl                       	N/A                 	N/A       
+ExitCode                           	N/A                 	N/A       
+InstallDate                        	N/A                 	N/A       
+Name                               	N/A                 	N/A       
+PathName                           	N/A                 	N/A       
+ServiceSpecificExitCode            	N/A                 	N/A       
+ServiceType                        	N/A                 	N/A       
+StartMode                          	N/A                 	N/A       
+StartName                          	N/A                 	N/A       
+Started                            	N/A                 	N/A       
+State                              	N/A                 	N/A       
+Status                             	N/A                 	N/A       
+SystemName                         	N/A                 	N/A       
+TagId                              	N/A                 	N/A       
+

@@ -44,6 +44,14 @@ pub trait Management {
         self.execute(request)
     }
 
+    /// Names and descriptions for global help; targeted commands load full metadata.
+    fn load_alias_inventory(
+        &mut self,
+        role: &crate::model::WideText,
+        locale: &crate::model::WideText,
+    ) -> Result<Option<Vec<crate::alias::AliasDefinition>>, crate::alias::ResolveError> {
+        self.load_aliases(role, None, locale)
+    }
     fn load_aliases(
         &mut self,
         _role: &crate::model::WideText,

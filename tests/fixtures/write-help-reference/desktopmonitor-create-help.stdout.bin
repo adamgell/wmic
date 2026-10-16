@@ -1,0 +1,38 @@
+
+Creates a new instance and sets the property values for the new instance.
+USAGE:
+
+CREATE <assign list>
+NOTE: <assign list> can be more than one property name separated by commas.
+Each property name should be followed by '=' and its value.
+
+NOTE: Create cannot be used to create a new class.
+
+The following properties are available:
+Property				Type			Operation
+========				====			=========
+Availability                       	N/A                 	N/A       
+Bandwidth                          	N/A                 	N/A       
+ConfigManagerErrorCode             	N/A                 	N/A       
+ConfigManagerUserConfig            	N/A                 	N/A       
+Description                        	N/A                 	N/A       
+DeviceID                           	N/A                 	N/A       
+DisplayType                        	N/A                 	N/A       
+ErrorCleared                       	N/A                 	N/A       
+ErrorDescription                   	N/A                 	N/A       
+InstallDate                        	N/A                 	N/A       
+IsLocked                           	N/A                 	N/A       
+LastErrorCode                      	N/A                 	N/A       
+MonitorManufacturer                	N/A                 	N/A       
+MonitorType                        	N/A                 	N/A       
+Name                               	N/A                 	N/A       
+PNPDeviceID                        	N/A                 	N/A       
+PixelsPerXLogicalInch              	N/A                 	N/A       
+PixelsPerYLogicalInch              	N/A                 	N/A       
+PowerManagementCapabilities        	N/A                 	N/A       
+PowerManagementSupported           	N/A                 	N/A       
+ScreenHeight                       	N/A                 	N/A       
+ScreenWidth                        	N/A                 	N/A       
+Status                             	N/A                 	N/A       
+StatusInfo                         	N/A                 	N/A       
+

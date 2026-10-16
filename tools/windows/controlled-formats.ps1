@@ -1,4 +1,4 @@
-param([Parameter(Mandatory)][string]$CaptureScriptPath,[string]$Candidate,[string]$CandidateSha256,[switch]$ReferenceOnly)
+param([Parameter(Mandatory)][string]$CaptureScriptPath,[string]$Candidate,[string]$CandidateSha256,[switch]$ReferenceOnly,[switch]$Whitespace)
 $ErrorActionPreference='Stop'
 $reference='C:\Windows\System32\wbem\WMIC.exe'
 $referenceHash='2EF794C4940AFEA56C6D6D3B9BC9E66965BC7333E79C5DCB2DEF3C0E36F0834C'
@@ -6,6 +6,7 @@ $null=& ([ScriptBlock]::Create([IO.File]::ReadAllText($CaptureScriptPath))) -Man
 if(!$ReferenceOnly -and (Get-FileHash -LiteralPath $Candidate -Algorithm SHA256).Hash -ne $CandidateSha256){throw 'Candidate hash mismatch'}
 $name='WmicCompatFormat_'+[Guid]::NewGuid().ToString('N')
 $value='a,b"c & <tag>'
+if($Whitespace){$value='  '+$value+'  '}
 $selection='path Win32_Environment where "Name='''+$name+''' AND UserName=''<SYSTEM>''" get VariableValue'
 $cases=@();$errors=@();$cleanup=$false
 function OwnedObject { @(Get-CimInstance Win32_Environment -Filter "Name='$name'") }

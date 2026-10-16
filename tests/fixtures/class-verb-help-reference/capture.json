@@ -1,0 +1,159 @@
+{
+  "schema_version": 1,
+  "profile": {
+    "role": "reference",
+    "executable": "C:\\Windows\\System32\\wbem\\WMIC.exe",
+    "executable_sha256": "2EF794C4940AFEA56C6D6D3B9BC9E66965BC7333E79C5DCB2DEF3C0E36F0834C",
+    "version": "10.0.26100.1 (WinBuild.160101.0800)",
+    "signature": "Valid",
+    "computer": "DESKTOP-N4H9E7R",
+    "identity": "NT AUTHORITY\\SYSTEM",
+    "launcher_architecture": "ARM64",
+    "culture": "en-US",
+    "ui_culture": "en-US",
+    "ansi_codepage": 1252,
+    "oem_codepage": 437,
+    "console_output_codepage": 437,
+    "directory": "C:\\",
+    "launch_api": "CreateProcessW",
+    "output_mode": "native pipes"
+  },
+  "cases": [
+    {
+      "id": "class-verb-help-0",
+      "arguments_utf16_base64": "YwBsAGEAcwBzACAAVwBpAG4AMwAyAF8ATwBwAGUAcgBhAHQAaQBuAGcAUwB5AHMAdABlAG0AIABkAGUAbABlAHQAZQAgAC8APwA=",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiACAAYwBsAGEAcwBzACAAVwBpAG4AMwAyAF8ATwBwAGUAcgBhAHQAaQBuAGcAUwB5AHMAdABlAG0AIABkAGUAbABlAHQAZQAgAC8APwA=",
+      "state": "completed",
+      "exit_status": 0,
+      "duration_ms": 95,
+      "process_id": 14240,
+      "normalizations": [],
+      "stdout": {
+        "file": "class-verb-help-0.stdout.bin",
+        "bytes": 163,
+        "sha256": "9d1fb8693b5e3f956355c3d4db0e173f831ca9a5fb6fb26fd0b1b370696eadb2"
+      },
+      "stderr": {
+        "file": "class-verb-help-0.stderr.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "id": "class-verb-help-1",
+      "arguments_utf16_base64": "YwBsAGEAcwBzACAAVwBpAG4AMwAyAF8ATwBwAGUAcgBhAHQAaQBuAGcAUwB5AHMAdABlAG0AIABzAGUAdAAgAC8APwA=",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiACAAYwBsAGEAcwBzACAAVwBpAG4AMwAyAF8ATwBwAGUAcgBhAHQAaQBuAGcAUwB5AHMAdABlAG0AIABzAGUAdAAgAC8APwA=",
+      "state": "completed",
+      "exit_status": 0,
+      "duration_ms": 82,
+      "process_id": 1724,
+      "normalizations": [],
+      "stdout": {
+        "file": "class-verb-help-1.stdout.bin",
+        "bytes": 462,
+        "sha256": "0acb62ebfb14ccc2f64d464c34becdf2f9649d7cbb8fbc1216be532cd98c899e"
+      },
+      "stderr": {
+        "file": "class-verb-help-1.stderr.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "id": "class-verb-help-2",
+      "arguments_utf16_base64": "YwBsAGEAcwBzACAAVwBpAG4AMwAyAF8ATwBwAGUAcgBhAHQAaQBuAGcAUwB5AHMAdABlAG0AIABjAHIAZQBhAHQAZQAgAC8APwA=",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiACAAYwBsAGEAcwBzACAAVwBpAG4AMwAyAF8ATwBwAGUAcgBhAHQAaQBuAGcAUwB5AHMAdABlAG0AIABjAHIAZQBhAHQAZQAgAC8APwA=",
+      "state": "completed",
+      "exit_status": 0,
+      "duration_ms": 79,
+      "process_id": 5068,
+      "normalizations": [],
+      "stdout": {
+        "file": "class-verb-help-2.stdout.bin",
+        "bytes": 4908,
+        "sha256": "18870cb2577ee12e2f95fd56822b76b55173d4c15adbd1b86a24399901f7161a"
+      },
+      "stderr": {
+        "file": "class-verb-help-2.stderr.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "id": "class-verb-help-3",
+      "arguments_utf16_base64": "YwBsAGEAcwBzACAAVwBpAG4AMwAyAF8ATwBwAGUAcgBhAHQAaQBuAGcAUwB5AHMAdABlAG0AIABjAGEAbABsACAALwA/AA==",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiACAAYwBsAGEAcwBzACAAVwBpAG4AMwAyAF8ATwBwAGUAcgBhAHQAaQBuAGcAUwB5AHMAdABlAG0AIABjAGEAbABsACAALwA/AA==",
+      "state": "completed",
+      "exit_status": 0,
+      "duration_ms": 76,
+      "process_id": 6256,
+      "normalizations": [],
+      "stdout": {
+        "file": "class-verb-help-3.stdout.bin",
+        "bytes": 1030,
+        "sha256": "47d028f1bb891888de59e4af16ec0b56738c33247f8e27db3ef60d8c49874175"
+      },
+      "stderr": {
+        "file": "class-verb-help-3.stderr.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "id": "class-verb-help-4",
+      "arguments_utf16_base64": "YwBsAGEAcwBzACAAVwBpAG4AMwAyAF8ATwBwAGUAcgBhAHQAaQBuAGcAUwB5AHMAdABlAG0AIAAvAD8A",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiACAAYwBsAGEAcwBzACAAVwBpAG4AMwAyAF8ATwBwAGUAcgBhAHQAaQBuAGcAUwB5AHMAdABlAG0AIAAvAD8A",
+      "state": "completed",
+      "exit_status": 0,
+      "duration_ms": 72,
+      "process_id": 14380,
+      "normalizations": [],
+      "stdout": {
+        "file": "class-verb-help-4.stdout.bin",
+        "bytes": 377,
+        "sha256": "ee60c6d2c4b40a7521f24d054d3a1fea87675202c386fbf500e364613bbc7eca"
+      },
+      "stderr": {
+        "file": "class-verb-help-4.stderr.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "id": "schema-method-help-0",
+      "arguments_utf16_base64": "YwBsAGEAcwBzACAAVwBpAG4AMwAyAF8AUAByAG8AYwBlAHMAcwAgAGMAYQBsAGwAIAAvAD8A",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiACAAYwBsAGEAcwBzACAAVwBpAG4AMwAyAF8AUAByAG8AYwBlAHMAcwAgAGMAYQBsAGwAIAAvAD8A",
+      "state": "completed",
+      "exit_status": 0,
+      "duration_ms": 65,
+      "process_id": 13256,
+      "stdout_base64": "DQ0KTWV0aG9kIGV4ZWN1dGlvbiBvcGVyYXRpb25zLg0NClVTQUdFOg0NCg0NCkNBTEwgPG1ldGhvZCBuYW1lPiBbPGFjdHVhbCBwYXJhbWxpc3Q+XQ0NCk5PVEU6IDxhY3R1YWwgcGFyYW1saXN0PiA6Oj0gPGFjdHVhbCBwYXJhbT4gfCA8YWN0dWFsIHBhcmFtPiwgIDxhY3R1YWwgcGFyYW1saXN0Pg0NCg0NClRoZSBmb2xsb3dpbmcgdmVyYihzKS9tZXRob2QocykgYXJlIGF2YWlsYWJsZToNDQoNDQpDYWxsCQkJWyBJbi9PdXQgXVBhcmFtcyZ0eXBlCQkJU3RhdHVzDQ0KPT09PQkJCT09PT09PT09PT09PT09PT09PT09PQkJCT09PT09PQ0NCkF0dGFjaERlYnVnZ2VyICAgICAgICAgIFtPVVRdUmV0dXJuVmFsdWUodWludDMyKSAgICAgICAgICAgIAlJbXBsZW1lbnRlZCAgICANCg0NCkNyZWF0ZSAgICAgICAgICAgICAgICAgIFtJTiBdQ29tbWFuZExpbmUoc3RyaW5nKSAgICAgICAgICAgIAlJbXBsZW1lbnRlZCAgICANCg0NCgkJCVtJTiBdQ3VycmVudERpcmVjdG9yeShzdHJpbmcpICAgICAgIAkNCg0NCgkJCVtJTiBdUHJvY2Vzc1N0YXJ0dXBJbmZvcm1hdGlvbihvYmplY3Q6V2luMzJfUHJvY2Vzc1N0YXJ0dXApCQ0KDQ0KCQkJW09VVF1Qcm9jZXNzSWQodWludDMyKSAgICAgICAgICAgICAgCQ0KDQ0KCQkJW09VVF1SZXR1cm5WYWx1ZSh1aW50MzIpICAgICAgICAgICAgCQ0KDQ0KR2V0QXZhaWxhYmxlVmlydHVhbFNpemUgW09VVF1BdmFpbGFibGVWaXJ0dWFsU2l6ZSh1aW50NjQpICAgCUltcGxlbWVudGVkICAgIA0KDQ0KCQkJW09VVF1SZXR1cm5WYWx1ZSh1aW50MzIpICAgICAgICAgICAgCQ0KDQ0KR2V0T3duZXIgICAgICAgICAgICAgICAgW09VVF1Eb21haW4oc3RyaW5nKSAgICAgICAgICAgICAgICAgCUltcGxlbWVudGVkICAgIA0KDQ0KCQkJW09VVF1SZXR1cm5WYWx1ZSh1aW50MzIpICAgICAgICAgICAgCQ0KDQ0KCQkJW09VVF1Vc2VyKHN0cmluZykgICAgICAgICAgICAgICAgICAgCQ0KDQ0KR2V0T3duZXJTaWQgICAgICAgICAgICAgW09VVF1SZXR1cm5WYWx1ZSh1aW50MzIpICAgICAgICAgICAgCUltcGxlbWVudGVkICAgIA0KDQ0KCQkJW09VVF1TaWQoc3RyaW5nKSAgICAgICAgICAgICAgICAgICAgCQ0KDQ0KU2V0UHJpb3JpdHkgICAgICAgICAgICAgW0lOIF1Qcmlvcml0eShzaW50MzIpICAgICAgICAgICAgICAgCUltcGxlbWVudGVkICAgIA0KDQ0KCQkJW09VVF1SZXR1cm5WYWx1ZSh1aW50MzIpICAgICAgICAgICAgCQ0KDQ0KVGVybWluYXRlICAgICAgICAgICAgICAgW0lOIF1SZWFzb24odWludDMyKSAgICAgICAgICAgICAgICAgCUltcGxlbWVudGVkICAgIA0KDQ0KCQkJW09VVF1SZXR1cm5WYWx1ZSh1aW50MzIpICAgICAgICAgICAgCQ0KDQ0KDQ0K",
+      "stderr_base64": "",
+      "normalizations": []
+    },
+    {
+      "id": "schema-method-help-1",
+      "arguments_utf16_base64": "YwBsAGEAcwBzACAAVwBpAG4AMwAyAF8AUwBlAHIAdgBpAGMAZQAgAGMAYQBsAGwAIAAvAD8A",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiACAAYwBsAGEAcwBzACAAVwBpAG4AMwAyAF8AUwBlAHIAdgBpAGMAZQAgAGMAYQBsAGwAIAAvAD8A",
+      "state": "completed",
+      "exit_status": 0,
+      "duration_ms": 61,
+      "process_id": 11568,
+      "stdout_base64": "DQ0KTWV0aG9kIGV4ZWN1dGlvbiBvcGVyYXRpb25zLg0NClVTQUdFOg0NCg0NCkNBTEwgPG1ldGhvZCBuYW1lPiBbPGFjdHVhbCBwYXJhbWxpc3Q+XQ0NCk5PVEU6IDxhY3R1YWwgcGFyYW1saXN0PiA6Oj0gPGFjdHVhbCBwYXJhbT4gfCA8YWN0dWFsIHBhcmFtPiwgIDxhY3R1YWwgcGFyYW1saXN0Pg0NCg0NClRoZSBmb2xsb3dpbmcgdmVyYihzKS9tZXRob2QocykgYXJlIGF2YWlsYWJsZToNDQoNDQpDYWxsCQkJWyBJbi9PdXQgXVBhcmFtcyZ0eXBlCQkJU3RhdHVzDQ0KPT09PQkJCT09PT09PT09PT09PT09PT09PT09PQkJCT09PT09PQ0NCkNoYW5nZSAgICAgICAgICAgICAgICAgIFtJTiBdRGVza3RvcEludGVyYWN0KGJvb2xlYW4pICAgICAgIAlOb3QgRm91bmQgICAgICANCg0NCgkJCVtJTiBdRGlzcGxheU5hbWUoc3RyaW5nKSAgICAgICAgICAgIAkNCg0NCgkJCVtJTiBdU3RhcnRQYXNzd29yZChzdHJpbmcpICAgICAgICAgIAkNCg0NCgkJCVtJTiBdRXJyb3JDb250cm9sKHVpbnQ4KSAgICAgICAgICAgIAkNCg0NCgkJCVtJTiBdTG9hZE9yZGVyR3JvdXAoc3RyaW5nKSAgICAgICAgIAkNCg0NCgkJCVtJTiBdTG9hZE9yZGVyR3JvdXBEZXBlbmRlbmNpZXMoYXJyYXkgb2Ygc3RyaW5nKQkNCg0NCgkJCVtJTiBdUGF0aE5hbWUoc3RyaW5nKSAgICAgICAgICAgICAgIAkNCg0NCgkJCVtPVVRdUmV0dXJuVmFsdWUodWludDMyKSAgICAgICAgICAgIAkNCg0NCgkJCVtJTiBdU2VydmljZURlcGVuZGVuY2llcyhhcnJheSBvZiBzdHJpbmcpCQ0KDQ0KCQkJW0lOIF1TZXJ2aWNlVHlwZSh1aW50OCkgICAgICAgICAgICAgCQ0KDQ0KCQkJW0lOIF1TdGFydE1vZGUoc3RyaW5nKSAgICAgICAgICAgICAgCQ0KDQ0KCQkJW0lOIF1TdGFydE5hbWUoc3RyaW5nKSAgICAgICAgICAgICAgCQ0KDQ0KQ2hhbmdlU3RhcnRNb2RlICAgICAgICAgW0lOIF1TdGFydE1vZGUoc3RyaW5nKSAgICAgICAgICAgICAgCU5vdCBGb3VuZCAgICAgIA0KDQ0KCQkJW09VVF1SZXR1cm5WYWx1ZSh1aW50MzIpICAgICAgICAgICAgCQ0KDQ0KQ3JlYXRlICAgICAgICAgICAgICAgICAgW0lOIF1EZXNrdG9wSW50ZXJhY3QoYm9vbGVhbikgICAgICAgCU5vdCBGb3VuZCAgICAgIA0KDQ0KCQkJW0lOIF1EaXNwbGF5TmFtZShzdHJpbmcpICAgICAgICAgICAgCQ0KDQ0KCQkJW0lOIF1TdGFydE5hbWUoc3RyaW5nKSAgICAgICAgICAgICAgCQ0KDQ0KCQkJW0lOIF1TdGFydFBhc3N3b3JkKHN0cmluZykgICAgICAgICAgCQ0KDQ0KCQkJW0lOIF1FcnJvckNvbnRyb2wodWludDgpICAgICAgICAgICAgCQ0KDQ0KCQkJW0lOIF1Mb2FkT3JkZXJHcm91cChzdHJpbmcpICAgICAgICAgCQ0KDQ0KCQkJW0lOIF1Mb2FkT3JkZXJHcm91cERlcGVuZGVuY2llcyhhcnJheSBvZiBzdHJpbmcpCQ0KDQ0KCQkJW0lOIF1OYW1lKHN0cmluZykgICAgICAgICAgICAgICAgICAgCQ0KDQ0KCQkJW09VVF1SZXR1cm5WYWx1ZSh1aW50MzIpICAgICAgICAgICAgCQ0KDQ0KCQkJW0lOIF1QYXRoTmFtZShzdHJpbmcpICAgICAgICAgICAgICAgCQ0KDQ0KCQkJW0lOIF1TZXJ2aWNlRGVwZW5kZW5jaWVzKGFycmF5IG9mIHN0cmluZykJDQoNDQoJCQlbSU4gXVNlcnZpY2VUeXBlKHVpbnQ4KSAgICAgICAgICAgICAJDQoNDQoJCQlbSU4gXVN0YXJ0TW9kZShzdHJpbmcpICAgICAgICAgICAgICAJDQoNDQpEZWxldGUgICAgICAgICAgICAgICAgICBbT1VUXVJldHVyblZhbHVlKHVpbnQzMikgICAgICAgICAgICAJTm90IEZvdW5kICAgICAgDQoNDQpHZXRTZWN1cml0eURlc2NyaXB0b3IgICBbT1VUXURlc2NyaXB0b3Iob2JqZWN0OldpbjMyX1NlY3VyaXR5RGVzY3JpcHRvcikJSW1wbGVtZW50ZWQgICAgDQoNDQoJCQlbT1VUXVJldHVyblZhbHVlKHVpbnQzMikgICAgICAgICAgICAJDQoNDQpJbnRlcnJvZ2F0ZVNlcnZpY2UgICAgICBbT1VUXVJldHVyblZhbHVlKHVpbnQzMikgICAgICAgICAgICAJTm90IEZvdW5kICAgICAgDQoNDQpQYXVzZVNlcnZpY2UgICAgICAgICAgICBbT1VUXVJldHVyblZhbHVlKHVpbnQzMikgICAgICAgICAgICAJTm90IEZvdW5kICAgICAgDQoNDQpSZXN1bWVTZXJ2aWNlICAgICAgICAgICBbT1VUXVJldHVyblZhbHVlKHVpbnQzMikgICAgICAgICAgICAJTm90IEZvdW5kICAgICAgDQoNDQpTZXRTZWN1cml0eURlc2NyaXB0b3IgICBbSU4gXURlc2NyaXB0b3Iob2JqZWN0OldpbjMyX1NlY3VyaXR5RGVzY3JpcHRvcikJSW1wbGVtZW50ZWQgICAgDQoNDQoJCQlbT1VUXVJldHVyblZhbHVlKHVpbnQzMikgICAgICAgICAgICAJDQoNDQpTdGFydFNlcnZpY2UgICAgICAgICAgICBbT1VUXVJldHVyblZhbHVlKHVpbnQzMikgICAgICAgICAgICAJTm90IEZvdW5kICAgICAgDQoNDQpTdG9wU2VydmljZSAgICAgICAgICAgICBbT1VUXVJldHVyblZhbHVlKHVpbnQzMikgICAgICAgICAgICAJTm90IEZvdW5kICAgICAgDQoNDQpVc2VyQ29udHJvbFNlcnZpY2UgICAgICBbSU4gXUNvbnRyb2xDb2RlKHVpbnQ4KSAgICAgICAgICAgICAJTm90IEZvdW5kICAgICAgDQoNDQoJCQlbT1VUXVJldHVyblZhbHVlKHVpbnQzMikgICAgICAgICAgICAJDQoNDQoNDQo=",
+      "stderr_base64": "",
+      "normalizations": []
+    },
+    {
+      "id": "schema-method-help-2",
+      "arguments_utf16_base64": "YwBsAGEAcwBzACAAXwBfAE4AYQBtAGUAcwBwAGEAYwBlACAAYwBhAGwAbAAgAC8APwA=",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiACAAYwBsAGEAcwBzACAAXwBfAE4AYQBtAGUAcwBwAGEAYwBlACAAYwBhAGwAbAAgAC8APwA=",
+      "state": "completed",
+      "exit_status": 0,
+      "duration_ms": 56,
+      "process_id": 9672,
+      "stdout_base64": "DQ0KTWV0aG9kIGV4ZWN1dGlvbiBvcGVyYXRpb25zLg0NClVTQUdFOg0NCg0NCkNBTEwgPG1ldGhvZCBuYW1lPiBbPGFjdHVhbCBwYXJhbWxpc3Q+XQ0NCk5PVEU6IDxhY3R1YWwgcGFyYW1saXN0PiA6Oj0gPGFjdHVhbCBwYXJhbT4gfCA8YWN0dWFsIHBhcmFtPiwgIDxhY3R1YWwgcGFyYW1saXN0Pg0NCg0NClVzZXIgZGVmaW5lZCB2ZXJiKHMpIG9yIG1ldGhvZChzKSBub3QgYXZhaWxhYmxlIGZvciB0aGUgdGFyZ2V0IFdNSSBjbGFzcy4NDQoNDQo=",
+      "stderr_base64": "",
+      "normalizations": []
+    }
+  ]
+}

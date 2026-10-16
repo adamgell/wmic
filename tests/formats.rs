@@ -324,3 +324,32 @@ fn value_array_delimiter_has_no_space() {
         WideText::from("{1,2}")
     );
 }
+
+#[test]
+fn embedded_cim_objects_use_the_sdk_object_property_tags() {
+    let result = ManagementResult::Objects(ObjectSet {
+        objects: vec![Record {
+            class: "Outer".into(),
+            properties: vec![Property {
+                name: "Child".into(),
+                cim_type: 13,
+                system: false,
+                qualifiers: vec![],
+                value: CimValue::Object(Box::new(Record {
+                    class: "Inner".into(),
+                    ..Default::default()
+                })),
+            }],
+            ..Default::default()
+        }],
+        schema: None,
+    });
+    let xml = wmic_compat::render::to_wmi_xml(&result)
+        .unwrap()
+        .to_string_lossy();
+    assert!(
+        xml.contains(
+            "<PROPERTY.OBJECT NAME=\"Child\"><VALUE.OBJECT><INSTANCE CLASSNAME=\"Inner\">"
+        )
+    );
+}

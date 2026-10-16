@@ -82,7 +82,7 @@ pub fn class(schema: &ClassSchema) -> WideText {
         let ty = method
             .output
             .iter()
-            .find(|p| p.name.eq_ascii_ignore_case("ReturnValue"))
+            .find(|p| p.name.eq_ignore_case("ReturnValue"))
             .map_or(0, |p| p.cim_type);
         span(&mut out, "mofkeyword", cim_type_name(ty));
         push(&mut out, NL);
@@ -94,7 +94,7 @@ pub fn class(schema: &ClassSchema) -> WideText {
             .input
             .iter()
             .chain(&method.output)
-            .filter(|p| !p.name.eq_ascii_ignore_case("ReturnValue"))
+            .filter(|p| !p.name.eq_ignore_case("ReturnValue"))
             .collect();
         params.sort_by_key(|p| p.id.unwrap_or(u32::MAX));
         let mut seen = std::collections::BTreeSet::new();

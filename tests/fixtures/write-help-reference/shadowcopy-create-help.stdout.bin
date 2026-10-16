@@ -1,0 +1,39 @@
+
+Creates a new instance and sets the property values for the new instance.
+USAGE:
+
+CREATE <assign list>
+NOTE: <assign list> can be more than one property name separated by commas.
+Each property name should be followed by '=' and its value.
+
+NOTE: Create cannot be used to create a new class.
+
+The following properties are available:
+Property				Type			Operation
+========				====			=========
+Client Accessible                  	N/A                 	N/A       
+Count                              	N/A                 	N/A       
+Device Object                      	N/A                 	N/A       
+Differential                       	N/A                 	N/A       
+Exposed Locally                    	N/A                 	N/A       
+Exposed Name                       	N/A                 	N/A       
+Exposed Path                       	N/A                 	N/A       
+Exposed Remotely                   	N/A                 	N/A       
+Hardware Assisted                  	N/A                 	N/A       
+ID                                 	N/A                 	N/A       
+Imported                           	N/A                 	N/A       
+InstallDate                        	N/A                 	N/A       
+No Auto Release                    	N/A                 	N/A       
+No Writers                         	N/A                 	N/A       
+Not Surfaced                       	N/A                 	N/A       
+Originating Machine                	N/A                 	N/A       
+Persistent                         	N/A                 	N/A       
+Plex                               	N/A                 	N/A       
+Provider ID                        	N/A                 	N/A       
+Read/Write                         	N/A                 	N/A       
+Service Machine                    	N/A                 	N/A       
+Shadow Set ID                      	N/A                 	N/A       
+State                              	N/A                 	N/A       
+Transportable                      	N/A                 	N/A       
+VolumeName                         	N/A                 	N/A       
+

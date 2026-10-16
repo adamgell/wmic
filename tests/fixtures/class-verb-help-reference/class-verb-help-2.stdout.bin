@@ -1,0 +1,78 @@
+
+Creates a new instance and sets the property values for the new instance.
+USAGE:
+
+CREATE <assign list>
+NOTE: <assign list> can be more than one property name separated by commas.
+Each property name should be followed by '=' and its value.
+
+NOTE: Create cannot be used to create a new class.
+
+The following properties are available:
+Property				Type			Operation
+========				====			=========
+BootDevice                         	string              	Read      
+BuildNumber                        	string              	Read      
+BuildType                          	string              	Read      
+CSCreationClassName                	string              	Read      
+CSDVersion                         	string              	Read      
+CSName                             	string              	Read      
+Caption                            	string              	Read      
+CodeSet                            	string              	Read      
+CountryCode                        	string              	Read      
+CreationClassName                  	string              	Read      
+CurrentTimeZone                    	sint16              	Read      
+DataExecutionPrevention_32BitApplications	boolean             	Read      
+DataExecutionPrevention_Available  	boolean             	Read      
+DataExecutionPrevention_Drivers    	boolean             	Read      
+DataExecutionPrevention_SupportPolicy	uint8               	Read      
+Debug                              	boolean             	Read      
+Description                        	string              	Read/Write
+Distributed                        	boolean             	Read      
+EncryptionLevel                    	uint32              	Read      
+ForegroundApplicationBoost         	uint8               	Read/Write
+FreePhysicalMemory                 	uint64              	Read      
+FreeSpaceInPagingFiles             	uint64              	Read      
+FreeVirtualMemory                  	uint64              	Read      
+InstallDate                        	datetime            	Read      
+LargeSystemCache                   	uint32              	Read      
+LastBootUpTime                     	datetime            	Read      
+LocalDateTime                      	datetime            	Read      
+Locale                             	string              	Read      
+MUILanguages                       	array of string     	Read      
+Manufacturer                       	string              	Read      
+MaxNumberOfProcesses               	uint32              	Read      
+MaxProcessMemorySize               	uint64              	Read      
+Name                               	string              	Read      
+NumberOfLicensedUsers              	uint32              	Read      
+NumberOfProcesses                  	uint32              	Read      
+NumberOfUsers                      	uint32              	Read      
+OSArchitecture                     	string              	Read      
+OSLanguage                         	uint32              	Read      
+OSProductSuite                     	uint32              	Read      
+OSType                             	uint16              	Read      
+OperatingSystemSKU                 	uint32              	Read      
+Organization                       	string              	Read      
+OtherTypeDescription               	string              	Read      
+PAEEnabled                         	boolean             	Read      
+PlusProductID                      	string              	Read      
+PlusVersionNumber                  	string              	Read      
+PortableOperatingSystem            	boolean             	Read      
+Primary                            	boolean             	Read      
+ProductType                        	uint32              	Read      
+RegisteredUser                     	string              	Read      
+SerialNumber                       	string              	Read      
+ServicePackMajorVersion            	uint16              	Read      
+ServicePackMinorVersion            	uint16              	Read      
+SizeStoredInPagingFiles            	uint64              	Read      
+Status                             	string              	Read      
+SuiteMask                          	uint32              	Read      
+SystemDevice                       	string              	Read      
+SystemDirectory                    	string              	Read      
+SystemDrive                        	string              	Read      
+TotalSwapSpaceSize                 	uint64              	Read      
+TotalVirtualMemorySize             	uint64              	Read      
+TotalVisibleMemorySize             	uint64              	Read      
+Version                            	string              	Read      
+WindowsDirectory                   	string              	Read      
+

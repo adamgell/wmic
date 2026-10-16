@@ -11,7 +11,7 @@ pub fn connect(options: &ConnectionOptions) -> Result<IWbemServices> {
             .map_err(|e| Error::from_hresult(HRESULT(e.code as i32)))?;
         let locator: IWbemLocator = CoCreateInstance(&WbemLocator, None, CLSCTX_INPROC_SERVER)?;
         let mut ns = options.namespace.clone();
-        if !options.node.eq_ascii_ignore_case(".") && !options.node.0.is_empty() {
+        if !options.node.eq_ignore_case(".") && !options.node.0.is_empty() {
             let mut v = vec![92, 92];
             v.extend(&options.node.0);
             v.push(92);

@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "reference_sha256": "2EF794C4940AFEA56C6D6D3B9BC9E66965BC7333E79C5DCB2DEF3C0E36F0834C",
+  "cases": [
+    {
+      "id": "class-verb-help-0",
+      "arguments": "class Win32_OperatingSystem delete /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "class-verb-help-1",
+      "arguments": "class Win32_OperatingSystem set /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "class-verb-help-2",
+      "arguments": "class Win32_OperatingSystem create /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "class-verb-help-3",
+      "arguments": "class Win32_OperatingSystem call /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "class-verb-help-4",
+      "arguments": "class Win32_OperatingSystem /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "schema-method-help-0",
+      "arguments": "class Win32_Process call /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "schema-method-help-1",
+      "arguments": "class Win32_Service call /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "schema-method-help-2",
+      "arguments": "class __Namespace call /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    }
+  ]
+}

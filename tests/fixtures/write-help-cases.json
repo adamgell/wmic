@@ -1,0 +1,1464 @@
+{
+  "schema_version": 1,
+  "reference_sha256": "2EF794C4940AFEA56C6D6D3B9BC9E66965BC7333E79C5DCB2DEF3C0E36F0834C",
+  "cases": [
+    {
+      "id": "alias-set-help",
+      "arguments": "Alias set /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "alias-create-help",
+      "arguments": "Alias create /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "alias-delete-help",
+      "arguments": "Alias delete /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "baseboard-set-help",
+      "arguments": "BaseBoard set /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "baseboard-create-help",
+      "arguments": "BaseBoard create /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "baseboard-delete-help",
+      "arguments": "BaseBoard delete /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "bios-set-help",
+      "arguments": "BIOS set /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "bios-create-help",
+      "arguments": "BIOS create /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "bios-delete-help",
+      "arguments": "BIOS delete /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "bootconfig-set-help",
+      "arguments": "BootConfig set /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "bootconfig-create-help",
+      "arguments": "BootConfig create /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "bootconfig-delete-help",
+      "arguments": "BootConfig delete /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "cdrom-set-help",
+      "arguments": "CDROM set /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "cdrom-create-help",
+      "arguments": "CDROM create /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "cdrom-delete-help",
+      "arguments": "CDROM delete /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "computersystem-set-help",
+      "arguments": "ComputerSystem set /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "computersystem-create-help",
+      "arguments": "ComputerSystem create /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "computersystem-delete-help",
+      "arguments": "ComputerSystem delete /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "cpu-set-help",
+      "arguments": "CPU set /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "cpu-create-help",
+      "arguments": "CPU create /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "cpu-delete-help",
+      "arguments": "CPU delete /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "csproduct-set-help",
+      "arguments": "CSProduct set /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "csproduct-create-help",
+      "arguments": "CSProduct create /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "csproduct-delete-help",
+      "arguments": "CSProduct delete /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "datafile-set-help",
+      "arguments": "DataFile set /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "datafile-create-help",
+      "arguments": "DataFile create /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "datafile-delete-help",
+      "arguments": "DataFile delete /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "dcomapp-set-help",
+      "arguments": "DCOMAPP set /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "dcomapp-create-help",
+      "arguments": "DCOMAPP create /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "dcomapp-delete-help",
+      "arguments": "DCOMAPP delete /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "desktop-set-help",
+      "arguments": "DESKTOP set /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "desktop-create-help",
+      "arguments": "DESKTOP create /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "desktop-delete-help",
+      "arguments": "DESKTOP delete /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "desktopmonitor-set-help",
+      "arguments": "DesktopMonitor set /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "desktopmonitor-create-help",
+      "arguments": "DesktopMonitor create /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "desktopmonitor-delete-help",
+      "arguments": "DesktopMonitor delete /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "devicememoryaddress-set-help",
+      "arguments": "DeviceMemoryAddress set /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "devicememoryaddress-create-help",
+      "arguments": "DeviceMemoryAddress create /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "devicememoryaddress-delete-help",
+      "arguments": "DeviceMemoryAddress delete /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "diskdrive-set-help",
+      "arguments": "DiskDrive set /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "diskdrive-create-help",
+      "arguments": "DiskDrive create /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "diskdrive-delete-help",
+      "arguments": "DiskDrive delete /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "diskquota-set-help",
+      "arguments": "DiskQuota set /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "diskquota-create-help",
+      "arguments": "DiskQuota create /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "diskquota-delete-help",
+      "arguments": "DiskQuota delete /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "dmachannel-set-help",
+      "arguments": "DMAChannel set /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "dmachannel-create-help",
+      "arguments": "DMAChannel create /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "dmachannel-delete-help",
+      "arguments": "DMAChannel delete /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "environment-set-help",
+      "arguments": "Environment set /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "environment-create-help",
+      "arguments": "Environment create /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "environment-delete-help",
+      "arguments": "Environment delete /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "fsdir-set-help",
+      "arguments": "FSDir set /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "fsdir-create-help",
+      "arguments": "FSDir create /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "fsdir-delete-help",
+      "arguments": "FSDir delete /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "group-set-help",
+      "arguments": "Group set /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "group-create-help",
+      "arguments": "Group create /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "group-delete-help",
+      "arguments": "Group delete /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "idecontroller-set-help",
+      "arguments": "IDECONTROLLER set /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "idecontroller-create-help",
+      "arguments": "IDECONTROLLER create /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "idecontroller-delete-help",
+      "arguments": "IDECONTROLLER delete /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "irq-set-help",
+      "arguments": "IRQ set /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "irq-create-help",
+      "arguments": "IRQ create /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "irq-delete-help",
+      "arguments": "IRQ delete /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "job-set-help",
+      "arguments": "Job set /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "job-create-help",
+      "arguments": "Job create /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "job-delete-help",
+      "arguments": "Job delete /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "loadorder-set-help",
+      "arguments": "LoadOrder set /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "loadorder-create-help",
+      "arguments": "LoadOrder create /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "loadorder-delete-help",
+      "arguments": "LoadOrder delete /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "logicaldisk-set-help",
+      "arguments": "LogicalDisk set /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "logicaldisk-create-help",
+      "arguments": "LogicalDisk create /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "logicaldisk-delete-help",
+      "arguments": "LogicalDisk delete /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "logon-set-help",
+      "arguments": "LOGON set /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "logon-create-help",
+      "arguments": "LOGON create /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "logon-delete-help",
+      "arguments": "LOGON delete /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "memcache-set-help",
+      "arguments": "MEMCACHE set /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "memcache-create-help",
+      "arguments": "MEMCACHE create /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "memcache-delete-help",
+      "arguments": "MEMCACHE delete /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "memorychip-set-help",
+      "arguments": "MemoryChip set /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "memorychip-create-help",
+      "arguments": "MemoryChip create /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "memorychip-delete-help",
+      "arguments": "MemoryChip delete /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "memphysical-set-help",
+      "arguments": "MemPhysical set /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "memphysical-create-help",
+      "arguments": "MemPhysical create /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "memphysical-delete-help",
+      "arguments": "MemPhysical delete /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "netclient-set-help",
+      "arguments": "NetClient set /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "netclient-create-help",
+      "arguments": "NetClient create /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "netclient-delete-help",
+      "arguments": "NetClient delete /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "netlogin-set-help",
+      "arguments": "NetLogin set /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "netlogin-create-help",
+      "arguments": "NetLogin create /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "netlogin-delete-help",
+      "arguments": "NetLogin delete /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "netprotocol-set-help",
+      "arguments": "NetProtocol set /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "netprotocol-create-help",
+      "arguments": "NetProtocol create /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "netprotocol-delete-help",
+      "arguments": "NetProtocol delete /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "netuse-set-help",
+      "arguments": "NetUse set /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "netuse-create-help",
+      "arguments": "NetUse create /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "netuse-delete-help",
+      "arguments": "NetUse delete /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "nic-set-help",
+      "arguments": "NIC set /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "nic-create-help",
+      "arguments": "NIC create /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "nic-delete-help",
+      "arguments": "NIC delete /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "nicconfig-set-help",
+      "arguments": "NICConfig set /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "nicconfig-create-help",
+      "arguments": "NICConfig create /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "nicconfig-delete-help",
+      "arguments": "NICConfig delete /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "ntdomain-set-help",
+      "arguments": "NTDOMAIN set /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "ntdomain-create-help",
+      "arguments": "NTDOMAIN create /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "ntdomain-delete-help",
+      "arguments": "NTDOMAIN delete /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "ntevent-set-help",
+      "arguments": "NTEvent set /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "ntevent-create-help",
+      "arguments": "NTEvent create /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "ntevent-delete-help",
+      "arguments": "NTEvent delete /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "nteventlog-set-help",
+      "arguments": "NTEventLog set /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "nteventlog-create-help",
+      "arguments": "NTEventLog create /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "nteventlog-delete-help",
+      "arguments": "NTEventLog delete /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "onboarddevice-set-help",
+      "arguments": "OnBoardDevice set /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "onboarddevice-create-help",
+      "arguments": "OnBoardDevice create /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "onboarddevice-delete-help",
+      "arguments": "OnBoardDevice delete /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "os-set-help",
+      "arguments": "OS set /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "os-create-help",
+      "arguments": "OS create /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "os-delete-help",
+      "arguments": "OS delete /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "pagefile-set-help",
+      "arguments": "PageFile set /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "pagefile-create-help",
+      "arguments": "PageFile create /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "pagefile-delete-help",
+      "arguments": "PageFile delete /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "pagefileset-set-help",
+      "arguments": "PageFileSet set /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "pagefileset-create-help",
+      "arguments": "PageFileSet create /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "pagefileset-delete-help",
+      "arguments": "PageFileSet delete /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "partition-set-help",
+      "arguments": "Partition set /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "partition-create-help",
+      "arguments": "Partition create /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "partition-delete-help",
+      "arguments": "Partition delete /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "port-set-help",
+      "arguments": "Port set /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "port-create-help",
+      "arguments": "Port create /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "port-delete-help",
+      "arguments": "Port delete /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "portconnector-set-help",
+      "arguments": "PortConnector set /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "portconnector-create-help",
+      "arguments": "PortConnector create /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "portconnector-delete-help",
+      "arguments": "PortConnector delete /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "printer-set-help",
+      "arguments": "Printer set /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "printer-create-help",
+      "arguments": "Printer create /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "printer-delete-help",
+      "arguments": "Printer delete /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "printerconfig-set-help",
+      "arguments": "PrinterConfig set /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "printerconfig-create-help",
+      "arguments": "PrinterConfig create /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "printerconfig-delete-help",
+      "arguments": "PrinterConfig delete /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "printjob-set-help",
+      "arguments": "PrintJob set /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "printjob-create-help",
+      "arguments": "PrintJob create /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "printjob-delete-help",
+      "arguments": "PrintJob delete /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "process-set-help",
+      "arguments": "Process set /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "process-create-help",
+      "arguments": "Process create /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "process-delete-help",
+      "arguments": "Process delete /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "product-set-help",
+      "arguments": "Product set /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "product-create-help",
+      "arguments": "Product create /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "product-delete-help",
+      "arguments": "Product delete /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "qfe-set-help",
+      "arguments": "QFE set /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "qfe-create-help",
+      "arguments": "QFE create /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "qfe-delete-help",
+      "arguments": "QFE delete /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "quotasetting-set-help",
+      "arguments": "QuotaSetting set /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "quotasetting-create-help",
+      "arguments": "QuotaSetting create /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "quotasetting-delete-help",
+      "arguments": "QuotaSetting delete /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "rdaccount-set-help",
+      "arguments": "RDAccount set /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "rdaccount-create-help",
+      "arguments": "RDAccount create /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "rdaccount-delete-help",
+      "arguments": "RDAccount delete /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "rdnic-set-help",
+      "arguments": "RDNIC set /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "rdnic-create-help",
+      "arguments": "RDNIC create /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "rdnic-delete-help",
+      "arguments": "RDNIC delete /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "rdpermissions-set-help",
+      "arguments": "RDPermissions set /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "rdpermissions-create-help",
+      "arguments": "RDPermissions create /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "rdpermissions-delete-help",
+      "arguments": "RDPermissions delete /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "rdtoggle-set-help",
+      "arguments": "RDToggle set /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "rdtoggle-create-help",
+      "arguments": "RDToggle create /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "rdtoggle-delete-help",
+      "arguments": "RDToggle delete /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "recoveros-set-help",
+      "arguments": "RecoverOS set /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "recoveros-create-help",
+      "arguments": "RecoverOS create /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "recoveros-delete-help",
+      "arguments": "RecoverOS delete /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "registry-set-help",
+      "arguments": "Registry set /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "registry-create-help",
+      "arguments": "Registry create /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "registry-delete-help",
+      "arguments": "Registry delete /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "scsicontroller-set-help",
+      "arguments": "SCSICONTROLLER set /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "scsicontroller-create-help",
+      "arguments": "SCSICONTROLLER create /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "scsicontroller-delete-help",
+      "arguments": "SCSICONTROLLER delete /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "server-set-help",
+      "arguments": "Server set /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "server-create-help",
+      "arguments": "Server create /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "server-delete-help",
+      "arguments": "Server delete /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "service-set-help",
+      "arguments": "Service set /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "service-create-help",
+      "arguments": "Service create /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "service-delete-help",
+      "arguments": "Service delete /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "shadowcopy-set-help",
+      "arguments": "ShadowCopy set /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "shadowcopy-create-help",
+      "arguments": "ShadowCopy create /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "shadowcopy-delete-help",
+      "arguments": "ShadowCopy delete /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "shadowstorage-set-help",
+      "arguments": "ShadowStorage set /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "shadowstorage-create-help",
+      "arguments": "ShadowStorage create /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "shadowstorage-delete-help",
+      "arguments": "ShadowStorage delete /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "share-set-help",
+      "arguments": "Share set /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "share-create-help",
+      "arguments": "Share create /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "share-delete-help",
+      "arguments": "Share delete /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "softwareelement-set-help",
+      "arguments": "SoftwareElement set /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "softwareelement-create-help",
+      "arguments": "SoftwareElement create /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "softwareelement-delete-help",
+      "arguments": "SoftwareElement delete /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "softwarefeature-set-help",
+      "arguments": "SoftwareFeature set /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "softwarefeature-create-help",
+      "arguments": "SoftwareFeature create /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "softwarefeature-delete-help",
+      "arguments": "SoftwareFeature delete /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "sounddev-set-help",
+      "arguments": "SoundDev set /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "sounddev-create-help",
+      "arguments": "SoundDev create /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "sounddev-delete-help",
+      "arguments": "SoundDev delete /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "startup-set-help",
+      "arguments": "Startup set /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "startup-create-help",
+      "arguments": "Startup create /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "startup-delete-help",
+      "arguments": "Startup delete /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "sysaccount-set-help",
+      "arguments": "SysAccount set /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "sysaccount-create-help",
+      "arguments": "SysAccount create /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "sysaccount-delete-help",
+      "arguments": "SysAccount delete /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "sysdriver-set-help",
+      "arguments": "SysDriver set /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "sysdriver-create-help",
+      "arguments": "SysDriver create /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "sysdriver-delete-help",
+      "arguments": "SysDriver delete /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "systemenclosure-set-help",
+      "arguments": "SystemEnclosure set /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "systemenclosure-create-help",
+      "arguments": "SystemEnclosure create /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "systemenclosure-delete-help",
+      "arguments": "SystemEnclosure delete /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "systemslot-set-help",
+      "arguments": "SystemSlot set /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "systemslot-create-help",
+      "arguments": "SystemSlot create /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "systemslot-delete-help",
+      "arguments": "SystemSlot delete /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "tapedrive-set-help",
+      "arguments": "TapeDrive set /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "tapedrive-create-help",
+      "arguments": "TapeDrive create /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "tapedrive-delete-help",
+      "arguments": "TapeDrive delete /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "temperature-set-help",
+      "arguments": "Temperature set /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "temperature-create-help",
+      "arguments": "Temperature create /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "temperature-delete-help",
+      "arguments": "Temperature delete /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "timezone-set-help",
+      "arguments": "TimeZone set /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "timezone-create-help",
+      "arguments": "TimeZone create /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "timezone-delete-help",
+      "arguments": "TimeZone delete /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "ups-set-help",
+      "arguments": "UPS set /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "ups-create-help",
+      "arguments": "UPS create /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "ups-delete-help",
+      "arguments": "UPS delete /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "useraccount-set-help",
+      "arguments": "UserAccount set /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "useraccount-create-help",
+      "arguments": "UserAccount create /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "useraccount-delete-help",
+      "arguments": "UserAccount delete /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "voltage-set-help",
+      "arguments": "Voltage set /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "voltage-create-help",
+      "arguments": "Voltage create /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "voltage-delete-help",
+      "arguments": "Voltage delete /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "volume-set-help",
+      "arguments": "Volume set /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "volume-create-help",
+      "arguments": "Volume create /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "volume-delete-help",
+      "arguments": "Volume delete /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "volumequotasetting-set-help",
+      "arguments": "VolumeQuotaSetting set /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "volumequotasetting-create-help",
+      "arguments": "VolumeQuotaSetting create /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "volumequotasetting-delete-help",
+      "arguments": "VolumeQuotaSetting delete /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "volumeuserquota-set-help",
+      "arguments": "VolumeUserQuota set /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "volumeuserquota-create-help",
+      "arguments": "VolumeUserQuota create /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "volumeuserquota-delete-help",
+      "arguments": "VolumeUserQuota delete /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "wmiset-set-help",
+      "arguments": "WMISet set /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "wmiset-create-help",
+      "arguments": "WMISet create /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "wmiset-delete-help",
+      "arguments": "WMISet delete /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    }
+  ]
+}

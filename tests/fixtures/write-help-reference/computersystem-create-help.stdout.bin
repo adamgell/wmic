@@ -1,0 +1,67 @@
+
+Creates a new instance and sets the property values for the new instance.
+USAGE:
+
+CREATE <assign list>
+NOTE: <assign list> can be more than one property name separated by commas.
+Each property name should be followed by '=' and its value.
+
+NOTE: Create cannot be used to create a new class.
+
+The following properties are available:
+Property				Type			Operation
+========				====			=========
+AdminPasswordStatus                	N/A                 	N/A       
+AutomaticResetBootOption           	N/A                 	N/A       
+AutomaticResetCapability           	N/A                 	N/A       
+BootOptionOnLimit                  	N/A                 	N/A       
+BootOptionOnWatchDog               	N/A                 	N/A       
+BootROMSupported                   	N/A                 	N/A       
+BootupState                        	N/A                 	N/A       
+Caption                            	N/A                 	N/A       
+ChassisBootupState                 	N/A                 	N/A       
+CreationClassName                  	N/A                 	N/A       
+CurrentTimeZone                    	N/A                 	N/A       
+DaylightInEffect                   	N/A                 	N/A       
+Description                        	N/A                 	N/A       
+Domain                             	N/A                 	N/A       
+DomainRole                         	N/A                 	N/A       
+EnableDaylightSavingsTime          	boolean             	Write     
+FrontPanelResetStatus              	N/A                 	N/A       
+InfraredSupported                  	N/A                 	N/A       
+InitialLoadInfo                    	N/A                 	N/A       
+InstallDate                        	N/A                 	N/A       
+KeyboardPasswordStatus             	N/A                 	N/A       
+LastLoadInfo                       	N/A                 	N/A       
+Manufacturer                       	N/A                 	N/A       
+Model                              	N/A                 	N/A       
+Name                               	N/A                 	N/A       
+NameFormat                         	N/A                 	N/A       
+NetworkServerModeEnabled           	N/A                 	N/A       
+NumberOfProcessors                 	N/A                 	N/A       
+OEMStringArray                     	N/A                 	N/A       
+PartOfDomain                       	N/A                 	N/A       
+PauseAfterReset                    	N/A                 	N/A       
+PowerManagementCapabilities        	N/A                 	N/A       
+PowerManagementSupported           	N/A                 	N/A       
+PowerOnPasswordStatus              	N/A                 	N/A       
+PowerState                         	N/A                 	N/A       
+PowerSupplyState                   	N/A                 	N/A       
+PrimaryOwnerContact                	N/A                 	N/A       
+PrimaryOwnerName                   	N/A                 	N/A       
+ResetCapability                    	N/A                 	N/A       
+ResetCount                         	N/A                 	N/A       
+ResetLimit                         	N/A                 	N/A       
+Roles                              	N/A                 	N/A       
+Status                             	N/A                 	N/A       
+SupportContactDescription          	N/A                 	N/A       
+SystemStartupDelay                 	N/A                 	N/A       
+SystemStartupOptions               	N/A                 	N/A       
+SystemStartupSetting               	N/A                 	N/A       
+SystemType                         	N/A                 	N/A       
+ThermalState                       	N/A                 	N/A       
+TotalPhysicalMemory                	N/A                 	N/A       
+UserName                           	N/A                 	N/A       
+WakeUpType                         	N/A                 	N/A       
+Workgroup                          	string              	Read/Write
+

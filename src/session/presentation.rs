@@ -73,7 +73,7 @@ pub(super) fn context(
             .nodes
             .iter()
             .map(|n| {
-                if n.eq_ascii_ignore_case(".") {
+                if n.eq_ignore_case(".") {
                     local.clone()
                 } else {
                     n.clone()
@@ -122,17 +122,17 @@ pub(super) fn prepare(
             .collect();
     let mut tables = vec![];
     for m in &request.modifiers {
-        if m.name.eq_ascii_ignore_case("translate")
+        if m.name.eq_ignore_case("translate")
             && let SwitchValue::Value(name) = &m.value
         {
             let table = backend
                 .load_translation(&settings.role, name)
                 .map_err(|e| crate::render::RenderError::status(e.code, e.message))?
                 .or_else(|| {
-                    if settings.role.eq_ascii_ignore_case("root\\cli") {
+                    if settings.role.eq_ignore_case("root\\cli") {
                         stock
                             .iter()
-                            .find(|t| name.eq_ascii_ignore_case(&t.name.to_string_lossy()))
+                            .find(|t| name.eq_ignore_case(&t.name.to_string_lossy()))
                             .map(|t| t.entries.clone())
                     } else {
                         None

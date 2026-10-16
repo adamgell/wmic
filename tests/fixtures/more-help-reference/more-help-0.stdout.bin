@@ -1,0 +1,17 @@
+
+Property set operations.
+USAGE:
+
+SET <assign list>
+NOTE: <assign list> can be more than one property name separated by commas.
+Each property name should be followed by '=' and its value.
+
+The following writeable properties are available:
+Property				Type			Operation
+========				====			=========
+CurrentTimeZone                    	sint16              	Read/Write
+Description                        	string              	Read/Write
+ForegroundApplicationBoost         	uint8               	Read/Write
+QuantumLength                      	uint8               	Read/Write
+QuantumType                        	uint8               	Read/Write
+

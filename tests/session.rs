@@ -105,7 +105,7 @@ fn session_supplies_a_sanitized_xml_presentation_context() {
                 !context
                     .settings
                     .iter()
-                    .any(|(key, _)| key.eq_ascii_ignore_case("password"))
+                    .any(|(key, _)| key.eq_ignore_case("password"))
             );
             Ok(ManagementResult::Objects(ObjectSet::default()))
         }

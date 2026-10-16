@@ -1,0 +1,4 @@
+FriendlyName  Target                               
+OS            Select * from Win32_OperatingSystem  
+CPU           Select * from WIN32_PROCESSOR        
+

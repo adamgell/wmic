@@ -1,0 +1,18 @@
+
+Property set operations.
+USAGE:
+
+SET <assign list>
+NOTE: <assign list> can be more than one property name separated by commas.
+Each property name should be followed by '=' and its value.
+
+The following writeable properties are available:
+Property				Type			Operation
+========				====			=========
+DefaultLimit                       	uint64              	Read/Write
+DefaultWarningLimit                	uint64              	Read/Write
+ExceededNotification               	boolean             	Read/Write
+State                              	uint32              	Read/Write
+VolumePath                         	string              	Read/Write
+WarningExceededNotification        	boolean             	Read/Write
+

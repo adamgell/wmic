@@ -1,0 +1,90 @@
+
+Method execution operations.
+USAGE:
+
+CALL <method name> [<actual paramlist>]
+NOTE: <actual paramlist> ::= <actual param> | <actual param>,  <actual paramlist>
+
+The following verb(s)/method(s) are available:
+
+Call			[ In/Out ]Params&type			Status
+====			=====================			======
+Change                  [IN ]DesktopInteract(boolean)       	Not Found      
+
+			[IN ]DisplayName(string)            	
+
+			[IN ]StartPassword(string)          	
+
+			[IN ]ErrorControl(uint8)            	
+
+			[IN ]LoadOrderGroup(string)         	
+
+			[IN ]LoadOrderGroupDependencies(array of string)	
+
+			[IN ]PathName(string)               	
+
+			[OUT]ReturnValue(uint32)            	
+
+			[IN ]ServiceDependencies(array of string)	
+
+			[IN ]ServiceType(uint8)             	
+
+			[IN ]StartMode(string)              	
+
+			[IN ]StartName(string)              	
+
+ChangeStartMode         [IN ]StartMode(string)              	Not Found      
+
+			[OUT]ReturnValue(uint32)            	
+
+Create                  [IN ]DesktopInteract(boolean)       	Not Found      
+
+			[IN ]DisplayName(string)            	
+
+			[IN ]StartName(string)              	
+
+			[IN ]StartPassword(string)          	
+
+			[IN ]ErrorControl(uint8)            	
+
+			[IN ]LoadOrderGroup(string)         	
+
+			[IN ]LoadOrderGroupDependencies(array of string)	
+
+			[IN ]Name(string)                   	
+
+			[OUT]ReturnValue(uint32)            	
+
+			[IN ]PathName(string)               	
+
+			[IN ]ServiceDependencies(array of string)	
+
+			[IN ]ServiceType(uint8)             	
+
+			[IN ]StartMode(string)              	
+
+Delete                  [OUT]ReturnValue(uint32)            	Not Found      
+
+GetSecurityDescriptor   [OUT]Descriptor(object:Win32_SecurityDescriptor)	Implemented    
+
+			[OUT]ReturnValue(uint32)            	
+
+InterrogateService      [OUT]ReturnValue(uint32)            	Not Found      
+
+PauseService            [OUT]ReturnValue(uint32)            	Not Found      
+
+ResumeService           [OUT]ReturnValue(uint32)            	Not Found      
+
+SetSecurityDescriptor   [IN ]Descriptor(object:Win32_SecurityDescriptor)	Implemented    
+
+			[OUT]ReturnValue(uint32)            	
+
+StartService            [OUT]ReturnValue(uint32)            	Not Found      
+
+StopService             [OUT]ReturnValue(uint32)            	Not Found      
+
+UserControlService      [IN ]ControlCode(uint8)             	Not Found      
+
+			[OUT]ReturnValue(uint32)            	
+
+

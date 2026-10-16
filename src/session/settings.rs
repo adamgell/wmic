@@ -72,7 +72,7 @@ impl SessionSettings {
                 SwitchValue::Value(v) => Some(v.clone()),
                 SwitchValue::Reset => None,
                 SwitchValue::Missing => {
-                    if m.name.eq_ascii_ignore_case("?") || command.help {
+                    if m.name.eq_ignore_case("?") || command.help {
                         continue;
                     }
                     return Err(setting_error(0xAC5D, "Invalid Global Switch."));
@@ -226,7 +226,7 @@ impl SessionSettings {
                     if !command
                         .modifiers
                         .iter()
-                        .any(|m| m.name.eq_ascii_ignore_case("password"))
+                        .any(|m| m.name.eq_ignore_case("password"))
                     {
                         s.password = None;
                     }
@@ -244,15 +244,15 @@ fn level(v: Option<&WideText>, names: &[&str], base: u32, default: u32) -> Optio
         None => Some(default),
         Some(v) => names
             .iter()
-            .position(|n| v.eq_ascii_ignore_case(n))
+            .position(|n| v.eq_ignore_case(n))
             .map(|i| i as u32 + base),
     }
 }
 fn toggle(v: Option<&WideText>, on: &str, off: &str, default: bool) -> Option<bool> {
     match v {
         None => Some(default),
-        Some(v) if v.eq_ascii_ignore_case(on) => Some(true),
-        Some(v) if v.eq_ascii_ignore_case(off) => Some(false),
+        Some(v) if v.eq_ignore_case(on) => Some(true),
+        Some(v) if v.eq_ignore_case(off) => Some(false),
         _ => None,
     }
 }

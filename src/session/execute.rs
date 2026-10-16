@@ -221,12 +221,12 @@ impl Session {
         let every = command.as_ref().and_then(|c| {
             c.modifiers
                 .iter()
-                .position(|m| m.name.eq_ascii_ignore_case("every"))
+                .position(|m| m.name.eq_ignore_case("every"))
         });
         let repeat = command.as_ref().and_then(|c| {
             c.modifiers
                 .iter()
-                .position(|m| m.name.eq_ascii_ignore_case("repeat"))
+                .position(|m| m.name.eq_ignore_case("repeat"))
         });
         let switch_error = |sink: &mut dyn OutputSink, code, message: &str| {
             emit(
@@ -481,8 +481,10 @@ impl Session {
             }
         }
         frame.settings = Some(settings.clone());
-        if mode == EntryMode::Interactive && settings.role != self.settings.role {
-            match backend.load_aliases(&settings.role, None, &settings.locale) {
+        if mode == EntryMode::Interactive
+            && !settings.role.eq_ordinal_ignore_case(&self.settings.role)
+        {
+            match backend.load_alias_inventory(&settings.role, &settings.locale) {
                 Err(_) | Ok(None) => {
                     return emit(
                         sink,
@@ -532,7 +534,7 @@ impl Session {
                 && parsed
                     .modifiers
                     .iter()
-                    .all(|m| m.name.eq_ascii_ignore_case("?") || m.value != SwitchValue::Missing))
+                    .all(|m| m.name.eq_ignore_case("?") || m.value != SwitchValue::Missing))
         {
             let mut loader = BackendRoleLoader {
                 backend,
@@ -544,8 +546,10 @@ impl Session {
             }
         }
         if parsed.help {
-            let schema = if matches!(parsed.target, Some(Target::Path(_)))
+            let schema = if (matches!(parsed.target, Some(Target::Path(_)))
                 && parsed.verb == Verb::Get
+                || matches!(parsed.target, Some(Target::Path(_) | Target::Class(_)))
+                    && matches!(parsed.verb, Verb::Set | Verb::Create | Verb::Call))
                 && parsed.verb_explicit
             {
                 let mut req = match self.aliases.resolve(&parsed, &settings) {
@@ -561,12 +565,16 @@ impl Session {
                     }
                 };
                 req.class_mode = true;
+                req.verb = Verb::Get;
+                req.method = None;
+                req.arguments.clear();
+                req.properties.clear();
                 configure_connection(&mut req, &settings);
                 match backend.execute(&req) {
                     Ok(ManagementResult::Schema(s)) => Some(s),
                     Err(error) => {
                         let status = error.code;
-                        let node = if req.connection.node.eq_ascii_ignore_case(".") {
+                        let node = if req.connection.node.eq_ignore_case(".") {
                             self.local_node.clone()
                         } else {
                             req.connection.node.clone()
@@ -602,9 +610,9 @@ impl Session {
             }) {
                 Ok(output) => emit(sink, output, 0),
                 Err(error) => {
-                    emit_render_error(sink, error);
+                    let code = emit_render_error(sink, error);
                     CommandOutcome {
-                        exit_status: 0xACB2,
+                        exit_status: code,
                         ..Default::default()
                     }
                 }
@@ -681,7 +689,7 @@ impl Session {
                 break;
             }
             request.connection.node = target.clone();
-            let node = if target.eq_ascii_ignore_case(".") {
+            let node = if target.eq_ignore_case(".") {
                 self.local_node.clone()
             } else {
                 target.clone()
@@ -716,7 +724,12 @@ impl Session {
                         partial: None,
                     })
                 } else {
-                    backend.execute_with_confirmation(&request, &mut SinkConfirmation(sink))
+                    match self.aliases.virtual_query(&request, &node) {
+                        Some(result) => result,
+                        None => {
+                            backend.execute_with_confirmation(&request, &mut SinkConfirmation(sink))
+                        }
+                    }
                 };
             match &mut result {
                 Ok(value) => mark_node(value, &node),
@@ -841,8 +854,12 @@ impl crate::alias::RoleLoader for BackendRoleLoader<'_> {
         &mut self,
         role: &WideText,
     ) -> Result<Option<Vec<crate::alias::AliasDefinition>>, ResolveError> {
-        self.backend
-            .load_aliases(role, self.selected.as_ref(), &self.locale)
+        if self.selected.is_none() {
+            self.backend.load_alias_inventory(role, &self.locale)
+        } else {
+            self.backend
+                .load_aliases(role, self.selected.as_ref(), &self.locale)
+        }
     }
 }
 
@@ -915,7 +932,7 @@ impl crate::backend::Confirmation for SinkConfirmation<'_> {
                 let answer = self.0.read_line()?;
                 if answer
                     .as_ref()
-                    .is_some_and(|a| a.trim_ascii().eq_ascii_ignore_case("?"))
+                    .is_some_and(|a| a.trim_ascii().eq_ignore_case("?"))
                 {
                     self.0.write(
                         OutputStream::Stderr,
@@ -927,7 +944,7 @@ impl crate::backend::Confirmation for SinkConfirmation<'_> {
             }
         })();
         result
-            .map(|answer| answer.is_some_and(|a| a.trim_ascii().eq_ascii_ignore_case("y")))
+            .map(|answer| answer.is_some_and(|a| a.trim_ascii().eq_ignore_case("y")))
             .map_err(|e| ManagementError {
                 code: 0x80070005,
                 target: WideText::default(),

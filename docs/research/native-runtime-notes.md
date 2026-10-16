@@ -30,3 +30,6 @@ The default context is authentication level `PKTPRIVACY` (6), impersonation `IMP
 Set a blanket on the actual interface pointer. Querying `IUnknown` first can select a different proxy; the first adapter implementation did that and a real `IEnumWbemClassObject::Next` returned `0x80041003`. Borrowing the original pointer fixed the query. Apply credentials and security to both `IWbemServices` and enumerators.
 
 Microsoft documents the credential copy lifetime in [CoSetProxyBlanket](https://learn.microsoft.com/en-us/windows/win32/api/combaseapi/nf-combaseapi-cosetproxyblanket), and the signed Automation storage used for unsigned CIM types in [Numbers (WMI)](https://learn.microsoft.com/en-us/windows/win32/wmisdk/numbers).
+
+
+Case comparison uses the Windows ordinal uppercase table for Unicode identifiers, via [CompareStringOrdinal](https://learn.microsoft.com/en-us/windows/win32/api/stringapiset/nf-stringapiset-comparestringordinal). The native integration test covers Latin accents, Greek case, and unpaired UTF16 comparison. The PWhere FROM-clause contract is recorded in the captured MSFT_CliAlias schema description and assets/aliases.json. The bundled alias enumeration order is independently recorded from the original provider in assets/alias-order.json; the sorted alias catalog remains reproducible.

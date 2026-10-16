@@ -1,0 +1,45 @@
+
+Creates a new instance and sets the property values for the new instance.
+USAGE:
+
+CREATE <assign list>
+NOTE: <assign list> can be more than one property name separated by commas.
+Each property name should be followed by '=' and its value.
+
+NOTE: Create cannot be used to create a new class.
+
+The following properties are available:
+Property				Type			Operation
+========				====			=========
+AdapterType                        	N/A                 	N/A       
+AutoSense                          	N/A                 	N/A       
+Availability                       	N/A                 	N/A       
+ConfigManagerErrorCode             	N/A                 	N/A       
+ConfigManagerUserConfig            	N/A                 	N/A       
+Description                        	N/A                 	N/A       
+DeviceID                           	N/A                 	N/A       
+ErrorCleared                       	N/A                 	N/A       
+ErrorDescription                   	N/A                 	N/A       
+Index                              	N/A                 	N/A       
+InstallDate                        	N/A                 	N/A       
+Installed                          	N/A                 	N/A       
+LastErrorCode                      	N/A                 	N/A       
+MACAddress                         	N/A                 	N/A       
+Manufacturer                       	N/A                 	N/A       
+MaxNumberControlled                	N/A                 	N/A       
+MaxSpeed                           	N/A                 	N/A       
+Name                               	N/A                 	N/A       
+NetConnectionID                    	N/A                 	N/A       
+NetConnectionStatus                	N/A                 	N/A       
+NetworkAddresses                   	N/A                 	N/A       
+PNPDeviceID                        	N/A                 	N/A       
+PermanentAddress                   	N/A                 	N/A       
+PowerManagementCapabilities        	N/A                 	N/A       
+PowerManagementSupported           	N/A                 	N/A       
+ProductName                        	N/A                 	N/A       
+ServiceName                        	N/A                 	N/A       
+Speed                              	N/A                 	N/A       
+Status                             	N/A                 	N/A       
+StatusInfo                         	N/A                 	N/A       
+TimeOfLastReset                    	N/A                 	N/A       
+

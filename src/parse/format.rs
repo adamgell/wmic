@@ -32,7 +32,7 @@ fn atom(units: &[u16], at: &mut usize) -> Result<(WideText, bool), ParseError> {
             || (65..=90).contains(u)
             || (97..=122).contains(u)
             || (48..=57).contains(u)
-            || matches!(*u, 95 | 46 | 92 | 61 | 40 | 41))
+            || matches!(*u, 95 | 46 | 92 | 61 | 40 | 41 | 63))
     }) {
         return Err(ParseError::new(0xACB4, "Invalid GET switch.", None));
     }

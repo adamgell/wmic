@@ -1,0 +1,37 @@
+
+Creates a new instance and sets the property values for the new instance.
+USAGE:
+
+CREATE <assign list>
+NOTE: <assign list> can be more than one property name separated by commas.
+Each property name should be followed by '=' and its value.
+
+NOTE: Create cannot be used to create a new class.
+
+The following properties are available:
+Property				Type			Operation
+========				====			=========
+Bias                               	N/A                 	N/A       
+DaylightBias                       	N/A                 	N/A       
+DaylightDay                        	N/A                 	N/A       
+DaylightDayOfWeek                  	N/A                 	N/A       
+DaylightHour                       	N/A                 	N/A       
+DaylightMillisecond                	N/A                 	N/A       
+DaylightMinute                     	N/A                 	N/A       
+DaylightMonth                      	N/A                 	N/A       
+DaylightName                       	N/A                 	N/A       
+DaylightSecond                     	N/A                 	N/A       
+DaylightYear                       	N/A                 	N/A       
+Description                        	N/A                 	N/A       
+SettingID                          	N/A                 	N/A       
+StandardBias                       	N/A                 	N/A       
+StandardDay                        	N/A                 	N/A       
+StandardDayOfWeek                  	N/A                 	N/A       
+StandardHour                       	N/A                 	N/A       
+StandardMillisecond                	N/A                 	N/A       
+StandardMinute                     	N/A                 	N/A       
+StandardMonth                      	N/A                 	N/A       
+StandardName                       	N/A                 	N/A       
+StandardSecond                     	N/A                 	N/A       
+StandardYear                       	N/A                 	N/A       
+

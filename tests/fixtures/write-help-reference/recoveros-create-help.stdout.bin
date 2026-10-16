@@ -1,0 +1,24 @@
+
+Creates a new instance and sets the property values for the new instance.
+USAGE:
+
+CREATE <assign list>
+NOTE: <assign list> can be more than one property name separated by commas.
+Each property name should be followed by '=' and its value.
+
+NOTE: Create cannot be used to create a new class.
+
+The following properties are available:
+Property				Type			Operation
+========				====			=========
+AutoReboot                         	N/A                 	N/A       
+DebugFilePath                      	N/A                 	N/A       
+Description                        	N/A                 	N/A       
+KernelDumpOnly                     	N/A                 	N/A       
+Name                               	N/A                 	N/A       
+OverwriteExistingDebugFile         	N/A                 	N/A       
+SendAdminAlert                     	N/A                 	N/A       
+SettingID                          	N/A                 	N/A       
+WriteDebugInfo                     	N/A                 	N/A       
+WriteToSystemLog                   	N/A                 	N/A       
+

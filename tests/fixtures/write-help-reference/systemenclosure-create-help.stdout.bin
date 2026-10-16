@@ -1,0 +1,49 @@
+
+Creates a new instance and sets the property values for the new instance.
+USAGE:
+
+CREATE <assign list>
+NOTE: <assign list> can be more than one property name separated by commas.
+Each property name should be followed by '=' and its value.
+
+NOTE: Create cannot be used to create a new class.
+
+The following properties are available:
+Property				Type			Operation
+========				====			=========
+AudibleAlarm                       	N/A                 	N/A       
+BreachDescription                  	N/A                 	N/A       
+CableManagementStrategy            	N/A                 	N/A       
+ChassisTypes                       	N/A                 	N/A       
+CurrentRequiredOrProduced          	N/A                 	N/A       
+Depth                              	N/A                 	N/A       
+Description                        	N/A                 	N/A       
+HeatGeneration                     	N/A                 	N/A       
+Height                             	N/A                 	N/A       
+HotSwappable                       	N/A                 	N/A       
+InstallDate                        	N/A                 	N/A       
+LockPresent                        	N/A                 	N/A       
+Manufacturer                       	N/A                 	N/A       
+Model                              	N/A                 	N/A       
+Name                               	N/A                 	N/A       
+NumberOfPowerCords                 	N/A                 	N/A       
+OtherIdentifyingInfo               	N/A                 	N/A       
+PartNumber                         	N/A                 	N/A       
+PoweredOn                          	N/A                 	N/A       
+Removable                          	N/A                 	N/A       
+Replaceable                        	N/A                 	N/A       
+SKU                                	N/A                 	N/A       
+SMBIOSAssetTag                     	N/A                 	N/A       
+SecurityBreach                     	N/A                 	N/A       
+SecurityStatus                     	N/A                 	N/A       
+SerialNumber                       	N/A                 	N/A       
+ServiceDescriptions                	N/A                 	N/A       
+ServicePhilosophy                  	N/A                 	N/A       
+Status                             	N/A                 	N/A       
+Tag                                	N/A                 	N/A       
+TypeDescriptions                   	N/A                 	N/A       
+Version                            	N/A                 	N/A       
+VisibleAlarm                       	N/A                 	N/A       
+Weight                             	N/A                 	N/A       
+Width                              	N/A                 	N/A       
+

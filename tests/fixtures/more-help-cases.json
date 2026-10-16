@@ -1,0 +1,66 @@
+{
+  "schema_version": 1,
+  "reference_sha256": "2EF794C4940AFEA56C6D6D3B9BC9E66965BC7333E79C5DCB2DEF3C0E36F0834C",
+  "cases": [
+    {
+      "id": "more-help-0",
+      "arguments": "os set /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "more-help-1",
+      "arguments": "environment create /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "more-help-2",
+      "arguments": "os delete /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "more-help-3",
+      "arguments": "path Win32_OperatingSystem set /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "more-help-4",
+      "arguments": "path Win32_Process create /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "more-help-5",
+      "arguments": "os get /all /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "more-help-6",
+      "arguments": "os get /value /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "more-help-7",
+      "arguments": "os assoc /resultclass /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "more-help-8",
+      "arguments": "os assoc /resultrole /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "more-help-9",
+      "arguments": "os delete /nointeractive /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    }
+  ]
+}

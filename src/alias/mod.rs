@@ -1,4 +1,6 @@
 //! Alias metadata is data, never startup provider enumeration or executable code.
+mod predicate;
+mod virtual_role;
 use crate::{
     backend::{ConnectionOptions, ResolvedRequest},
     model::*,
@@ -140,12 +142,15 @@ pub enum ResolvedCommand {
 }
 #[derive(Clone, Debug)]
 pub struct AliasStore {
+    fallback: bool,
     definitions: Vec<AliasDefinition>,
     role: WideText,
 }
 impl AliasStore {
     pub fn stock() -> Result<Self, ResolveError> {
-        Self::from_json(include_str!("../../assets/aliases.json"))
+        let mut store = Self::from_json(include_str!("../../assets/aliases.json"))?;
+        store.fallback = false;
+        Ok(store)
     }
     pub fn from_json(json: &str) -> Result<Self, ResolveError> {
         let definitions: Vec<AliasDefinition> = serde_json::from_str(json)
@@ -153,13 +158,31 @@ impl AliasStore {
         Self::validated(definitions, "root\\cli".into())
     }
     fn validated(definitions: Vec<AliasDefinition>, role: WideText) -> Result<Self, ResolveError> {
-        let mut names = std::collections::BTreeSet::new();
+        let mut names: Vec<WideText> = vec![];
         for a in &definitions {
-            if a.friendly_name.is_empty() || !names.insert(a.friendly_name.to_ascii_lowercase()) {
+            if a.friendly_name.is_empty()
+                || names.iter().any(|n| n.eq_ignore_case(&a.friendly_name))
+            {
                 return Err(error(0x80041008, "Invalid alias metadata.", None));
             }
+            names.push(a.friendly_name.as_str().into());
         }
-        Ok(Self { definitions, role })
+        Ok(Self {
+            definitions,
+            role,
+            fallback: false,
+        })
+    }
+    pub fn virtual_query(
+        &self,
+        r: &ResolvedRequest,
+        node: &WideText,
+    ) -> Option<Result<ManagementResult, ManagementError>> {
+        (self.fallback
+            && r.class_name.eq_ignore_case("MSFT_CliAlias")
+            && r.connection.namespace.eq_ignore_case("root\\cli")
+            && r.connection.node.eq_ignore_case("."))
+        .then(|| virtual_role::query(r, node))
     }
     pub fn definitions(&self) -> &[AliasDefinition] {
         &self.definitions
@@ -167,7 +190,7 @@ impl AliasStore {
     pub fn find(&self, name: &WideText) -> Option<&AliasDefinition> {
         self.definitions
             .iter()
-            .find(|a| name.eq_ascii_ignore_case(&a.friendly_name))
+            .find(|a| name.eq_ignore_case(&a.friendly_name))
     }
     pub fn load_role(
         &mut self,
@@ -176,8 +199,9 @@ impl AliasStore {
     ) -> Result<(), ResolveError> {
         match loader.load(&settings.role)? {
             Some(defs) => *self = Self::validated(defs, settings.role.clone())?,
-            None if !settings.explicit_role && settings.role.eq_ascii_ignore_case("root\\cli") => {
-                *self = Self::stock()?
+            None if settings.role.eq_ignore_case("root\\cli") => {
+                *self = Self::stock()?;
+                self.fallback = true;
             }
             None => return Err(error(0x8004100e, "Invalid namespace", None)),
         }
@@ -190,9 +214,7 @@ impl AliasStore {
     ) -> Result<ResolvedCommand, ResolveError> {
         if settings.explicit_role
             && settings.role != self.role
-            && !settings
-                .role
-                .eq_ascii_ignore_case(&self.role.to_string_lossy())
+            && !settings.role.eq_ignore_case(&self.role.to_string_lossy())
         {
             return Err(error(0x8004100e, "Invalid namespace", None));
         }
@@ -232,9 +254,7 @@ impl AliasStore {
             modifiers: command
                 .modifiers
                 .iter()
-                .filter(|m| {
-                    m.scope != ModifierScope::Global || !m.name.eq_ascii_ignore_case("password")
-                })
+                .filter(|m| m.scope != ModifierScope::Global || !m.name.eq_ignore_case("password"))
                 .cloned()
                 .collect(),
             view: command.view.clone(),
@@ -256,11 +276,11 @@ impl AliasStore {
             let mut filters = crate::backend::AssociationFilters::default();
             for m in &command.modifiers {
                 if let SwitchValue::Value(v) = &m.value {
-                    if m.name.eq_ascii_ignore_case("resultclass") {
+                    if m.name.eq_ignore_case("resultclass") {
                         filters.result_class = Some(v.clone())
-                    } else if m.name.eq_ascii_ignore_case("resultrole") {
+                    } else if m.name.eq_ignore_case("resultrole") {
                         filters.result_role = Some(v.clone())
-                    } else if m.name.eq_ascii_ignore_case("assocclass") {
+                    } else if m.name.eq_ignore_case("assocclass") {
                         filters.assoc_class = Some(v.clone())
                     }
                 }
@@ -287,7 +307,7 @@ impl AliasStore {
             let mut method = command.method.clone();
             if !command.verb_explicit
                 && let Some(last) = pos.last()
-                && a.verbs.iter().any(|v| last.eq_ascii_ignore_case(&v.name))
+                && a.verbs.iter().any(|v| last.eq_ignore_case(&v.name))
             {
                 method = pos.pop();
                 req.verb = Verb::Call;
@@ -310,18 +330,32 @@ impl AliasStore {
                     let expanded = substitute(template, &pos);
                     let text = expanded.trim_ascii();
                     let prefix: Vec<u16> = "where ".encode_utf16().collect();
-                    req.selector = Some(
-                        if text.0.len() >= prefix.len()
-                            && text.0[..prefix.len()]
-                                .iter()
-                                .zip(prefix)
-                                .all(|(a, b)| a.to_ascii_lowercase() == b)
-                        {
-                            WideText(text.0[6..].to_vec())
-                        } else {
-                            text
-                        },
-                    );
+                    if text.0.len() > 5 && WideText(text.0[..5].to_vec()).eq_ignore_case("from ") {
+                        let mut query: WideText = "SELECT * ".into();
+                        query.0.extend(&text.0);
+                        req.class_name = target_class(&query.to_string_lossy());
+                        req.query = Some(query);
+                        req.selector = None;
+                    } else {
+                        req.selector = Some(
+                            if text.0.len() >= prefix.len()
+                                && text.0[..prefix.len()]
+                                    .iter()
+                                    .zip(prefix)
+                                    .all(|(a, b)| a.to_ascii_lowercase() == b)
+                            {
+                                WideText(text.0[6..].to_vec())
+                            } else {
+                                text
+                            },
+                        );
+                    }
+                }
+                if let Some(explicit) = &command.selector {
+                    let mut combined = req.selector.take().unwrap_or_default();
+                    combined.0.extend(" WHERE ".encode_utf16());
+                    combined.0.extend(&explicit.0);
+                    req.selector = Some(combined);
                 }
             }
             let view = command
@@ -349,7 +383,7 @@ impl AliasStore {
             if req.verb == Verb::Call
                 && let Some(m) = &method
             {
-                if let Some(v) = a.verbs.iter().find(|v| m.eq_ascii_ignore_case(&v.name)) {
+                if let Some(v) = a.verbs.iter().find(|v| m.eq_ignore_case(&v.name)) {
                     if v.verb_type == Some(2) {
                         let d = DerivedCommand {
                             template: v.derivation.as_str().into(),

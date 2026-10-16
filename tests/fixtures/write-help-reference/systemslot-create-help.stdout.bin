@@ -1,0 +1,43 @@
+
+Creates a new instance and sets the property values for the new instance.
+USAGE:
+
+CREATE <assign list>
+NOTE: <assign list> can be more than one property name separated by commas.
+Each property name should be followed by '=' and its value.
+
+NOTE: Create cannot be used to create a new class.
+
+The following properties are available:
+Property				Type			Operation
+========				====			=========
+ConnectorPinout                    	N/A                 	N/A       
+ConnectorType                      	N/A                 	N/A       
+CurrentUsage                       	N/A                 	N/A       
+Description                        	N/A                 	N/A       
+HeightAllowed                      	N/A                 	N/A       
+InstallDate                        	N/A                 	N/A       
+LengthAllowed                      	N/A                 	N/A       
+Manufacturer                       	N/A                 	N/A       
+MaxDataWidth                       	N/A                 	N/A       
+Model                              	N/A                 	N/A       
+Name                               	N/A                 	N/A       
+Number                             	N/A                 	N/A       
+OtherIdentifyingInfo               	N/A                 	N/A       
+PMESignal                          	N/A                 	N/A       
+PartNumber                         	N/A                 	N/A       
+PoweredOn                          	N/A                 	N/A       
+PurposeDescription                 	N/A                 	N/A       
+SKU                                	N/A                 	N/A       
+SerialNumber                       	N/A                 	N/A       
+Shared                             	N/A                 	N/A       
+SlotDesignation                    	N/A                 	N/A       
+SpecialPurpose                     	N/A                 	N/A       
+Status                             	N/A                 	N/A       
+SupportsHotPlug                    	N/A                 	N/A       
+Tag                                	N/A                 	N/A       
+ThermalRating                      	N/A                 	N/A       
+VccMixedVoltageSupport             	N/A                 	N/A       
+Version                            	N/A                 	N/A       
+VppMixedVoltageSupport             	N/A                 	N/A       
+

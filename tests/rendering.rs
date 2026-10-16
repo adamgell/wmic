@@ -252,3 +252,37 @@ fn class_mof_places_array_declarations_after_scalar_declarations() {
     .to_string_lossy();
     assert!(out.find(">Zscalar</SPAN>").unwrap() < out.find(">Aarray</SPAN>").unwrap());
 }
+
+#[test]
+fn association_cells_keep_table_array_separators() {
+    let q = request("os assoc");
+    let data = ManagementResult::Associations(vec![AssociationGroup {
+        source: Record {
+            path: Some("PATH".into()),
+            ..Default::default()
+        },
+        associated: vec![Record {
+            properties: vec![property(
+                "Names",
+                CimValue::Array(vec![
+                    CimValue::String("one".into()),
+                    CimValue::String("two".into()),
+                ]),
+                8 | 0x2000,
+            )],
+            ..Default::default()
+        }],
+    }]);
+    let output = render(RenderRequest {
+        request: &q,
+        result: Ok(&data),
+        node: &wide("HOST"),
+    })
+    .unwrap();
+    assert!(
+        output
+            .stdout
+            .to_string_lossy()
+            .contains("{\"one\", \"two\"}")
+    );
+}

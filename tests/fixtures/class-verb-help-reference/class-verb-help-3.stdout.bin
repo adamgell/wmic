@@ -1,0 +1,36 @@
+
+Method execution operations.
+USAGE:
+
+CALL <method name> [<actual paramlist>]
+NOTE: <actual paramlist> ::= <actual param> | <actual param>,  <actual paramlist>
+
+The following verb(s)/method(s) are available:
+
+Call			[ In/Out ]Params&type			Status
+====			=====================			======
+Reboot                  [OUT]ReturnValue(uint32)            	Implemented    
+
+SetDateTime             [IN ]LocalDateTime(DateTime)        	Implemented    
+
+			[OUT]ReturnValue(uint32)            	
+
+Shutdown                [OUT]ReturnValue(uint32)            	Implemented    
+
+Win32Shutdown           [IN ]Flags(sint32)                  	Implemented    
+
+			[IN ]Reserved(sint32)               	
+
+			[OUT]ReturnValue(uint32)            	
+
+Win32ShutdownTracker    [IN ]Comment(string)                	Implemented    
+
+			[IN ]Flags(sint32)                  	
+
+			[IN ]ReasonCode(uint32)             	
+
+			[IN ]Timeout(uint32)                	
+
+			[OUT]ReturnValue(uint32)            	
+
+

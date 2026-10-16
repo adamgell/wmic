@@ -1,0 +1,32 @@
+
+Creates a new instance and sets the property values for the new instance.
+USAGE:
+
+CREATE <assign list>
+NOTE: <assign list> can be more than one property name separated by commas.
+Each property name should be followed by '=' and its value.
+
+NOTE: Create cannot be used to create a new class.
+
+The following properties are available:
+Property				Type			Operation
+========				====			=========
+Command                            	N/A                 	N/A       
+DaysOfMonth                        	N/A                 	N/A       
+DaysOfWeek                         	N/A                 	N/A       
+Description                        	N/A                 	N/A       
+ElapsedTime                        	N/A                 	N/A       
+InstallDate                        	N/A                 	N/A       
+InteractWithDesktop                	N/A                 	N/A       
+JobId                              	N/A                 	N/A       
+JobStatus                          	N/A                 	N/A       
+Name                               	N/A                 	N/A       
+Notify                             	N/A                 	N/A       
+Owner                              	N/A                 	N/A       
+Priority                           	N/A                 	N/A       
+RunRepeatedly                      	N/A                 	N/A       
+StartTime                          	N/A                 	N/A       
+Status                             	N/A                 	N/A       
+TimeSubmitted                      	N/A                 	N/A       
+UntilTime                          	N/A                 	N/A       
+

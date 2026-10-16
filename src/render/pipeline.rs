@@ -9,7 +9,7 @@ pub fn compile_format(
         .iter()
         .enumerate()
         .rev()
-        .find(|(_, m)| m.name.eq_ascii_ignore_case("format"));
+        .find(|(_, m)| m.name.eq_ignore_case("format"));
     let mut spec = if let Some((_, m)) = explicit {
         let SwitchValue::Value(value) = &m.value else {
             return Err(RenderError::status(0xACB4, "Invalid GET switch."));
@@ -20,12 +20,12 @@ pub fn compile_format(
         let list = request
             .modifiers
             .iter()
-            .any(|m| m.name.eq_ascii_ignore_case("value"))
+            .any(|m| m.name.eq_ignore_case("value"))
             || request.view.is_some()
                 && request
                     .format
                     .as_ref()
-                    .is_some_and(|f| f.eq_ascii_ignore_case("list"));
+                    .is_some_and(|f| f.eq_ignore_case("list"));
         FormatSpec {
             transforms: vec![TransformSpec {
                 name: if request.class_mode {
@@ -46,7 +46,7 @@ pub fn compile_format(
         .modifiers
         .iter()
         .enumerate()
-        .filter(|(_, m)| m.name.eq_ascii_ignore_case("translate"))
+        .filter(|(_, m)| m.name.eq_ignore_case("translate"))
     {
         let SwitchValue::Value(name) = &m.value else {
             return Err(RenderError::status(
@@ -56,7 +56,7 @@ pub fn compile_format(
         };
         let entries = tables
             .iter()
-            .find(|(n, _)| n.eq_ascii_ignore_case(&name.to_string_lossy()))
+            .find(|(n, _)| n.eq_ignore_case(&name.to_string_lossy()))
             .map(|(_, t)| t.clone())
             .ok_or_else(|| {
                 RenderError::status(
