@@ -182,7 +182,7 @@ later operations must return a tracked unsupported result until implemented.
 `encode_output(&WideText, &DestinationProfile) -> Result<Vec<u8>, OutputError>`.
 `DestinationProfile` describes console/pipe/file encoding measured in Task 1.
 
-- [ ] Add golden cases `reversed_get_properties_match_reference`, `empty_query_matches_reference`, `array_null_and_boolean_rendering`, and `invalid_property_diagnostic_matches_reference`. Assert encoded bytes against the corresponding reference capture, not trimmed text. The preliminary pipe fixtures include `CR CR LF` and an empty query that writes stderr with status `0`; preserve both.
+- [x] Add golden cases `reversed_get_properties_match_reference`, `empty_query_matches_reference`, `array_null_and_boolean_rendering`, and `invalid_property_diagnostic_matches_reference`. Assert encoded bytes against the corresponding reference capture, not trimmed text. The preliminary pipe fixtures include `CR CR LF` and an empty query that writes stderr with status `0`; preserve both.
 
   ```rust
   assert_eq!(table_bytes.as_slice(), include_bytes!("../docs/research/evidence/2026-10-15/pipe-cases/os-get.stdout.bin"));
@@ -190,9 +190,9 @@ later operations must return a tracked unsupported result until implemented.
   assert_eq!(empty_stderr.as_slice(), b"No Instance(s) Available.\r\r\n");
   ```
 
-- [ ] Run `cargo test --test rendering`; confirm byte comparisons fail before implementing the formats.
-- [ ] Implement measured default views, property ordering, alignment, blank lines, value syntax, diagnostic destinations and destination encoding. Keep renderer input typed and deterministic.
-- [ ] Run `cargo test --test rendering`; expected: byte equality for the stage's corpus. Commit as `feat: reproduce WMIC table and value output`.
+- [x] Run `cargo test --test rendering`; confirm byte comparisons fail before implementing the formats.
+- [x] Implement measured default views, property ordering, alignment, blank lines, value syntax, diagnostic destinations and destination encoding. Keep renderer input typed and deterministic.
+- [x] Run `cargo test --test rendering`; expected: byte equality for the stage's corpus. Commit as `feat: reproduce WMIC table and value output`.
 
 ## Task 6: one-shot executable and full query-path conformance — Stage 1
 

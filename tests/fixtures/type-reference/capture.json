@@ -1,0 +1,63 @@
+{
+  "schema_version": 1,
+  "profile": {
+    "role": "reference",
+    "executable": "C:\\Windows\\System32\\wbem\\WMIC.exe",
+    "executable_sha256": "2EF794C4940AFEA56C6D6D3B9BC9E66965BC7333E79C5DCB2DEF3C0E36F0834C",
+    "version": "10.0.26100.1 (WinBuild.160101.0800)",
+    "signature": "Valid",
+    "computer": "DESKTOP-N4H9E7R",
+    "identity": "NT AUTHORITY\\SYSTEM",
+    "launcher_architecture": "ARM64",
+    "culture": "en-US",
+    "ui_culture": "en-US",
+    "ansi_codepage": 1252,
+    "oem_codepage": 437,
+    "console_output_codepage": 437,
+    "directory": "C:\\",
+    "launch_api": "CreateProcessW",
+    "output_mode": "native pipes"
+  },
+  "cases": [
+    {
+      "id": "types-value",
+      "arguments_utf16_base64": "bwBzACAAZwBlAHQAIABNAFUASQBMAGEAbgBnAHUAYQBnAGUAcwAsAFAAcgBpAG0AYQByAHkALABPAHQAaABlAHIAVAB5AHAAZQBEAGUAcwBjAHIAaQBwAHQAaQBvAG4AIAAvAHYAYQBsAHUAZQA=",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiACAAbwBzACAAZwBlAHQAIABNAFUASQBMAGEAbgBnAHUAYQBnAGUAcwAsAFAAcgBpAG0AYQByAHkALABPAHQAaABlAHIAVAB5AHAAZQBEAGUAcwBjAHIAaQBwAHQAaQBvAG4AIAAvAHYAYQBsAHUAZQA=",
+      "state": "completed",
+      "exit_status": 0,
+      "duration_ms": 66,
+      "process_id": 14172,
+      "normalizations": [],
+      "stdout": {
+        "file": "types-value.stdout.bin",
+        "bytes": 79,
+        "sha256": "0ce1bec9070cb92c2876dd48e356d6e7a44f8bf0871c90857ba8c69c4681022d"
+      },
+      "stderr": {
+        "file": "types-value.stderr.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "id": "types-table",
+      "arguments_utf16_base64": "bwBzACAAZwBlAHQAIABNAFUASQBMAGEAbgBnAHUAYQBnAGUAcwAsAFAAcgBpAG0AYQByAHkALABPAHQAaABlAHIAVAB5AHAAZQBEAGUAcwBjAHIAaQBwAHQAaQBvAG4A",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiACAAbwBzACAAZwBlAHQAIABNAFUASQBMAGEAbgBnAHUAYQBnAGUAcwAsAFAAcgBpAG0AYQByAHkALABPAHQAaABlAHIAVAB5AHAAZQBEAGUAcwBjAHIAaQBwAHQAaQBvAG4A",
+      "state": "completed",
+      "exit_status": 0,
+      "duration_ms": 60,
+      "process_id": 11016,
+      "normalizations": [],
+      "stdout": {
+        "file": "types-table.stdout.bin",
+        "bytes": 99,
+        "sha256": "59fe96cdabb6f9e66e0bc665f80defc6b5c75e4b2218f9a76de23dd34ff123c0"
+      },
+      "stderr": {
+        "file": "types-table.stderr.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    }
+  ]
+}

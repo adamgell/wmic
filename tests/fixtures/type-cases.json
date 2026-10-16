@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "reference_sha256": "2EF794C4940AFEA56C6D6D3B9BC9E66965BC7333E79C5DCB2DEF3C0E36F0834C",
+  "cases": [
+    {
+      "id": "types-value",
+      "arguments": "os get MUILanguages,Primary,OtherTypeDescription /value",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "types-table",
+      "arguments": "os get MUILanguages,Primary,OtherTypeDescription",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    }
+  ]
+}
