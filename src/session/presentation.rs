@@ -228,3 +228,36 @@ pub(super) fn components(
     out.0.extend("</PROPERTIES>".encode_utf16());
     out
 }
+
+pub(super) fn context_text(settings: &SessionSettings, local: &WideText) -> WideText {
+    let command = ParsedCommand::empty(WideText::default());
+    let c = context(&command, settings, local, 0, 0);
+    let mut out = WideText::default();
+    let nodes = c
+        .nodes
+        .iter()
+        .map(WideText::to_string_lossy)
+        .collect::<Vec<_>>()
+        .join(",");
+    for (name, value) in c.settings {
+        let key = name.to_string_lossy();
+        if key == "IMPLEVEL" {
+            out.0
+                .extend(format!("{:<22}: {nodes}\r\r\n", "NODE(S)").encode_utf16());
+        }
+        out.0.extend(format!("{key:<22}: ").encode_utf16());
+        out.0.extend(&value.0);
+        out.0.extend("\r\r\n".encode_utf16());
+        if key == "IMPLEVEL" {
+            out.0.extend(
+                format!(
+                    "[AUTHORITY            : {}]\r\r\n",
+                    settings.authority.as_ref().unwrap_or(&"N/A".into())
+                )
+                .encode_utf16(),
+            );
+        }
+    }
+    out.0.extend("\r\r\n".encode_utf16());
+    out
+}

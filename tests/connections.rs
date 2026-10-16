@@ -13,7 +13,7 @@ fn settings(text: &str) -> SessionSettings {
         .unwrap()
 }
 #[test]
-fn switches_reset_to_reference_security_defaults() {
+fn explicit_defaults_restore_reference_security_levels() {
     let s = settings("/authlevel:connect /implevel:identify /privileges:disable");
     assert_eq!(s.authentication, 2);
     assert_eq!(s.impersonation, 2);
@@ -21,7 +21,7 @@ fn switches_reset_to_reference_security_defaults() {
     let reset = s
         .for_command(
             &parse_command(
-                &wide("/authlevel: /implevel: /privileges:"),
+                &wide("/authlevel:pktprivacy /implevel:impersonate /privileges:enable"),
                 EntryMode::Interactive,
             )
             .unwrap(),
@@ -270,4 +270,31 @@ fn non_aggregate_partial_enumeration_preserves_rows_and_failure() {
     assert_eq!(out.exit_status, 0x80041001);
     assert!(sink.stdout.to_string_lossy().contains("Before failure"));
     assert!(sink.stderr.to_string_lossy().contains("Generic failure"));
+}
+
+#[test]
+fn empty_security_and_boolean_values_have_native_errors() {
+    for (name, code) in [
+        ("authlevel", 0xAC49),
+        ("implevel", 0xAC48),
+        ("privileges", 0xAC5E),
+        ("trace", 0xAC54),
+        ("aggregate", 0xAC6F),
+        ("interactive", 0xAC66),
+        ("failfast", 0xAC68),
+    ] {
+        let parsed = parse_command(
+            &wide(&format!("/{name}:\"\" CONTEXT")),
+            EntryMode::Interactive,
+        )
+        .unwrap();
+        assert_eq!(
+            SessionSettings::default()
+                .for_command(&parsed)
+                .unwrap_err()
+                .code,
+            code,
+            "{name}"
+        );
+    }
 }

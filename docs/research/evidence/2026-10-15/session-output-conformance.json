@@ -1,0 +1,385 @@
+{
+  "cleanup": true,
+  "root": "C:\\WINDOWS\\TEMP\\WmicCompatOutput_0a69925c90db47b5bc3b7ee0ca36ca31",
+  "sha256": "8ea145f93e2342530fa75d38d23d0a0c45a8e127fb7ee829ca53fda9fc4e85d5",
+  "errors": [],
+  "cases": [
+    {
+      "files": {
+        "out.txt": "//5DAGEAcAB0AGkAbwBuACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAADQAKAE0AaQBjAHIAbwBzAG8AZgB0ACAAVwBpAG4AZABvAHcAcwAgADEAMQAgAFAAcgBvACAAIAANAAoADQAKAA==",
+        "unrelated.bin": "AP8NCio="
+      },
+      "result": {
+        "id": "shell-output",
+        "arguments_utf16_base64": "",
+        "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiAA==",
+        "state": "completed",
+        "exit_status": 0,
+        "duration_ms": 185,
+        "process_id": 7040,
+        "stdout_base64": "d21pYzpyb290XGNsaT53bWljOnJvb3RcY2xpPndtaWM6cm9vdFxjbGk+d21pYzpyb290XGNsaT5WZXJzaW9uICAgICANDQoxMC4wLjI2MjAwICANDQoNDQp3bWljOnJvb3RcY2xpPg==",
+        "stderr_base64": "",
+        "normalizations": null
+      },
+      "arguments": "",
+      "id": "shell-output",
+      "role": "reference"
+    },
+    {
+      "files": {
+        "out.txt": "//5DAGEAcAB0AGkAbwBuACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAADQAKAE0AaQBjAHIAbwBzAG8AZgB0ACAAVwBpAG4AZABvAHcAcwAgADEAMQAgAFAAcgBvACAAIAANAAoADQAKAA==",
+        "unrelated.bin": "AP8NCio="
+      },
+      "result": {
+        "id": "shell-output-quit",
+        "arguments_utf16_base64": "",
+        "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiAA==",
+        "state": "completed",
+        "exit_status": 0,
+        "duration_ms": 90,
+        "process_id": 6916,
+        "stdout_base64": "d21pYzpyb290XGNsaT53bWljOnJvb3RcY2xpPndtaWM6cm9vdFxjbGk+",
+        "stderr_base64": "",
+        "normalizations": null
+      },
+      "arguments": "",
+      "id": "shell-output-quit",
+      "role": "reference"
+    },
+    {
+      "files": {
+        "out.txt": "//5DAGEAcAB0AGkAbwBuACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAADQAKAE0AaQBjAHIAbwBzAG8AZgB0ACAAVwBpAG4AZABvAHcAcwAgADEAMQAgAFAAcgBvACAAIAANAAoADQAKAA==",
+        "unrelated.bin": "AP8NCio="
+      },
+      "result": {
+        "id": "shell-output-bad",
+        "arguments_utf16_base64": "",
+        "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiAA==",
+        "state": "completed",
+        "exit_status": 0,
+        "duration_ms": 99,
+        "process_id": 1592,
+        "stdout_base64": "d21pYzpyb290XGNsaT53bWljOnJvb3RcY2xpPndtaWM6cm9vdFxjbGk+d21pYzpyb290XGNsaT4=",
+        "stderr_base64": "SW52YWxpZCBHbG9iYWwgU3dpdGNoLg0NCg==",
+        "normalizations": null
+      },
+      "arguments": "",
+      "id": "shell-output-bad",
+      "role": "reference"
+    },
+    {
+      "files": {
+        "unrelated.bin": "AP8NCio=",
+        "record.xml": "PFdNSVJFQ09SRCBVU0VSPSJIT01FXERFU0tUT1AtTjRIOUU3UiQiPjxSRUNPUkQgU0VRVUVOQ0VOVU09IjIiIElTU1VFREZST009IkRFU0tUT1AtTjRIOUU3UiIgU1RBUlRUSU1FPSIxMC0xNS0yMDI2VDIzOjE5OjMwIj48UkVRVUVTVD48Q09NTUFORExJTkU+b3MgZ2V0IENhcHRpb248L0NPTU1BTkRMSU5FPjwvUkVRVUVTVD48T1VUUFVUIFRBUkdFVE5PREU9IkRFU0tUT1AtTjRIOUU3UiIgSVRFUkFUSU9OPSIxIj48IVtDREFUQVtDYXB0aW9uICAgICAgICAgICAgICAgICAgIA0KTWljcm9zb2Z0IFdpbmRvd3MgMTEgUHJvICANCl1dPjwvT1VUUFVUPjwvUkVDT1JEPjxSRUNPUkQgU0VRVUVOQ0VOVU09IjMiIElTU1VFREZST009IkRFU0tUT1AtTjRIOUU3UiIgU1RBUlRUSU1FPSIxMC0xNS0yMDI2VDIzOjE5OjMwIj48UkVRVUVTVD48Q09NTUFORExJTkU+L25vbnNlbnNlPC9DT01NQU5ETElORT48L1JFUVVFU1Q+PE9VVFBVVCBUQVJHRVROT0RFPSJERVNLVE9QLU40SDlFN1IiIElURVJBVElPTj0iMSI+PCFbQ0RBVEFbSW52YWxpZCBHbG9iYWwgU3dpdGNoLg0KXV0+PC9PVVRQVVQ+PC9SRUNPUkQ+PC9XTUlSRUNPUkQ+DQo="
+      },
+      "result": {
+        "id": "shell-record-bad",
+        "arguments_utf16_base64": "",
+        "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiAA==",
+        "state": "completed",
+        "exit_status": 0,
+        "duration_ms": 85,
+        "process_id": 11224,
+        "stdout_base64": "d21pYzpyb290XGNsaT53bWljOnJvb3RcY2xpPkNhcHRpb24gICAgICAgICAgICAgICAgICAgDQ0KTWljcm9zb2Z0IFdpbmRvd3MgMTEgUHJvICANDQoNDQp3bWljOnJvb3RcY2xpPndtaWM6cm9vdFxjbGk+",
+        "stderr_base64": "SW52YWxpZCBHbG9iYWwgU3dpdGNoLg0NCg==",
+        "normalizations": null
+      },
+      "arguments": "",
+      "id": "shell-record-bad",
+      "role": "reference"
+    },
+    {
+      "files": {
+        "unrelated.bin": "AP8NCio=",
+        "append.txt": "//5DAGEAcAB0AGkAbwBuACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAADQAKAE0AaQBjAHIAbwBzAG8AZgB0ACAAVwBpAG4AZABvAHcAcwAgADEAMQAgAFAAcgBvACAAIAANAAoADQAKAFYAZQByAHMAaQBvAG4AIAAgACAAIAAgAA0ACgAxADAALgAwAC4AMgA2ADIAMAAwACAAIAANAAoADQAKAA=="
+      },
+      "result": {
+        "id": "shell-append",
+        "arguments_utf16_base64": "",
+        "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiAA==",
+        "state": "completed",
+        "exit_status": 0,
+        "duration_ms": 129,
+        "process_id": 13344,
+        "stdout_base64": "d21pYzpyb290XGNsaT53bWljOnJvb3RcY2xpPkNhcHRpb24gICAgICAgICAgICAgICAgICAgDQ0KTWljcm9zb2Z0IFdpbmRvd3MgMTEgUHJvICANDQoNDQp3bWljOnJvb3RcY2xpPlZlcnNpb24gICAgIA0NCjEwLjAuMjYyMDAgIA0NCg0NCndtaWM6cm9vdFxjbGk+",
+        "stderr_base64": "",
+        "normalizations": null
+      },
+      "arguments": "",
+      "id": "shell-append",
+      "role": "reference"
+    },
+    {
+      "files": {
+        "unrelated.bin": "AP8NCio=",
+        "record.xml": "PFdNSVJFQ09SRCBVU0VSPSJIT01FXERFU0tUT1AtTjRIOUU3UiQiPjxSRUNPUkQgU0VRVUVOQ0VOVU09IjIiIElTU1VFREZST009IkRFU0tUT1AtTjRIOUU3UiIgU1RBUlRUSU1FPSIxMC0xNS0yMDI2VDIzOjE5OjMwIj48UkVRVUVTVD48Q09NTUFORExJTkU+b3MgZ2V0IENhcHRpb248L0NPTU1BTkRMSU5FPjwvUkVRVUVTVD48T1VUUFVUIFRBUkdFVE5PREU9IkRFU0tUT1AtTjRIOUU3UiIgSVRFUkFUSU9OPSIxIj48IVtDREFUQVtDYXB0aW9uICAgICAgICAgICAgICAgICAgIA0KTWljcm9zb2Z0IFdpbmRvd3MgMTEgUHJvICANCl1dPjwvT1VUUFVUPjwvUkVDT1JEPjxSRUNPUkQgU0VRVUVOQ0VOVU09IjMiIElTU1VFREZST009IkRFU0tUT1AtTjRIOUU3UiIgU1RBUlRUSU1FPSIxMC0xNS0yMDI2VDIzOjE5OjMwIj48UkVRVUVTVD48Q09NTUFORExJTkU+b3MgZ2V0IFZlcnNpb248L0NPTU1BTkRMSU5FPjwvUkVRVUVTVD48T1VUUFVUIFRBUkdFVE5PREU9IkRFU0tUT1AtTjRIOUU3UiIgSVRFUkFUSU9OPSIxIj48IVtDREFUQVtWZXJzaW9uICAgICANCjEwLjAuMjYyMDAgIA0KXV0+PC9PVVRQVVQ+PC9SRUNPUkQ+PC9XTUlSRUNPUkQ+DQo="
+      },
+      "result": {
+        "id": "shell-record",
+        "arguments_utf16_base64": "",
+        "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiAA==",
+        "state": "completed",
+        "exit_status": 0,
+        "duration_ms": 123,
+        "process_id": 7976,
+        "stdout_base64": "d21pYzpyb290XGNsaT53bWljOnJvb3RcY2xpPkNhcHRpb24gICAgICAgICAgICAgICAgICAgDQ0KTWljcm9zb2Z0IFdpbmRvd3MgMTEgUHJvICANDQoNDQp3bWljOnJvb3RcY2xpPlZlcnNpb24gICAgIA0NCjEwLjAuMjYyMDAgIA0NCg0NCndtaWM6cm9vdFxjbGk+",
+        "stderr_base64": "",
+        "normalizations": null
+      },
+      "arguments": "",
+      "id": "shell-record",
+      "role": "reference"
+    },
+    {
+      "files": {
+        "out.txt": "//5DAGEAcAB0AGkAbwBuACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAADQAKAE0AaQBjAHIAbwBzAG8AZgB0ACAAVwBpAG4AZABvAHcAcwAgADEAMQAgAFAAcgBvACAAIAANAAoA",
+        "unrelated.bin": "AP8NCio="
+      },
+      "result": {
+        "id": "shell-inline-output",
+        "arguments_utf16_base64": "",
+        "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiAA==",
+        "state": "completed",
+        "exit_status": 0,
+        "duration_ms": 135,
+        "process_id": 6812,
+        "stdout_base64": "d21pYzpyb290XGNsaT53bWljOnJvb3RcY2xpPlZlcnNpb24gICAgIA0NCjEwLjAuMjYyMDAgIA0NCg0NCndtaWM6cm9vdFxjbGk+",
+        "stderr_base64": "",
+        "normalizations": null
+      },
+      "arguments": "",
+      "id": "shell-inline-output",
+      "role": "reference"
+    },
+    {
+      "files": {
+        "out.txt": "//5DAGEAcAB0AGkAbwBuACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAADQAKAE0AaQBjAHIAbwBzAG8AZgB0ACAAVwBpAG4AZABvAHcAcwAgADEAMQAgAFAAcgBvACAAIAANAAoA",
+        "unrelated.bin": "AP8NCio="
+      },
+      "result": {
+        "id": "repeat-output",
+        "arguments_utf16_base64": "LwBvAHUAdABwAHUAdAA6ACIAQwA6AFwAVwBJAE4ARABPAFcAUwBcAFQARQBNAFAAXABXAG0AaQBjAEMAbwBtAHAAYQB0AE8AdQB0AHAAdQB0AF8AMABhADYAOQA5ADIANQBjADkAMABkAGIANAA3AGIANQBiAGMAMwBiADcAZQBlADAAYwBhADMANgBjAGEAMwAxAFwAbwB1AHQALgB0AHgAdAAiACAAbwBzACAAZwBlAHQAIABDAGEAcAB0AGkAbwBuACAALwBlAHYAZQByAHkAOgAwACAALwByAGUAcABlAGEAdAA6ADIA",
+        "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiACAALwBvAHUAdABwAHUAdAA6ACIAQwA6AFwAVwBJAE4ARABPAFcAUwBcAFQARQBNAFAAXABXAG0AaQBjAEMAbwBtAHAAYQB0AE8AdQB0AHAAdQB0AF8AMABhADYAOQA5ADIANQBjADkAMABkAGIANAA3AGIANQBiAGMAMwBiADcAZQBlADAAYwBhADMANgBjAGEAMwAxAFwAbwB1AHQALgB0AHgAdAAiACAAbwBzACAAZwBlAHQAIABDAGEAcAB0AGkAbwBuACAALwBlAHYAZQByAHkAOgAwACAALwByAGUAcABlAGEAdAA6ADIA",
+        "state": "completed",
+        "exit_status": 0,
+        "duration_ms": 123,
+        "process_id": 8092,
+        "stdout_base64": "",
+        "stderr_base64": "",
+        "normalizations": null
+      },
+      "arguments": "/output:\"C:\\WINDOWS\\TEMP\\WmicCompatOutput_0a69925c90db47b5bc3b7ee0ca36ca31\\out.txt\" os get Caption /every:0 /repeat:2",
+      "id": "repeat-output",
+      "role": "reference"
+    },
+    {
+      "files": {
+        "unrelated.bin": "AP8NCio="
+      },
+      "result": {
+        "id": "repeat-record",
+        "arguments_utf16_base64": "LwByAGUAYwBvAHIAZAA6ACIAQwA6AFwAVwBJAE4ARABPAFcAUwBcAFQARQBNAFAAXABXAG0AaQBjAEMAbwBtAHAAYQB0AE8AdQB0AHAAdQB0AF8AMABhADYAOQA5ADIANQBjADkAMABkAGIANAA3AGIANQBiAGMAMwBiADcAZQBlADAAYwBhADMANgBjAGEAMwAxAFwAcgBlAGMAbwByAGQALgB4AG0AbAAiACAAbwBzACAAZwBlAHQAIABDAGEAcAB0AGkAbwBuACAALwBlAHYAZQByAHkAOgAwACAALwByAGUAcABlAGEAdAA6ADIA",
+        "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiACAALwByAGUAYwBvAHIAZAA6ACIAQwA6AFwAVwBJAE4ARABPAFcAUwBcAFQARQBNAFAAXABXAG0AaQBjAEMAbwBtAHAAYQB0AE8AdQB0AHAAdQB0AF8AMABhADYAOQA5ADIANQBjADkAMABkAGIANAA3AGIANQBiAGMAMwBiADcAZQBlADAAYwBhADMANgBjAGEAMwAxAFwAcgBlAGMAbwByAGQALgB4AG0AbAAiACAAbwBzACAAZwBlAHQAIABDAGEAcAB0AGkAbwBuACAALwBlAHYAZQByAHkAOgAwACAALwByAGUAcABlAGEAdAA6ADIA",
+        "state": "completed",
+        "exit_status": 0,
+        "duration_ms": 127,
+        "process_id": 10932,
+        "stdout_base64": "Q2FwdGlvbiAgICAgICAgICAgICAgICAgICANDQpNaWNyb3NvZnQgV2luZG93cyAxMSBQcm8gIA0NCg0NCkNhcHRpb24gICAgICAgICAgICAgICAgICAgDQ0KTWljcm9zb2Z0IFdpbmRvd3MgMTEgUHJvICANDQoNDQo=",
+        "stderr_base64": "",
+        "normalizations": null
+      },
+      "arguments": "/record:\"C:\\WINDOWS\\TEMP\\WmicCompatOutput_0a69925c90db47b5bc3b7ee0ca36ca31\\record.xml\" os get Caption /every:0 /repeat:2",
+      "id": "repeat-record",
+      "role": "reference"
+    },
+    {
+      "files": {
+        "out.txt": "//5DAGEAcAB0AGkAbwBuACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAADQAKAE0AaQBjAHIAbwBzAG8AZgB0ACAAVwBpAG4AZABvAHcAcwAgADEAMQAgAFAAcgBvACAAIAANAAoADQAKAA==",
+        "unrelated.bin": "AP8NCio="
+      },
+      "result": {
+        "id": "shell-output",
+        "arguments_utf16_base64": "",
+        "command_line_utf16_base64": "IgBDADoAXABQAHIAbwBnAHIAYQBtAEQAYQB0AGEAXABXAG0AaQBjAEMAbwBtAHAAYQB0AFwAYQByAHQAaQBmAGEAYwB0AHMAXAA4AEUAQQAxADQANQBGADkAMwBFADIAMwA0ADIANQAzADAARgBBADcANQBEADMAOABEADIAMwBEADAAQQAwAEMANAA1AEEAOABFADEAMgA3AEYAQgA3AEUARQA4ADIAOQBDAEEANQAzAEYARABBADkARgBDADQARQA4ADUARAA1AFwAdwBtAGkAYwAuAGUAeABlACIA",
+        "state": "completed",
+        "exit_status": 0,
+        "duration_ms": 166,
+        "process_id": 7172,
+        "stdout_base64": "d21pYzpyb290XGNsaT53bWljOnJvb3RcY2xpPndtaWM6cm9vdFxjbGk+d21pYzpyb290XGNsaT5WZXJzaW9uICAgICANDQoxMC4wLjI2MjAwICANDQoNDQp3bWljOnJvb3RcY2xpPg==",
+        "stderr_base64": "",
+        "normalizations": null
+      },
+      "arguments": "",
+      "id": "shell-output",
+      "role": "candidate"
+    },
+    {
+      "files": {
+        "out.txt": "//5DAGEAcAB0AGkAbwBuACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAADQAKAE0AaQBjAHIAbwBzAG8AZgB0ACAAVwBpAG4AZABvAHcAcwAgADEAMQAgAFAAcgBvACAAIAANAAoADQAKAA==",
+        "unrelated.bin": "AP8NCio="
+      },
+      "result": {
+        "id": "shell-output-quit",
+        "arguments_utf16_base64": "",
+        "command_line_utf16_base64": "IgBDADoAXABQAHIAbwBnAHIAYQBtAEQAYQB0AGEAXABXAG0AaQBjAEMAbwBtAHAAYQB0AFwAYQByAHQAaQBmAGEAYwB0AHMAXAA4AEUAQQAxADQANQBGADkAMwBFADIAMwA0ADIANQAzADAARgBBADcANQBEADMAOABEADIAMwBEADAAQQAwAEMANAA1AEEAOABFADEAMgA3AEYAQgA3AEUARQA4ADIAOQBDAEEANQAzAEYARABBADkARgBDADQARQA4ADUARAA1AFwAdwBtAGkAYwAuAGUAeABlACIA",
+        "state": "completed",
+        "exit_status": 0,
+        "duration_ms": 100,
+        "process_id": 640,
+        "stdout_base64": "d21pYzpyb290XGNsaT53bWljOnJvb3RcY2xpPndtaWM6cm9vdFxjbGk+",
+        "stderr_base64": "",
+        "normalizations": null
+      },
+      "arguments": "",
+      "id": "shell-output-quit",
+      "role": "candidate"
+    },
+    {
+      "files": {
+        "out.txt": "//5DAGEAcAB0AGkAbwBuACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAADQAKAE0AaQBjAHIAbwBzAG8AZgB0ACAAVwBpAG4AZABvAHcAcwAgADEAMQAgAFAAcgBvACAAIAANAAoADQAKAA==",
+        "unrelated.bin": "AP8NCio="
+      },
+      "result": {
+        "id": "shell-output-bad",
+        "arguments_utf16_base64": "",
+        "command_line_utf16_base64": "IgBDADoAXABQAHIAbwBnAHIAYQBtAEQAYQB0AGEAXABXAG0AaQBjAEMAbwBtAHAAYQB0AFwAYQByAHQAaQBmAGEAYwB0AHMAXAA4AEUAQQAxADQANQBGADkAMwBFADIAMwA0ADIANQAzADAARgBBADcANQBEADMAOABEADIAMwBEADAAQQAwAEMANAA1AEEAOABFADEAMgA3AEYAQgA3AEUARQA4ADIAOQBDAEEANQAzAEYARABBADkARgBDADQARQA4ADUARAA1AFwAdwBtAGkAYwAuAGUAeABlACIA",
+        "state": "completed",
+        "exit_status": 0,
+        "duration_ms": 125,
+        "process_id": 8544,
+        "stdout_base64": "d21pYzpyb290XGNsaT53bWljOnJvb3RcY2xpPndtaWM6cm9vdFxjbGk+d21pYzpyb290XGNsaT4=",
+        "stderr_base64": "SW52YWxpZCBHbG9iYWwgU3dpdGNoLg0NCg==",
+        "normalizations": null
+      },
+      "arguments": "",
+      "id": "shell-output-bad",
+      "role": "candidate"
+    },
+    {
+      "files": {
+        "unrelated.bin": "AP8NCio=",
+        "record.xml": "PFdNSVJFQ09SRCBVU0VSPSJIT01FXERFU0tUT1AtTjRIOUU3UiQiPjxSRUNPUkQgU0VRVUVOQ0VOVU09IjIiIElTU1VFREZST009IkRFU0tUT1AtTjRIOUU3UiIgU1RBUlRUSU1FPSIxMC0xNS0yMDI2VDIzOjE5OjMxIj48UkVRVUVTVD48Q09NTUFORExJTkU+b3MgZ2V0IENhcHRpb248L0NPTU1BTkRMSU5FPjwvUkVRVUVTVD48T1VUUFVUIFRBUkdFVE5PREU9IkRFU0tUT1AtTjRIOUU3UiIgSVRFUkFUSU9OPSIxIj48IVtDREFUQVtDYXB0aW9uICAgICAgICAgICAgICAgICAgIA0KTWljcm9zb2Z0IFdpbmRvd3MgMTEgUHJvICANCl1dPjwvT1VUUFVUPjwvUkVDT1JEPjxSRUNPUkQgU0VRVUVOQ0VOVU09IjMiIElTU1VFREZST009IkRFU0tUT1AtTjRIOUU3UiIgU1RBUlRUSU1FPSIxMC0xNS0yMDI2VDIzOjE5OjMxIj48UkVRVUVTVD48Q09NTUFORExJTkU+L25vbnNlbnNlPC9DT01NQU5ETElORT48L1JFUVVFU1Q+PE9VVFBVVCBUQVJHRVROT0RFPSJERVNLVE9QLU40SDlFN1IiIElURVJBVElPTj0iMSI+PCFbQ0RBVEFbSW52YWxpZCBHbG9iYWwgU3dpdGNoLg0KXV0+PC9PVVRQVVQ+PC9SRUNPUkQ+PC9XTUlSRUNPUkQ+DQo="
+      },
+      "result": {
+        "id": "shell-record-bad",
+        "arguments_utf16_base64": "",
+        "command_line_utf16_base64": "IgBDADoAXABQAHIAbwBnAHIAYQBtAEQAYQB0AGEAXABXAG0AaQBjAEMAbwBtAHAAYQB0AFwAYQByAHQAaQBmAGEAYwB0AHMAXAA4AEUAQQAxADQANQBGADkAMwBFADIAMwA0ADIANQAzADAARgBBADcANQBEADMAOABEADIAMwBEADAAQQAwAEMANAA1AEEAOABFADEAMgA3AEYAQgA3AEUARQA4ADIAOQBDAEEANQAzAEYARABBADkARgBDADQARQA4ADUARAA1AFwAdwBtAGkAYwAuAGUAeABlACIA",
+        "state": "completed",
+        "exit_status": 0,
+        "duration_ms": 89,
+        "process_id": 13676,
+        "stdout_base64": "d21pYzpyb290XGNsaT53bWljOnJvb3RcY2xpPkNhcHRpb24gICAgICAgICAgICAgICAgICAgDQ0KTWljcm9zb2Z0IFdpbmRvd3MgMTEgUHJvICANDQoNDQp3bWljOnJvb3RcY2xpPndtaWM6cm9vdFxjbGk+",
+        "stderr_base64": "SW52YWxpZCBHbG9iYWwgU3dpdGNoLg0NCg==",
+        "normalizations": null
+      },
+      "arguments": "",
+      "id": "shell-record-bad",
+      "role": "candidate"
+    },
+    {
+      "files": {
+        "unrelated.bin": "AP8NCio=",
+        "append.txt": "//5DAGEAcAB0AGkAbwBuACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAADQAKAE0AaQBjAHIAbwBzAG8AZgB0ACAAVwBpAG4AZABvAHcAcwAgADEAMQAgAFAAcgBvACAAIAANAAoADQAKAFYAZQByAHMAaQBvAG4AIAAgACAAIAAgAA0ACgAxADAALgAwAC4AMgA2ADIAMAAwACAAIAANAAoADQAKAA=="
+      },
+      "result": {
+        "id": "shell-append",
+        "arguments_utf16_base64": "",
+        "command_line_utf16_base64": "IgBDADoAXABQAHIAbwBnAHIAYQBtAEQAYQB0AGEAXABXAG0AaQBjAEMAbwBtAHAAYQB0AFwAYQByAHQAaQBmAGEAYwB0AHMAXAA4AEUAQQAxADQANQBGADkAMwBFADIAMwA0ADIANQAzADAARgBBADcANQBEADMAOABEADIAMwBEADAAQQAwAEMANAA1AEEAOABFADEAMgA3AEYAQgA3AEUARQA4ADIAOQBDAEEANQAzAEYARABBADkARgBDADQARQA4ADUARAA1AFwAdwBtAGkAYwAuAGUAeABlACIA",
+        "state": "completed",
+        "exit_status": 0,
+        "duration_ms": 133,
+        "process_id": 7892,
+        "stdout_base64": "d21pYzpyb290XGNsaT53bWljOnJvb3RcY2xpPkNhcHRpb24gICAgICAgICAgICAgICAgICAgDQ0KTWljcm9zb2Z0IFdpbmRvd3MgMTEgUHJvICANDQoNDQp3bWljOnJvb3RcY2xpPlZlcnNpb24gICAgIA0NCjEwLjAuMjYyMDAgIA0NCg0NCndtaWM6cm9vdFxjbGk+",
+        "stderr_base64": "",
+        "normalizations": null
+      },
+      "arguments": "",
+      "id": "shell-append",
+      "role": "candidate"
+    },
+    {
+      "files": {
+        "unrelated.bin": "AP8NCio=",
+        "record.xml": "PFdNSVJFQ09SRCBVU0VSPSJIT01FXERFU0tUT1AtTjRIOUU3UiQiPjxSRUNPUkQgU0VRVUVOQ0VOVU09IjIiIElTU1VFREZST009IkRFU0tUT1AtTjRIOUU3UiIgU1RBUlRUSU1FPSIxMC0xNS0yMDI2VDIzOjE5OjMxIj48UkVRVUVTVD48Q09NTUFORExJTkU+b3MgZ2V0IENhcHRpb248L0NPTU1BTkRMSU5FPjwvUkVRVUVTVD48T1VUUFVUIFRBUkdFVE5PREU9IkRFU0tUT1AtTjRIOUU3UiIgSVRFUkFUSU9OPSIxIj48IVtDREFUQVtDYXB0aW9uICAgICAgICAgICAgICAgICAgIA0KTWljcm9zb2Z0IFdpbmRvd3MgMTEgUHJvICANCl1dPjwvT1VUUFVUPjwvUkVDT1JEPjxSRUNPUkQgU0VRVUVOQ0VOVU09IjMiIElTU1VFREZST009IkRFU0tUT1AtTjRIOUU3UiIgU1RBUlRUSU1FPSIxMC0xNS0yMDI2VDIzOjE5OjMxIj48UkVRVUVTVD48Q09NTUFORExJTkU+b3MgZ2V0IFZlcnNpb248L0NPTU1BTkRMSU5FPjwvUkVRVUVTVD48T1VUUFVUIFRBUkdFVE5PREU9IkRFU0tUT1AtTjRIOUU3UiIgSVRFUkFUSU9OPSIxIj48IVtDREFUQVtWZXJzaW9uICAgICANCjEwLjAuMjYyMDAgIA0KXV0+PC9PVVRQVVQ+PC9SRUNPUkQ+PC9XTUlSRUNPUkQ+DQo="
+      },
+      "result": {
+        "id": "shell-record",
+        "arguments_utf16_base64": "",
+        "command_line_utf16_base64": "IgBDADoAXABQAHIAbwBnAHIAYQBtAEQAYQB0AGEAXABXAG0AaQBjAEMAbwBtAHAAYQB0AFwAYQByAHQAaQBmAGEAYwB0AHMAXAA4AEUAQQAxADQANQBGADkAMwBFADIAMwA0ADIANQAzADAARgBBADcANQBEADMAOABEADIAMwBEADAAQQAwAEMANAA1AEEAOABFADEAMgA3AEYAQgA3AEUARQA4ADIAOQBDAEEANQAzAEYARABBADkARgBDADQARQA4ADUARAA1AFwAdwBtAGkAYwAuAGUAeABlACIA",
+        "state": "completed",
+        "exit_status": 0,
+        "duration_ms": 157,
+        "process_id": 14312,
+        "stdout_base64": "d21pYzpyb290XGNsaT53bWljOnJvb3RcY2xpPkNhcHRpb24gICAgICAgICAgICAgICAgICAgDQ0KTWljcm9zb2Z0IFdpbmRvd3MgMTEgUHJvICANDQoNDQp3bWljOnJvb3RcY2xpPlZlcnNpb24gICAgIA0NCjEwLjAuMjYyMDAgIA0NCg0NCndtaWM6cm9vdFxjbGk+",
+        "stderr_base64": "",
+        "normalizations": null
+      },
+      "arguments": "",
+      "id": "shell-record",
+      "role": "candidate"
+    },
+    {
+      "files": {
+        "out.txt": "//5DAGEAcAB0AGkAbwBuACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAADQAKAE0AaQBjAHIAbwBzAG8AZgB0ACAAVwBpAG4AZABvAHcAcwAgADEAMQAgAFAAcgBvACAAIAANAAoA",
+        "unrelated.bin": "AP8NCio="
+      },
+      "result": {
+        "id": "shell-inline-output",
+        "arguments_utf16_base64": "",
+        "command_line_utf16_base64": "IgBDADoAXABQAHIAbwBnAHIAYQBtAEQAYQB0AGEAXABXAG0AaQBjAEMAbwBtAHAAYQB0AFwAYQByAHQAaQBmAGEAYwB0AHMAXAA4AEUAQQAxADQANQBGADkAMwBFADIAMwA0ADIANQAzADAARgBBADcANQBEADMAOABEADIAMwBEADAAQQAwAEMANAA1AEEAOABFADEAMgA3AEYAQgA3AEUARQA4ADIAOQBDAEEANQAzAEYARABBADkARgBDADQARQA4ADUARAA1AFwAdwBtAGkAYwAuAGUAeABlACIA",
+        "state": "completed",
+        "exit_status": 0,
+        "duration_ms": 152,
+        "process_id": 14996,
+        "stdout_base64": "d21pYzpyb290XGNsaT53bWljOnJvb3RcY2xpPlZlcnNpb24gICAgIA0NCjEwLjAuMjYyMDAgIA0NCg0NCndtaWM6cm9vdFxjbGk+",
+        "stderr_base64": "",
+        "normalizations": null
+      },
+      "arguments": "",
+      "id": "shell-inline-output",
+      "role": "candidate"
+    },
+    {
+      "files": {
+        "out.txt": "//5DAGEAcAB0AGkAbwBuACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAADQAKAE0AaQBjAHIAbwBzAG8AZgB0ACAAVwBpAG4AZABvAHcAcwAgADEAMQAgAFAAcgBvACAAIAANAAoA",
+        "unrelated.bin": "AP8NCio="
+      },
+      "result": {
+        "id": "repeat-output",
+        "arguments_utf16_base64": "LwBvAHUAdABwAHUAdAA6ACIAQwA6AFwAVwBJAE4ARABPAFcAUwBcAFQARQBNAFAAXABXAG0AaQBjAEMAbwBtAHAAYQB0AE8AdQB0AHAAdQB0AF8AMABhADYAOQA5ADIANQBjADkAMABkAGIANAA3AGIANQBiAGMAMwBiADcAZQBlADAAYwBhADMANgBjAGEAMwAxAFwAbwB1AHQALgB0AHgAdAAiACAAbwBzACAAZwBlAHQAIABDAGEAcAB0AGkAbwBuACAALwBlAHYAZQByAHkAOgAwACAALwByAGUAcABlAGEAdAA6ADIA",
+        "command_line_utf16_base64": "IgBDADoAXABQAHIAbwBnAHIAYQBtAEQAYQB0AGEAXABXAG0AaQBjAEMAbwBtAHAAYQB0AFwAYQByAHQAaQBmAGEAYwB0AHMAXAA4AEUAQQAxADQANQBGADkAMwBFADIAMwA0ADIANQAzADAARgBBADcANQBEADMAOABEADIAMwBEADAAQQAwAEMANAA1AEEAOABFADEAMgA3AEYAQgA3AEUARQA4ADIAOQBDAEEANQAzAEYARABBADkARgBDADQARQA4ADUARAA1AFwAdwBtAGkAYwAuAGUAeABlACIAIAAvAG8AdQB0AHAAdQB0ADoAIgBDADoAXABXAEkATgBEAE8AVwBTAFwAVABFAE0AUABcAFcAbQBpAGMAQwBvAG0AcABhAHQATwB1AHQAcAB1AHQAXwAwAGEANgA5ADkAMgA1AGMAOQAwAGQAYgA0ADcAYgA1AGIAYwAzAGIANwBlAGUAMABjAGEAMwA2AGMAYQAzADEAXABvAHUAdAAuAHQAeAB0ACIAIABvAHMAIABnAGUAdAAgAEMAYQBwAHQAaQBvAG4AIAAvAGUAdgBlAHIAeQA6ADAAIAAvAHIAZQBwAGUAYQB0ADoAMgA=",
+        "state": "completed",
+        "exit_status": 0,
+        "duration_ms": 107,
+        "process_id": 13804,
+        "stdout_base64": "",
+        "stderr_base64": "",
+        "normalizations": null
+      },
+      "arguments": "/output:\"C:\\WINDOWS\\TEMP\\WmicCompatOutput_0a69925c90db47b5bc3b7ee0ca36ca31\\out.txt\" os get Caption /every:0 /repeat:2",
+      "id": "repeat-output",
+      "role": "candidate"
+    },
+    {
+      "files": {
+        "unrelated.bin": "AP8NCio="
+      },
+      "result": {
+        "id": "repeat-record",
+        "arguments_utf16_base64": "LwByAGUAYwBvAHIAZAA6ACIAQwA6AFwAVwBJAE4ARABPAFcAUwBcAFQARQBNAFAAXABXAG0AaQBjAEMAbwBtAHAAYQB0AE8AdQB0AHAAdQB0AF8AMABhADYAOQA5ADIANQBjADkAMABkAGIANAA3AGIANQBiAGMAMwBiADcAZQBlADAAYwBhADMANgBjAGEAMwAxAFwAcgBlAGMAbwByAGQALgB4AG0AbAAiACAAbwBzACAAZwBlAHQAIABDAGEAcAB0AGkAbwBuACAALwBlAHYAZQByAHkAOgAwACAALwByAGUAcABlAGEAdAA6ADIA",
+        "command_line_utf16_base64": "IgBDADoAXABQAHIAbwBnAHIAYQBtAEQAYQB0AGEAXABXAG0AaQBjAEMAbwBtAHAAYQB0AFwAYQByAHQAaQBmAGEAYwB0AHMAXAA4AEUAQQAxADQANQBGADkAMwBFADIAMwA0ADIANQAzADAARgBBADcANQBEADMAOABEADIAMwBEADAAQQAwAEMANAA1AEEAOABFADEAMgA3AEYAQgA3AEUARQA4ADIAOQBDAEEANQAzAEYARABBADkARgBDADQARQA4ADUARAA1AFwAdwBtAGkAYwAuAGUAeABlACIAIAAvAHIAZQBjAG8AcgBkADoAIgBDADoAXABXAEkATgBEAE8AVwBTAFwAVABFAE0AUABcAFcAbQBpAGMAQwBvAG0AcABhAHQATwB1AHQAcAB1AHQAXwAwAGEANgA5ADkAMgA1AGMAOQAwAGQAYgA0ADcAYgA1AGIAYwAzAGIANwBlAGUAMABjAGEAMwA2AGMAYQAzADEAXAByAGUAYwBvAHIAZAAuAHgAbQBsACIAIABvAHMAIABnAGUAdAAgAEMAYQBwAHQAaQBvAG4AIAAvAGUAdgBlAHIAeQA6ADAAIAAvAHIAZQBwAGUAYQB0ADoAMgA=",
+        "state": "completed",
+        "exit_status": 0,
+        "duration_ms": 112,
+        "process_id": 4524,
+        "stdout_base64": "Q2FwdGlvbiAgICAgICAgICAgICAgICAgICANDQpNaWNyb3NvZnQgV2luZG93cyAxMSBQcm8gIA0NCg0NCkNhcHRpb24gICAgICAgICAgICAgICAgICAgDQ0KTWljcm9zb2Z0IFdpbmRvd3MgMTEgUHJvICANDQoNDQo=",
+        "stderr_base64": "",
+        "normalizations": null
+      },
+      "arguments": "/record:\"C:\\WINDOWS\\TEMP\\WmicCompatOutput_0a69925c90db47b5bc3b7ee0ca36ca31\\record.xml\" os get Caption /every:0 /repeat:2",
+      "id": "repeat-record",
+      "role": "candidate"
+    }
+  ],
+  "differences": []
+}

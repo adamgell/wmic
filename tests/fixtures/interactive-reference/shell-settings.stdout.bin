@@ -1,0 +1,35 @@
+wmic:root\cli>wmic:root\cli>NAMESPACE             : root\cimv2\root\default
+ROLE                  : root\cli
+NODE(S)               : DESKTOP-N4H9E7R
+IMPLEVEL              : IMPERSONATE
+[AUTHORITY            : N/A]
+AUTHLEVEL             : PKTPRIVACY
+LOCALE                : ms_409
+PRIVILEGES            : ENABLE
+TRACE                 : OFF
+RECORD                : N/A
+INTERACTIVE           : ON
+FAILFAST              : OFF
+OUTPUT                : STDOUT
+APPEND                : STDOUT
+USER                  : N/A
+AGGREGATE             : ON
+
+wmic:root\cli>wmic:root\cli>NAMESPACE             : root\cimv2\root\default
+ROLE                  : root\cli
+NODE(S)               : DESKTOP-N4H9E7R
+IMPLEVEL              : IMPERSONATE
+[AUTHORITY            : N/A]
+AUTHLEVEL             : PKTPRIVACY
+LOCALE                : ms_409
+PRIVILEGES            : ENABLE
+TRACE                 : OFF
+RECORD                : N/A
+INTERACTIVE           : ON
+FAILFAST              : OFF
+OUTPUT                : STDOUT
+APPEND                : STDOUT
+USER                  : N/A
+AGGREGATE             : ON
+
+wmic:root\cli>

@@ -5,9 +5,34 @@ from compare import compare_cases
 
 
 def normalize_record_timestamp(data):
-    # A root record transcript, never provider text or arbitrary nested markup.
-    pattern = rb'\A(<WMIRECORD USER="[^"<>]*"><RECORD SEQUENCENUM="[0-9]+" ISSUEDFROM="[^"<>]*" STARTTIME=")[^"<>]*(")'
-    return re.sub(pattern, lambda m: m[1]+b'{STARTTIME}'+m[2], data, count=1)
+    # Locate direct RECORD elements with Expat, then replace only byte spans in
+    # their opening tags. Reserializing XML would hide other byte differences.
+    from xml.parsers import expat
+    if not data.startswith(b'<WMIRECORD '):
+        return data
+    parser = expat.ParserCreate()
+    stack, spans = [], []
+    def start(name, attributes):
+        if stack == ['WMIRECORD'] and name == 'RECORD':
+            at = parser.CurrentByteIndex
+            end = data.find(b'>', at)
+            match = re.search(rb'\bSTARTTIME="([^"<>]*)"', data[at:end])
+            if match:
+                spans.append((at+match.start(1), at+match.end(1)))
+        stack.append(name)
+    def end(name):
+        stack.pop()
+    def doctype(*args):
+        raise ValueError('record DTD is not allowed')
+    parser.StartElementHandler, parser.EndElementHandler = start, end
+    parser.StartDoctypeDeclHandler = doctype
+    try:
+        parser.Parse(data, True)
+    except (expat.ExpatError, ValueError):
+        return data
+    for first,last in reversed(spans):
+        data = data[:first]+b'{STARTTIME}'+data[last:]
+    return data
 
 
 def compare_owned(payload):

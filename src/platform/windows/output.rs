@@ -3,13 +3,19 @@ use crate::{
     render::{DestinationProfile, OutputError, encode_output},
     session::{OutputSink, OutputStream},
 };
-use windows::Win32::{
-    Globalization::{GetACP, GetOEMCP},
-    Storage::FileSystem::WriteFile,
-    System::Console::*,
-};
+use windows::Win32::{Globalization::GetOEMCP, Storage::FileSystem::WriteFile, System::Console::*};
 pub struct NativeOutput;
 impl OutputSink for NativeOutput {
+    fn consume_query_key(&mut self) -> Result<(), OutputError> {
+        let _ = super::console::key_pressed();
+        Ok(())
+    }
+    fn clear_wait_prompt(&mut self) -> Result<(), OutputError> {
+        super::console::clear_wait_prompt().map_err(|e| OutputError(e.to_string()))
+    }
+    fn console_input(&self) -> bool {
+        super::console::has_input_console()
+    }
     fn clipboard(&mut self, text: &WideText) -> Result<(), OutputError> {
         write_clipboard(text)
     }
@@ -107,12 +113,16 @@ fn read_input(secret: bool) -> Result<Option<WideText>, OutputError> {
                 break;
             }
         }
+        if out.is_empty() || out.first() == Some(&26) {
+            return Ok(None);
+        }
         while out.last().is_some_and(|u| *u == 10 || *u == 13) {
             out.pop();
         }
         Ok(Some(WideText(out)))
     } else {
         let mut out = vec![];
+        let mut received = false;
         loop {
             let mut byte = [0];
             let mut count = 0;
@@ -121,18 +131,25 @@ fn read_input(secret: bool) -> Result<Option<WideText>, OutputError> {
                 Err(e) if e.code().0 as u32 == 0x8007006d => break,
                 Err(e) => return Err(OutputError(e.to_string())),
             }
-            if count == 0 || byte[0] == 10 {
+            if count == 0 {
+                break;
+            }
+            received = true;
+            if byte[0] == 10 {
                 break;
             }
             if byte[0] != 13 {
                 out.push(byte[0]);
             }
         }
+        if !received {
+            return Ok(None);
+        }
         use windows::Win32::Globalization::MultiByteToWideChar;
         let flags = windows::Win32::Globalization::MULTI_BYTE_TO_WIDE_CHAR_FLAGS(0);
-        let count = unsafe { MultiByteToWideChar(GetACP(), flags, &out, None) };
+        let count = unsafe { MultiByteToWideChar(output_code_page(), flags, &out, None) };
         let mut text = vec![0; count as usize];
-        unsafe { MultiByteToWideChar(GetACP(), flags, &out, Some(&mut text)) };
+        unsafe { MultiByteToWideChar(output_code_page(), flags, &out, Some(&mut text)) };
         Ok(Some(WideText(text)))
     }
 }
@@ -207,4 +224,23 @@ fn write_clipboard(text: &WideText) -> Result<(), OutputError> {
 fn output_code_page() -> u32 {
     let cp = unsafe { GetConsoleOutputCP() };
     if cp == 0 { unsafe { GetOEMCP() } } else { cp }
+}
+
+pub struct NativeInput;
+impl crate::session::InputSource for NativeInput {
+    fn next_input(&mut self) -> Result<crate::session::InputEvent, crate::session::InputError> {
+        use crate::session::InputEvent;
+        if super::console::interrupted() {
+            return Ok(InputEvent::Interrupted);
+        }
+        let console = unsafe { GetStdHandle(STD_INPUT_HANDLE) }
+            .ok()
+            .is_some_and(|handle| unsafe { GetConsoleMode(handle, &mut CONSOLE_MODE(0)) }.is_ok());
+        match read_input(false) {
+            Ok(Some(line)) => Ok(InputEvent::Line { line, console }),
+            Ok(None) => Ok(InputEvent::Eof),
+            Err(_) if super::console::interrupted() => Ok(InputEvent::Interrupted),
+            Err(e) => Err(e.into()),
+        }
+    }
 }

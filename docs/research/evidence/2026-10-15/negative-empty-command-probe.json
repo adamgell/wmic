@@ -1,0 +1,20 @@
+{
+  "id": "missing-method-args",
+  "arguments_utf16_base64": "cAByAG8AYwBlAHMAcwAgAGMAYQBsAGwAIABDAHIAZQBhAHQAZQA=",
+  "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiACAAcAByAG8AYwBlAHMAcwAgAGMAYQBsAGwAIABDAHIAZQBhAHQAZQA=",
+  "state": "completed",
+  "exit_status": 0,
+  "duration_ms": 112,
+  "process_id": 8940,
+  "normalizations": [],
+  "stdout": {
+    "file": "missing-method-args.stdout.bin",
+    "bytes": 139,
+    "sha256": "5bb44dda040472d70169726f3d16bce0187633a57cf205e0471312ca8c1dc540"
+  },
+  "stderr": {
+    "file": "missing-method-args.stderr.bin",
+    "bytes": 2,
+    "sha256": "7eb70257593da06f682a3ddda54a9d260d4fc514f645237f5ca74b08f8da61a6"
+  }
+}

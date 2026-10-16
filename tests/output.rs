@@ -132,3 +132,61 @@ fn recording_uses_utf8_and_keeps_command_text_quotes() {
     assert!(text.contains("<![CDATA[é字\r\n]]>"));
     fs::remove_dir_all(dir).unwrap();
 }
+
+#[test]
+fn parser_error_is_recorded_once_and_quit_preserves_the_output_file() {
+    use std::collections::VecDeque;
+    use wmic_compat::backend::{Management, ResolvedRequest};
+    struct Provider;
+    impl Management for Provider {
+        fn execute(&mut self, _: &ResolvedRequest) -> Result<ManagementResult, ManagementError> {
+            Ok(ManagementResult::Objects(ObjectSet {
+                objects: vec![Record {
+                    class: "Win32_OperatingSystem".into(),
+                    properties: vec![Property {
+                        name: "Caption".into(),
+                        cim_type: 8,
+                        value: CimValue::String("Test".into()),
+                        system: false,
+                        qualifiers: vec![],
+                    }],
+                    ..Default::default()
+                }],
+                schema: None,
+            }))
+        }
+    }
+    struct Input(VecDeque<InputEvent>);
+    impl InputSource for Input {
+        fn next_input(&mut self) -> Result<InputEvent, InputError> {
+            Ok(self.0.pop_front().unwrap_or(InputEvent::Eof))
+        }
+    }
+    let dir = directory();
+    let output = dir.join("out.txt");
+    let record = dir.join("record.xml");
+    let mut session = Session::new("HOST".into()).unwrap();
+    session.settings.output = output.to_str().unwrap().into();
+    session.settings.record = Some(record.to_str().unwrap().into());
+    let mut input = Input(
+        ["os get Caption", "/nonsense", "quit"]
+            .into_iter()
+            .map(|s| InputEvent::Line {
+                line: s.into(),
+                console: false,
+            })
+            .collect(),
+    );
+    let mut sink = RoutedOutput::new(Capture::default());
+    assert_eq!(
+        run_interactive(&mut session, &mut Provider, &mut input, &mut sink).exit_status,
+        0
+    );
+    let out = fs::read(output).unwrap();
+    assert!(out.windows(8).any(|s| s == [84, 0, 101, 0, 115, 0, 116, 0]));
+    let xml = String::from_utf8(fs::read(record).unwrap()).unwrap();
+    assert_eq!(xml.matches("<RECORD SEQUENCENUM=").count(), 2);
+    assert!(xml.contains("<COMMANDLINE>/nonsense</COMMANDLINE>"));
+    assert_eq!(xml.matches("Invalid Global Switch.").count(), 1);
+    fs::remove_dir_all(dir).unwrap();
+}

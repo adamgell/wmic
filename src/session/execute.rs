@@ -12,6 +12,24 @@ pub enum OutputStream {
     Stderr,
 }
 pub trait OutputSink {
+    fn consume_query_key(&mut self) -> Result<(), OutputError> {
+        Ok(())
+    }
+    fn reset_command(&mut self, _settings: &SessionSettings) -> Result<(), OutputError> {
+        Ok(())
+    }
+    fn clear_wait_prompt(&mut self) -> Result<(), OutputError> {
+        Ok(())
+    }
+    fn console_input(&self) -> bool {
+        false
+    }
+    fn command(&mut self, _command: &ParsedCommand) -> Result<(), OutputError> {
+        Ok(())
+    }
+    fn prompt(&mut self, text: &WideText) -> Result<(), OutputError> {
+        self.write(OutputStream::Stdout, text)
+    }
     fn configure(&mut self, _settings: &SessionSettings) -> Result<(), OutputError> {
         Ok(())
     }
@@ -45,14 +63,29 @@ pub trait OutputSink {
     fn write(&mut self, stream: OutputStream, text: &WideText) -> Result<(), OutputError>;
 }
 pub trait RepeatScheduler {
+    fn cancelled(&self) -> bool {
+        false
+    }
     /// False means cancellation; no WMI timeout is implied by this interval.
     fn wait(&mut self, seconds: u32) -> bool;
 }
 pub struct ThreadScheduler;
 impl RepeatScheduler for ThreadScheduler {
+    fn cancelled(&self) -> bool {
+        interrupted()
+    }
     fn wait(&mut self, seconds: u32) -> bool {
-        std::thread::sleep(std::time::Duration::from_secs(seconds.into()));
-        true
+        let end = std::time::Instant::now() + std::time::Duration::from_secs(seconds.into());
+        loop {
+            if interrupted() || console_key_pressed() {
+                return false;
+            }
+            let now = std::time::Instant::now();
+            if now >= end {
+                return true;
+            }
+            std::thread::sleep((end - now).min(std::time::Duration::from_millis(100)));
+        }
     }
 }
 #[derive(Clone, Debug, Default, PartialEq, Eq)]
@@ -66,6 +99,11 @@ pub struct CommandOutcome {
 pub struct NodeOutcome {
     pub node: WideText,
     pub exit_status: u32,
+}
+#[derive(Default)]
+struct ExecutionFrame {
+    every_count: u32,
+    settings: Option<SessionSettings>,
 }
 pub struct Session {
     sequence: u32,
@@ -99,6 +137,20 @@ impl Session {
         sink: &mut dyn OutputSink,
         scheduler: &mut dyn RepeatScheduler,
     ) -> CommandOutcome {
+        if sink.reset_command(&self.settings).is_err() {
+            return CommandOutcome {
+                exit_status: 0x80070005,
+                ..Default::default()
+            };
+        }
+        if parse_command(raw, mode)
+            .is_ok_and(|c| c.verb == Verb::Exit && !c.help && c.modifiers.is_empty())
+        {
+            return CommandOutcome {
+                exit_requested: true,
+                ..Default::default()
+            };
+        }
         if let Ok(command) = parse_command(raw, mode)
             && let Ok(settings) = self.settings.for_command(&command)
         {
@@ -112,9 +164,31 @@ impl Session {
                     0xABF7,
                 );
             }
+            if sink.command(&command).is_err() {
+                return CommandOutcome {
+                    exit_status: 0x80070005,
+                    ..Default::default()
+                };
+            }
             let context = super::presentation::context(
                 &command,
                 &settings,
+                &self.local_node,
+                self.sequence + 1,
+                0,
+            );
+            if sink.command_context(&context).is_err() {
+                return CommandOutcome {
+                    exit_status: 0x80070005,
+                    ..Default::default()
+                };
+            }
+        } else {
+            let mut command = ParsedCommand::empty(raw.clone());
+            command.command_line = crate::parse::diagnostic_command_line(raw, mode);
+            let context = super::presentation::context(
+                &command,
+                &self.settings,
                 &self.local_node,
                 self.sequence + 1,
                 0,
@@ -143,55 +217,128 @@ impl Session {
         sink: &mut dyn OutputSink,
         scheduler: &mut dyn RepeatScheduler,
     ) -> CommandOutcome {
-        let interval = parse_command(raw, mode)
-            .ok()
-            .filter(|c| !c.help)
-            .and_then(|command| {
-                command
-                    .modifiers
-                    .into_iter()
-                    .rev()
-                    .find(|m| m.name.eq_ascii_ignore_case("every"))
-            });
-        let interval = match interval {
-            None => None,
-            Some(m) => match m.value {
-                SwitchValue::Value(v) => match v.to_string_lossy().parse::<u32>() {
-                    Ok(n) if n > 0 => Some(n),
-                    _ => {
-                        return emit(
-                            sink,
-                            RenderedOutput {
-                                stderr: "Invalid GET switch.\r\r\n".into(),
-                                ..Default::default()
-                            },
-                            0xACB4,
-                        );
-                    }
+        let command = parse_command(raw, mode).ok().filter(|c| !c.help);
+        let every = command.as_ref().and_then(|c| {
+            c.modifiers
+                .iter()
+                .position(|m| m.name.eq_ascii_ignore_case("every"))
+        });
+        let repeat = command.as_ref().and_then(|c| {
+            c.modifiers
+                .iter()
+                .position(|m| m.name.eq_ascii_ignore_case("repeat"))
+        });
+        let switch_error = |sink: &mut dyn OutputSink, code, message: &str| {
+            emit(
+                sink,
+                RenderedOutput {
+                    stderr: format!("{message}\r\r\n").into(),
+                    ..Default::default()
                 },
-                _ => {
-                    return emit(
+                code,
+            )
+        };
+        if let Some(repeat) = repeat
+            && every.is_none_or(|every| repeat < every)
+        {
+            return switch_error(
+                sink,
+                0xB0A6,
+                "HINT: /REPEAT should always follow /EVERY switch.",
+            );
+        }
+        let number = |position: usize| {
+            command
+                .as_ref()
+                .and_then(|c| match &c.modifiers[position].value {
+                    SwitchValue::Value(v) => v.to_string_lossy().parse::<u32>().ok(),
+                    _ => None,
+                })
+        };
+        let interval = match every {
+            None => None,
+            Some(at) => match number(at) {
+                Some(n) => Some(n),
+                None => {
+                    return switch_error(
                         sink,
-                        RenderedOutput {
-                            stderr: "Invalid GET switch.\r\r\n".into(),
-                            ..Default::default()
-                        },
-                        0xACB4,
+                        0xACAE,
+                        "Invalid interval value specified with /EVERY switch.",
                     );
                 }
             },
         };
+        let limit = match repeat {
+            None => None,
+            Some(at) => match number(at) {
+                Some(n) if n > 0 => Some(n),
+                _ => return switch_error(sink, 0xABE8, "Invalid REPEAT count."),
+            },
+        };
         self.sequence = self.sequence.saturating_add(1);
-        let mut every_count = 0;
+        let mut frame = ExecutionFrame::default();
         loop {
-            let outcome = self.execute_once(raw, mode, backend, sink, every_count);
-            every_count += 1;
+            if scheduler.cancelled() {
+                return CommandOutcome {
+                    exit_status: 0xC000013A,
+                    ..Default::default()
+                };
+            }
+            let outcome = self.execute_once(raw, mode, backend, sink, scheduler, &mut frame);
+            frame.every_count += 1;
+            if interval.is_none()
+                && sink.console_input()
+                && command
+                    .as_ref()
+                    .is_some_and(|c| matches!(c.verb, Verb::Get | Verb::List | Verb::Assoc))
+                && !outcome.nodes.is_empty()
+                && sink.consume_query_key().is_err()
+            {
+                return CommandOutcome {
+                    exit_status: 0x80070005,
+                    ..outcome
+                };
+            }
             if outcome.exit_requested
                 || outcome.interactive_requested
                 || interval.is_none()
-                || !scheduler.wait(interval.unwrap_or(0))
+                || limit.is_some_and(|n| frame.every_count >= n)
             {
                 return outcome;
+            }
+            let wait_prompt =
+                limit.is_none() && interval.is_some_and(|n| n > 0) && sink.console_input();
+            if wait_prompt
+                && sink
+                    .prompt(&"Hit any key to break the cycle....".into())
+                    .is_err()
+            {
+                return CommandOutcome {
+                    exit_status: 0x80070005,
+                    ..outcome
+                };
+            }
+            if !scheduler.wait(interval.unwrap_or(0)) {
+                if wait_prompt && !scheduler.cancelled() && sink.clear_wait_prompt().is_err() {
+                    return CommandOutcome {
+                        exit_status: 0x80070005,
+                        ..outcome
+                    };
+                }
+                return if scheduler.cancelled() {
+                    CommandOutcome {
+                        exit_status: 0xC000013A,
+                        ..outcome
+                    }
+                } else {
+                    outcome
+                };
+            }
+            if wait_prompt && sink.clear_wait_prompt().is_err() {
+                return CommandOutcome {
+                    exit_status: 0x80070005,
+                    ..outcome
+                };
             }
         }
     }
@@ -294,16 +441,86 @@ impl Session {
         mode: EntryMode,
         backend: &mut dyn Management,
         sink: &mut dyn OutputSink,
-        every_count: u32,
+        scheduler: &mut dyn RepeatScheduler,
+        frame: &mut ExecutionFrame,
     ) -> CommandOutcome {
         let parsed = match parse_command(raw, mode) {
             Ok(p) => p,
             Err(e) => return emit(sink, render::render_parse_error(&e), e.code),
         };
-        let mut settings = match self.settings.for_command(&parsed) {
+        let every_count = frame.every_count;
+        let mut settings = match frame
+            .settings
+            .as_ref()
+            .map_or_else(|| self.settings.for_command(&parsed), |s| Ok(s.clone()))
+        {
             Ok(s) => s,
             Err(e) => return emit(sink, render::render_parse_error(&e), e.code),
         };
+        if !parsed.help && settings.user.is_some() && settings.password.is_none() {
+            if sink
+                .write(OutputStream::Stderr, &"Enter the password :".into())
+                .is_err()
+            {
+                return CommandOutcome {
+                    exit_status: 0x80070005,
+                    ..Default::default()
+                };
+            }
+            match sink.read_secret() {
+                Ok(value) => {
+                    settings.password =
+                        Some(crate::backend::SecretWide::new(value.unwrap_or_default()))
+                }
+                Err(_) => {
+                    return CommandOutcome {
+                        exit_status: 0x80070005,
+                        ..Default::default()
+                    };
+                }
+            }
+        }
+        frame.settings = Some(settings.clone());
+        if mode == EntryMode::Interactive && settings.role != self.settings.role {
+            match backend.load_aliases(&settings.role, None, &settings.locale) {
+                Err(_) | Ok(None) => {
+                    return emit(
+                        sink,
+                        RenderedOutput {
+                            stderr: "Invalid Role.\r\r\n".into(),
+                            ..Default::default()
+                        },
+                        0xAC61,
+                    );
+                }
+                Ok(Some(_)) => {}
+            }
+        }
+        if mode == EntryMode::Interactive {
+            let routes = (
+                self.settings.output.clone(),
+                self.settings.append.clone(),
+                self.settings.record.clone(),
+            );
+            self.settings = settings.clone();
+            if parsed.verb != Verb::Interactive {
+                (
+                    self.settings.output,
+                    self.settings.append,
+                    self.settings.record,
+                ) = routes;
+            }
+        }
+        if parsed.verb == Verb::Context && !parsed.help {
+            return emit(
+                sink,
+                RenderedOutput {
+                    stdout: super::presentation::context_text(&settings, &self.local_node),
+                    ..Default::default()
+                },
+                0,
+            );
+        }
         let selected = match &parsed.target {
             Some(Target::Alias(name)) => Some(name.clone()),
             _ => None,
@@ -429,29 +646,6 @@ impl Session {
                 0x8004100c,
             );
         };
-        if settings.user.is_some() && settings.password.is_none() {
-            if sink
-                .write(OutputStream::Stderr, &"Enter the password :".into())
-                .is_err()
-            {
-                return CommandOutcome {
-                    exit_status: 0x80070005,
-                    ..Default::default()
-                };
-            }
-            match sink.read_secret() {
-                Ok(value) => {
-                    settings.password =
-                        Some(crate::backend::SecretWide::new(value.unwrap_or_default()))
-                }
-                Err(_) => {
-                    return CommandOutcome {
-                        exit_status: 0x80070005,
-                        ..Default::default()
-                    };
-                }
-            }
-        }
         configure_connection(&mut request, &settings);
         request.render_context = Some(super::presentation::context(
             &parsed,
@@ -482,6 +676,10 @@ impl Session {
             vec![request.connection.node.clone()]
         };
         for target in &nodes {
+            if scheduler.cancelled() {
+                status = 0xC000013A;
+                break;
+            }
             request.connection.node = target.clone();
             let node = if target.eq_ascii_ignore_case(".") {
                 self.local_node.clone()
@@ -757,5 +955,27 @@ fn mark_node(result: &mut ManagementResult, node: &WideText) {
             }
         }
         _ => {}
+    }
+}
+
+fn interrupted() -> bool {
+    #[cfg(windows)]
+    {
+        crate::platform::windows::console::interrupted()
+    }
+    #[cfg(not(windows))]
+    {
+        false
+    }
+}
+
+fn console_key_pressed() -> bool {
+    #[cfg(windows)]
+    {
+        crate::platform::windows::console::key_pressed()
+    }
+    #[cfg(not(windows))]
+    {
+        false
     }
 }

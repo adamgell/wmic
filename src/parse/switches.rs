@@ -30,8 +30,16 @@ pub(super) fn modifier(
             "?",
         ][..],
         ModifierScope::Verb => match verb {
-            Verb::Get => &["value", "all", "translate", "every", "format", "?"],
-            Verb::List => &["translate", "every", "format", "?"],
+            Verb::Get => &[
+                "value",
+                "all",
+                "translate",
+                "every",
+                "repeat",
+                "format",
+                "?",
+            ],
+            Verb::List => &["translate", "every", "repeat", "format", "?"],
             Verb::Assoc => &[
                 "resultclass",
                 "resultrole",

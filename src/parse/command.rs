@@ -167,6 +167,9 @@ pub fn parse_command(raw: &WideText, mode: EntryMode) -> Result<ParsedCommand, P
         &[]
     };
     match command.verb {
+        Verb::Context if !body.is_empty() => {
+            return Err(ParseError::new(0xBBF1, "Invalid context syntax.", None));
+        }
         Verb::Get => {
             command.properties = lex::split_commas(body, false);
             if matches!(command.target, Some(Target::Class(_))) && !command.properties.is_empty() {
@@ -264,4 +267,18 @@ pub fn parse_command(raw: &WideText, mode: EntryMode) -> Result<ParsedCommand, P
         }
     }
     Ok(command)
+}
+
+/// Failed commands still get recorded; never expose a possibly supplied password.
+pub fn diagnostic_command_line(raw: &WideText, mode: EntryMode) -> WideText {
+    let units = command_units(raw, mode).unwrap_or(&raw.0);
+    if WideText(units.to_vec())
+        .to_string_lossy()
+        .to_ascii_lowercase()
+        .contains("/password")
+    {
+        "<invalid command; credentials redacted>".into()
+    } else {
+        WideText(units.to_vec())
+    }
 }

@@ -1,0 +1,310 @@
+{
+  "schema_version": 1,
+  "reference_sha256": "2EF794C4940AFEA56C6D6D3B9BC9E66965BC7333E79C5DCB2DEF3C0E36F0834C",
+  "cases": [
+    {
+      "id": "shell-eof",
+      "arguments": "",
+      "stdin_base64": "",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "shell-quit",
+      "arguments": "",
+      "stdin_base64": "cXVpdA0K",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "shell-exit",
+      "arguments": "",
+      "stdin_base64": "ZXhpdA0K",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "shell-context",
+      "arguments": "",
+      "stdin_base64": "Y29udGV4dA0KcXVpdA0K",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "shell-query",
+      "arguments": "",
+      "stdin_base64": "b3MgZ2V0IENhcHRpb24NCnF1aXQNCg==",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "shell-empty",
+      "arguments": "",
+      "stdin_base64": "DQpxdWl0DQo=",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "shell-error",
+      "arguments": "",
+      "stdin_base64": "V21pY0NvbXBhdE1pc3NpbmcgZ2V0IENhcHRpb24NCmV4aXQNCg==",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "shell-help",
+      "arguments": "",
+      "stdin_base64": "Lz8NCnF1aXQNCg==",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "shell-settings",
+      "arguments": "",
+      "stdin_base64": "L25hbWVzcGFjZTpyb290XGRlZmF1bHQNCmNvbnRleHQNCi9uYW1lc3BhY2U6DQpjb250ZXh0DQpxdWl0DQo=",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "shell-inline-settings",
+      "arguments": "",
+      "stdin_base64": "L3RyYWNlOm9mZiAvYWdncmVnYXRlOm9mZiBjb250ZXh0DQpjb250ZXh0DQpxdWl0DQo=",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "shell-node-reset",
+      "arguments": "",
+      "stdin_base64": "L25vZGU6Lg0KY29udGV4dA0KL25vZGU6DQpjb250ZXh0DQpxdWl0DQo=",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "shell-trailing-quit",
+      "arguments": "",
+      "stdin_base64": "cXVpdA0Kb3MgZ2V0IENhcHRpb24NCg==",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "shell-args-settings",
+      "arguments": "/aggregate:off",
+      "stdin_base64": "Y29udGV4dA0KcXVpdA0K",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "shell-errors-before-eof",
+      "arguments": "",
+      "stdin_base64": "TWlzc2luZw0K",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "context",
+      "arguments": "CONTEXT",
+      "stdin_base64": "",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "context-trailing",
+      "arguments": "CONTEXT foo",
+      "stdin_base64": "",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "every-repeat2",
+      "arguments": "os get Caption /every:1 /repeat:2",
+      "stdin_base64": "",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "repeat-no-every",
+      "arguments": "os get Caption /repeat:2",
+      "stdin_base64": "",
+      "operation": "read_only",
+      "timeout_ms": 3000
+    },
+    {
+      "id": "repeat-zero",
+      "arguments": "os get Caption /every:1 /repeat:0",
+      "stdin_base64": "",
+      "operation": "read_only",
+      "timeout_ms": 3000
+    },
+    {
+      "id": "every-zero",
+      "arguments": "os get Caption /every:0 /repeat:2",
+      "stdin_base64": "",
+      "operation": "read_only",
+      "timeout_ms": 3000
+    },
+    {
+      "id": "repeat-invalid",
+      "arguments": "os get Caption /every:1 /repeat:bad",
+      "stdin_base64": "",
+      "operation": "read_only",
+      "timeout_ms": 3000
+    },
+    {
+      "id": "every-list",
+      "arguments": "os list brief /every:1 /repeat:2",
+      "stdin_base64": "",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "context-user",
+      "arguments": "/user:WmicCompatMissing CONTEXT",
+      "stdin_base64": "DQo=",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "context-ns-relative",
+      "arguments": "/namespace:root\\default CONTEXT",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "context-ns-absolute",
+      "arguments": "/namespace:\\\\root\\default CONTEXT",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "context-role-relative",
+      "arguments": "/role:root\\cli CONTEXT",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "context-role-absolute",
+      "arguments": "/role:\\\\root\\cli CONTEXT",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "context-ns-empty",
+      "arguments": "/namespace:\"\" CONTEXT",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "context-node-empty",
+      "arguments": "/node:\"\" CONTEXT",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "context-aggregate-empty",
+      "arguments": "/aggregate:\"\" CONTEXT",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "context-interactive-empty",
+      "arguments": "/interactive:\"\" CONTEXT",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "auth-empty",
+      "arguments": "/authlevel:\"\" CONTEXT",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "imp-empty",
+      "arguments": "/implevel:\"\" CONTEXT",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "priv-empty",
+      "arguments": "/privileges:\"\" CONTEXT",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "trace-empty",
+      "arguments": "/trace:\"\" CONTEXT",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "failfast-empty",
+      "arguments": "/failfast:\"\" CONTEXT",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "every-invalid",
+      "arguments": "os get Caption /every:bad /repeat:2",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "repeat-before-every",
+      "arguments": "os get Caption /repeat:2 /every:0",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "shell-reset-quoted",
+      "arguments": "",
+      "operation": "read_only",
+      "timeout_ms": 5000,
+      "stdin_base64": "L25hbWVzcGFjZTpcXHJvb3RcZGVmYXVsdA0KL25hbWVzcGFjZToiIg0KY29udGV4dA0KcXVpdA0K"
+    },
+    {
+      "id": "shell-role-relative",
+      "arguments": "",
+      "operation": "read_only",
+      "timeout_ms": 5000,
+      "stdin_base64": "L3JvbGU6cm9vdFxjbGkNCmNvbnRleHQNCnF1aXQNCg=="
+    },
+    {
+      "id": "bare-namespace",
+      "arguments": "/namespace: /aggregate:on CONTEXT",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "bare-node",
+      "arguments": "/node: /aggregate:on CONTEXT",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "bare-role",
+      "arguments": "/role: /aggregate:on CONTEXT",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "shell-role-invalid-eof",
+      "arguments": "",
+      "operation": "read_only",
+      "timeout_ms": 5000,
+      "stdin_base64": "L3JvbGU6cm9vdFxjbGkNCg=="
+    },
+    {
+      "id": "shell-bare-namespace-eof",
+      "arguments": "",
+      "operation": "read_only",
+      "timeout_ms": 5000,
+      "stdin_base64": "L25hbWVzcGFjZToNCg=="
+    },
+    {
+      "id": "shell-bare-node-eof",
+      "arguments": "",
+      "operation": "read_only",
+      "timeout_ms": 5000,
+      "stdin_base64": "L25vZGU6DQo="
+    }
+  ]
+}

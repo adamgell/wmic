@@ -84,7 +84,7 @@ fn write_file(file: &mut FileDestination, text: &WideText) -> Result<(), OutputE
         .write_all(&encode_output(text, &file.profile)?)
         .map_err(io_error)
 }
-#[derive(Default)]
+#[derive(Default, Clone)]
 struct RecordOutput {
     context: Option<RenderContext>,
     node: WideText,
@@ -96,7 +96,12 @@ pub struct RoutedOutput<T: OutputSink> {
     append: Option<FileDestination>,
     append_name: Option<WideText>,
     managed: bool,
-    record: Option<File>,
+    record_name: Option<WideText>,
+    record_enabled: bool,
+    history: Vec<RecordOutput>,
+    output_name: Option<WideText>,
+    inherited_output: bool,
+    last_iteration: u32,
     clipboard: bool,
     clipboard_append: bool,
     clipboard_text: WideText,
@@ -111,7 +116,12 @@ impl<T: OutputSink> RoutedOutput<T> {
             append: None,
             append_name: None,
             managed: false,
-            record: None,
+            record_name: None,
+            record_enabled: true,
+            history: vec![],
+            output_name: None,
+            inherited_output: false,
+            last_iteration: 0,
             clipboard: false,
             clipboard_append: false,
             clipboard_text: WideText::default(),
@@ -121,8 +131,58 @@ impl<T: OutputSink> RoutedOutput<T> {
     }
 }
 impl<T: OutputSink> OutputSink for RoutedOutput<T> {
+    fn consume_query_key(&mut self) -> Result<(), OutputError> {
+        self.inner.consume_query_key()
+    }
+    fn clear_wait_prompt(&mut self) -> Result<(), OutputError> {
+        self.inner.clear_wait_prompt()
+    }
+    fn reset_command(&mut self, s: &SessionSettings) -> Result<(), OutputError> {
+        self.output = None;
+        self.append = None;
+        self.append_name = None;
+        self.output_name = None;
+        self.records.clear();
+        self.empty = true;
+        self.managed = false;
+        self.record_enabled = true;
+        self.inherited_output = false;
+        self.clipboard = false;
+        self.clipboard_append = false;
+        self.clipboard_text = WideText::default();
+        if self.record_name != s.record {
+            self.history.clear();
+        }
+        self.record_name = s.record.clone();
+        Ok(())
+    }
+    fn console_input(&self) -> bool {
+        self.inner.console_input()
+    }
     fn record_user(&self) -> WideText {
         self.inner.record_user()
+    }
+    fn prompt(&mut self, text: &WideText) -> Result<(), OutputError> {
+        self.inner.prompt(text)
+    }
+    fn command(&mut self, command: &ParsedCommand) -> Result<(), OutputError> {
+        self.record_enabled = !matches!(command.verb, Verb::Interactive | Verb::Exit)
+            && !command
+                .modifiers
+                .iter()
+                .any(|m| m.name.eq_ascii_ignore_case("every"));
+        self.inherited_output = !command
+            .modifiers
+            .iter()
+            .any(|m| m.scope == ModifierScope::Global && m.name.eq_ascii_ignore_case("output"));
+        if command
+            .modifiers
+            .iter()
+            .any(|m| m.scope == ModifierScope::Global && m.name.eq_ascii_ignore_case("record"))
+        {
+            self.history.clear();
+        }
+        Ok(())
     }
     fn read_line(&mut self) -> Result<Option<WideText>, OutputError> {
         self.inner.read_line()
@@ -133,7 +193,12 @@ impl<T: OutputSink> OutputSink for RoutedOutput<T> {
     fn configure(&mut self, s: &SessionSettings) -> Result<(), OutputError> {
         self.output = None;
         self.append = None;
-        self.record = None;
+        if self.record_name != s.record {
+            self.history.clear();
+        }
+        self.record_name = s.record.clone();
+        self.output_name = None;
+        self.last_iteration = 0;
         self.records.clear();
         self.clipboard_text = WideText::default();
         self.empty = true;
@@ -142,13 +207,20 @@ impl<T: OutputSink> OutputSink for RoutedOutput<T> {
         self.clipboard = s.output.eq_ascii_ignore_case("clipboard");
         self.clipboard_append = s.append.eq_ascii_ignore_case("clipboard");
         if !s.output.eq_ascii_ignore_case("stdout") && !self.clipboard {
-            self.output = Some(open_file(&s.output, false)?)
+            self.output = Some(open_file(&s.output, false)?);
+            self.output_name = Some(s.output.clone());
         }
         if !s.append.eq_ascii_ignore_case("stdout") && !self.clipboard_append {
             self.append_name = Some(s.append.clone());
         }
-        if let Some(name) = &s.record {
-            self.record = Some(File::create(path(name)).map_err(io_error)?)
+        if let Some(name) = &self.record_name {
+            let p = path(name);
+            if p.is_dir()
+                || p.parent()
+                    .is_some_and(|p| !p.as_os_str().is_empty() && !p.is_dir())
+            {
+                return Err(OutputError("Invalid record file".into()));
+            }
         }
         Ok(())
     }
@@ -165,6 +237,12 @@ impl<T: OutputSink> OutputSink for RoutedOutput<T> {
             self.records.pop();
         }
         self.managed = true;
+        if context.every_count > self.last_iteration
+            && let Some(name) = &self.output_name
+        {
+            self.output = Some(open_file(name, false)?);
+        }
+        self.last_iteration = context.every_count;
         self.records.push(RecordOutput {
             context: Some(context.clone()),
             node: node.clone(),
@@ -219,7 +297,7 @@ impl<T: OutputSink> OutputSink for RoutedOutput<T> {
             if let Some(file) = &mut self.output {
                 write_file(file, &"\r\n".into())?;
             }
-            if self.record.is_some() {
+            if self.record_name.is_some() && self.record_enabled {
                 self.inner
                     .write(OutputStream::Stdout, &"\r\r\n\r\r\n".into())?;
             }
@@ -228,6 +306,9 @@ impl<T: OutputSink> OutputSink for RoutedOutput<T> {
             }
         }
         if let Some(file) = &mut self.output {
+            if self.inherited_output && !self.empty {
+                write_file(file, &"\r\n".into())?;
+            }
             file.file.flush().map_err(io_error)?;
         }
         if let Some(file) = &mut self.append {
@@ -237,8 +318,17 @@ impl<T: OutputSink> OutputSink for RoutedOutput<T> {
             self.inner.clipboard(&self.clipboard_text)?;
         }
         let user = self.record_user();
-        if let Some(file) = &mut self.record {
-            let text = record_xml(&user, &self.records);
+        if self.record_enabled
+            && let Some(name) = &self.record_name
+        {
+            self.history.extend(
+                self.records
+                    .iter()
+                    .filter(|r| !r.text.0.is_empty())
+                    .cloned(),
+            );
+            let text = record_xml(&user, &self.history);
+            let mut file = File::create(path(name)).map_err(io_error)?;
             file.write_all(&encode_output(&text, &DestinationProfile::pipe(65001))?)
                 .map_err(io_error)?;
             file.flush().map_err(io_error)?;

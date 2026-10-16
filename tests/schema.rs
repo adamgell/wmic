@@ -219,8 +219,8 @@ fn live_role_loader_overrides_packaged_alias_and_connection_defaults() {
     }
     let mut backend = Backend::default();
     let out = Session::new(wide("LOCAL")).unwrap().execute(
-        &wide("/role:root\\Custom Sample get Caption"),
-        EntryMode::Interactive,
+        &wide(r"wmic.exe /role:\\root\Custom Sample get Caption"),
+        EntryMode::Process,
         &mut backend,
         &mut Sink,
     );

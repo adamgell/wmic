@@ -85,21 +85,41 @@ impl SessionSettings {
                 "record" => s.record = value,
                 "namespace" => {
                     s.explicit_namespace = value.is_some();
-                    s.namespace = value.unwrap_or_else(|| defaults.namespace.clone());
+                    s.namespace = namespace(
+                        value,
+                        &s.namespace,
+                        &defaults.namespace,
+                        m.raw_value.as_ref(),
+                        0xAC4B,
+                        "Invalid Namespace.",
+                    )?;
                 }
                 "role" => {
                     s.explicit_role = value.is_some();
-                    s.role = value.unwrap_or_else(|| defaults.role.clone());
+                    s.role = namespace(
+                        value,
+                        &s.role,
+                        &defaults.role,
+                        m.raw_value.as_ref(),
+                        0xAC61,
+                        "Invalid Role.",
+                    )?;
                 }
                 "node" => {
                     s.explicit_nodes = value.is_some();
                     s.nodes = match value {
                         Some(v) => super::load_nodes(&v)
                             .map_err(|e| setting_error(e.code, &e.message.to_string_lossy()))?,
+                        None if m.raw_value.as_ref().is_some_and(|v| v.0.is_empty()) => {
+                            return Err(setting_error(0xAC47, "Invalid Node Name."));
+                        }
                         None => defaults.nodes.clone(),
                     };
                 }
                 "authlevel" => {
+                    if value.is_none() {
+                        return Err(setting_error(0xAC49, "Invalid Authentication Level."));
+                    }
                     s.authentication = level(
                         value.as_ref(),
                         &[
@@ -117,6 +137,9 @@ impl SessionSettings {
                     .ok_or_else(|| setting_error(0xAC49, "Invalid Authentication Level."))?;
                 }
                 "implevel" => {
+                    if value.is_none() {
+                        return Err(setting_error(0xAC48, "Invalid Impersonation Level."));
+                    }
                     s.impersonation = level(
                         value.as_ref(),
                         &["anonymous", "identify", "impersonate", "delegate"],
@@ -127,6 +150,12 @@ impl SessionSettings {
                 }
                 "locale" => s.locale = value.unwrap_or_else(|| defaults.locale.clone()),
                 "privileges" => {
+                    if value.is_none() {
+                        return Err(setting_error(
+                            0xAC5E,
+                            "Invalid Privileges Option Value (ENABLE|DISABLE expected).",
+                        ));
+                    }
                     s.privileges =
                         toggle(value.as_ref(), "enable", "disable", true).ok_or_else(|| {
                             setting_error(
@@ -136,6 +165,12 @@ impl SessionSettings {
                         })?
                 }
                 "failfast" => {
+                    if value.is_none() {
+                        return Err(setting_error(
+                            0xAC68,
+                            "Invalid FailFast Option Value (ON|OFF expected).",
+                        ));
+                    }
                     if let Some(ms) = value
                         .as_ref()
                         .and_then(|v| v.to_string_lossy().parse::<u32>().ok())
@@ -154,20 +189,36 @@ impl SessionSettings {
                     }
                 }
                 "interactive" => {
-                    s.interactive = toggle(value.as_ref(), "on", "off", false).ok_or_else(|| {
-                        setting_error(
+                    if value.is_none() {
+                        return Err(setting_error(
                             0xAC66,
                             "Invalid Interactive Option Value (ON|OFF expected).",
-                        )
-                    })?
+                        ));
+                    }
+                    s.interactive = value
+                        .as_ref()
+                        .and_then(|v| toggle(Some(v), "on", "off", false))
+                        .ok_or_else(|| {
+                            setting_error(
+                                0xAC66,
+                                "Invalid Interactive Option Value (ON|OFF expected).",
+                            )
+                        })?
                 }
                 "trace" | "aggregate" => {
-                    let v = toggle(value.as_ref(), "on", "off", name == "aggregate")
-                        .ok_or_else(|| setting_error(0xAC5D, "Invalid Global Switch."))?;
-                    match name.as_str() {
-                        "trace" => s.trace = v,
-                        "failfast" => s.failfast = v,
-                        _ => s.aggregate = v,
+                    let (code, message) = if name == "trace" {
+                        (0xAC54, "Invalid Trace Option Value (ON|OFF expected).")
+                    } else {
+                        (0xAC6F, "Invalid Aggregate Option Value (ON|OFF expected).")
+                    };
+                    let v = value
+                        .as_ref()
+                        .and_then(|v| toggle(Some(v), "on", "off", false))
+                        .ok_or_else(|| setting_error(code, message))?;
+                    if name == "trace" {
+                        s.trace = v
+                    } else {
+                        s.aggregate = v
                     }
                 }
                 "user" => {
@@ -210,5 +261,26 @@ fn setting_error(code: u32, message: &str) -> crate::model::ParseError {
         code,
         message: message.into(),
         token: None,
+    }
+}
+
+fn namespace(
+    value: Option<WideText>,
+    current: &WideText,
+    default: &WideText,
+    raw: Option<&WideText>,
+    code: u32,
+    message: &str,
+) -> Result<WideText, crate::model::ParseError> {
+    match value {
+        None if raw.is_some_and(|v| v.0.is_empty()) => Err(setting_error(code, message)),
+        None => Ok(default.clone()),
+        Some(v) if v.0.starts_with(&[92, 92]) => Ok(WideText(v.0[2..].to_vec())),
+        Some(v) => {
+            let mut result = current.clone();
+            result.0.push(92);
+            result.0.extend(v.0);
+            Ok(result)
+        }
     }
 }

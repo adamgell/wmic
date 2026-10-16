@@ -1,10 +1,10 @@
 use crate::model::WideText;
 #[derive(Debug)]
-pub struct InputError {
+pub struct NodeInputError {
     pub code: u32,
     pub message: WideText,
 }
-pub fn load_nodes(value: &WideText) -> Result<Vec<WideText>, InputError> {
+pub fn load_nodes(value: &WideText) -> Result<Vec<WideText>, NodeInputError> {
     let mut nodes = vec![];
     for part in value.0.split(|u| *u == 44) {
         let mut part = WideText(part.to_vec()).trim_ascii();
@@ -38,7 +38,7 @@ pub fn load_nodes(value: &WideText) -> Result<Vec<WideText>, InputError> {
             } else {
                 String::from_utf8(data)
                     .map(WideText::from)
-                    .map_err(|_| InputError {
+                    .map_err(|_| NodeInputError {
                         code: 0x80070057,
                         message: "Invalid node file encoding.".into(),
                     })?
@@ -62,18 +62,19 @@ fn insert(nodes: &mut Vec<WideText>, node: WideText) {
         nodes.push(node)
     }
 }
-fn read_file(path: &WideText) -> Result<Vec<u8>, InputError> {
+fn read_file(path: &WideText) -> Result<Vec<u8>, NodeInputError> {
     #[cfg(windows)]
     let path = {
         use std::os::windows::ffi::OsStringExt;
         std::path::PathBuf::from(std::ffi::OsString::from_wide(&path.0))
     };
     #[cfg(not(windows))]
-    let path = std::path::PathBuf::from(String::from_utf16(&path.0).map_err(|_| InputError {
-        code: 0x80070057,
-        message: "Invalid file name.".into(),
-    })?);
-    std::fs::read(path).map_err(|e| InputError {
+    let path =
+        std::path::PathBuf::from(String::from_utf16(&path.0).map_err(|_| NodeInputError {
+            code: 0x80070057,
+            message: "Invalid file name.".into(),
+        })?);
+    std::fs::read(path).map_err(|e| NodeInputError {
         code: 0x80070000 | e.raw_os_error().unwrap_or(2) as u32,
         message: "Unable to read node list file.".into(),
     })

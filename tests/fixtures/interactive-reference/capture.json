@@ -1,0 +1,943 @@
+{
+  "schema_version": 1,
+  "profile": {
+    "role": "reference",
+    "executable": "C:\\Windows\\System32\\wbem\\WMIC.exe",
+    "executable_sha256": "2EF794C4940AFEA56C6D6D3B9BC9E66965BC7333E79C5DCB2DEF3C0E36F0834C",
+    "version": "10.0.26100.1 (WinBuild.160101.0800)",
+    "signature": "Valid",
+    "computer": "DESKTOP-N4H9E7R",
+    "identity": "NT AUTHORITY\\SYSTEM",
+    "launcher_architecture": "ARM64",
+    "culture": "en-US",
+    "ui_culture": "en-US",
+    "ansi_codepage": 1252,
+    "oem_codepage": 437,
+    "console_output_codepage": 437,
+    "directory": "C:\\",
+    "launch_api": "CreateProcessW",
+    "output_mode": "native pipes"
+  },
+  "cases": [
+    {
+      "id": "shell-eof",
+      "arguments_utf16_base64": "",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiAA==",
+      "state": "completed",
+      "exit_status": 0,
+      "duration_ms": 79,
+      "process_id": 896,
+      "normalizations": [],
+      "stdout": {
+        "file": "shell-eof.stdout.bin",
+        "bytes": 14,
+        "sha256": "446f923ebde011928989b1b0db2e9748ff3b8535fa7eab009b8e940bb8d49977"
+      },
+      "stderr": {
+        "file": "shell-eof.stderr.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "id": "shell-quit",
+      "arguments_utf16_base64": "",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiAA==",
+      "state": "completed",
+      "exit_status": 0,
+      "duration_ms": 78,
+      "process_id": 9676,
+      "normalizations": [],
+      "stdout": {
+        "file": "shell-quit.stdout.bin",
+        "bytes": 14,
+        "sha256": "446f923ebde011928989b1b0db2e9748ff3b8535fa7eab009b8e940bb8d49977"
+      },
+      "stderr": {
+        "file": "shell-quit.stderr.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "id": "shell-exit",
+      "arguments_utf16_base64": "",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiAA==",
+      "state": "completed",
+      "exit_status": 0,
+      "duration_ms": 80,
+      "process_id": 3488,
+      "normalizations": [],
+      "stdout": {
+        "file": "shell-exit.stdout.bin",
+        "bytes": 14,
+        "sha256": "446f923ebde011928989b1b0db2e9748ff3b8535fa7eab009b8e940bb8d49977"
+      },
+      "stderr": {
+        "file": "shell-exit.stderr.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "id": "shell-context",
+      "arguments_utf16_base64": "",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiAA==",
+      "state": "completed",
+      "exit_status": 0,
+      "duration_ms": 77,
+      "process_id": 8820,
+      "normalizations": [],
+      "stdout": {
+        "file": "shell-context.stdout.bin",
+        "bytes": 561,
+        "sha256": "812d06067cfa247c9316773192d297a631683e028f33bdfcbba3d3a765d0c51f"
+      },
+      "stderr": {
+        "file": "shell-context.stderr.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "id": "shell-query",
+      "arguments_utf16_base64": "",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiAA==",
+      "state": "completed",
+      "exit_status": 0,
+      "duration_ms": 136,
+      "process_id": 1504,
+      "normalizations": [],
+      "stdout": {
+        "file": "shell-query.stdout.bin",
+        "bytes": 89,
+        "sha256": "23c17bb263352252e20cd7f1ee97d982d4db64175fd704505f490215cb5a6486"
+      },
+      "stderr": {
+        "file": "shell-query.stderr.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "id": "shell-empty",
+      "arguments_utf16_base64": "",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiAA==",
+      "state": "completed",
+      "exit_status": 0,
+      "duration_ms": 81,
+      "process_id": 13944,
+      "normalizations": [],
+      "stdout": {
+        "file": "shell-empty.stdout.bin",
+        "bytes": 28,
+        "sha256": "f94b4bce2259e9b4ebe30bc3214db0a51174cbcf16e7e689ed3cdee852d3953c"
+      },
+      "stderr": {
+        "file": "shell-empty.stderr.bin",
+        "bytes": 31,
+        "sha256": "ad984318e3725080f0074ce3c9c80209622327721e4483ef68f3d12ae02acd01"
+      }
+    },
+    {
+      "id": "shell-error",
+      "arguments_utf16_base64": "",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiAA==",
+      "state": "completed",
+      "exit_status": 0,
+      "duration_ms": 94,
+      "process_id": 14584,
+      "normalizations": [],
+      "stdout": {
+        "file": "shell-error.stdout.bin",
+        "bytes": 28,
+        "sha256": "f94b4bce2259e9b4ebe30bc3214db0a51174cbcf16e7e689ed3cdee852d3953c"
+      },
+      "stderr": {
+        "file": "shell-error.stderr.bin",
+        "bytes": 39,
+        "sha256": "927d2c6d90416d519c840ae9b5dcffe30800d7df3ab6cb99c76b18c6ec6d19e9"
+      }
+    },
+    {
+      "id": "shell-help",
+      "arguments_utf16_base64": "",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiAA==",
+      "state": "completed",
+      "exit_status": 0,
+      "duration_ms": 142,
+      "process_id": 13268,
+      "normalizations": [],
+      "stdout": {
+        "file": "shell-help.stdout.bin",
+        "bytes": 7407,
+        "sha256": "084de104ae0c32d42d67cfbd289611efb17f066f3e8744448b1319c3b37c54fd"
+      },
+      "stderr": {
+        "file": "shell-help.stderr.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "id": "shell-settings",
+      "arguments_utf16_base64": "",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiAA==",
+      "state": "completed",
+      "exit_status": 0,
+      "duration_ms": 71,
+      "process_id": 6076,
+      "normalizations": [],
+      "stdout": {
+        "file": "shell-settings.stdout.bin",
+        "bytes": 1162,
+        "sha256": "125af1897bc21b4e122d4dcaf8610f0323006c483f7871026349d28c64fa2ace"
+      },
+      "stderr": {
+        "file": "shell-settings.stderr.bin",
+        "bytes": 21,
+        "sha256": "7af52c59adc4c903e5e68a5c090483e573be34a6cd5f3291670a38a187662fc0"
+      }
+    },
+    {
+      "id": "shell-inline-settings",
+      "arguments_utf16_base64": "",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiAA==",
+      "state": "completed",
+      "exit_status": 0,
+      "duration_ms": 70,
+      "process_id": 4652,
+      "normalizations": [],
+      "stdout": {
+        "file": "shell-inline-settings.stdout.bin",
+        "bytes": 1110,
+        "sha256": "4877acc4bbc67cec193ac62fd38034c0cfb905fe6316f82584a0b7b2a5c46249"
+      },
+      "stderr": {
+        "file": "shell-inline-settings.stderr.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "id": "shell-node-reset",
+      "arguments_utf16_base64": "",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiAA==",
+      "state": "completed",
+      "exit_status": 0,
+      "duration_ms": 85,
+      "process_id": 10356,
+      "normalizations": [],
+      "stdout": {
+        "file": "shell-node-reset.stdout.bin",
+        "bytes": 1136,
+        "sha256": "b59fc9ed175d2642849e9955a9b1e0021b099de24f69fa0005d7393b84df5d31"
+      },
+      "stderr": {
+        "file": "shell-node-reset.stderr.bin",
+        "bytes": 21,
+        "sha256": "a459c3026cf6ae7e981edf8bef3a4c579c3ed4f4ae905b6280f7d7b018e414e6"
+      }
+    },
+    {
+      "id": "shell-trailing-quit",
+      "arguments_utf16_base64": "",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiAA==",
+      "state": "completed",
+      "exit_status": 0,
+      "duration_ms": 68,
+      "process_id": 13936,
+      "normalizations": [],
+      "stdout": {
+        "file": "shell-trailing-quit.stdout.bin",
+        "bytes": 14,
+        "sha256": "446f923ebde011928989b1b0db2e9748ff3b8535fa7eab009b8e940bb8d49977"
+      },
+      "stderr": {
+        "file": "shell-trailing-quit.stderr.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "id": "shell-args-settings",
+      "arguments_utf16_base64": "LwBhAGcAZwByAGUAZwBhAHQAZQA6AG8AZgBmAA==",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiACAALwBhAGcAZwByAGUAZwBhAHQAZQA6AG8AZgBmAA==",
+      "state": "completed",
+      "exit_status": 0,
+      "duration_ms": 78,
+      "process_id": 14476,
+      "normalizations": [],
+      "stdout": {
+        "file": "shell-args-settings.stdout.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "file": "shell-args-settings.stderr.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "id": "shell-errors-before-eof",
+      "arguments_utf16_base64": "",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiAA==",
+      "state": "completed",
+      "exit_status": 44135,
+      "duration_ms": 84,
+      "process_id": 11936,
+      "normalizations": [],
+      "stdout": {
+        "file": "shell-errors-before-eof.stdout.bin",
+        "bytes": 28,
+        "sha256": "f94b4bce2259e9b4ebe30bc3214db0a51174cbcf16e7e689ed3cdee852d3953c"
+      },
+      "stderr": {
+        "file": "shell-errors-before-eof.stderr.bin",
+        "bytes": 29,
+        "sha256": "ff8d5dea4d4d0888fa8c4cacebc70355d69af23eb177be14daf38688df451413"
+      }
+    },
+    {
+      "id": "context",
+      "arguments_utf16_base64": "QwBPAE4AVABFAFgAVAA=",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiACAAQwBPAE4AVABFAFgAVAA=",
+      "state": "completed",
+      "exit_status": 0,
+      "duration_ms": 74,
+      "process_id": 11972,
+      "normalizations": [],
+      "stdout": {
+        "file": "context.stdout.bin",
+        "bytes": 534,
+        "sha256": "762a6351bfd56046441bfe1ad07db3b896129415d69bba302f517f4635a6b567"
+      },
+      "stderr": {
+        "file": "context.stderr.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "id": "context-trailing",
+      "arguments_utf16_base64": "QwBPAE4AVABFAFgAVAAgAGYAbwBvAA==",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiACAAQwBPAE4AVABFAFgAVAAgAGYAbwBvAA==",
+      "state": "completed",
+      "exit_status": 48113,
+      "duration_ms": 73,
+      "process_id": 2276,
+      "normalizations": [],
+      "stdout": {
+        "file": "context-trailing.stdout.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "file": "context-trailing.stderr.bin",
+        "bytes": 26,
+        "sha256": "534787fcd9f557b5c12b7d24f66561985e669ca12e07f32507223c54224f45d2"
+      }
+    },
+    {
+      "id": "every-repeat2",
+      "arguments_utf16_base64": "bwBzACAAZwBlAHQAIABDAGEAcAB0AGkAbwBuACAALwBlAHYAZQByAHkAOgAxACAALwByAGUAcABlAGEAdAA6ADIA",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiACAAbwBzACAAZwBlAHQAIABDAGEAcAB0AGkAbwBuACAALwBlAHYAZQByAHkAOgAxACAALwByAGUAcABlAGEAdAA6ADIA",
+      "state": "completed",
+      "exit_status": 0,
+      "duration_ms": 1137,
+      "process_id": 11256,
+      "normalizations": [],
+      "stdout": {
+        "file": "every-repeat2.stdout.bin",
+        "bytes": 122,
+        "sha256": "2b9cee32baac40a8dc481ce5b66e384665134606e130878d22458a100a69b554"
+      },
+      "stderr": {
+        "file": "every-repeat2.stderr.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "id": "repeat-no-every",
+      "arguments_utf16_base64": "bwBzACAAZwBlAHQAIABDAGEAcAB0AGkAbwBuACAALwByAGUAcABlAGEAdAA6ADIA",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiACAAbwBzACAAZwBlAHQAIABDAGEAcAB0AGkAbwBuACAALwByAGUAcABlAGEAdAA6ADIA",
+      "state": "completed",
+      "exit_status": 45222,
+      "duration_ms": 90,
+      "process_id": 7304,
+      "normalizations": [],
+      "stdout": {
+        "file": "repeat-no-every.stdout.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "file": "repeat-no-every.stderr.bin",
+        "bytes": 52,
+        "sha256": "08e0f571692674d0ad51c5575d70c570be53fc07abe344ef15357f1018500bc5"
+      }
+    },
+    {
+      "id": "repeat-zero",
+      "arguments_utf16_base64": "bwBzACAAZwBlAHQAIABDAGEAcAB0AGkAbwBuACAALwBlAHYAZQByAHkAOgAxACAALwByAGUAcABlAGEAdAA6ADAA",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiACAAbwBzACAAZwBlAHQAIABDAGEAcAB0AGkAbwBuACAALwBlAHYAZQByAHkAOgAxACAALwByAGUAcABlAGEAdAA6ADAA",
+      "state": "completed",
+      "exit_status": 44008,
+      "duration_ms": 95,
+      "process_id": 5544,
+      "normalizations": [],
+      "stdout": {
+        "file": "repeat-zero.stdout.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "file": "repeat-zero.stderr.bin",
+        "bytes": 24,
+        "sha256": "3be3539ba19789c9bbd2a8a60473c2fba9902c695c6e13bd8053a767a2ddba65"
+      }
+    },
+    {
+      "id": "every-zero",
+      "arguments_utf16_base64": "bwBzACAAZwBlAHQAIABDAGEAcAB0AGkAbwBuACAALwBlAHYAZQByAHkAOgAwACAALwByAGUAcABlAGEAdAA6ADIA",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiACAAbwBzACAAZwBlAHQAIABDAGEAcAB0AGkAbwBuACAALwBlAHYAZQByAHkAOgAwACAALwByAGUAcABlAGEAdAA6ADIA",
+      "state": "completed",
+      "exit_status": 0,
+      "duration_ms": 131,
+      "process_id": 404,
+      "normalizations": [],
+      "stdout": {
+        "file": "every-zero.stdout.bin",
+        "bytes": 122,
+        "sha256": "2b9cee32baac40a8dc481ce5b66e384665134606e130878d22458a100a69b554"
+      },
+      "stderr": {
+        "file": "every-zero.stderr.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "id": "repeat-invalid",
+      "arguments_utf16_base64": "bwBzACAAZwBlAHQAIABDAGEAcAB0AGkAbwBuACAALwBlAHYAZQByAHkAOgAxACAALwByAGUAcABlAGEAdAA6AGIAYQBkAA==",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiACAAbwBzACAAZwBlAHQAIABDAGEAcAB0AGkAbwBuACAALwBlAHYAZQByAHkAOgAxACAALwByAGUAcABlAGEAdAA6AGIAYQBkAA==",
+      "state": "completed",
+      "exit_status": 44008,
+      "duration_ms": 95,
+      "process_id": 13812,
+      "normalizations": [],
+      "stdout": {
+        "file": "repeat-invalid.stdout.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "file": "repeat-invalid.stderr.bin",
+        "bytes": 24,
+        "sha256": "3be3539ba19789c9bbd2a8a60473c2fba9902c695c6e13bd8053a767a2ddba65"
+      }
+    },
+    {
+      "id": "every-list",
+      "arguments_utf16_base64": "bwBzACAAbABpAHMAdAAgAGIAcgBpAGUAZgAgAC8AZQB2AGUAcgB5ADoAMQAgAC8AcgBlAHAAZQBhAHQAOgAyAA==",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiACAAbwBzACAAbABpAHMAdAAgAGIAcgBpAGUAZgAgAC8AZQB2AGUAcgB5ADoAMQAgAC8AcgBlAHAAZQBhAHQAOgAyAA==",
+      "state": "completed",
+      "exit_status": 0,
+      "duration_ms": 1169,
+      "process_id": 10832,
+      "normalizations": [],
+      "stdout": {
+        "file": "every-list.stdout.bin",
+        "bytes": 422,
+        "sha256": "b5a639a18f17ad4737b9a5de78327336ab1e93fb08ce6e80c0ab7f437fdf91c0"
+      },
+      "stderr": {
+        "file": "every-list.stderr.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "id": "context-user",
+      "arguments_utf16_base64": "LwB1AHMAZQByADoAVwBtAGkAYwBDAG8AbQBwAGEAdABNAGkAcwBzAGkAbgBnACAAQwBPAE4AVABFAFgAVAA=",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiACAALwB1AHMAZQByADoAVwBtAGkAYwBDAG8AbQBwAGEAdABNAGkAcwBzAGkAbgBnACAAQwBPAE4AVABFAFgAVAA=",
+      "state": "completed",
+      "exit_status": 0,
+      "duration_ms": 72,
+      "process_id": 13176,
+      "normalizations": [],
+      "stdout": {
+        "file": "context-user.stdout.bin",
+        "bytes": 548,
+        "sha256": "df3975b5f8693b50242623e62c6e4f0de5788ab2aaa4ff70d76d852bfefc2858"
+      },
+      "stderr": {
+        "file": "context-user.stderr.bin",
+        "bytes": 20,
+        "sha256": "5f4b157392bcd6017d465680acfd00829e022a73e9368498d91ce3fbc0c0baaf"
+      }
+    },
+    {
+      "id": "context-ns-relative",
+      "arguments_utf16_base64": "LwBuAGEAbQBlAHMAcABhAGMAZQA6AHIAbwBvAHQAXABkAGUAZgBhAHUAbAB0ACAAQwBPAE4AVABFAFgAVAA=",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiACAALwBuAGEAbQBlAHMAcABhAGMAZQA6AHIAbwBvAHQAXABkAGUAZgBhAHUAbAB0ACAAQwBPAE4AVABFAFgAVAA=",
+      "state": "completed",
+      "exit_status": 0,
+      "duration_ms": 83,
+      "process_id": 11008,
+      "normalizations": [],
+      "stdout": {
+        "file": "context-ns-relative.stdout.bin",
+        "bytes": 547,
+        "sha256": "2581551f5864f971d5c08400f1c8f608abbc36ede3886cd6178e9140c8f1f391"
+      },
+      "stderr": {
+        "file": "context-ns-relative.stderr.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "id": "context-ns-absolute",
+      "arguments_utf16_base64": "LwBuAGEAbQBlAHMAcABhAGMAZQA6AFwAXAByAG8AbwB0AFwAZABlAGYAYQB1AGwAdAAgAEMATwBOAFQARQBYAFQA",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiACAALwBuAGEAbQBlAHMAcABhAGMAZQA6AFwAXAByAG8AbwB0AFwAZABlAGYAYQB1AGwAdAAgAEMATwBOAFQARQBYAFQA",
+      "state": "completed",
+      "exit_status": 0,
+      "duration_ms": 70,
+      "process_id": 2788,
+      "normalizations": [],
+      "stdout": {
+        "file": "context-ns-absolute.stdout.bin",
+        "bytes": 536,
+        "sha256": "7708db1040f03bd8b81d9d6beb14162c13c321008dddc1359ff0940c42afad3c"
+      },
+      "stderr": {
+        "file": "context-ns-absolute.stderr.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "id": "context-role-relative",
+      "arguments_utf16_base64": "LwByAG8AbABlADoAcgBvAG8AdABcAGMAbABpACAAQwBPAE4AVABFAFgAVAA=",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiACAALwByAG8AbABlADoAcgBvAG8AdABcAGMAbABpACAAQwBPAE4AVABFAFgAVAA=",
+      "state": "completed",
+      "exit_status": 0,
+      "duration_ms": 71,
+      "process_id": 2196,
+      "normalizations": [],
+      "stdout": {
+        "file": "context-role-relative.stdout.bin",
+        "bytes": 543,
+        "sha256": "2f6cebd96fa5d3b0761d3c38830d6d69032e0309f995c0baa9a4954837d148eb"
+      },
+      "stderr": {
+        "file": "context-role-relative.stderr.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "id": "context-role-absolute",
+      "arguments_utf16_base64": "LwByAG8AbABlADoAXABcAHIAbwBvAHQAXABjAGwAaQAgAEMATwBOAFQARQBYAFQA",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiACAALwByAG8AbABlADoAXABcAHIAbwBvAHQAXABjAGwAaQAgAEMATwBOAFQARQBYAFQA",
+      "state": "completed",
+      "exit_status": 0,
+      "duration_ms": 77,
+      "process_id": 1820,
+      "normalizations": [],
+      "stdout": {
+        "file": "context-role-absolute.stdout.bin",
+        "bytes": 534,
+        "sha256": "762a6351bfd56046441bfe1ad07db3b896129415d69bba302f517f4635a6b567"
+      },
+      "stderr": {
+        "file": "context-role-absolute.stderr.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "id": "context-ns-empty",
+      "arguments_utf16_base64": "LwBuAGEAbQBlAHMAcABhAGMAZQA6ACIAIgAgAEMATwBOAFQARQBYAFQA",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiACAALwBuAGEAbQBlAHMAcABhAGMAZQA6ACIAIgAgAEMATwBOAFQARQBYAFQA",
+      "state": "completed",
+      "exit_status": 0,
+      "duration_ms": 77,
+      "process_id": 7724,
+      "normalizations": [],
+      "stdout": {
+        "file": "context-ns-empty.stdout.bin",
+        "bytes": 534,
+        "sha256": "762a6351bfd56046441bfe1ad07db3b896129415d69bba302f517f4635a6b567"
+      },
+      "stderr": {
+        "file": "context-ns-empty.stderr.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "id": "context-node-empty",
+      "arguments_utf16_base64": "LwBuAG8AZABlADoAIgAiACAAQwBPAE4AVABFAFgAVAA=",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiACAALwBuAG8AZABlADoAIgAiACAAQwBPAE4AVABFAFgAVAA=",
+      "state": "completed",
+      "exit_status": 0,
+      "duration_ms": 80,
+      "process_id": 292,
+      "normalizations": [],
+      "stdout": {
+        "file": "context-node-empty.stdout.bin",
+        "bytes": 534,
+        "sha256": "762a6351bfd56046441bfe1ad07db3b896129415d69bba302f517f4635a6b567"
+      },
+      "stderr": {
+        "file": "context-node-empty.stderr.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "id": "context-aggregate-empty",
+      "arguments_utf16_base64": "LwBhAGcAZwByAGUAZwBhAHQAZQA6ACIAIgAgAEMATwBOAFQARQBYAFQA",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiACAALwBhAGcAZwByAGUAZwBhAHQAZQA6ACIAIgAgAEMATwBOAFQARQBYAFQA",
+      "state": "completed",
+      "exit_status": 44143,
+      "duration_ms": 77,
+      "process_id": 9744,
+      "normalizations": [],
+      "stdout": {
+        "file": "context-aggregate-empty.stdout.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "file": "context-aggregate-empty.stderr.bin",
+        "bytes": 52,
+        "sha256": "e3f57ce2aa94ec6d8735760fbba3ab7139ee968f6e759347fa92ab877b3c6773"
+      }
+    },
+    {
+      "id": "context-interactive-empty",
+      "arguments_utf16_base64": "LwBpAG4AdABlAHIAYQBjAHQAaQB2AGUAOgAiACIAIABDAE8ATgBUAEUAWABUAA==",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiACAALwBpAG4AdABlAHIAYQBjAHQAaQB2AGUAOgAiACIAIABDAE8ATgBUAEUAWABUAA==",
+      "state": "completed",
+      "exit_status": 44134,
+      "duration_ms": 76,
+      "process_id": 13224,
+      "normalizations": [],
+      "stdout": {
+        "file": "context-interactive-empty.stdout.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "file": "context-interactive-empty.stderr.bin",
+        "bytes": 54,
+        "sha256": "06e418a6bd4cc0611adfac668e2eebddd7c225b4c3b148c4c94770f559ad1e81"
+      }
+    },
+    {
+      "id": "auth-empty",
+      "arguments_utf16_base64": "LwBhAHUAdABoAGwAZQB2AGUAbAA6ACIAIgAgAEMATwBOAFQARQBYAFQA",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiACAALwBhAHUAdABoAGwAZQB2AGUAbAA6ACIAIgAgAEMATwBOAFQARQBYAFQA",
+      "state": "completed",
+      "exit_status": 44105,
+      "duration_ms": 60,
+      "process_id": 3344,
+      "normalizations": [],
+      "stdout": {
+        "file": "auth-empty.stdout.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "file": "auth-empty.stderr.bin",
+        "bytes": 32,
+        "sha256": "983e094daaae133c207804b9e3fe046b80ed438566a5e2b3192321ec924618a0"
+      }
+    },
+    {
+      "id": "imp-empty",
+      "arguments_utf16_base64": "LwBpAG0AcABsAGUAdgBlAGwAOgAiACIAIABDAE8ATgBUAEUAWABUAA==",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiACAALwBpAG0AcABsAGUAdgBlAGwAOgAiACIAIABDAE8ATgBUAEUAWABUAA==",
+      "state": "completed",
+      "exit_status": 44104,
+      "duration_ms": 56,
+      "process_id": 13692,
+      "normalizations": [],
+      "stdout": {
+        "file": "imp-empty.stdout.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "file": "imp-empty.stderr.bin",
+        "bytes": 31,
+        "sha256": "aa90d7e9b28eb65995acd9e21b331c0d15253b549c47180429887d205b07f38e"
+      }
+    },
+    {
+      "id": "priv-empty",
+      "arguments_utf16_base64": "LwBwAHIAaQB2AGkAbABlAGcAZQBzADoAIgAiACAAQwBPAE4AVABFAFgAVAA=",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiACAALwBwAHIAaQB2AGkAbABlAGcAZQBzADoAIgAiACAAQwBPAE4AVABFAFgAVAA=",
+      "state": "completed",
+      "exit_status": 44126,
+      "duration_ms": 61,
+      "process_id": 12548,
+      "normalizations": [],
+      "stdout": {
+        "file": "priv-empty.stdout.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "file": "priv-empty.stderr.bin",
+        "bytes": 61,
+        "sha256": "8e06e2ca54e45c5ffb4be2232d529ac4905dd68c273cb22593ba59835319ea28"
+      }
+    },
+    {
+      "id": "trace-empty",
+      "arguments_utf16_base64": "LwB0AHIAYQBjAGUAOgAiACIAIABDAE8ATgBUAEUAWABUAA==",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiACAALwB0AHIAYQBjAGUAOgAiACIAIABDAE8ATgBUAEUAWABUAA==",
+      "state": "completed",
+      "exit_status": 44116,
+      "duration_ms": 62,
+      "process_id": 8220,
+      "normalizations": [],
+      "stdout": {
+        "file": "trace-empty.stdout.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "file": "trace-empty.stderr.bin",
+        "bytes": 48,
+        "sha256": "13e7ef263e34c2914d5a8424e19ef62b5c4863e21edd69bbcf9aeb7ed55ed383"
+      }
+    },
+    {
+      "id": "failfast-empty",
+      "arguments_utf16_base64": "LwBmAGEAaQBsAGYAYQBzAHQAOgAiACIAIABDAE8ATgBUAEUAWABUAA==",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiACAALwBmAGEAaQBsAGYAYQBzAHQAOgAiACIAIABDAE8ATgBUAEUAWABUAA==",
+      "state": "completed",
+      "exit_status": 44136,
+      "duration_ms": 58,
+      "process_id": 11300,
+      "normalizations": [],
+      "stdout": {
+        "file": "failfast-empty.stdout.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "file": "failfast-empty.stderr.bin",
+        "bytes": 51,
+        "sha256": "291ca8dfa4e55b27cc663b4f64a4c362c08fce4669f45e2be9ee17c26964235e"
+      }
+    },
+    {
+      "id": "every-invalid",
+      "arguments_utf16_base64": "bwBzACAAZwBlAHQAIABDAGEAcAB0AGkAbwBuACAALwBlAHYAZQByAHkAOgBiAGEAZAAgAC8AcgBlAHAAZQBhAHQAOgAyAA==",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiACAAbwBzACAAZwBlAHQAIABDAGEAcAB0AGkAbwBuACAALwBlAHYAZQByAHkAOgBiAGEAZAAgAC8AcgBlAHAAZQBhAHQAOgAyAA==",
+      "state": "completed",
+      "exit_status": 44206,
+      "duration_ms": 64,
+      "process_id": 12980,
+      "normalizations": [],
+      "stdout": {
+        "file": "every-invalid.stdout.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "file": "every-invalid.stderr.bin",
+        "bytes": 55,
+        "sha256": "f0f1a9eb76372fc5c74c1268ec7c81bb4f7fe41ba52b328a20bad6a4e1ed5bae"
+      }
+    },
+    {
+      "id": "repeat-before-every",
+      "arguments_utf16_base64": "bwBzACAAZwBlAHQAIABDAGEAcAB0AGkAbwBuACAALwByAGUAcABlAGEAdAA6ADIAIAAvAGUAdgBlAHIAeQA6ADAA",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiACAAbwBzACAAZwBlAHQAIABDAGEAcAB0AGkAbwBuACAALwByAGUAcABlAGEAdAA6ADIAIAAvAGUAdgBlAHIAeQA6ADAA",
+      "state": "completed",
+      "exit_status": 45222,
+      "duration_ms": 61,
+      "process_id": 12000,
+      "normalizations": [],
+      "stdout": {
+        "file": "repeat-before-every.stdout.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "file": "repeat-before-every.stderr.bin",
+        "bytes": 52,
+        "sha256": "08e0f571692674d0ad51c5575d70c570be53fc07abe344ef15357f1018500bc5"
+      }
+    },
+    {
+      "id": "shell-reset-quoted",
+      "arguments_utf16_base64": "",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiAA==",
+      "state": "completed",
+      "exit_status": 0,
+      "duration_ms": 60,
+      "process_id": 7888,
+      "normalizations": [],
+      "stdout": {
+        "file": "shell-reset-quoted.stdout.bin",
+        "bytes": 589,
+        "sha256": "98019fd916497095486a22e1091540c8797ff34e18bb7bd04a577f5b367fdd8e"
+      },
+      "stderr": {
+        "file": "shell-reset-quoted.stderr.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "id": "shell-role-relative",
+      "arguments_utf16_base64": "",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiAA==",
+      "state": "completed",
+      "exit_status": 0,
+      "duration_ms": 73,
+      "process_id": 7048,
+      "normalizations": [],
+      "stdout": {
+        "file": "shell-role-relative.stdout.bin",
+        "bytes": 575,
+        "sha256": "71abef9fa3f0de8f21a81312a4e39a8bb7f5225a69adf3875ed05fd71bd814cb"
+      },
+      "stderr": {
+        "file": "shell-role-relative.stderr.bin",
+        "bytes": 16,
+        "sha256": "56ec67d06345b921c0258f5bb06b24edc7a25149efcd93832d54c714a8c43711"
+      }
+    },
+    {
+      "id": "bare-namespace",
+      "arguments_utf16_base64": "LwBuAGEAbQBlAHMAcABhAGMAZQA6ACAALwBhAGcAZwByAGUAZwBhAHQAZQA6AG8AbgAgAEMATwBOAFQARQBYAFQA",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiACAALwBuAGEAbQBlAHMAcABhAGMAZQA6ACAALwBhAGcAZwByAGUAZwBhAHQAZQA6AG8AbgAgAEMATwBOAFQARQBYAFQA",
+      "state": "completed",
+      "exit_status": 44107,
+      "duration_ms": 50,
+      "process_id": 8480,
+      "normalizations": [],
+      "stdout": {
+        "file": "bare-namespace.stdout.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "file": "bare-namespace.stderr.bin",
+        "bytes": 21,
+        "sha256": "7af52c59adc4c903e5e68a5c090483e573be34a6cd5f3291670a38a187662fc0"
+      }
+    },
+    {
+      "id": "bare-node",
+      "arguments_utf16_base64": "LwBuAG8AZABlADoAIAAvAGEAZwBnAHIAZQBnAGEAdABlADoAbwBuACAAQwBPAE4AVABFAFgAVAA=",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiACAALwBuAG8AZABlADoAIAAvAGEAZwBnAHIAZQBnAGEAdABlADoAbwBuACAAQwBPAE4AVABFAFgAVAA=",
+      "state": "completed",
+      "exit_status": 44103,
+      "duration_ms": 45,
+      "process_id": 4384,
+      "normalizations": [],
+      "stdout": {
+        "file": "bare-node.stdout.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "file": "bare-node.stderr.bin",
+        "bytes": 21,
+        "sha256": "a459c3026cf6ae7e981edf8bef3a4c579c3ed4f4ae905b6280f7d7b018e414e6"
+      }
+    },
+    {
+      "id": "bare-role",
+      "arguments_utf16_base64": "LwByAG8AbABlADoAIAAvAGEAZwBnAHIAZQBnAGEAdABlADoAbwBuACAAQwBPAE4AVABFAFgAVAA=",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiACAALwByAG8AbABlADoAIAAvAGEAZwBnAHIAZQBnAGEAdABlADoAbwBuACAAQwBPAE4AVABFAFgAVAA=",
+      "state": "completed",
+      "exit_status": 44129,
+      "duration_ms": 63,
+      "process_id": 7260,
+      "normalizations": [],
+      "stdout": {
+        "file": "bare-role.stdout.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "file": "bare-role.stderr.bin",
+        "bytes": 16,
+        "sha256": "56ec67d06345b921c0258f5bb06b24edc7a25149efcd93832d54c714a8c43711"
+      }
+    },
+    {
+      "id": "shell-role-invalid-eof",
+      "arguments_utf16_base64": "",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiAA==",
+      "state": "completed",
+      "exit_status": 44129,
+      "duration_ms": 56,
+      "process_id": 7012,
+      "normalizations": [],
+      "stdout": {
+        "file": "shell-role-invalid-eof.stdout.bin",
+        "bytes": 28,
+        "sha256": "f94b4bce2259e9b4ebe30bc3214db0a51174cbcf16e7e689ed3cdee852d3953c"
+      },
+      "stderr": {
+        "file": "shell-role-invalid-eof.stderr.bin",
+        "bytes": 16,
+        "sha256": "56ec67d06345b921c0258f5bb06b24edc7a25149efcd93832d54c714a8c43711"
+      }
+    },
+    {
+      "id": "shell-bare-namespace-eof",
+      "arguments_utf16_base64": "",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiAA==",
+      "state": "completed",
+      "exit_status": 44107,
+      "duration_ms": 51,
+      "process_id": 4460,
+      "normalizations": [],
+      "stdout": {
+        "file": "shell-bare-namespace-eof.stdout.bin",
+        "bytes": 28,
+        "sha256": "f94b4bce2259e9b4ebe30bc3214db0a51174cbcf16e7e689ed3cdee852d3953c"
+      },
+      "stderr": {
+        "file": "shell-bare-namespace-eof.stderr.bin",
+        "bytes": 21,
+        "sha256": "7af52c59adc4c903e5e68a5c090483e573be34a6cd5f3291670a38a187662fc0"
+      }
+    },
+    {
+      "id": "shell-bare-node-eof",
+      "arguments_utf16_base64": "",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiAA==",
+      "state": "completed",
+      "exit_status": 44103,
+      "duration_ms": 43,
+      "process_id": 11948,
+      "normalizations": [],
+      "stdout": {
+        "file": "shell-bare-node-eof.stdout.bin",
+        "bytes": 28,
+        "sha256": "f94b4bce2259e9b4ebe30bc3214db0a51174cbcf16e7e689ed3cdee852d3953c"
+      },
+      "stderr": {
+        "file": "shell-bare-node-eof.stderr.bin",
+        "bytes": 21,
+        "sha256": "a459c3026cf6ae7e981edf8bef3a4c579c3ed4f4ae905b6280f7d7b018e414e6"
+      }
+    }
+  ]
+}

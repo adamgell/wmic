@@ -304,3 +304,14 @@ fn spaced_password_value_is_redacted_from_presentation() {
             .contains("/password:<redacted>")
     );
 }
+
+#[test]
+fn diagnostic_recording_does_not_leak_credentials_when_parsing_fails() {
+    let line = wide("wmic /password: SENSITIVE /nonsense os get Caption");
+    assert!(parse_command(&line, EntryMode::Process).is_err());
+    assert!(
+        !wmic_compat::parse::diagnostic_command_line(&line, EntryMode::Process)
+            .to_string_lossy()
+            .contains("SENSITIVE")
+    );
+}
