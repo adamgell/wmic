@@ -59,9 +59,9 @@ Expect `Valid`, `Authenticode`, publisher `Adam Gell`, and a Microsoft timestamp
 
 The compatibility report describes a separately measured local unsigned baseline. Signing proves origin and integrity; it does not extend the measured OS/provider coverage or resolve the historical Defender detection. Keep those limits in the release notes.
 
-## First verified draft
+## First verified prerelease
 
-The [signed workflow, attempt 2](https://github.com/adamgell/wmic/actions/runs/38917773797/attempts/2) succeeded for source `8117295f3b8e562cb97caa847604c9e4b39d5c45` and created the [draft prerelease `v0.1.0-dev`](https://github.com/adamgell/wmic/releases/tag/untagged-6525acbcf73e055bd35a). [CI on that source](https://github.com/adamgell/wmic/actions/runs/38917717172) passed all four jobs. The first release attempt stopped at the name-only OIDC subject mismatch described above; the second authenticated successfully using the corrected immutable subject.
+The [signed workflow, attempt 2](https://github.com/adamgell/wmic/actions/runs/38917773797/attempts/2) succeeded for source `8117295f3b8e562cb97caa847604c9e4b39d5c45` and created the draft for [prerelease `v0.1.0-dev`](https://github.com/adamgell/wmic/releases/tag/v0.1.0-dev). [CI on that source](https://github.com/adamgell/wmic/actions/runs/38917717172) passed all four jobs. The first release attempt stopped at the name-only OIDC subject mismatch described above; the second authenticated successfully using the corrected immutable subject.
 
 All three executables passed Windows Authenticode and SDK SignTool verification before packaging. Each architecture's unsigned, wrong-publisher and tampered-section negative checks rejected their inputs. The draft has exactly ten assets: three ZIPs, three ZIP checksum sidecars, three native signature receipts, and release context. All downloaded asset digests were compared to GitHub's asset metadata; the complete downloaded bundle passed provenance, inventory, PE and hash checks.
 
@@ -73,6 +73,6 @@ Independent read-only Authenticode checks on the selected Parallels guest then v
 | x64 | `94274a0b2f0462e3374c864fb4a52ce47fdc0df9daf196a4fdc0c8589b7d35ac` |
 | x86 | `af470d7643d49721a0dc07d74115fffc9b9518b666b1e314a6fe4188ee4d335d` |
 
-The release remains a draft prerelease. Publishing it is a separate action.
+The user authorized publication on 2026-10-16, and the release is now a public prerelease. An unauthenticated GitHub API read confirmed publication, the tag resolves to the verified source commit, and all ten asset digests and the release notes match the verified draft.
 
 References: [Microsoft OIDC instructions](https://github.com/Azure/artifact-signing-action/blob/main/docs/OIDC.md), [Azure GitHub OIDC integration](https://learn.microsoft.com/en-us/azure/developer/github/connect-from-azure-openid-connect), [Artifact Signing action](https://github.com/Azure/artifact-signing-action).
