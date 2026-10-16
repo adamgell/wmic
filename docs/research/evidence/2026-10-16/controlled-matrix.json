@@ -1,0 +1,734 @@
+{
+  "arm64": {
+    "artifact": {
+      "path": "C:\\ProgramData\\WmicCompat\\artifacts\\CF1F6D2DEC0EBAA559E373987BB1CE2D2CE62FE6F48049D194932549ECB52248\\wmic.exe",
+      "sha256": "cf1f6d2dec0ebaa559e373987bb1ce2d2ce62fe6f48049d194932549ecb52248",
+      "target": "aarch64-pc-windows-msvc"
+    },
+    "tests": {
+      "scripts": {
+        "total": 7,
+        "differences": [],
+        "cleanup": true,
+        "errors": [],
+        "case_ids": [
+          "csv.ps1",
+          "error.cmd",
+          "error.ps1",
+          "hardcoded.cmd",
+          "pipe.cmd",
+          "query.cmd",
+          "query.ps1"
+        ],
+        "resolutions": [
+          {
+            "path": "C:\\Windows\\System32\\wbem\\WMIC.exe",
+            "sha256": "2EF794C4940AFEA56C6D6D3B9BC9E66965BC7333E79C5DCB2DEF3C0E36F0834C",
+            "role": "reference"
+          },
+          {
+            "path": "C:\\ProgramData\\WmicCompat\\artifacts\\CF1F6D2DEC0EBAA559E373987BB1CE2D2CE62FE6F48049D194932549ECB52248\\wmic.exe",
+            "sha256": "CF1F6D2DEC0EBAA559E373987BB1CE2D2CE62FE6F48049D194932549ECB52248",
+            "role": "candidate"
+          }
+        ],
+        "script_hashes": {
+          "csv.ps1": "D713E5F060F7541304F5F27DC61BE22A3FBADD3E8A516F5D625AC4A2B0874025",
+          "pipe.cmd": "D5325473C2B3C6FFFB519BE20F08EC87988AB1BF571C2E47A83534566954A125",
+          "error.cmd": "6FFC770DB7EF80195871EAB286982383F22C9D2077005BDD30FDFAFC8D4F2180",
+          "query.ps1": "3E73DEC2F76E56D0D53278232B3D8D8B7F3D808F77687BCE77E351C0EE4C14C3",
+          "error.ps1": "714180F2420FFAC696D5602FD36ACA9E5C70ADF781163165B94185E9A176EF7D",
+          "query.cmd": "FC6026BFA954A84B531F076958B07958ABDCA75D141C4BE9AAC3DFFB97F2CA8C",
+          "hardcoded.cmd": "DBFB875585EF508569AA9B4B70B8524EFF3212E7D31E4A8371A10617EDD22C32"
+        }
+      },
+      "files": {
+        "total": 22,
+        "differences": [],
+        "cleanup": true,
+        "errors": [],
+        "case_ids": [
+          "output-new",
+          "output-existing",
+          "append-new",
+          "append-existing",
+          "both-output-append",
+          "both-append-output",
+          "output-stdout",
+          "append-stdout",
+          "output-reset",
+          "append-reset",
+          "append-invalid-property",
+          "output-invalid-property",
+          "output-missing-dir",
+          "output-is-directory",
+          "record-new",
+          "record-existing",
+          "record-output",
+          "record-error",
+          "record-reset",
+          "output-csv",
+          "append-utf16",
+          "append-utf8"
+        ]
+      },
+      "unicode": {
+        "total": 7,
+        "differences": [],
+        "cleanup": true,
+        "errors": [],
+        "case_ids": [
+          "owned-format-append_ansi",
+          "owned-format-append_new",
+          "owned-format-csv",
+          "owned-format-output",
+          "owned-format-record",
+          "owned-format-table",
+          "owned-format-value"
+        ]
+      },
+      "session-files": {
+        "total": 9,
+        "differences": [],
+        "cleanup": true,
+        "errors": [],
+        "case_ids": [
+          "shell-output",
+          "shell-output-quit",
+          "shell-output-bad",
+          "shell-record-bad",
+          "shell-append",
+          "shell-record",
+          "shell-inline-output",
+          "repeat-output",
+          "repeat-record"
+        ]
+      },
+      "formats": {
+        "total": 12,
+        "differences": [],
+        "cleanup": true,
+        "errors": [],
+        "case_ids": [
+          "owned-format-basicxml_after",
+          "owned-format-basicxml_before",
+          "owned-format-csv",
+          "owned-format-hform",
+          "owned-format-htable",
+          "owned-format-mof",
+          "owned-format-nocomma_after",
+          "owned-format-nocomma_before",
+          "owned-format-rawxml",
+          "owned-format-table",
+          "owned-format-value",
+          "owned-format-xml"
+        ],
+        "normalizations": {
+          "owned-format-rawxml": "root COMMAND STARTTIME only",
+          "owned-format-xml": "exact root HTML COMMAND STARTTIME only"
+        }
+      },
+      "whitespace-formats": {
+        "total": 12,
+        "differences": [],
+        "cleanup": true,
+        "errors": [],
+        "case_ids": [
+          "owned-format-basicxml_after",
+          "owned-format-basicxml_before",
+          "owned-format-csv",
+          "owned-format-hform",
+          "owned-format-htable",
+          "owned-format-mof",
+          "owned-format-nocomma_after",
+          "owned-format-nocomma_before",
+          "owned-format-rawxml",
+          "owned-format-table",
+          "owned-format-value",
+          "owned-format-xml"
+        ],
+        "normalizations": {
+          "owned-format-rawxml": "root COMMAND STARTTIME only",
+          "owned-format-xml": "exact root HTML COMMAND STARTTIME only"
+        }
+      },
+      "lifecycle": {
+        "total": 11,
+        "differences": [],
+        "cleanup": [
+          {
+            "creation_date": "/Date(1792124839432)/",
+            "process_id": 5060,
+            "environment_remaining": 0,
+            "process_remaining": 0,
+            "role": "reference"
+          },
+          {
+            "creation_date": "/Date(1792124841002)/",
+            "process_id": 2072,
+            "environment_remaining": 0,
+            "process_remaining": 0,
+            "role": "candidate"
+          }
+        ],
+        "errors": [],
+        "case_ids": [
+          "environment-create",
+          "environment-get",
+          "environment-set-declined",
+          "environment-set",
+          "environment-get-changed",
+          "environment-delete-help",
+          "environment-delete-declined",
+          "environment-delete",
+          "process-create",
+          "process-owner",
+          "process-terminate"
+        ],
+        "probe_ids": []
+      },
+      "named-lifecycle": {
+        "total": 11,
+        "differences": [],
+        "cleanup": [
+          {
+            "creation_date": "/Date(1792124844804)/",
+            "process_id": 9468,
+            "environment_remaining": 0,
+            "process_remaining": 0,
+            "role": "reference"
+          },
+          {
+            "creation_date": "/Date(1792124846654)/",
+            "process_id": 2468,
+            "environment_remaining": 0,
+            "process_remaining": 0,
+            "role": "candidate"
+          }
+        ],
+        "errors": [],
+        "case_ids": [
+          "environment-create",
+          "environment-get",
+          "environment-set-declined",
+          "environment-set",
+          "environment-get-changed",
+          "environment-delete-help",
+          "environment-delete-declined",
+          "environment-delete",
+          "process-create",
+          "process-owner",
+          "process-terminate"
+        ],
+        "probe_ids": [
+          "process-create-null-directory"
+        ]
+      },
+      "console": {
+        "total": 9,
+        "differences": [],
+        "cleanup": true,
+        "errors": [],
+        "case_ids": [
+          "console-context",
+          "console-query",
+          "console-empty",
+          "console-cancel-repeat",
+          "console-cancel-second",
+          "console-break-key",
+          "console-eof",
+          "console-repeat2",
+          "console-repeat2-wait"
+        ]
+      }
+    }
+  },
+  "x64": {
+    "artifact": {
+      "path": "C:\\ProgramData\\WmicCompat\\artifacts\\7024A58F151713CBA12662AAA94444A87DCC5634756E2D4073C3F5BF7DC6E7EB\\wmic.exe",
+      "sha256": "7024a58f151713cba12662aaa94444a87dcc5634756e2d4073c3f5bf7dc6e7eb",
+      "target": "x86_64-pc-windows-msvc"
+    },
+    "tests": {
+      "scripts": {
+        "total": 7,
+        "differences": [],
+        "cleanup": true,
+        "errors": [],
+        "case_ids": [
+          "csv.ps1",
+          "error.cmd",
+          "error.ps1",
+          "hardcoded.cmd",
+          "pipe.cmd",
+          "query.cmd",
+          "query.ps1"
+        ],
+        "resolutions": [
+          {
+            "path": "C:\\Windows\\System32\\wbem\\WMIC.exe",
+            "sha256": "2EF794C4940AFEA56C6D6D3B9BC9E66965BC7333E79C5DCB2DEF3C0E36F0834C",
+            "role": "reference"
+          },
+          {
+            "path": "C:\\ProgramData\\WmicCompat\\artifacts\\7024A58F151713CBA12662AAA94444A87DCC5634756E2D4073C3F5BF7DC6E7EB\\wmic.exe",
+            "sha256": "7024A58F151713CBA12662AAA94444A87DCC5634756E2D4073C3F5BF7DC6E7EB",
+            "role": "candidate"
+          }
+        ],
+        "script_hashes": {
+          "csv.ps1": "D713E5F060F7541304F5F27DC61BE22A3FBADD3E8A516F5D625AC4A2B0874025",
+          "pipe.cmd": "D5325473C2B3C6FFFB519BE20F08EC87988AB1BF571C2E47A83534566954A125",
+          "error.cmd": "6FFC770DB7EF80195871EAB286982383F22C9D2077005BDD30FDFAFC8D4F2180",
+          "query.ps1": "3E73DEC2F76E56D0D53278232B3D8D8B7F3D808F77687BCE77E351C0EE4C14C3",
+          "error.ps1": "714180F2420FFAC696D5602FD36ACA9E5C70ADF781163165B94185E9A176EF7D",
+          "query.cmd": "FC6026BFA954A84B531F076958B07958ABDCA75D141C4BE9AAC3DFFB97F2CA8C",
+          "hardcoded.cmd": "DBFB875585EF508569AA9B4B70B8524EFF3212E7D31E4A8371A10617EDD22C32"
+        }
+      },
+      "files": {
+        "total": 22,
+        "differences": [],
+        "cleanup": true,
+        "errors": [],
+        "case_ids": [
+          "output-new",
+          "output-existing",
+          "append-new",
+          "append-existing",
+          "both-output-append",
+          "both-append-output",
+          "output-stdout",
+          "append-stdout",
+          "output-reset",
+          "append-reset",
+          "append-invalid-property",
+          "output-invalid-property",
+          "output-missing-dir",
+          "output-is-directory",
+          "record-new",
+          "record-existing",
+          "record-output",
+          "record-error",
+          "record-reset",
+          "output-csv",
+          "append-utf16",
+          "append-utf8"
+        ]
+      },
+      "unicode": {
+        "total": 7,
+        "differences": [],
+        "cleanup": true,
+        "errors": [],
+        "case_ids": [
+          "owned-format-append_ansi",
+          "owned-format-append_new",
+          "owned-format-csv",
+          "owned-format-output",
+          "owned-format-record",
+          "owned-format-table",
+          "owned-format-value"
+        ]
+      },
+      "session-files": {
+        "total": 9,
+        "differences": [],
+        "cleanup": true,
+        "errors": [],
+        "case_ids": [
+          "shell-output",
+          "shell-output-quit",
+          "shell-output-bad",
+          "shell-record-bad",
+          "shell-append",
+          "shell-record",
+          "shell-inline-output",
+          "repeat-output",
+          "repeat-record"
+        ]
+      },
+      "formats": {
+        "total": 12,
+        "differences": [],
+        "cleanup": true,
+        "errors": [],
+        "case_ids": [
+          "owned-format-basicxml_after",
+          "owned-format-basicxml_before",
+          "owned-format-csv",
+          "owned-format-hform",
+          "owned-format-htable",
+          "owned-format-mof",
+          "owned-format-nocomma_after",
+          "owned-format-nocomma_before",
+          "owned-format-rawxml",
+          "owned-format-table",
+          "owned-format-value",
+          "owned-format-xml"
+        ],
+        "normalizations": {
+          "owned-format-rawxml": "root COMMAND STARTTIME only",
+          "owned-format-xml": "exact root HTML COMMAND STARTTIME only"
+        }
+      },
+      "whitespace-formats": {
+        "total": 12,
+        "differences": [],
+        "cleanup": true,
+        "errors": [],
+        "case_ids": [
+          "owned-format-basicxml_after",
+          "owned-format-basicxml_before",
+          "owned-format-csv",
+          "owned-format-hform",
+          "owned-format-htable",
+          "owned-format-mof",
+          "owned-format-nocomma_after",
+          "owned-format-nocomma_before",
+          "owned-format-rawxml",
+          "owned-format-table",
+          "owned-format-value",
+          "owned-format-xml"
+        ],
+        "normalizations": {
+          "owned-format-rawxml": "root COMMAND STARTTIME only",
+          "owned-format-xml": "exact root HTML COMMAND STARTTIME only"
+        }
+      },
+      "lifecycle": {
+        "total": 11,
+        "differences": [],
+        "cleanup": [
+          {
+            "creation_date": "/Date(1792125010552)/",
+            "process_id": 3204,
+            "environment_remaining": 0,
+            "process_remaining": 0,
+            "role": "reference"
+          },
+          {
+            "creation_date": "/Date(1792125013702)/",
+            "process_id": 10456,
+            "environment_remaining": 0,
+            "process_remaining": 0,
+            "role": "candidate"
+          }
+        ],
+        "errors": [],
+        "case_ids": [
+          "environment-create",
+          "environment-get",
+          "environment-set-declined",
+          "environment-set",
+          "environment-get-changed",
+          "environment-delete-help",
+          "environment-delete-declined",
+          "environment-delete",
+          "process-create",
+          "process-owner",
+          "process-terminate"
+        ],
+        "probe_ids": []
+      },
+      "named-lifecycle": {
+        "total": 11,
+        "differences": [],
+        "cleanup": [
+          {
+            "creation_date": "/Date(1792125019832)/",
+            "process_id": 9300,
+            "environment_remaining": 0,
+            "process_remaining": 0,
+            "role": "reference"
+          },
+          {
+            "creation_date": "/Date(1792125023335)/",
+            "process_id": 13024,
+            "environment_remaining": 0,
+            "process_remaining": 0,
+            "role": "candidate"
+          }
+        ],
+        "errors": [],
+        "case_ids": [
+          "environment-create",
+          "environment-get",
+          "environment-set-declined",
+          "environment-set",
+          "environment-get-changed",
+          "environment-delete-help",
+          "environment-delete-declined",
+          "environment-delete",
+          "process-create",
+          "process-owner",
+          "process-terminate"
+        ],
+        "probe_ids": [
+          "process-create-null-directory"
+        ]
+      },
+      "console": {
+        "total": 9,
+        "differences": [],
+        "cleanup": true,
+        "errors": [],
+        "case_ids": [
+          "console-context",
+          "console-query",
+          "console-empty",
+          "console-cancel-repeat",
+          "console-cancel-second",
+          "console-break-key",
+          "console-eof",
+          "console-repeat2",
+          "console-repeat2-wait"
+        ]
+      }
+    }
+  },
+  "x86": {
+    "artifact": {
+      "path": "C:\\ProgramData\\WmicCompat\\artifacts\\1732BD1A506C7284D369867221B0BD5F4FBAA504F5044B0C6DCB819F8D71AFD8\\wmic.exe",
+      "sha256": "1732bd1a506c7284d369867221b0bd5f4fbaa504f5044b0c6dcb819f8d71afd8",
+      "target": "i686-pc-windows-msvc"
+    },
+    "tests": {
+      "scripts": {
+        "total": 7,
+        "differences": [],
+        "cleanup": true,
+        "errors": [],
+        "case_ids": [
+          "csv.ps1",
+          "error.cmd",
+          "error.ps1",
+          "hardcoded.cmd",
+          "pipe.cmd",
+          "query.cmd",
+          "query.ps1"
+        ],
+        "resolutions": [
+          {
+            "path": "C:\\Windows\\System32\\wbem\\WMIC.exe",
+            "sha256": "2EF794C4940AFEA56C6D6D3B9BC9E66965BC7333E79C5DCB2DEF3C0E36F0834C",
+            "role": "reference"
+          },
+          {
+            "path": "C:\\ProgramData\\WmicCompat\\artifacts\\1732BD1A506C7284D369867221B0BD5F4FBAA504F5044B0C6DCB819F8D71AFD8\\wmic.exe",
+            "sha256": "1732BD1A506C7284D369867221B0BD5F4FBAA504F5044B0C6DCB819F8D71AFD8",
+            "role": "candidate"
+          }
+        ],
+        "script_hashes": {
+          "csv.ps1": "D713E5F060F7541304F5F27DC61BE22A3FBADD3E8A516F5D625AC4A2B0874025",
+          "pipe.cmd": "D5325473C2B3C6FFFB519BE20F08EC87988AB1BF571C2E47A83534566954A125",
+          "error.cmd": "6FFC770DB7EF80195871EAB286982383F22C9D2077005BDD30FDFAFC8D4F2180",
+          "query.ps1": "3E73DEC2F76E56D0D53278232B3D8D8B7F3D808F77687BCE77E351C0EE4C14C3",
+          "error.ps1": "714180F2420FFAC696D5602FD36ACA9E5C70ADF781163165B94185E9A176EF7D",
+          "query.cmd": "FC6026BFA954A84B531F076958B07958ABDCA75D141C4BE9AAC3DFFB97F2CA8C",
+          "hardcoded.cmd": "DBFB875585EF508569AA9B4B70B8524EFF3212E7D31E4A8371A10617EDD22C32"
+        }
+      },
+      "files": {
+        "total": 22,
+        "differences": [],
+        "cleanup": true,
+        "errors": [],
+        "case_ids": [
+          "output-new",
+          "output-existing",
+          "append-new",
+          "append-existing",
+          "both-output-append",
+          "both-append-output",
+          "output-stdout",
+          "append-stdout",
+          "output-reset",
+          "append-reset",
+          "append-invalid-property",
+          "output-invalid-property",
+          "output-missing-dir",
+          "output-is-directory",
+          "record-new",
+          "record-existing",
+          "record-output",
+          "record-error",
+          "record-reset",
+          "output-csv",
+          "append-utf16",
+          "append-utf8"
+        ]
+      },
+      "unicode": {
+        "total": 7,
+        "differences": [],
+        "cleanup": true,
+        "errors": [],
+        "case_ids": [
+          "owned-format-append_ansi",
+          "owned-format-append_new",
+          "owned-format-csv",
+          "owned-format-output",
+          "owned-format-record",
+          "owned-format-table",
+          "owned-format-value"
+        ]
+      },
+      "session-files": {
+        "total": 9,
+        "differences": [],
+        "cleanup": true,
+        "errors": [],
+        "case_ids": [
+          "shell-output",
+          "shell-output-quit",
+          "shell-output-bad",
+          "shell-record-bad",
+          "shell-append",
+          "shell-record",
+          "shell-inline-output",
+          "repeat-output",
+          "repeat-record"
+        ]
+      },
+      "formats": {
+        "total": 12,
+        "differences": [],
+        "cleanup": true,
+        "errors": [],
+        "case_ids": [
+          "owned-format-basicxml_after",
+          "owned-format-basicxml_before",
+          "owned-format-csv",
+          "owned-format-hform",
+          "owned-format-htable",
+          "owned-format-mof",
+          "owned-format-nocomma_after",
+          "owned-format-nocomma_before",
+          "owned-format-rawxml",
+          "owned-format-table",
+          "owned-format-value",
+          "owned-format-xml"
+        ],
+        "normalizations": {
+          "owned-format-rawxml": "root COMMAND STARTTIME only",
+          "owned-format-xml": "exact root HTML COMMAND STARTTIME only"
+        }
+      },
+      "whitespace-formats": {
+        "total": 12,
+        "differences": [],
+        "cleanup": true,
+        "errors": [],
+        "case_ids": [
+          "owned-format-basicxml_after",
+          "owned-format-basicxml_before",
+          "owned-format-csv",
+          "owned-format-hform",
+          "owned-format-htable",
+          "owned-format-mof",
+          "owned-format-nocomma_after",
+          "owned-format-nocomma_before",
+          "owned-format-rawxml",
+          "owned-format-table",
+          "owned-format-value",
+          "owned-format-xml"
+        ],
+        "normalizations": {
+          "owned-format-rawxml": "root COMMAND STARTTIME only",
+          "owned-format-xml": "exact root HTML COMMAND STARTTIME only"
+        }
+      },
+      "lifecycle": {
+        "total": 11,
+        "differences": [],
+        "cleanup": [
+          {
+            "creation_date": "/Date(1792125117424)/",
+            "process_id": 1240,
+            "environment_remaining": 0,
+            "process_remaining": 0,
+            "role": "reference"
+          },
+          {
+            "creation_date": "/Date(1792125119896)/",
+            "process_id": 10512,
+            "environment_remaining": 0,
+            "process_remaining": 0,
+            "role": "candidate"
+          }
+        ],
+        "errors": [],
+        "case_ids": [
+          "environment-create",
+          "environment-get",
+          "environment-set-declined",
+          "environment-set",
+          "environment-get-changed",
+          "environment-delete-help",
+          "environment-delete-declined",
+          "environment-delete",
+          "process-create",
+          "process-owner",
+          "process-terminate"
+        ],
+        "probe_ids": []
+      },
+      "named-lifecycle": {
+        "total": 11,
+        "differences": [],
+        "cleanup": [
+          {
+            "creation_date": "/Date(1792125124534)/",
+            "process_id": 14040,
+            "environment_remaining": 0,
+            "process_remaining": 0,
+            "role": "reference"
+          },
+          {
+            "creation_date": "/Date(1792125126938)/",
+            "process_id": 12908,
+            "environment_remaining": 0,
+            "process_remaining": 0,
+            "role": "candidate"
+          }
+        ],
+        "errors": [],
+        "case_ids": [
+          "environment-create",
+          "environment-get",
+          "environment-set-declined",
+          "environment-set",
+          "environment-get-changed",
+          "environment-delete-help",
+          "environment-delete-declined",
+          "environment-delete",
+          "process-create",
+          "process-owner",
+          "process-terminate"
+        ],
+        "probe_ids": [
+          "process-create-null-directory"
+        ]
+      },
+      "console": {
+        "total": 9,
+        "differences": [],
+        "cleanup": true,
+        "errors": [],
+        "case_ids": [
+          "console-context",
+          "console-query",
+          "console-empty",
+          "console-cancel-repeat",
+          "console-cancel-second",
+          "console-break-key",
+          "console-eof",
+          "console-repeat2",
+          "console-repeat2-wait"
+        ]
+      }
+    }
+  }
+}

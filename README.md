@@ -88,6 +88,20 @@ python3 -m unittest discover -s tools/reference/tests
 python3 -m unittest discover -s tools/release/tests
 ```
 
+The reviewed build passes 158 portable Rust tests and 21 native Windows tests. The [compatibility report](docs/compatibility.md) pins the delivered executable hashes, corpus results, and remaining acceptance limits.
+
+For the selected Parallels guest, run the read-only corpus against a release build:
+
+```sh
+python3 tools/reference/run_corpus.py \
+  --vm '{ec3bc428-7a31-4f17-8424-7ce78923f7f3}' \
+  --target aarch64-pc-windows-msvc \
+  --binary target/aarch64-pc-windows-msvc/release/wmic.exe \
+  --out artifacts/recheck-arm64
+```
+
+The report retains known differences; it does not turn them into passing comparisons. Use a fresh output directory for each measured build. x86 runs capture the installed x86 original first; x64 runs use the ARM64 original and remain cross-architecture comparisons.
+
 Windows-only integration tests are ignored by default and require the reference fixtures and a selected guest. The source under `tools/windows` contains the controlled harnesses; read their scope before running them. The CLI itself does not require Python or PowerShell for ordinary WMI operations.
 
 ```sh

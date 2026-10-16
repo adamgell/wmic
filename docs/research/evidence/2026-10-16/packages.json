@@ -1,0 +1,44 @@
+[
+  {
+    "archive": "artifacts/packages/wmic-compat-0.1.0-dev-aarch64-pc-windows-msvc.zip",
+    "bytes": 931149,
+    "sha256": "143a20951a0c8cfe238381b9f42ddc9a95fe4db1cda3e106c6343b682f17bfff",
+    "target": "aarch64-pc-windows-msvc",
+    "executable_sha256": "cf1f6d2dec0ebaa559e373987bb1ce2d2ce62fe6f48049d194932549ecb52248",
+    "members": [
+      "README.md",
+      "SHA256SUMS",
+      "compatibility.md",
+      "manifest.json",
+      "wmic.exe"
+    ]
+  },
+  {
+    "archive": "artifacts/packages/wmic-compat-0.1.0-dev-i686-pc-windows-msvc.zip",
+    "bytes": 931073,
+    "sha256": "3d0b07b719e6d9dd7fb5a56b4ab813ffdab7aac367edae75583a0f305d53b6ec",
+    "target": "i686-pc-windows-msvc",
+    "executable_sha256": "1732bd1a506c7284d369867221b0bd5f4fbaa504f5044b0c6dcb819f8d71afd8",
+    "members": [
+      "README.md",
+      "SHA256SUMS",
+      "compatibility.md",
+      "manifest.json",
+      "wmic.exe"
+    ]
+  },
+  {
+    "archive": "artifacts/packages/wmic-compat-0.1.0-dev-x86_64-pc-windows-msvc.zip",
+    "bytes": 987467,
+    "sha256": "ec7e1d664cec6bd75de75e79d384ea4196ffe3b3072d1e54f5c7f8310264c8ae",
+    "target": "x86_64-pc-windows-msvc",
+    "executable_sha256": "7024a58f151713cba12662aaa94444a87dcc5634756e2d4073c3f5bf7dc6e7eb",
+    "members": [
+      "README.md",
+      "SHA256SUMS",
+      "compatibility.md",
+      "manifest.json",
+      "wmic.exe"
+    ]
+  }
+]

@@ -1,0 +1,25 @@
+{
+  "source_commit": "ac390d4",
+  "portable_rust_passed": 158,
+  "native_windows_library_passed": 18,
+  "native_windows_backend_passed": 3,
+  "reference_python_passed": 24,
+  "package_python_passed": 4,
+  "fmt": "pass",
+  "portable_clippy": "pass",
+  "arm64_all_target_clippy": "pass",
+  "release_msvc_targets": [
+    "aarch64-pc-windows-msvc",
+    "x86_64-pc-windows-msvc",
+    "i686-pc-windows-msvc"
+  ],
+  "review": "one fresh gpt-6-astra review; four Important findings fixed with RED to GREEN regressions; no Critical findings or deferred minors",
+  "typeahead": {
+    "profile": "ARM64 private console",
+    "transcripts_equal": true,
+    "state": "timeout",
+    "application_exit_status": null,
+    "forced_termination_status": 4294967295,
+    "width_while_alive": 1500
+  }
+}
