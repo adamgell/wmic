@@ -1,4 +1,4 @@
-//! Bounded scalar WQL predicates for the bundled metadata provider.
+//! Bounded scalar WQL predicates evaluated in memory against records.
 use crate::model::{CimValue, Record, WideText};
 #[derive(Clone, Debug)]
 enum Token {
@@ -246,7 +246,9 @@ impl Expr {
                 matches!(field(record, name)?, CimValue::Empty | CimValue::Null) != *not
             }
             Self::Like(name, pattern, not) => match field(record, name)? {
-                CimValue::String(value) => like(value, pattern)? != *not,
+                CimValue::String(value)
+                | CimValue::DateTime(value)
+                | CimValue::Reference(value) => like(value, pattern)? != *not,
                 CimValue::Null | CimValue::Empty => false,
                 _ => return Err(()),
             },
@@ -254,7 +256,10 @@ impl Expr {
                 let left = field(record, name)?;
                 let order = match (left, right) {
                     (CimValue::Null | CimValue::Empty, _) | (_, Literal::Null) => return Ok(false),
-                    (CimValue::String(a), Literal::Text(b)) => {
+                    (
+                        CimValue::String(a) | CimValue::DateTime(a) | CimValue::Reference(a),
+                        Literal::Text(b),
+                    ) => {
                         if a.eq_ordinal_ignore_case(b) {
                             std::cmp::Ordering::Equal
                         } else {
@@ -264,8 +269,22 @@ impl Expr {
                         }
                     }
                     (CimValue::Boolean(a), Literal::Bool(b)) => a.cmp(b),
-                    (CimValue::Sint32(a), Literal::Number(b)) => (*a as i128).cmp(b),
-                    (CimValue::Uint32(a), Literal::Number(b)) => (*a as i128).cmp(b),
+                    (CimValue::Real32(a), Literal::Number(b)) => {
+                        match (f32::from_bits(*a) as f64).partial_cmp(&(*b as f64)) {
+                            Some(order) => order,
+                            None => return Ok(false),
+                        }
+                    }
+                    (CimValue::Real64(a), Literal::Number(b)) => {
+                        match f64::from_bits(*a).partial_cmp(&(*b as f64)) {
+                            Some(order) => order,
+                            None => return Ok(false),
+                        }
+                    }
+                    (left, Literal::Number(b)) => match integer(left) {
+                        Some(a) => a.cmp(b),
+                        None => return Err(()),
+                    },
                     _ => return Err(()),
                 };
                 use std::cmp::Ordering::*;
@@ -281,6 +300,19 @@ impl Expr {
             }
         })
     }
+}
+fn integer(value: &CimValue) -> Option<i128> {
+    Some(match value {
+        CimValue::Sint8(v) => *v as i128,
+        CimValue::Uint8(v) => *v as i128,
+        CimValue::Sint16(v) => *v as i128,
+        CimValue::Uint16(v) | CimValue::Char16(v) => *v as i128,
+        CimValue::Sint32(v) => *v as i128,
+        CimValue::Uint32(v) => *v as i128,
+        CimValue::Sint64(v) => *v as i128,
+        CimValue::Uint64(v) => *v as i128,
+        _ => return None,
+    })
 }
 #[derive(Clone)]
 enum Piece {
@@ -362,4 +394,97 @@ fn like(text: &WideText, pattern: &WideText) -> Result<bool, ()> {
         previous = next;
     }
     Ok(previous[text.0.len()])
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::model::Property;
+    fn record(values: Vec<(&str, CimValue)>) -> Record {
+        Record {
+            properties: values
+                .into_iter()
+                .map(|(name, value)| Property {
+                    name: name.into(),
+                    value,
+                    cim_type: 0,
+                    system: false,
+                    qualifiers: vec![],
+                })
+                .collect(),
+            ..Default::default()
+        }
+    }
+    fn check(expression: &str, record: &Record) -> Result<bool, ()> {
+        Predicate::parse(&expression.into())?.matches(record)
+    }
+    #[test]
+    fn every_integer_width_compares_with_integer_literals() {
+        let r = record(vec![
+            ("A", CimValue::Sint8(-3)),
+            ("B", CimValue::Uint8(200)),
+            ("C", CimValue::Sint16(-300)),
+            ("D", CimValue::Uint16(65535)),
+            ("E", CimValue::Sint32(-5)),
+            ("F", CimValue::Uint32(4_000_000_000)),
+            ("G", CimValue::Sint64(-9_000_000_000)),
+            ("H", CimValue::Uint64(u64::MAX)),
+            ("I", CimValue::Char16(65)),
+        ]);
+        for expression in [
+            "A = -3",
+            "B > 199",
+            "C < -299",
+            "D = 65535",
+            "E <= -5",
+            "F >= 4000000000",
+            "G < 0",
+            "H = 18446744073709551615",
+            "I = 65",
+            "NOT A = 3 AND B <> 0",
+        ] {
+            assert_eq!(check(expression, &r), Ok(true), "{expression}");
+        }
+        for expression in ["A = 3", "B < 200", "H < 1", "I > 65"] {
+            assert_eq!(check(expression, &r), Ok(false), "{expression}");
+        }
+    }
+    #[test]
+    fn real_values_compare_with_integer_literals() {
+        let r = record(vec![
+            ("S", CimValue::Real32(1.5f32.to_bits())),
+            ("D", CimValue::Real64(2.0f64.to_bits())),
+            ("N", CimValue::Real64(f64::NAN.to_bits())),
+        ]);
+        assert_eq!(check("S > 1", &r), Ok(true));
+        assert_eq!(check("S >= 2", &r), Ok(false));
+        assert_eq!(check("D = 2", &r), Ok(true));
+        assert_eq!(check("D <> 2", &r), Ok(false));
+        assert_eq!(check("N = 2", &r), Ok(false));
+        assert_eq!(check("N <> 2", &r), Ok(false));
+    }
+    #[test]
+    fn date_time_and_reference_compare_as_text() {
+        let r = record(vec![
+            ("T", CimValue::DateTime("20260918204038.959360-240".into())),
+            ("P", CimValue::Reference("HOST:Win32_X.Id=1".into())),
+        ]);
+        assert_eq!(check("T = '20260918204038.959360-240'", &r), Ok(true));
+        assert_eq!(check("T > '20260101000000.000000-240'", &r), Ok(true));
+        assert_eq!(check("T LIKE '202609%'", &r), Ok(true));
+        assert_eq!(check("P LIKE '%win32_x%'", &r), Ok(true));
+    }
+    #[test]
+    fn mismatched_types_and_null_keep_their_results() {
+        let r = record(vec![
+            ("N", CimValue::Null),
+            ("I", CimValue::Uint16(1)),
+            ("S", CimValue::String("x".into())),
+        ]);
+        assert_eq!(check("N = 1", &r), Ok(false));
+        assert_eq!(check("I = 'x'", &r), Err(()));
+        assert_eq!(check("S = 1", &r), Err(()));
+        assert_eq!(check("I LIKE '1'", &r), Err(()));
+        assert_eq!(check("Missing = 1", &r), Err(()));
+    }
 }

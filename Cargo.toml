@@ -19,6 +19,11 @@ windows = { version = "0.62.2", features = ["Win32_Foundation", "Win32_Data_Xml_
 [target.'cfg(unix)'.dependencies]
 libc = "0.2"
 
+[target.'cfg(target_os = "macos")'.dependencies]
+core-foundation = "0.10"
+io-kit-sys = "0.5"
+plist = "1"
+
 [[bin]]
 name = "wmic"
 path = "src/main.rs"

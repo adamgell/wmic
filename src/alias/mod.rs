@@ -1,5 +1,5 @@
 //! Alias metadata is data, never startup provider enumeration or executable code.
-mod predicate;
+pub(crate) mod predicate;
 mod virtual_role;
 use crate::{
     backend::{ConnectionOptions, ResolvedRequest},
