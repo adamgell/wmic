@@ -41,13 +41,21 @@ A literal `C:\Windows\System32\wbem\WMIC.exe` call continues to use that locatio
 
 ## macOS
 
-The macOS build is `wmic`. It uses the same command parser, help, aliases, and output formats as the Windows build. It answers queries from macOS system interfaces instead of WMI. It serves 30 Win32 classes in `root\cimv2` for the local machine. `SET`, `CREATE`, `DELETE`, `ASSOC`, and remote nodes are not supported. No Microsoft WMIC exists for macOS, so data values have no reference corpus. The [macOS guide](https://github.com/adamgell/wmic/blob/main/docs/macos.md) lists the classes, methods, evidence, and unverified areas. The examples assume `wmic` is on PATH.
+The macOS build is `wmic`. It uses the same command parser, help, aliases, and output formats as the Windows build. It answers queries from macOS system interfaces instead of WMI. It serves 30 Win32 classes in `root\cimv2` for the local machine. `SET`, `CREATE`, `DELETE`, and `ASSOC` are not supported. A remote node is queried over WinRM (see below). No Microsoft WMIC exists for macOS, so data values have no reference corpus. The [macOS guide](https://github.com/adamgell/wmic/blob/main/docs/macos.md) lists the classes, methods, remote nodes, evidence, and unverified areas. The examples assume `wmic` is on PATH.
 
 ```sh
 wmic os get Caption,Version
 wmic os where "Caption like '%macOS%'" get Caption /format:csv
 wmic process where "ProcessId=$$" call GetOwner
 ```
+
+A `/node` that is not the local machine, or any `/user`, sends the request to the WinRM service on that node (WS-Management over HTTP, port 5985). The macOS build cannot speak DCOM, so the target needs WinRM enabled (`Enable-PSRemoting` or `winrm quickconfig`). Authentication is NTLMv2 with message encryption. Basic, Kerberos, CredSSP, and HTTPS are not implemented. Give the account as `/user:DOMAIN\name`, or as `/user:name /authority:NTLMDOMAIN:domain`. Without `/password:`, `wmic` reads the password from standard input.
+
+```sh
+wmic /node:server01 /user:CONTOSO\admin os get Caption
+```
+
+The environment variable `WMIC_WSMAN_PORT` replaces port 5985. The [remote nodes section](https://github.com/adamgell/wmic/blob/main/docs/macos.md#remote-nodes) of the macOS guide lists the requirements, errors, and limits. The Windows build is unchanged and uses DCOM.
 
 The shell removes quotes before `wmic` starts. `wmic` puts quotes around an argument that has white space. To pass quotes to WMIC, put the whole argument in single quotes: `wmic '/node:"a,b"' os get Caption`.
 

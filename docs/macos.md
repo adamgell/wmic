@@ -23,17 +23,18 @@ The commands in the guides use `wmic` after you put the executable on PATH. Repl
 
 ## Scope
 
-The macOS build runs the same parser, help, alias set, formats, and session logic as the Windows build. It does not use WMI. A backend answers each query from macOS system interfaces: sysctl, Mach, libproc, IOKit, Core Foundation, SystemConfiguration, `getfsstat`, `getifaddrs`, directory tables, and property lists. The only subprocess that a query starts is `/bin/launchctl`, for the `Win32_Service` class. The `Win32_Process` `Create` method also starts the program that the caller names.
+The macOS build runs the same parser, help, alias set, formats, and session logic as the Windows build. It does not use WMI. For the local machine, a backend answers each query from macOS system interfaces: sysctl, Mach, libproc, IOKit, Core Foundation, SystemConfiguration, `getfsstat`, `getifaddrs`, directory tables, and property lists. The only subprocess that a query starts is `/bin/launchctl`, for the `Win32_Service` class. The `Win32_Process` `Create` method also starts the program that the caller names.
 
-The backend serves 30 classes in the `root\cimv2` namespace. Twenty-six classes have a provider. Four classes exist but return no instances.
+The local backend serves 30 classes in the `root\cimv2` namespace. Twenty-six classes have a provider. Four classes exist but return no instances.
+
+A request for a node that is not the local machine, or with `/USER`, goes to the WinRM service on that node over WS-Management. [Remote nodes](#remote-nodes) lists the requirements and the limits.
 
 The macOS build does not support these operations:
 
-- `SET`, `CREATE`, and `DELETE`. They return `Not supported` (0x8004100C).
-- `ASSOC`. It returns `Not supported` (0x8004100C).
-- A node that is not the local machine. It returns `The RPC server is unavailable.` (0x800706BA).
-- A namespace other than `root\cimv2`. It returns `Invalid namespace` (0x8004100E).
-- An object path that omits a key property, or uses the `=@` form for a class that is not a singleton. It returns `Invalid object path` (0x8004103A).
+- `SET`, `CREATE`, and `DELETE`. They return `Not supported` (0x8004100C). This applies to the local machine and to remote nodes.
+- `ASSOC`. It returns `Not supported` (0x8004100C). This applies to the local machine and to remote nodes.
+- On the local machine, a namespace other than `root\cimv2`. It returns `Invalid namespace` (0x8004100E). A remote node receives the namespace in the resource URI and reports `Invalid namespace` for a namespace that it does not have.
+- An object path that omits a key property, or uses the `=@` form for a class that is not a singleton. It returns `Invalid object path` (0x8004103A). For a remote node, this check applies to the classes in the embedded schema.
 
 The local machine is `.`, `localhost`, `127.0.0.1`, `::1`, and the host name of the machine, with or without its domain suffix.
 
@@ -122,9 +123,119 @@ A custom `.xsl` file runs through the system `libxslt`. The engine applies these
 - The result is UTF-8 even when the stylesheet declares another encoding.
 - `libxslt` writes an empty element as `<a/>`. MSXML6 writes `<a />` or `<a></a>`, depending on how the input wrote the element. Custom stylesheet output can differ from Windows in this respect.
 
+## Remote nodes
+
+A request for another node goes to the WinRM service on that node. Classic WMIC uses DCOM for remote WMI. The macOS build cannot speak DCOM. Remote WMI from macOS needs WinRM on the target. The Windows build is unchanged and still uses DCOM.
+
+```sh
+wmic /node:server01 /user:CONTOSO\admin os get Caption
+```
+
+### When a request is remote
+
+- A request is remote when `/NODE` names a machine other than the local machine. [Scope](#scope) lists the local names.
+- A request for the local machine with `/USER` is refused with `User credentials cannot be used for local connections` (0x80041064), as on Windows. When `WMIC_WSMAN_PORT` is set, such a request goes to WinRM on that port instead, which serves SSH tunnels to a remote listener.
+- A `/NODE` without `/USER` sends an empty user name and an empty password. The build does not use the macOS login. Give `/USER` for each remote command.
+
+### Requirements
+
+- The target has WinRM enabled. Run `Enable-PSRemoting` or `winrm quickconfig` on the target.
+- The build sends WS-Management over HTTP to TCP port 5985, path `/wsman`. It connects directly and does not use an HTTP proxy.
+- Authentication is NTLMv2 inside the Negotiate scheme. After the logon, the build seals every SOAP message with the NTLM session key. Sealing encrypts and signs the message. This works against the Windows default, `AllowUnencrypted=false` with the Negotiate scheme enabled.
+- The build ends the logon when the server does not grant sealing. It sends no SOAP message in plain text.
+- The password does not cross the network. NTLMv2 sends a response that the build computes from it.
+- Not implemented: Basic, Kerberos, CredSSP, certificate authentication, and HTTPS (port 5986). A target that allows only these methods is not supported.
+- The connect timeout is 5 seconds. The read and write timeout is 90 seconds, longer than the 60 second operation timeout the request declares. A request that the server answers with a timeout fault is sent again until it completes or Ctrl+C ends it.
+
+### Credentials and connection settings
+
+| Input | Effect |
+| --- | --- |
+| `/USER:DOMAIN\name` | Logon as `name` in `DOMAIN`. |
+| `/USER:name /AUTHORITY:NTLMDOMAIN:domain` | Logon as `name` in `domain`. A `DOMAIN\` prefix in `/USER` takes precedence. Other `/AUTHORITY` forms are ignored. |
+| `/PASSWORD:text` | The password. The shell passes it to `wmic` as an argument, so other users on the Mac can read it in the process list. |
+| `/USER` without `/PASSWORD` | `wmic` writes `Enter the password :` to standard error and reads one line from standard input. The input is not echoed when standard input is a terminal. A script can pipe the password. An empty line sends an empty password. |
+| `/AUTHLEVEL`, `/IMPLEVEL`, `/PRIVILEGES`, `/LOCALE` | Accepted. They have no effect on WinRM. Every request uses the locale `en-US`. |
+| `/FAILFAST:on` | Before the query, checks that a TCP connection to the listener port opens. A number sets the timeout in milliseconds. The default is 5000. On failure the command reports `RPC Server not available.` (0xABE3). |
+| `WMIC_WSMAN_PORT` | An environment variable. Its value replaces port 5985 for all nodes. Use it for a non-standard listener or an SSH tunnel. A value that is not a port number from 1 to 65535 reports `Invalid parameter` (0x80041008). |
+
+```sh
+printf '%s\n' "$PASSWORD" | wmic /node:server01 /user:CONTOSO\admin os get Caption
+```
+
+### What works
+
+- Alias queries and WQL queries: `GET`, `LIST`, `WHERE`, and property lists.
+- `PATH` with an object path that has keys. An instance that does not exist returns no objects and no error.
+- `CLASS` and `PATH <class> GET /?`. For a class in the embedded schema, the definition comes from the schema and the build sends nothing. For another class, see the list below.
+- `CALL` on static methods such as `Win32_Process.Create`, and on instance methods such as `GetOwner`. For an instance method, the build first selects the instances, then calls the method on each one. The build does not repeat a method call.
+- The confirmation prompts of `/INTERACTIVE:ON`. They use the Windows text, with the object path of the instance.
+- Every output format.
+- The alias set is the Windows set. An alias without a macOS provider, such as `printer`, works against a remote node.
+- An enumeration reads 32 instances per request. Ctrl+C between requests ends the enumeration, releases it on the server, and keeps the instances received so far. A failed request also keeps them.
+
+For a class outside the embedded schema (30 classes, see [Supported classes](#supported-classes)):
+
+- Queries work. The build types every property value as a string.
+- `CLASS` and `/?` read the first instance of the class. They list the property names with the type string and no methods. A class without an instance lists no properties.
+- `__SUPERCLASS` is NULL and `__DYNASTY` is the class name.
+- `CALL` sends the arguments named in the command as text. The call is static when the command has no object path and no `WHERE` clause.
+
+For a class in the schema, a method that the class does not have returns `<name> - Invalid alias verb.` (0xABFD) and sends nothing.
+
+### What does not work
+
+`SET`, `CREATE`, `DELETE`, and `ASSOC` return `Not supported` (0x8004100C). The build sends nothing to the node for them.
+
+### Data fidelity
+
+- The embedded Windows class schema gives each value its type. A value that does not fit its declared type stays as text.
+- A datetime converts from the WS-Management ISO form to the CIM form. The build keeps the wall-clock fields and the offset of the remote machine. It does not convert to UTC. A duration with days and time fields converts to a CIM interval.
+- A reference property becomes an object path. An embedded object becomes a nested record.
+- WinRM does not send object paths or the ten `__*` system properties. The build creates them from the endpoint reference and the schema: `__PATH`, `__RELPATH`, `__NAMESPACE`, `__SERVER`, `__CLASS`, `__SUPERCLASS`, `__DYNASTY`, `__DERIVATION`, `__GENUS`, and `__PROPERTY_COUNT`.
+- The server part of an object path and `__SERVER` carry the computer name that the remote machine reports during authentication, as on Windows. When the exchange carries no name, the node name as typed, in upper case, is used.
+- The `Node` column of the CSV format and the `Node - ` line of an error show the node as typed, as on Windows.
+- The default namespace is `root\cimv2`. `/NAMESPACE` sets another namespace through the resource URI.
+
+### Errors
+
+| Case | Message | Status | Exit code |
+| --- | --- | --- | ---: |
+| Unknown class in an alias or WQL query | `Invalid class` | 0x80041010 | 16 |
+| Unknown class in `PATH` | `Not found` | 0x80041002 | 2 |
+| Unknown property | `Invalid query` | 0x80041017 | 23 |
+| Unknown namespace | `Invalid namespace` | 0x8004100E | 14 |
+| The server refuses the logon | `Access denied` | 0x80070005 | 5 |
+| WMI refuses the operation | `Access denied` | 0x80041003 | 3 |
+| The connection fails: refused, name not found, or no answer in 5 seconds | `The RPC server is unavailable.` | 0x800706BA | 186 |
+| `SET`, `CREATE`, `DELETE`, `ASSOC` | `Not supported` | 0x8004100C | 12 |
+| A fault with another WMI status, for example an invalid parameter or an invalid method | The text of that status | The status | Low byte of the status |
+| A fault without a WMI status, an HTTP error, or a reply that is not SOAP | `Generic failure` | 0x80041001 | 1 |
+
+- The connection failure keeps the text of classic WMIC so that scripts behave the same.
+- The exit codes follow the mapping in [Exit status](#exit-status).
+- A WMI status that has no WMIC text shows the text from the server. For `Generic failure`, the server text is kept in the error record and is not printed.
+
+### Several nodes
+
+`/NODE:a,b` runs the command for each node in turn. The build chooses the backend for each node. A local name stays on the local backend unless the command has `/USER`. With `/USER`, every node goes to WinRM, including the local names. Each node prints its own result. A failure on one node does not stop the next node. The exit status is the status of the last node that failed.
+
+Requests to the same host, port, and account share one authenticated connection in one `wmic` process. A request that cannot change state repeats once on a new connection when a reused connection fails. A method call never repeats.
+
+### Diagnose a listener
+
+The example `wsman-probe` is not part of the `wmic` executable. It does not run on Windows.
+
+```sh
+cargo run --example wsman-probe -- HOST PORT [DOMAIN\]USER
+cargo run --example wsman-probe -- --challenge HOST PORT
+```
+
+The first form reads the password from standard input, authenticates with NTLM, sends an Identify request, and prints the decrypted reply. The second form sends only the NTLM negotiate message and prints the parsed challenge. It uses no credentials.
+
 ## Supported classes
 
-The bundled alias set is the Windows set: 81 aliases and 426 views. Help, `alias list`, `CONTEXT`, and `/?` behave as on Windows. Thirty aliases map to a class that this build serves. An alias for any other class returns `Invalid class` (0x80041010) when it is queried. The bundled alias store answers `ALIAS` queries for the local node. The commands `path` and `class` with an unknown class name return `Not found` (0x80041002). A property name that the class does not have returns `Invalid query` (0x80041017).
+The bundled alias set is the Windows set: 81 aliases and 426 views. Help, `alias list`, `CONTEXT`, and `/?` behave as on Windows. Thirty aliases map to a class that this build serves. An alias for any other class returns `Invalid class` (0x80041010) when it is queried for the local machine. The bundled alias store answers `ALIAS` queries for the local node. The commands `path` and `class` with an unknown class name return `Not found` (0x80041002). A property name that the class does not have returns `Invalid query` (0x80041017).
 
 Every property of a class is present in every instance. A value that macOS cannot provide is NULL. The column "Always NULL" lists notable properties that the provider never sets. Other properties can also be NULL when the source has no value.
 
@@ -216,7 +327,8 @@ This is an administrative shutdown path. Apple's `shutdown(8)` manual describes 
 - `Win32_Environment` lists the environment of the `wmic` process. It does not list user and system variables.
 - `Win32_Service` lists launchd jobs. `ServiceType` is `Own Process`. `AcceptStop` is true. `AcceptPause` is false.
 - Each `Win32_Service` query starts `/bin/launchctl` four times: `print` and `print-disabled`, each for the `system` domain and the user's `gui` domain. A method call reuses the inventory for 5 seconds.
-- The backend reads only the node and the namespace of a request. It does not read `/USER`, `/PASSWORD`, `/AUTHORITY`, `/LOCALE`, `/AUTHLEVEL`, `/IMPLEVEL`, or `/PRIVILEGES`.
+- The local backend reads only the node and the namespace of a request. It does not read `/USER`, `/PASSWORD`, `/AUTHORITY`, `/LOCALE`, `/AUTHLEVEL`, `/IMPLEVEL`, or `/PRIVILEGES`. The remote backend reads the node, the namespace, `/USER`, `/PASSWORD`, and `/AUTHORITY`. [Remote nodes](#remote-nodes) lists the effect of the other switches.
+- A remote node returns the values of the Windows host. The tables in [Supported classes](#supported-classes), [Value mapping](#value-mapping), and [Methods](#methods) describe the local machine only.
 - `Win32_OperatingSystem.Locale` and `OSLanguage` come from the `LC_ALL`, `LC_MESSAGES`, and `LANG` environment variables. Only English locales have values.
 - `Win32_Process.Create` ignores `ProcessStartupInformation`.
 - The format and stylesheet differences are listed in [Formats and stylesheets](#formats-and-stylesheets).
@@ -229,7 +341,8 @@ The evidence for the macOS build differs from the Windows evidence in [compatibi
 - No Microsoft WMIC exists for macOS. The project has no reference corpus for data values on macOS.
 - Output formatting is checked against the captured Windows output in `tests/fixtures`. The shared renderer tests run on macOS.
 - Data shape is checked against the Windows class schema. The file `assets/macos-schema.json` holds the classes, property names, types, and method signatures.
-- Data values are checked against the macOS sources on one machine, an Apple Silicon Mac mini that runs macOS 26.6.2.
+- Local data values are checked against the macOS sources on one machine, an Apple Silicon Mac mini that runs macOS 26.6.2.
+- Remote node behavior is checked against WinRM reply fixtures in `tests/fixtures/wsman` and against two live Windows hosts. See [Remote node evidence](#remote-node-evidence).
 
 The CI workflow defines a `macos` job for the runners `macos-15` and `macos-26`. The job runs `cargo fmt --check`, `cargo clippy --locked --all-targets -- -D warnings`, `cargo build --locked --release`, and `cargo test --locked`.
 
@@ -247,11 +360,14 @@ The test files below contain these `#[test]` functions in this revision.
 | `src/backend/macos/providers/mapping_tests.rs` | 4 | macOS | Fixed nonempty disk/partition/interface/DHCP/DNS snapshots with exact expected typed records |
 | `src/backend/macos/providers/operating_system.rs` (unit tests) | 6 | macOS | All four power methods, force preservation, flag validation, fake privilege denial, and result shape through injected adapters |
 | `src/backend/macos/sys/power_tests.rs` | 8 | macOS | Exact ordinary versus forced operation selection, zero action calls when privilege is denied, command status/error mapping, and no forced fallback |
+| `tests/wsman_protocol.rs` | 51 | Unix (3 on macOS only) | Enumerate, pull, release, get, invoke, faults, typing, object paths, nested reference keys, routing, port validation, stale connections, timeouts |
+| `tests/wsman_transport.rs` | 27 | Unix | NTLM vectors from MS-NLMP 4.2.4, loopback server with a real handshake, sealing, framing variants, chunked HTTP, unsealed-reply refusal, wrong password, closed connections |
+| `src/backend/wsman/**` (unit tests) | 31 | Unix | Value conversion, fault precedence, parsing limits, path quoting, record building, envelopes, timeouts, the port variable |
 | `src/platform/unix/console.rs` (unit tests) | 4 | Unix | Signal handler, inherited dispositions, terminal restore |
 | `src/alias/predicate.rs` (unit tests) | 6 | All platforms | WHERE literal coercion and comparison types |
-| Total | 182 | | |
+| Total | 291 | | |
 
-The five `tests/macos_*.rs` files hold 107 of the 182 tests listed here. Unix and Windows-specific suites have explicit platform gates. At the earlier commit b2755a9, `cargo test --locked` reported 311 passed and 0 failed on the Mac mini, and 189 passed, 0 failed, 33 ignored on Windows.
+The five `tests/macos_*.rs` files hold 107 of the 291 tests listed here. The remote-node suites run on every Unix platform. Unix and Windows-specific suites have explicit platform gates. At the earlier commit b2755a9, `cargo test --locked` reported 311 passed and 0 failed on the Mac mini, and 189 passed, 0 failed, 33 ignored on Windows.
 
 The earlier follow-up passed 327 tests on Apple Silicon, including 12 executable tests and four fixed-snapshot mapping tests. [Review evidence](research/evidence/2026-10-16/macos-pr-review.json) records that baseline. The shutdown fix passes 340 tests: it adds 14 injected tests and replaces the prior native privilege/invalid-flag test, so all power behavior is tested through fakes, independently of the test runner's real user ID. [Shutdown fix evidence](research/evidence/2026-10-16/macos-shutdown-fix.json) records the fresh checks and remaining acceptance limits.
 
@@ -261,17 +377,57 @@ The tests that read the live system assert structure and internal consistency. E
 
 Required system providers must return instances on the supported macOS runners. Disk/partition and adapter tests reject empty results, and every adapter requires a configuration. The four explicitly unpopulated hardware classes remain allowed to be empty; other optional providers can be empty when no corresponding data exists. Fixed input snapshots additionally verify disk ownership/geometry/type, physical and virtual links, IPv4/IPv6 addressing, DHCP, DNS, missing values, and disconnected interfaces independently of live hardware availability.
 
+### Remote node evidence
+
+The commands below ran on 2026-10-16 from the Mac mini against two Windows hosts through an SSH tunnel to the WinRM listener. One host runs Windows 11 Enterprise Evaluation (build 26200). The other host runs Windows Server 2025 Datacenter Evaluation (build 26100). Both are lab machines. The exit code of every command was read from the shell. For a command with a pipe, the exit code is the exit code of the pipeline.
+
+| Host | Command | Result |
+| --- | --- | --- |
+| Windows 11 | `os get Caption,Version,BuildNumber,CSName,LastBootUpTime,FreePhysicalMemory` | One row. `LastBootUpTime` is in CIM form with the remote offset (`-240`). Exit 0. |
+| Windows 11 | `os get Caption,Primary,MUILanguages,OSArchitecture /format:list` | `Primary` is `TRUE`. `MUILanguages` is an array. Exit 0. |
+| Windows 11 | `cpu get Name,NumberOfCores,MaxClockSpeed` | One row. Exit 0. |
+| Windows 11 | `logicaldisk get DeviceID,FileSystem,Size,FreeSpace` | One row for the `C:` drive. Exit 0. |
+| Windows 11 | `process where "Name='lsass.exe'" get Name,ProcessId,ExecutablePath,CreationDate` | One row. `ExecutablePath` is empty for this protected process. Exit 0. |
+| Windows 11 | `process get Name,ProcessId /format:csv` | CSV with a `Node` column that holds the node as typed. Exit 0. |
+| Windows 11 | `os get __SERVER,__PATH,__NAMESPACE /format:list` | `__SERVER` and the server part of `__PATH` hold the remote computer name. `__NAMESPACE` is `ROOT\CIMV2`. Exit 0. |
+| Windows 11 | `service where "StartMode='Auto'" get Name` | 67 lines of output, more than one page of 32 instances. Exit 0. |
+| Windows 11 | `nicconfig where IPEnabled=TRUE get IPAddress,MACAddress,DHCPEnabled /format:list` | Two adapters. `IPAddress` is an array. `DHCPEnabled` is a Boolean. Exit 0. |
+| Windows 11 | `path Win32_Nope get Name` | `Not found`, exit 2, no `Node - ` line. |
+| Windows 11 | `os get Nope` | `Invalid query`, exit 23. |
+| Windows 11 | `path Win32_OperatingSystem get "/?"` | The property help from the embedded schema. Exit 0. |
+| Windows 11 | `process call create "cmd.exe /c exit 0"` | `Method execution successful.` The out parameters hold a process id and `ReturnValue = 0`. Exit 0. |
+| Windows 11 | `process where "Name='lsass.exe'" call getowner` | `Method execution successful.` `Domain` and `User` hold the owner. `ReturnValue = 0`. Exit 0. |
+| Windows 11 | `path Win32_LogicalDiskToPartition get __RELPATH /format:list` | The association keys are quoted object paths of the partition and the disk. Exit 0. |
+| Windows 11 | `/namespace:\root
+osuchns path Win32_OperatingSystem get Caption` | `Invalid namespace`, exit 14. |
+| Windows Server | `os get Caption,Version,CSName` | One row. Exit 0. |
+| Windows Server | `service where "Name='CcmExec'" get Name,DisplayName,State,StartMode,ProcessId /format:csv` | One row. Exit 0. |
+| Windows Server | `printer get Name` | One printer row. Exit 0. |
+| Windows Server | `useraccount get Name,Domain,SID /format:csv` | CSV rows with SIDs. Exit 0. |
+| Windows Server | `product get Name,Version /format:csv` | CSV rows of installed products. Exit 0. |
+
+The same commands run through the Windows build against `/node:127.0.0.1` print the typed address in the `Node` column and the computer name in `__SERVER`, which is what the macOS build prints.
+
 ## Not verified
 
 - Intel Macs. The code has separate values for x86_64. They have not run.
 - macOS versions before 15. Manual runs on macOS 15 are unverified.
 - Real ordinary or forced `Win32_OperatingSystem` shutdown/restart effects. Injected tests cover the privileged route and result mapping, but no native power action or GUI shutdown interaction has been exercised.
 - Experimental service control. The `StartService`, `StopService`, and `ChangeStartMode` methods have no real test-owned launchd lifecycle acceptance. Only parsing and command construction have tests.
-- Remote nodes.
+- Remote nodes, in addition to the commands in [Remote node evidence](#remote-node-evidence):
+  - Kerberos, CredSSP, Basic, certificate authentication, and HTTPS. The build does not implement them.
+  - Hosts that require unencrypted traffic or Basic authentication. The build does not support them.
+  - Servers with a language other than English. Both live hosts use English. Every request asks for the locale `en-US`.
+  - HTTP proxies. The build does not use them.
+  - IPv6 literals in `/NODE`. The code brackets an IPv6 literal in the URL. No test or live run uses one.
+  - Large enumerations. The longest output that a live run counted had 67 lines.
+  - Enumeration context expiry. Only fixture replies test the restart after an expired context.
+  - `SET`, `CREATE`, and `DELETE` over WinRM. The build does not implement them.
+  - More than one node in one command. The code runs the nodes in turn through the dispatcher. No live run uses a node list.
 - The clipboard outside a graphical session.
 - The `sudo` path that selects the invoking user's launchd domain. A unit test covers the selection only.
 - Arguments that are not valid UTF-8.
 - The alias `UPS` and the class `Win32_UninterruptiblePowerSupply`. The class is absent from the schema source.
-- The aliases `Printer`, `Share`, `SoundDev`, `DesktopMonitor`, and every other bundled alias that the class table does not list. These aliases have no provider. A query returns `Invalid class`.
+- The aliases `Printer`, `Share`, `SoundDev`, `DesktopMonitor`, and every other bundled alias that the class table does not list. These aliases have no provider. A query for the local machine returns `Invalid class`.
 - The `libxslt` serialization of empty elements. The test suite does not assert it.
 - The `/EVERY` key check and the password prompt on a terminal. The test suite does not drive a terminal.
