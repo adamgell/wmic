@@ -89,7 +89,7 @@ impl ClassProvider for NetworkAdapterConfiguration {
                     .set("DNSDomain", dns.and_then(|d| d.domain.as_deref()))
                     .set(
                         "DNSDomainSuffixSearchOrder",
-                        dns.map(|d| d.search_domains.clone()),
+                        dns.and_then(|d| or_null(d.search_domains.clone())),
                     )
                     .set("DNSHostName", host_label.as_deref())
                     .set("DNSEnabledForWINSResolution", false)

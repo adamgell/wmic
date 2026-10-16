@@ -1,17 +1,25 @@
 #![cfg(target_os = "macos")]
 mod support;
-use std::{collections::HashMap, io::Cursor, path::Path};
+use std::{
+    cell::{Cell, RefCell},
+    collections::HashMap,
+    io::Cursor,
+    path::Path,
+    time::{Duration, Instant},
+};
 use support::request;
 use wmic_compat::{
     backend::{
         Management,
         macos::{
             MacManagement,
+            context::Context,
             provider::registry,
+            providers::{product, quick_fix_engineering, service, user_account},
             sys::{
                 accounts, cmdline,
-                launchd::{self, Domain, Outcome, RuntimeEntry},
-                proc,
+                launchd::{self, Domain, Outcome, Runtime, RuntimeEntry, Service},
+                proc, spawn,
             },
         },
     },
@@ -101,12 +109,34 @@ fn spawn_sleeper() -> i32 {
     }
 }
 
-/// Kills and reaps a child of this test process; returns the signal that ended it.
-fn reap(pid: i32) -> Option<i32> {
+/// Waits until the kernel has no process table row for the pid. The provider reaps its children
+/// on a detached thread, so a test must not wait for them itself.
+fn wait_until_gone(pid: i32) {
+    for _ in 0..200 {
+        if proc::find(pid).is_none() {
+            return;
+        }
+        std::thread::sleep(Duration::from_millis(25));
+    }
+    panic!("process {pid} is still in the process table");
+}
+
+/// Kills a child created through the provider and waits until it is gone.
+fn stop_child(pid: i32) {
     unsafe { libc::kill(pid, libc::SIGKILL) };
-    let mut status = 0;
-    unsafe { libc::waitpid(pid, &mut status, 0) };
-    libc::WIFSIGNALED(status).then(|| libc::WTERMSIG(status))
+    wait_until_gone(pid);
+}
+
+fn created_pid(result: &MethodResult) -> i32 {
+    match result
+        .out_parameters
+        .iter()
+        .find(|p| p.name.eq_ignore_case("ProcessId"))
+        .map(|p| &p.value)
+    {
+        Some(CimValue::Uint32(pid)) => *pid as i32,
+        other => panic!("missing ProcessId: {other:?}"),
+    }
 }
 
 #[test]
@@ -153,17 +183,33 @@ fn process_argument_buffers_skip_the_path_and_environment() {
     assert_eq!(proc::parse_arguments(&buffer[..2]), None);
     let mut truncated = 2i32.to_ne_bytes().to_vec();
     truncated.extend(b"/bin/x\0\0x\0");
-    assert_eq!(proc::parse_arguments(&truncated).unwrap(), ["x", ""]);
+    assert_eq!(proc::parse_arguments(&truncated).unwrap(), ["x"]);
 }
 
-const PRINT: &str = "system = {\n\ttype = system\n\thandle = 0\n\tactive count = 1058\n\tservice count = 6\n\tservices = {\n\t\t       0      - \tcom.apple.backgroundassets.managed.relay.service\n\t\t     536      - \tcom.apple.runningboardd\n\t\t       0   (pe) \tcom.apple.kernelmanager_helper\n\t\t       0      0 \tcom.apple.wifiFirmwareLoader\n\t\t   16229    -15 \tcom.apple.XprotectFramework.PluginService\n\t\t     453      - \tcom.apple.fseventsd\n\t}\n\n\tattractive services = {\n\t\t       0      - \tcom.example.not.a.service\n\t}\n\n\tdisabled services = {\n\t\t\"com.apple.ftpd\" => disabled\n\t}\n}\n";
+#[test]
+fn rewritten_argument_areas_lose_their_trailing_empty_arguments() {
+    let mut buffer = 5i32.to_ne_bytes().to_vec();
+    buffer.extend(b"/usr/libexec/sshd-session\0\0\0sshd-session: user [priv]\0\0\0\0\0HOME=/x\0");
+    assert_eq!(
+        proc::parse_arguments(&buffer).unwrap(),
+        ["sshd-session: user [priv]"]
+    );
+    let mut inner = 4i32.to_ne_bytes().to_vec();
+    inner.extend(b"/bin/x\0x\0\0y\0\0HOME=/x\0");
+    assert_eq!(proc::parse_arguments(&inner).unwrap(), ["x", "", "y"]);
+    let mut empty = 2i32.to_ne_bytes().to_vec();
+    empty.extend(b"/bin/x\0\0\0\0");
+    assert!(proc::parse_arguments(&empty).unwrap().is_empty());
+}
+
+const PRINT: &str = "system = {\n\ttype = system\n\thandle = 0\n\tactive count = 1058\n\tservice count = 6\n\tservices = {\n\t\t       0      - \tcom.apple.backgroundassets.managed.relay.service\n\t\t     536      - \tcom.apple.runningboardd\n\t\t       0   (pe) \tcom.apple.kernelmanager_helper\n\t\t       0      0 \tcom.apple.wifiFirmwareLoader\n\t\t   16229    -15 \tcom.apple.XprotectFramework.PluginService\n\t\t     453      - \tcom.apple.fseventsd\n\t\t     912     -9 \tcom.example.Label With  Spaces \n\t}\n\n\tattractive services = {\n\t\t       0      - \tcom.example.not.a.service\n\t}\n\n\tdisabled services = {\n\t\t\"com.apple.ftpd\" => disabled\n\t}\n}\n";
 
 const DISABLED: &str = "\n\tdisabled services = {\n\t\t\"com.apple.AEServer\" => enabled\n\t\t\"com.apple.CSCSupportd\" => disabled\n\t\t\"com.openssh.sshd\" => enabled\n\t\t\"odd\" => 1\n\t}\n";
 
 #[test]
 fn launchctl_service_rows_parse() {
     let rows = launchd::parse_services(PRINT);
-    assert_eq!(rows.len(), 6);
+    assert_eq!(rows.len(), 7);
     assert_eq!(
         rows[0],
         RuntimeEntry {
@@ -177,6 +223,18 @@ fn launchctl_service_rows_parse() {
     assert_eq!(rows[3].status, Some(0));
     assert_eq!(rows[4].status, Some(-15));
     assert_eq!(rows[5].label, "com.apple.fseventsd");
+    assert_eq!(
+        rows[6],
+        RuntimeEntry {
+            pid: 912,
+            status: Some(-9),
+            label: "com.example.Label With  Spaces".into()
+        }
+    );
+    assert_eq!(service::exit_code(rows[4].status), 1067);
+    assert_eq!(service::exit_code(rows[3].status), 0);
+    assert_eq!(service::exit_code(rows[0].status), 0);
+    assert_eq!(service::exit_code(Some(78)), 78);
     assert!(launchd::parse_services("Bad request.\n").is_empty());
     let listing = launchd::parse_services("\tservices = {\n\t\t-\t0\tcom.example.idle\n\t}\n");
     assert_eq!(listing[0].pid, 0);
@@ -447,7 +505,13 @@ fn process_table_includes_this_process_with_details() {
     assert!(line.contains(&file), "{line}");
     let created = text(me, "CreationDate").unwrap();
     assert_eq!(created.len(), 25, "{created}");
-    assert_eq!(number(me, "Priority"), Some(8));
+    let nice = unsafe { libc::getpriority(libc::PRIO_PROCESS, 0) };
+    let priority = match nice {
+        0 => 8,
+        n if n < 0 => 13,
+        _ => 4,
+    };
+    assert_eq!(number(me, "Priority"), Some(priority));
     assert!(number(me, "ThreadCount").unwrap() >= 1);
     assert!(number(me, "WorkingSetSize").unwrap() > 0);
     assert!(number(me, "VirtualSize").unwrap() > 0);
@@ -558,10 +622,7 @@ fn create_runs_a_program_and_terminate_kills_it() {
             .to_string_lossy()
             .ends_with(&format!("Win32_Process.Handle=\"{pid}\""))
     );
-    let mut status = 0;
-    unsafe { libc::waitpid(pid, &mut status, 0) };
-    assert!(libc::WIFSIGNALED(status));
-    assert_eq!(libc::WTERMSIG(status), libc::SIGKILL);
+    wait_until_gone(pid);
 }
 
 #[test]
@@ -571,25 +632,21 @@ fn terminate_through_an_object_path() {
         "path Win32_Process.Handle=\"{pid}\" call terminate"
     ));
     assert_eq!(return_value(&results[0]), 0);
-    assert_eq!(reap(pid), Some(libc::SIGKILL));
+    wait_until_gone(pid);
 }
 
 #[test]
 fn create_detaches_the_child_from_the_session_and_standard_streams() {
     let pid = spawn_sleeper();
     assert_eq!(unsafe { libc::getsid(pid) }, pid);
-    let mut output = vec![0u8; 0];
     let listing = std::process::Command::new("/usr/sbin/lsof")
         .args(["-a", "-p", &pid.to_string(), "-Fn", "-d", "0,1,2"])
-        .output();
-    if let Ok(listing) = listing {
-        output = listing.stdout;
-    }
-    reap(pid);
-    let names = String::from_utf8_lossy(&output);
-    for line in names.lines().filter(|l| l.starts_with('n')) {
-        assert_eq!(line, "n/dev/null", "{names}");
-    }
+        .output()
+        .expect("lsof runs");
+    stop_child(pid);
+    let names = String::from_utf8_lossy(&listing.stdout);
+    let opened: Vec<&str> = names.lines().filter(|l| l.starts_with('n')).collect();
+    assert_eq!(opened, ["n/dev/null"; 3], "{names}");
 }
 
 #[test]
@@ -601,12 +658,7 @@ fn create_honors_the_working_directory() {
         marker.display()
     ));
     assert_eq!(return_value(&results[0]), 0);
-    let pid = match &results[0].out_parameters[0].value {
-        CimValue::Uint32(pid) => *pid as i32,
-        other => panic!("{other:?}"),
-    };
-    let mut status = 0;
-    unsafe { libc::waitpid(pid, &mut status, 0) };
+    wait_until_gone(created_pid(&results[0]));
     let created = marker.join("created.txt").exists();
     std::fs::remove_dir_all(&marker).unwrap();
     assert!(created);
@@ -630,12 +682,7 @@ fn create_has_no_shell() {
         marker.display()
     ));
     assert_eq!(return_value(&results[0]), 0);
-    let pid = match &results[0].out_parameters[0].value {
-        CimValue::Uint32(pid) => *pid as i32,
-        other => panic!("{other:?}"),
-    };
-    let mut status = 0;
-    unsafe { libc::waitpid(pid, &mut status, 0) };
+    wait_until_gone(created_pid(&results[0]));
     assert!(!marker.exists());
 }
 
@@ -693,7 +740,7 @@ fn set_priority_maps_windows_classes_to_nice_values() {
         assert_eq!(set(32), 2, "lowering the nice value needs privilege");
         assert_eq!(nice(), 19);
     }
-    reap(pid);
+    stop_child(pid);
 }
 
 #[test]
@@ -782,13 +829,10 @@ fn a_running_system_service_cannot_start_again_or_change_without_privilege() {
 
 #[test]
 fn stopping_a_stopped_service_is_not_active() {
-    let stopped = objects("service where \"State='Stopped'\" get Name");
-    let Some(first) = stopped.first() else {
-        return;
-    };
-    let name = text(first, "Name").unwrap();
-    let results = invoke(&format!("service where \"Name='{name}'\" call stopservice"));
-    assert_eq!(return_value(&results[0]), 6);
+    let (stopped, calls) = recorder();
+    let idle = fake_service(Domain::Gui(501), DAEMON, true, 0, false);
+    assert_eq!(service::stop(&idle, &stopped), 6);
+    assert!(calls.borrow().is_empty());
 }
 
 #[test]
@@ -908,8 +952,15 @@ fn quick_fixes_come_from_the_install_history() {
         assert!(fixes.is_empty());
         return;
     }
+    let mut paths = vec![];
     for fix in &fixes {
         assert!(!text(fix, "HotFixID").unwrap().is_empty());
+        paths.push(
+            fix.path
+                .as_ref()
+                .expect("records carry a path")
+                .to_string_lossy(),
+        );
         assert_eq!(text(fix, "Description").as_deref(), Some("Update"));
         assert_eq!(*value(fix, "Caption"), CimValue::Null);
         assert_eq!(*value(fix, "InstalledBy"), CimValue::Null);
@@ -924,4 +975,502 @@ fn quick_fixes_come_from_the_install_history() {
             assert_eq!(parts[2].len(), 4);
         }
     }
+    let total = paths.len();
+    paths.sort();
+    paths.dedup();
+    assert_eq!(paths.len(), total, "object paths are unique");
+}
+
+const MANUAL: &str = r#"<?xml version="1.0" encoding="UTF-8"?>
+<plist version="1.0"><dict>
+<key>Label</key><string>com.example.manual</string>
+<key>ProgramArguments</key><array><string>/usr/bin/true</string></array>
+</dict></plist>"#;
+
+const KEPT: &str = r#"<?xml version="1.0" encoding="UTF-8"?>
+<plist version="1.0"><dict>
+<key>Label</key><string>com.example.kept</string>
+<key>ProgramArguments</key><array><string>/usr/bin/true</string></array>
+<key>KeepAlive</key><true/>
+</dict></plist>"#;
+
+const LOGIN_DISABLED: &str = r#"<?xml version="1.0" encoding="UTF-8"?>
+<plist version="1.0"><dict>
+<key>Label</key><string>com.example.login</string>
+<key>ProgramArguments</key><array><string>/usr/bin/true</string></array>
+<key>RunAtLoad</key><true/>
+<key>Disabled</key><true/>
+</dict></plist>"#;
+
+struct TempDir(std::path::PathBuf);
+
+impl TempDir {
+    fn at(path: std::path::PathBuf) -> Self {
+        let _ = std::fs::remove_dir_all(&path);
+        std::fs::create_dir_all(&path).unwrap();
+        Self(path)
+    }
+
+    fn new(tag: &str) -> Self {
+        Self::at(std::env::temp_dir().join(format!("wmic-{tag}-{}", std::process::id())))
+    }
+}
+
+impl Drop for TempDir {
+    fn drop(&mut self) {
+        let _ = std::fs::remove_dir_all(&self.0);
+    }
+}
+
+type Calls = std::rc::Rc<RefCell<Vec<Vec<String>>>>;
+
+/// A `launchctl` stand-in that records its arguments and succeeds.
+fn recorder() -> (impl Fn(&[String]) -> Outcome, Calls) {
+    let calls = Calls::default();
+    let sink = Calls::clone(&calls);
+    (
+        move |arguments: &[String]| {
+            sink.borrow_mut().push(arguments.to_vec());
+            Outcome {
+                success: true,
+                ..Default::default()
+            }
+        },
+        calls,
+    )
+}
+
+fn fake_service(domain: Domain, xml: &str, loaded: bool, pid: u32, disabled: bool) -> Service {
+    let definition = definition(xml);
+    Service {
+        label: definition.label.clone(),
+        domain,
+        definition: Some(definition),
+        runtime: Some(Runtime {
+            loaded,
+            pid,
+            status: None,
+        }),
+        disabled,
+    }
+}
+
+#[test]
+fn service_start_picks_the_launchctl_command_from_the_job_state() {
+    let (run, calls) = recorder();
+    let gui = Domain::Gui(501);
+    let running = fake_service(gui.clone(), MANUAL, true, 9, false);
+    assert_eq!(service::start(&running, &run), 10);
+    assert!(calls.borrow().is_empty());
+    let disabled = fake_service(gui.clone(), MANUAL, false, 0, true);
+    assert_eq!(service::start(&disabled, &run), 14);
+    assert!(calls.borrow().is_empty());
+    let loaded = fake_service(gui.clone(), MANUAL, true, 0, false);
+    assert_eq!(service::start(&loaded, &run), 0);
+    assert_eq!(
+        calls.borrow().last().unwrap(),
+        &["kickstart", "gui/501/com.example.manual"]
+    );
+    let unloaded = fake_service(gui.clone(), MANUAL, false, 0, false);
+    assert_eq!(service::start(&unloaded, &run), 0);
+    assert_eq!(
+        calls.borrow().last().unwrap(),
+        &["bootstrap", "gui/501", "/x/y.plist"]
+    );
+    let mut submitted = unloaded.clone();
+    submitted.definition = None;
+    let before = calls.borrow().len();
+    assert_eq!(service::start(&submitted, &run), 8);
+    assert_eq!(calls.borrow().len(), before);
+    let failing = |_: &[String]| Outcome::default();
+    assert_eq!(service::start(&loaded, &failing), 8);
+}
+
+#[test]
+fn service_stop_unloads_restarted_jobs_and_signals_the_others() {
+    let (run, calls) = recorder();
+    let gui = Domain::Gui(501);
+    let idle = fake_service(gui.clone(), KEPT, true, 0, false);
+    assert_eq!(service::stop(&idle, &run), 6);
+    assert!(calls.borrow().is_empty());
+    let kept = fake_service(gui.clone(), KEPT, true, 40, false);
+    assert_eq!(service::stop(&kept, &run), 0);
+    assert_eq!(
+        calls.borrow().last().unwrap(),
+        &["bootout", "gui/501/com.example.kept"]
+    );
+    let manual = fake_service(gui, MANUAL, true, 41, false);
+    assert_eq!(service::stop(&manual, &run), 0);
+    assert_eq!(
+        calls.borrow().last().unwrap(),
+        &["kill", "SIGTERM", "gui/501/com.example.manual"]
+    );
+    if !is_root() {
+        let system = fake_service(Domain::System, DAEMON, true, 42, false);
+        let before = calls.borrow().len();
+        assert_eq!(service::stop(&system, &run), 2);
+        assert_eq!(calls.borrow().len(), before);
+    }
+}
+
+#[test]
+fn change_start_mode_reports_the_mode_a_job_cannot_change_to() {
+    let (run, calls) = recorder();
+    let gui = Domain::Gui(501);
+    let auto = fake_service(gui.clone(), KEPT, true, 5, false);
+    assert_eq!(service::start_mode(&auto), "Auto");
+    let manual = fake_service(gui.clone(), MANUAL, false, 0, false);
+    assert_eq!(service::start_mode(&manual), "Manual");
+    for mode in ["Auto", "Automatic", "boot", "System"] {
+        assert_eq!(service::change_start_mode(&auto, mode, &run), 0, "{mode}");
+        assert_eq!(service::change_start_mode(&manual, mode, &run), 1, "{mode}");
+    }
+    assert_eq!(service::change_start_mode(&auto, "Manual", &run), 1);
+    assert_eq!(service::change_start_mode(&manual, " manual ", &run), 0);
+    assert_eq!(service::change_start_mode(&auto, "Bogus", &run), 21);
+    assert_eq!(service::change_start_mode(&auto, "", &run), 21);
+    assert!(
+        calls.borrow().is_empty(),
+        "an enabled job needs no launchctl call"
+    );
+
+    assert_eq!(service::change_start_mode(&auto, "Disabled", &run), 0);
+    assert_eq!(
+        calls.borrow().last().unwrap(),
+        &["disable", "gui/501/com.example.kept"]
+    );
+    let off = fake_service(gui, MANUAL, false, 0, true);
+    assert_eq!(service::start_mode(&off), "Disabled");
+    for mode in ["Manual", "Automatic"] {
+        assert_eq!(service::change_start_mode(&off, mode, &run), 0);
+        assert_eq!(
+            calls.borrow().last().unwrap(),
+            &["enable", "gui/501/com.example.manual"]
+        );
+    }
+    let failing = |_: &[String]| Outcome::default();
+    assert_eq!(service::change_start_mode(&off, "Manual", &failing), 8);
+    if !is_root() {
+        let system = fake_service(Domain::System, DAEMON, true, 5, false);
+        let before = calls.borrow().len();
+        assert_eq!(service::change_start_mode(&system, "Disabled", &run), 2);
+        assert_eq!(calls.borrow().len(), before);
+    }
+}
+
+#[test]
+fn service_records_report_signal_exits_as_aborted() {
+    let mut killed = fake_service(Domain::Gui(501), MANUAL, true, 0, false);
+    killed.runtime = Some(Runtime {
+        loaded: true,
+        pid: 0,
+        status: Some(-15),
+    });
+    let record = service::record(&Context::unrestricted(), &killed);
+    assert_eq!(number(&record, "ExitCode"), Some(1067));
+    assert_eq!(text(&record, "State").as_deref(), Some("Stopped"));
+    killed.runtime = Some(Runtime {
+        loaded: true,
+        pid: 0,
+        status: Some(78),
+    });
+    let record = service::record(&Context::unrestricted(), &killed);
+    assert_eq!(number(&record, "ExitCode"), Some(78));
+}
+
+#[test]
+fn the_service_inventory_is_enumerated_once_per_time_to_live() {
+    let loads = Cell::new(0);
+    let load = || {
+        loads.set(loads.get() + 1);
+        vec![fake_service(Domain::Gui(501), MANUAL, false, 0, false)]
+    };
+    let inventory = service::Inventory::new(Duration::from_secs(60));
+    assert_eq!(inventory.get(load).len(), 1);
+    assert_eq!(inventory.get(load).len(), 1);
+    assert_eq!(loads.get(), 1);
+    inventory.invalidate();
+    inventory.get(load);
+    assert_eq!(loads.get(), 2);
+    inventory.refresh(load);
+    assert_eq!(loads.get(), 3);
+    inventory.get(load);
+    assert_eq!(loads.get(), 3);
+    let expired = service::Inventory::new(Duration::ZERO);
+    expired.get(load);
+    expired.get(load);
+    assert_eq!(loads.get(), 5);
+}
+
+#[test]
+fn startup_jobs_are_enabled_jobs_that_launchd_starts_itself() {
+    let none = HashMap::new();
+    let login = definition(LOGIN_DISABLED);
+    assert!(login.is_disabled(&none));
+    assert!(!login.starts_at_login(&none), "the plist disables the job");
+    let enabled = HashMap::from([(login.label.clone(), false)]);
+    assert!(login.starts_at_login(&enabled), "the override enables it");
+    let daemon = definition(DAEMON);
+    assert!(daemon.starts_at_login(&none));
+    let disabled = HashMap::from([(daemon.label.clone(), true)]);
+    assert!(!daemon.starts_at_login(&disabled));
+    assert!(definition(KEPT).starts_at_login(&none), "KeepAlive counts");
+    assert!(!definition(MANUAL).starts_at_login(&none));
+    assert!(!definition(AGENT).starts_at_login(&none));
+}
+
+#[test]
+fn elevated_processes_act_for_the_invoking_user() {
+    let pick = |effective, sudo: Option<&str>, console: Option<u32>| {
+        accounts::select_session_uid(effective, 501, sudo, || console)
+    };
+    assert_eq!(pick(501, Some("502"), Some(503)), 501);
+    assert_eq!(pick(0, Some("502"), Some(503)), 502);
+    assert_eq!(pick(0, Some(" 502\n"), None), 502);
+    assert_eq!(pick(0, Some("not a number"), Some(503)), 503);
+    assert_eq!(pick(0, Some("-1"), Some(503)), 503);
+    assert_eq!(pick(0, Some("0"), Some(503)), 503);
+    assert_eq!(pick(0, None, Some(503)), 503);
+    assert_eq!(pick(0, None, Some(0)), 501);
+    assert_eq!(pick(0, None, None), 501);
+    let asked = Cell::new(false);
+    let uid = accounts::select_session_uid(0, 0, Some("502"), || {
+        asked.set(true);
+        None
+    });
+    assert_eq!(uid, 502);
+    assert!(!asked.get(), "the console user is read only when needed");
+    let uid = accounts::select_session_uid(501, 501, None, || {
+        asked.set(true);
+        None
+    });
+    assert_eq!(uid, 501);
+    assert!(!asked.get());
+}
+
+#[test]
+fn the_gui_domain_and_the_agent_directory_follow_one_user() {
+    let uid = accounts::session_uid();
+    let directory = launchd::user_agents_directory(uid).expect("the session user has a home");
+    assert!(directory.ends_with("Library/LaunchAgents"));
+    assert_eq!(
+        directory.parent().and_then(Path::parent),
+        accounts::home_directory().as_deref()
+    );
+    let listed = launchd::directories(&Domain::Gui(uid));
+    assert_eq!(listed.last(), Some(&directory));
+    if !is_root() {
+        assert_eq!(uid, unsafe { libc::getuid() });
+    }
+}
+
+#[test]
+fn user_accounts_exclude_system_placeholders() {
+    let user = |name: &str, uid: u32| accounts::User {
+        name: name.into(),
+        uid,
+        gecos: String::new(),
+    };
+    assert!(user_account::listed(&user("root", 0)));
+    assert!(user_account::listed(&user("jason", 501)));
+    assert!(user_account::listed(&user("last", 0x7fff_ffff)));
+    assert!(!user_account::listed(&user("daemon", 1)));
+    assert!(!user_account::listed(&user("short", 499)));
+    assert!(!user_account::listed(&user("_www", 70)));
+    assert!(!user_account::listed(&user("_hidden", 600)));
+    assert!(!user_account::listed(&user("nobody", 4_294_967_294)));
+    assert!(!user_account::listed(&user("nobody", 0x8000_0000)));
+    let users = objects("useraccount get Name");
+    assert!(
+        users
+            .iter()
+            .all(|u| text(u, "Name").as_deref() != Some("nobody"))
+    );
+}
+
+const HISTORY: &str = r#"<?xml version="1.0" encoding="UTF-8"?>
+<plist version="1.0"><array>
+<dict><key>displayName</key><string>XProtectPlistConfigData</string><key>displayVersion</key><string>5322</string><key>date</key><date>2025-01-02T03:04:05Z</date><key>processName</key><string>softwareupdated</string></dict>
+<dict><key>displayName</key><string>macOS Sequoia</string><key>displayVersion</key><string>15.1</string><key>date</key><date>2025-02-02T03:04:05Z</date><key>processName</key><string>installd</string></dict>
+<dict><key>displayName</key><string>XProtectPlistConfigData</string><key>displayVersion</key><string>5322</string><key>date</key><date>2025-06-07T03:04:05Z</date><key>processName</key><string>softwareupdated</string></dict>
+<dict><key>displayName</key><string>Zoom</string><key>displayVersion</key><string>6.0</string><key>date</key><date>2025-06-08T03:04:05Z</date><key>processName</key><string>Installer</string></dict>
+<dict><key>displayName</key><string>XProtectPlistConfigData</string><key>displayVersion</key><string>5322</string><key>date</key><date>2024-01-01T03:04:05Z</date><key>processName</key><string>softwareupdated</string></dict>
+<dict><key>displayName</key><string>Gatekeeper Compatibility Data</string><key>displayVersion</key><string>1.0</string><key>date</key><date>2025-03-03T03:04:05Z</date><key>processName</key><string>softwareupdated</string></dict>
+<dict><key>displayName</key><string>Gatekeeper Compatibility Data</string><key>displayVersion</key><string>1.0</string><key>processName</key><string>softwareupdated</string></dict>
+<dict><key>displayName</key><string></string><key>displayVersion</key><string></string><key>processName</key><string>softwareupdated</string></dict>
+</array></plist>"#;
+
+#[test]
+fn quick_fix_history_keeps_the_newest_entry_per_hot_fix() {
+    let history = plist::Value::from_reader(Cursor::new(HISTORY)).unwrap();
+    let entries = history.as_array().unwrap();
+    let chosen = quick_fix_engineering::newest_per_hot_fix(
+        entries.iter().filter_map(plist::Value::as_dictionary),
+    );
+    let ids: Vec<&str> = chosen.iter().map(|(id, _)| id.as_str()).collect();
+    assert_eq!(
+        ids,
+        [
+            "XProtectPlistConfigData 5322",
+            "macOS Sequoia 15.1",
+            "Gatekeeper Compatibility Data 1.0"
+        ]
+    );
+    let date = |at: usize| {
+        chosen[at]
+            .1
+            .get("date")
+            .and_then(plist::Value::as_date)
+            .map(|d| d.to_xml_format())
+    };
+    assert_eq!(date(0).as_deref(), Some("2025-06-07T03:04:05Z"));
+    assert_eq!(date(2).as_deref(), Some("2025-03-03T03:04:05Z"));
+}
+
+#[test]
+fn created_children_that_exit_are_reaped() {
+    let results = invoke("process call create \"/usr/bin/true\"");
+    assert_eq!(return_value(&results[0]), 0);
+    let pid = created_pid(&results[0]);
+    std::thread::sleep(Duration::from_millis(500));
+    wait_until_gone(pid);
+    let status = unsafe { libc::waitpid(pid, std::ptr::null_mut(), libc::WNOHANG) };
+    assert_eq!(status, -1, "the child has no waitable status left");
+}
+
+#[test]
+fn spawn_resolves_relative_program_paths_against_the_callers_directory() {
+    let base = Path::new("/base/dir");
+    assert_eq!(spawn::program_path("tool", base), Path::new("tool"));
+    assert_eq!(
+        spawn::program_path("bin/tool", base),
+        Path::new("/base/dir/bin/tool")
+    );
+    assert_eq!(
+        spawn::program_path("./tool", base),
+        Path::new("/base/dir/./tool")
+    );
+    assert_eq!(
+        spawn::program_path("/bin/tool", base),
+        Path::new("/bin/tool")
+    );
+
+    use std::os::unix::fs::PermissionsExt;
+    let elsewhere = TempDir::new("elsewhere");
+    let marker = elsewhere.0.join("ran");
+    let name = format!("wmic-relative-{}", std::process::id());
+    let local = TempDir::at(std::env::current_dir().unwrap().join(&name));
+    let tool = local.0.join("tool");
+    std::fs::write(
+        &tool,
+        format!("#!/bin/sh\necho ran > '{}'\n", marker.display()),
+    )
+    .unwrap();
+    std::fs::set_permissions(&tool, std::fs::Permissions::from_mode(0o755)).unwrap();
+    let results = invoke(&format!(
+        "process call create \"{name}/tool\",\"{}\"",
+        elsewhere.0.display()
+    ));
+    assert_eq!(return_value(&results[0]), 0);
+    wait_until_gone(created_pid(&results[0]));
+    assert!(marker.exists(), "the relative program did not run");
+}
+
+#[test]
+fn a_hung_launchctl_is_killed_at_the_deadline() {
+    let scratch = TempDir::new("deadline");
+    let file = scratch.0.join("pid");
+    let started = Instant::now();
+    let outcome = launchd::run_bounded(
+        "/bin/sh",
+        &[
+            "-c".into(),
+            format!("echo $$ > '{}'; exec /bin/sleep 60", file.display()),
+        ],
+        Duration::from_secs(2),
+    );
+    assert!(!outcome.success && outcome.stdout.is_empty());
+    assert!(started.elapsed() < Duration::from_secs(30));
+    let pid: i32 = std::fs::read_to_string(&file)
+        .unwrap()
+        .trim()
+        .parse()
+        .unwrap();
+    assert_eq!(unsafe { libc::kill(pid, 0) }, -1);
+    assert_eq!(
+        std::io::Error::last_os_error().raw_os_error(),
+        Some(libc::ESRCH)
+    );
+    let long = Duration::from_secs(30);
+    let done = launchd::run_bounded("/bin/echo", &["hi".into()], long);
+    assert!(done.success);
+    assert_eq!(done.stdout, "hi\n");
+    let failed = launchd::run_bounded("/bin/sh", &["-c".into(), "exit 3".into()], long);
+    assert!(!failed.success);
+    assert!(!launchd::run_bounded("/nonexistent/wmic-tool", &[], long).success);
+}
+
+fn write_bundle(root: &Path, name: &str, keys: &str) {
+    let contents = root.join(name).join("Contents");
+    std::fs::create_dir_all(&contents).unwrap();
+    std::fs::write(
+        contents.join("Info.plist"),
+        format!(
+            "<?xml version=\"1.0\" encoding=\"UTF-8\"?><plist version=\"1.0\"><dict>{keys}</dict></plist>"
+        ),
+    )
+    .unwrap();
+}
+
+#[test]
+fn products_are_unique_by_key_and_fall_back_to_the_bundle_path() {
+    let same = "<key>CFBundleName</key><string>Same</string><key>CFBundleShortVersionString</key><string>1.0</string>";
+    let first = TempDir::new("products-first");
+    let second = TempDir::new("products-second");
+    write_bundle(&first.0, "A.app", same);
+    write_bundle(&first.0, "B.app", same);
+    let identified =
+        format!("{same}<key>CFBundleIdentifier</key><string>com.example.same</string>");
+    write_bundle(&first.0, "C.app", &identified);
+    write_bundle(&second.0, "C.app", &identified);
+    write_bundle(&second.0, "D.app", same);
+    std::fs::create_dir_all(second.0.join("not-a-bundle")).unwrap();
+
+    let entries = product::scan(&[first.0.clone(), second.0.clone()]);
+    let identifiers: Vec<&str> = entries.iter().map(|e| e.identifier.as_str()).collect();
+    let path = |root: &TempDir, name: &str| root.0.join(name).to_string_lossy().into_owned();
+    assert_eq!(
+        identifiers,
+        [
+            path(&first, "A.app"),
+            path(&first, "B.app"),
+            "com.example.same".to_owned(),
+            path(&second, "D.app"),
+        ]
+    );
+    assert_eq!(
+        entries[2].path,
+        first.0.join("C.app"),
+        "the first root wins"
+    );
+    assert!(entries.iter().all(|e| e.name == "Same"));
+    assert!(entries.iter().all(|e| e.version.as_deref() == Some("1.0")));
+    assert!(product::scan(&[Path::new("/nonexistent-wmic-apps").to_owned()]).is_empty());
+
+    let live = objects("product get IdentifyingNumber,Name,Version");
+    let mut keys: Vec<_> = live
+        .iter()
+        .map(|p| {
+            (
+                text(p, "IdentifyingNumber"),
+                text(p, "Name"),
+                text(p, "Version"),
+            )
+        })
+        .collect();
+    let total = keys.len();
+    assert!(keys.iter().all(|(id, _, _)| id.is_some()));
+    keys.sort();
+    keys.dedup();
+    assert_eq!(keys.len(), total, "product keys are unique");
 }

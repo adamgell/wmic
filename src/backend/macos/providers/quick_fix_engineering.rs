@@ -2,7 +2,10 @@ use crate::{
     backend::macos::{context::Context, provider::ClassProvider, sys::time},
     model::{ManagementError, Record},
 };
-use std::time::UNIX_EPOCH;
+use std::{
+    collections::HashMap,
+    time::{SystemTime, UNIX_EPOCH},
+};
 
 pub struct QuickFixEngineering;
 
@@ -17,15 +20,58 @@ fn is_system_update(entry: &plist::Dictionary) -> bool {
     ) || text("displayName").is_some_and(|n| n.starts_with("macOS"))
 }
 
+/// Install time of a history entry.
+fn installed_at(entry: &plist::Dictionary) -> Option<SystemTime> {
+    entry.get("date")?.as_date().map(SystemTime::from)
+}
+
 /// Install date in the `M/D/YYYY` form Windows prints.
 fn installed_on(entry: &plist::Dictionary) -> Option<String> {
-    let date = entry.get("date")?.as_date()?;
-    let seconds = std::time::SystemTime::from(date)
+    let seconds = installed_at(entry)?
         .duration_since(UNIX_EPOCH)
         .ok()?
         .as_secs() as i64;
     let local = time::local(seconds);
     Some(format!("{}/{}/{}", local.month, local.day, local.year))
+}
+
+/// `HotFixID` of an entry: display name and version; `None` when both are empty.
+fn hot_fix_id(entry: &plist::Dictionary) -> Option<String> {
+    let text = |key: &str| {
+        entry
+            .get(key)
+            .and_then(plist::Value::as_string)
+            .unwrap_or_default()
+    };
+    let id = format!("{} {}", text("displayName"), text("displayVersion"));
+    let id = id.trim();
+    (!id.is_empty()).then(|| id.to_owned())
+}
+
+/// One entry per `HotFixID`, the newest install date winning; first-seen order is kept. The
+/// history repeats an update each time its payload is installed again.
+pub fn newest_per_hot_fix<'a>(
+    entries: impl IntoIterator<Item = &'a plist::Dictionary>,
+) -> Vec<(String, &'a plist::Dictionary)> {
+    let mut chosen: Vec<(String, &plist::Dictionary)> = vec![];
+    let mut position: HashMap<String, usize> = HashMap::new();
+    for entry in entries.into_iter().filter(|e| is_system_update(e)) {
+        let Some(id) = hot_fix_id(entry) else {
+            continue;
+        };
+        match position.get(&id) {
+            Some(&at) => {
+                if installed_at(entry) > installed_at(chosen[at].1) {
+                    chosen[at].1 = entry;
+                }
+            }
+            None => {
+                position.insert(id.clone(), chosen.len());
+                chosen.push((id, entry));
+            }
+        }
+    }
+    chosen
 }
 
 impl ClassProvider for QuickFixEngineering {
@@ -40,28 +86,18 @@ impl ClassProvider for QuickFixEngineering {
             .and_then(plist::Value::as_array)
             .map(Vec::as_slice)
             .unwrap_or_default();
-        Ok(entries
-            .iter()
-            .filter_map(plist::Value::as_dictionary)
-            .filter(|entry| is_system_update(entry))
-            .filter_map(|entry| {
-                let text = |key: &str| {
-                    entry
-                        .get(key)
-                        .and_then(plist::Value::as_string)
-                        .unwrap_or_default()
-                };
-                let hot_fix = format!("{} {}", text("displayName"), text("displayVersion"));
-                let hot_fix = hot_fix.trim();
-                (!hot_fix.is_empty()).then(|| {
+        Ok(
+            newest_per_hot_fix(entries.iter().filter_map(plist::Value::as_dictionary))
+                .into_iter()
+                .map(|(hot_fix, entry)| {
                     ctx.record("Win32_QuickFixEngineering")
-                        .set("HotFixID", hot_fix)
+                        .set("HotFixID", hot_fix.as_str())
                         .set("Description", "Update")
                         .set("InstalledOn", installed_on(entry))
                         .set("CSName", ctx.server())
                         .build()
                 })
-            })
-            .collect())
+                .collect(),
+        )
     }
 }

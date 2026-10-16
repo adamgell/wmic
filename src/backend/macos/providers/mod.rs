@@ -14,12 +14,12 @@ mod network_adapter_configuration;
 mod operating_system;
 mod process;
 mod processor;
-mod product;
-mod quick_fix_engineering;
-mod service;
-mod startup_command;
+pub mod product;
+pub mod quick_fix_engineering;
+pub mod service;
+pub mod startup_command;
 mod system_state;
-mod user_account;
+pub mod user_account;
 mod volume;
 
 /// Classes served with an empty instance set until a provider is added to `all`.
@@ -52,7 +52,7 @@ pub fn all() -> Vec<Box<dyn ClassProvider>> {
         Box::new(network_adapter::NetworkAdapter),
         Box::new(network_adapter_configuration::NetworkAdapterConfiguration),
         Box::new(process::Process),
-        Box::new(service::ServiceProvider),
+        Box::new(service::ServiceProvider::default()),
         Box::new(user_account::UserAccount),
         Box::new(group::Group),
         Box::new(startup_command::StartupCommand),

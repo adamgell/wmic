@@ -248,7 +248,8 @@ impl Default for ArgumentReader {
 }
 
 /// Splits a `KERN_PROCARGS2` buffer: an `int` argument count, the executable path, NUL padding,
-/// then the arguments; the environment after them is ignored.
+/// then the arguments; the environment after them is ignored. Trailing empty arguments are
+/// dropped: a process that rewrites its argument area leaves the old count over empty strings.
 pub fn parse_arguments(buffer: &[u8]) -> Option<Vec<String>> {
     let count = i32::from_ne_bytes(buffer.get(..4)?.try_into().ok()?);
     let count = usize::try_from(count).ok()?;
@@ -262,6 +263,9 @@ pub fn parse_arguments(buffer: &[u8]) -> Option<Vec<String>> {
         let end = rest.iter().position(|b| *b == 0).unwrap_or(rest.len());
         arguments.push(String::from_utf8_lossy(&rest[..end]).into_owned());
         rest = &rest[(end + 1).min(rest.len())..];
+    }
+    while arguments.last().is_some_and(String::is_empty) {
+        arguments.pop();
     }
     Some(arguments)
 }

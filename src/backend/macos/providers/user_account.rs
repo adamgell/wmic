@@ -5,9 +5,10 @@ use crate::{
 
 pub struct UserAccount;
 
-/// Root and regular accounts; names with a leading underscore are service accounts.
-fn listed(user: &accounts::User) -> bool {
-    (user.uid == 0 || user.uid >= 500) && !user.name.starts_with('_')
+/// Root and regular accounts; names with a leading underscore are service accounts. User ids
+/// from 0x8000_0000 on are system placeholders such as `nobody` (-2).
+pub fn listed(user: &accounts::User) -> bool {
+    (user.uid == 0 || (500..0x8000_0000).contains(&user.uid)) && !user.name.starts_with('_')
 }
 
 /// Real name: the GECOS field up to its first comma.

@@ -2,7 +2,10 @@ use crate::{
     backend::macos::{
         context::Context,
         provider::ClassProvider,
-        sys::{accounts, host, launchd},
+        sys::{
+            accounts, host,
+            launchd::{self, Domain},
+        },
     },
     model::{ManagementError, Record},
 };
@@ -16,14 +19,18 @@ impl ClassProvider for StartupCommand {
     }
 
     fn instances(&self, ctx: &Context) -> Result<Vec<Record>, ManagementError> {
-        let user = accounts::user_name(unsafe { libc::getuid() }).unwrap_or_else(host::user_name);
+        let uid = accounts::session_uid();
+        let user = accounts::user_name(uid).unwrap_or_else(host::user_name);
         let mut sources: Vec<(PathBuf, String)> =
             vec![("/Library/LaunchAgents".into(), "Public".into())];
-        sources.extend(launchd::user_agents_directory().map(|d| (d, user)));
+        sources.extend(launchd::user_agents_directory(uid).map(|d| (d, user)));
+        let overrides = launchd::disabled_overrides(&Domain::Gui(uid));
         let mut records = vec![];
         for (directory, owner) in sources {
             for definition in launchd::definitions(&directory) {
-                let Some(command) = definition.command_line().filter(|_| definition.run_at_load)
+                let Some(command) = definition
+                    .command_line()
+                    .filter(|_| definition.starts_at_login(&overrides))
                 else {
                     continue;
                 };

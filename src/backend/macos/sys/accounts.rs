@@ -94,9 +94,44 @@ pub fn user_name(uid: u32) -> Option<String> {
     lookup(uid).map(|(name, _)| name).filter(|n| !n.is_empty())
 }
 
-/// Home directory of the account that started the process.
-pub fn home_directory() -> Option<PathBuf> {
-    lookup(unsafe { libc::getuid() })
+/// Home directory of a user id.
+pub fn home_directory_of(uid: u32) -> Option<PathBuf> {
+    lookup(uid)
         .map(|(_, home)| home)
         .filter(|h| !h.as_os_str().is_empty())
+}
+
+/// User id whose launchd GUI domain and home directory the process acts on. An elevated process
+/// has no GUI domain of its own (`gui/0` does not exist), so it takes the invoking user from
+/// `SUDO_UID`, else the console user, else its own id. `console` runs only when needed.
+pub fn select_session_uid(
+    effective: u32,
+    real: u32,
+    sudo_uid: Option<&str>,
+    console: impl FnOnce() -> Option<u32>,
+) -> u32 {
+    if effective != 0 {
+        return real;
+    }
+    sudo_uid
+        .and_then(|value| value.trim().parse::<u32>().ok())
+        .filter(|uid| *uid != 0)
+        .or_else(|| console().filter(|uid| *uid != 0))
+        .unwrap_or(real)
+}
+
+/// The user id `select_session_uid` picks for this process.
+pub fn session_uid() -> u32 {
+    let sudo_uid = std::env::var("SUDO_UID").ok();
+    select_session_uid(
+        unsafe { libc::geteuid() },
+        unsafe { libc::getuid() },
+        sudo_uid.as_deref(),
+        || super::host::console_account().map(|(_, uid)| uid),
+    )
+}
+
+/// Home directory of the session user.
+pub fn home_directory() -> Option<PathBuf> {
+    home_directory_of(session_uid())
 }

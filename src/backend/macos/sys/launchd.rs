@@ -7,9 +7,13 @@ use std::{
     io::Read,
     path::{Path, PathBuf},
     process::{Command, Stdio},
+    time::{Duration, Instant},
 };
 
 const LAUNCHCTL: &str = "/bin/launchctl";
+/// A hung launchd must not hang the caller.
+const LAUNCHCTL_DEADLINE: Duration = Duration::from_secs(30);
+const POLL_INTERVAL: Duration = Duration::from_millis(50);
 /// A `launchctl print` of a busy domain stays far below this; a larger stream is cut off.
 const OUTPUT_LIMIT: u64 = 32 << 20;
 
@@ -60,7 +64,13 @@ fn read_bounded(source: impl Read, limit: u64) -> (Vec<u8>, bool) {
 
 /// Runs `/bin/launchctl` with a scrubbed environment and no input.
 pub fn run(arguments: &[String]) -> Outcome {
-    let spawned = Command::new(LAUNCHCTL)
+    run_bounded(LAUNCHCTL, arguments, LAUNCHCTL_DEADLINE)
+}
+
+/// Runs a program with a scrubbed environment and no input. A child that is still running at the
+/// deadline is killed and the outcome is the unavailable one.
+pub fn run_bounded(program: &str, arguments: &[String], deadline: Duration) -> Outcome {
+    let spawned = Command::new(program)
         .args(arguments)
         .env_clear()
         .env("PATH", "/usr/bin:/bin:/usr/sbin:/sbin")
@@ -74,20 +84,33 @@ pub fn run(arguments: &[String]) -> Outcome {
     let errors = child
         .stderr
         .take()
-        .map(|stream| std::thread::spawn(move || read_bounded(stream, 1 << 20).0));
-    let (stdout, truncated) = child
+        .map(|stream| std::thread::spawn(move || read_bounded(stream, 1 << 20)));
+    let output = child
         .stdout
         .take()
-        .map_or((vec![], false), |stream| read_bounded(stream, OUTPUT_LIMIT));
-    if truncated {
-        let _ = child.kill();
-    }
-    let status = child.wait();
-    let stderr = errors
+        .map(|stream| std::thread::spawn(move || read_bounded(stream, OUTPUT_LIMIT)));
+    let limit = Instant::now() + deadline;
+    let status = loop {
+        match child.try_wait() {
+            Ok(Some(status)) => break status,
+            Ok(None) if Instant::now() < limit => std::thread::sleep(POLL_INTERVAL),
+            _ => {
+                // The reader threads are not joined: a descendant that inherited the pipes
+                // would keep them open past the kill. They end when the pipes close.
+                let _ = child.kill();
+                let _ = child.wait();
+                return Outcome::default();
+            }
+        }
+    };
+    let (stdout, truncated) = output
+        .and_then(|handle| handle.join().ok())
+        .unwrap_or_default();
+    let (stderr, _) = errors
         .and_then(|handle| handle.join().ok())
         .unwrap_or_default();
     Outcome {
-        success: status.is_ok_and(|s| s.success()) && !truncated,
+        success: status.success() && !truncated,
         stdout: String::from_utf8_lossy(&stdout).into_owned(),
         stderr: String::from_utf8_lossy(&stderr).into_owned(),
     }
@@ -103,6 +126,14 @@ pub struct RuntimeEntry {
     pub label: String,
 }
 
+/// First white-space delimited field and the text after it; labels may contain white space, so
+/// only the leading columns are split off.
+fn split_field(text: &str) -> (&str, &str) {
+    let text = text.trim_start();
+    let end = text.find(char::is_whitespace).unwrap_or(text.len());
+    text.split_at(end)
+}
+
 /// Rows of the first top-level `services = {` block.
 pub fn parse_services(text: &str) -> Vec<RuntimeEntry> {
     let mut inside = false;
@@ -116,11 +147,12 @@ pub fn parse_services(text: &str) -> Vec<RuntimeEntry> {
         if trimmed == "}" {
             break;
         }
-        let mut fields = trimmed.split_whitespace();
-        let (Some(pid), Some(status), Some(label)) = (fields.next(), fields.next(), fields.next())
-        else {
+        let (pid, rest) = split_field(trimmed);
+        let (status, label) = split_field(rest);
+        let label = label.trim();
+        if pid.is_empty() || status.is_empty() || label.is_empty() {
             continue;
-        };
+        }
         let pid = if pid == "-" {
             0
         } else if let Ok(pid) = pid.parse() {
@@ -185,6 +217,16 @@ impl Definition {
         let mut parts = vec![executable];
         parts.extend(self.arguments.iter().skip(1).map(String::as_str));
         Some(cmdline::join(&parts))
+    }
+
+    /// True when the override database, else the plist, disables the job.
+    pub fn is_disabled(&self, overrides: &HashMap<String, bool>) -> bool {
+        overrides.get(&self.label).copied().unwrap_or(self.disabled)
+    }
+
+    /// True for an enabled job that launchd starts without a request: `RunAtLoad` or `KeepAlive`.
+    pub fn starts_at_login(&self, overrides: &HashMap<String, bool>) -> bool {
+        (self.run_at_load || self.keep_alive) && !self.is_disabled(overrides)
     }
 }
 
@@ -257,19 +299,19 @@ pub fn directories(domain: &Domain) -> Vec<PathBuf> {
             "/System/Library/LaunchDaemons".into(),
             "/Library/LaunchDaemons".into(),
         ],
-        Domain::Gui(_) => {
+        Domain::Gui(uid) => {
             let mut paths: Vec<PathBuf> = vec![
                 "/System/Library/LaunchAgents".into(),
                 "/Library/LaunchAgents".into(),
             ];
-            paths.extend(user_agents_directory());
+            paths.extend(user_agents_directory(*uid));
             paths
         }
     }
 }
 
-pub fn user_agents_directory() -> Option<PathBuf> {
-    accounts::home_directory().map(|home| home.join("Library/LaunchAgents"))
+pub fn user_agents_directory(uid: u32) -> Option<PathBuf> {
+    accounts::home_directory_of(uid).map(|home| home.join("Library/LaunchAgents"))
 }
 
 /// Process state of a job as the domain reports it.
@@ -370,10 +412,7 @@ pub fn merge(
         }
         let label = definition.label.clone();
         services.push(Service {
-            disabled: overrides
-                .get(&label)
-                .copied()
-                .unwrap_or(definition.disabled),
+            disabled: definition.is_disabled(overrides),
             runtime: state(rows.remove(&label)),
             definition: Some(definition),
             label,
@@ -394,16 +433,21 @@ pub fn merge(
     services
 }
 
+/// Override database of a domain; empty when `launchctl` cannot report it.
+pub fn disabled_overrides(domain: &Domain) -> HashMap<String, bool> {
+    let printed = run(&["print-disabled".into(), domain.target()]);
+    if printed.success {
+        parse_disabled(&printed.stdout)
+    } else {
+        HashMap::new()
+    }
+}
+
 fn domain_services(domain: Domain) -> Vec<Service> {
     let printed = run(&["print".into(), domain.target()]);
     let runtime =
         Some(parse_services(&printed.stdout)).filter(|rows| printed.success && !rows.is_empty());
-    let disabled = run(&["print-disabled".into(), domain.target()]);
-    let overrides = if disabled.success {
-        parse_disabled(&disabled.stdout)
-    } else {
-        HashMap::new()
-    };
+    let overrides = disabled_overrides(&domain);
     let definitions = directories(&domain)
         .iter()
         .flat_map(|d| definitions(d))
@@ -428,12 +472,11 @@ pub fn combine(groups: Vec<Vec<Service>>) -> Vec<Service> {
     services
 }
 
-/// Every launchd job of the system domain and of the current user's GUI domain.
+/// Every launchd job of the system domain and of the session user's GUI domain.
 pub fn services() -> Vec<Service> {
-    let uid = unsafe { libc::getuid() };
     combine(vec![
         domain_services(Domain::System),
-        domain_services(Domain::Gui(uid)),
+        domain_services(Domain::Gui(accounts::session_uid())),
     ])
 }
 

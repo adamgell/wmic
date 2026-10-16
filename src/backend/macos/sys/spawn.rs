@@ -1,5 +1,9 @@
 //! Detached process creation without a shell.
-use std::ffi::CString;
+use std::{
+    ffi::CString,
+    os::unix::ffi::OsStrExt,
+    path::{Path, PathBuf},
+};
 
 const POSIX_SPAWN_SETSIGDEF: libc::c_short = 0x0004;
 const POSIX_SPAWN_SETSIGMASK: libc::c_short = 0x0008;
@@ -10,15 +14,45 @@ fn c_string(text: &str) -> Result<CString, i32> {
     CString::new(text).map_err(|_| libc::EINVAL)
 }
 
+/// Program path as `posix_spawnp` must receive it. A relative path with a separator names a
+/// file relative to the caller; the child's working directory changes before the lookup, so the
+/// path is made absolute first. Bare names stay for the `PATH` search.
+pub fn program_path(program: &str, base: &Path) -> PathBuf {
+    let path = Path::new(program);
+    if program.contains('/') && !path.is_absolute() {
+        base.join(path)
+    } else {
+        path.to_owned()
+    }
+}
+
+/// Waits for a child so that it does not stay a zombie. Only this child is waited for: a
+/// process-wide `SIGCHLD` disposition or `waitpid(-1)` would take the status of unrelated
+/// children.
+fn reap(pid: libc::pid_t) {
+    loop {
+        let mut status = 0;
+        let result = unsafe { libc::waitpid(pid, &mut status, 0) };
+        if result >= 0 || std::io::Error::last_os_error().raw_os_error() != Some(libc::EINTR) {
+            return;
+        }
+    }
+}
+
 /// Starts `arguments[0]`, searched in `PATH`, in a new session with standard streams on
 /// `/dev/null` and no inherited descriptors. Returns the process id, or the `errno` that
-/// `posix_spawnp` reported.
+/// `posix_spawnp` reported. A detached thread reaps the child when it exits.
 pub fn spawn(arguments: &[String], directory: Option<&str>) -> Result<i32, i32> {
     let owned = arguments
         .iter()
         .map(|a| c_string(a))
         .collect::<Result<Vec<_>, _>>()?;
-    let program = owned.first().ok_or(libc::EINVAL)?;
+    let name = arguments.first().ok_or(libc::EINVAL)?;
+    let resolved = match std::env::current_dir() {
+        Ok(base) => program_path(name, &base),
+        Err(_) => PathBuf::from(name),
+    };
+    let program = CString::new(resolved.as_os_str().as_bytes()).map_err(|_| libc::EINVAL)?;
     let mut argv: Vec<*mut libc::c_char> = owned.iter().map(|a| a.as_ptr().cast_mut()).collect();
     argv.push(std::ptr::null_mut());
     let directory = directory.map(c_string).transpose()?;
@@ -66,5 +100,10 @@ pub fn spawn(arguments: &[String], directory: Option<&str>) -> Result<i32, i32> 
         libc::posix_spawn_file_actions_destroy(&mut actions);
         libc::posix_spawnattr_destroy(&mut attributes);
     }
-    if status == 0 { Ok(pid) } else { Err(status) }
+    if status != 0 {
+        return Err(status);
+    }
+    // A failed thread start leaves a zombie until the process exits, which does not fail the call.
+    let _ = std::thread::Builder::new().spawn(move || reap(pid));
+    Ok(pid)
 }

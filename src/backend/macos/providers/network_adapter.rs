@@ -16,7 +16,8 @@ pub struct NetworkAdapter;
 
 /// One adapter the Win32 network classes report.
 pub(super) struct Adapter {
-    /// Position in interface-index order; Win32 `Index` and `DeviceID`.
+    /// Kernel interface index; Win32 `Index` and `DeviceID`. It stays the same when another
+    /// interface appears or disappears.
     pub index: u32,
     pub interface: Interface,
     pub controller: Option<Controller>,
@@ -49,15 +50,14 @@ pub(super) fn adapters() -> Vec<Adapter> {
     interfaces::list()
         .into_iter()
         .filter(|i| reported(&i.name))
-        .enumerate()
-        .map(|(position, interface)| {
+        .map(|interface| {
             let controller = controllers.remove(&interface.name);
             let name = controller
                 .as_ref()
                 .and_then(Controller::product_name)
                 .unwrap_or_else(|| interface.name.clone());
             Adapter {
-                index: position as u32,
+                index: interface.index,
                 interface,
                 controller,
                 name,

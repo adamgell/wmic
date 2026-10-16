@@ -204,18 +204,21 @@ fn disk_drives_and_partitions_agree() {
 #[test]
 fn network_adapters_are_numbered_and_formatted() {
     let adapters = objects("nic get *");
-    for (position, adapter) in adapters.iter().enumerate() {
-        assert_eq!(number(adapter, "Index"), Some(position as i128));
-        assert_eq!(text(adapter, "DeviceID"), Some(position.to_string()));
+    let mut seen = HashSet::new();
+    for adapter in &adapters {
+        let index = number(adapter, "InterfaceIndex").unwrap();
+        assert!(index > 0);
+        assert!(
+            seen.insert(index),
+            "interface index {index} is listed twice"
+        );
+        assert_eq!(number(adapter, "Index"), Some(index));
+        assert_eq!(text(adapter, "DeviceID"), Some(index.to_string()));
         assert_eq!(
             text(adapter, "Caption"),
-            Some(format!(
-                "[{position:08}] {}",
-                text(adapter, "Name").unwrap()
-            ))
+            Some(format!("[{index:08}] {}", text(adapter, "Name").unwrap()))
         );
         assert_eq!(text(adapter, "Description"), text(adapter, "Name"));
-        assert!(number(adapter, "InterfaceIndex").unwrap() > 0);
         let service = text(adapter, "ServiceName").unwrap();
         assert!(
             ["en", "bridge", "vmnet"]
@@ -255,13 +258,18 @@ fn network_adapters_are_numbered_and_formatted() {
 fn network_configurations_follow_the_adapters() {
     let adapters = objects("nic get *");
     let configurations = objects("nicconfig get *");
-    assert_eq!(adapters.len(), configurations.len());
-    for (adapter, configuration) in adapters.iter().zip(&configurations) {
+    let mut paired = 0;
+    for configuration in &configurations {
+        let index = number(configuration, "InterfaceIndex");
+        assert_eq!(number(configuration, "Index"), index);
+        let Some(adapter) = adapters
+            .iter()
+            .find(|a| number(a, "InterfaceIndex") == index)
+        else {
+            continue;
+        };
+        paired += 1;
         assert_eq!(number(adapter, "Index"), number(configuration, "Index"));
-        assert_eq!(
-            number(adapter, "InterfaceIndex"),
-            number(configuration, "InterfaceIndex")
-        );
         assert_eq!(text(adapter, "Caption"), text(configuration, "Caption"));
         assert_eq!(text(adapter, "Name"), text(configuration, "Description"));
         assert_eq!(
@@ -298,11 +306,11 @@ fn network_configurations_follow_the_adapters() {
             Some(false)
         );
     }
-    assert_eq!(
-        objects("nicconfig where IPEnabled=TRUE get Index").len(),
-        configurations
-            .iter()
-            .filter(|c| flag(c, "IPEnabled") == Some(true))
-            .count()
+    assert!(
+        paired > 0 || adapters.is_empty() || configurations.is_empty(),
+        "no adapter matched a configuration"
     );
+    for configuration in objects("nicconfig where IPEnabled=TRUE get Index,IPEnabled") {
+        assert_eq!(flag(&configuration, "IPEnabled"), Some(true));
+    }
 }

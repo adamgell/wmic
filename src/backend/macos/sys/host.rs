@@ -64,12 +64,19 @@ pub fn computer_name() -> Option<String> {
     owned_string(raw).filter(|n| !n.is_empty())
 }
 
-/// Account name at the console, if a user is logged in.
-pub fn console_user() -> Option<String> {
+/// Account name and user id at the console, if a user is logged in.
+pub fn console_account() -> Option<(String, u32)> {
     let mut uid: libc::uid_t = 0;
     let mut gid: libc::gid_t = 0;
     let raw = unsafe { SCDynamicStoreCopyConsoleUser(std::ptr::null(), &mut uid, &mut gid) };
-    owned_string(raw).filter(|n| !n.is_empty() && n != "loginwindow")
+    owned_string(raw)
+        .filter(|n| !n.is_empty() && n != "loginwindow")
+        .map(|name| (name, uid))
+}
+
+/// Account name at the console, if a user is logged in.
+pub fn console_user() -> Option<String> {
+    console_account().map(|(name, _)| name)
 }
 
 /// Console user, else the account running the process.
