@@ -19,7 +19,29 @@ fn order(name: &WideText) -> (usize, String) {
 /// when one of them is requested. The selection and order of the direct renderers is applied
 /// before the command XML is written.
 pub(crate) fn selected(req: &ResolvedRequest, set: &ObjectSet) -> ObjectSet {
-    let cols = columns(req, &set.objects);
+    let wildcard = req.verb == Verb::Get && req.properties.iter().any(|name| name.0 == [42]);
+    let cols = if wildcard {
+        let mut cols: Vec<_> = set
+            .objects
+            .first()
+            .map(|r| {
+                r.properties
+                    .iter()
+                    .filter(|p| !p.system && !is_system(&p.name))
+                    .map(|p| (p.name.clone(), p.name.clone()))
+                    .collect()
+            })
+            .unwrap_or_default();
+        cols.extend(
+            req.properties
+                .iter()
+                .filter(|name| is_system(name))
+                .map(|name| (name.clone(), name.clone())),
+        );
+        cols
+    } else {
+        columns(req, &set.objects)
+    };
     let system_requested = cols.iter().any(|(_, source)| is_system(source));
     ObjectSet {
         objects: set

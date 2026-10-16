@@ -118,6 +118,12 @@ pub(super) fn execute(
         );
         if let Err(mut e) = applied {
             e.target = path;
+            e.operation = if request.verb == Verb::Delete {
+                "delete"
+            } else {
+                "update"
+            }
+            .into();
             if !paths.is_empty() {
                 e.partial = Some(Box::new(operation(paths)));
             }

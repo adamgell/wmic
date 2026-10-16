@@ -550,7 +550,11 @@ impl Session {
                 locale: settings.locale.clone(),
             };
             if let Err(error) = self.aliases.load_role(&settings, &mut loader) {
-                return emit(sink, render::render_resolve_error(&error), error.code);
+                return emit(
+                    sink,
+                    render::render_resolve_error_for(&error, raw),
+                    error.code,
+                );
             }
         }
         if parsed.help {
@@ -563,7 +567,11 @@ impl Session {
                 let mut req = match self.aliases.resolve(&parsed, &settings) {
                     Ok(ResolvedCommand::Management(r)) => r,
                     Err(error) => {
-                        return emit(sink, render::render_resolve_error(&error), error.code);
+                        return emit(
+                            sink,
+                            render::render_resolve_error_for(&error, raw),
+                            error.code,
+                        );
                     }
                     _ => {
                         return CommandOutcome {
@@ -609,7 +617,11 @@ impl Session {
                 && self.aliases.find(name).is_none()
                 && let Err(error) = self.aliases.resolve(&parsed, &settings)
             {
-                return emit(sink, render::render_resolve_error(&error), error.code);
+                return emit(
+                    sink,
+                    render::render_resolve_error_for(&error, raw),
+                    error.code,
+                );
             }
             return match render::help::render_help(render::help::HelpRequest {
                 command: &parsed,
@@ -641,7 +653,7 @@ impl Session {
         }
         let resolved = match self.aliases.resolve(&parsed, &settings) {
             Ok(r) => r,
-            Err(e) => return emit(sink, render::render_resolve_error(&e), e.code),
+            Err(e) => return emit(sink, render::render_resolve_error_for(&e, raw), e.code),
         };
         let resolved = match resolved {
             ResolvedCommand::Derived(command) => {

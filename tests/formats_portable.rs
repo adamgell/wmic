@@ -508,4 +508,31 @@ mod session_rendering {
             include_bytes!("fixtures/format-reference/system-csv.stdout.bin")
         );
     }
+
+    fn text(command: &str) -> String {
+        let bytes = output(command);
+        String::from_utf8(bytes).unwrap()
+    }
+
+    #[test]
+    fn a_wildcard_get_renders_every_non_system_property() {
+        for command in ["os get *", "os get * /value", "os get * /format:csv"] {
+            let out = text(command);
+            assert!(out.contains("Caption"), "{command}: {out:?}");
+            assert!(out.contains("Version"), "{command}: {out:?}");
+            assert!(
+                out.contains("Microsoft Windows 11 Pro"),
+                "{command}: {out:?}"
+            );
+            assert!(!out.contains("__"), "{command}: {out:?}");
+        }
+    }
+
+    #[test]
+    fn a_wildcard_get_adds_the_system_set_only_when_one_is_named() {
+        let out = text("os get *,__CLASS /value");
+        assert!(out.contains("__CLASS=Win32_OperatingSystem"), "{out:?}");
+        assert!(out.contains("__GENUS=2"), "{out:?}");
+        assert!(out.contains("Caption="), "{out:?}");
+    }
 }

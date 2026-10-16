@@ -11,7 +11,7 @@ use std::{
     marker::PhantomData,
     ptr::{self, NonNull},
     rc::Rc,
-    sync::Once,
+    sync::{Once, OnceLock},
 };
 
 macro_rules! opaque {
@@ -32,6 +32,9 @@ opaque!(
 );
 
 type ErrorHandler = Option<unsafe extern "C" fn(*mut c_void, *const c_char)>;
+type EntityLoader = unsafe extern "C" fn(*const c_char, *const c_char, *mut c_void) -> *mut c_void;
+type DocumentLoader =
+    unsafe extern "C" fn(*const c_char, *mut c_void, c_int, *mut c_void, c_int) -> *mut XmlDoc;
 type SecurityCheck =
     unsafe extern "C" fn(*mut XsltSecurityPrefs, *mut XsltTransformContext, *const c_char) -> c_int;
 
@@ -52,6 +55,12 @@ unsafe extern "C" {
     fn xmlOutputBufferGetSize(out: *mut XmlOutputBuffer) -> usize;
     fn xmlOutputBufferClose(out: *mut XmlOutputBuffer) -> c_int;
     fn xmlSetGenericErrorFunc(context: *mut c_void, handler: ErrorHandler);
+    fn xmlSetExternalEntityLoader(loader: EntityLoader);
+    fn xmlNoNetExternalEntityLoader(
+        url: *const c_char,
+        id: *const c_char,
+        context: *mut c_void,
+    ) -> *mut c_void;
 }
 
 #[link(name = "xslt")]
@@ -99,6 +108,9 @@ unsafe extern "C" {
         value: *const c_char,
     ) -> c_int;
     fn xsltSetGenericErrorFunc(context: *mut c_void, handler: ErrorHandler);
+    fn xsltSetCtxtParseOptions(context: *mut XsltTransformContext, options: c_int) -> c_int;
+    fn xsltSetLoaderFunc(loader: DocumentLoader);
+    static xsltDocDefaultLoader: Option<DocumentLoader>;
 }
 
 const PARSE_NOERROR: c_int = 1 << 5;
@@ -110,6 +122,9 @@ const PARSE_IGNORE_ENC: c_int = 1 << 21;
 const STYLESHEET_OPTIONS: c_int = PARSE_NONET | PARSE_NOCDATA | PARSE_NOERROR | PARSE_NOWARNING;
 const INPUT_OPTIONS: c_int =
     PARSE_NONET | PARSE_NOBLANKS | PARSE_NOERROR | PARSE_NOWARNING | PARSE_IGNORE_ENC;
+/// Documents loaded by `document()`, `xsl:include` and `xsl:import`: no network, no entity
+/// substitution and no external subset.
+const SECONDARY_OPTIONS: c_int = PARSE_NONET | PARSE_NOCDATA;
 
 const SECURITY_WRITE_FILE: c_int = 2;
 const SECURITY_CREATE_DIRECTORY: c_int = 3;
@@ -127,6 +142,23 @@ fn invalid_xml() -> RenderError {
 }
 
 unsafe extern "C" fn discard(_: *mut c_void, _: *const c_char) {}
+
+/// `xsltSetLoaderFunc` overwrites `xsltDocDefaultLoader`, so the original is kept before the
+/// replacement is installed.
+static DEFAULT_LOADER: OnceLock<DocumentLoader> = OnceLock::new();
+
+unsafe extern "C" fn load_secondary(
+    uri: *const c_char,
+    dict: *mut c_void,
+    _options: c_int,
+    context: *mut c_void,
+    kind: c_int,
+) -> *mut XmlDoc {
+    match DEFAULT_LOADER.get() {
+        Some(load) => unsafe { load(uri, dict, SECONDARY_OPTIONS, context, kind) },
+        None => ptr::null_mut(),
+    }
+}
 
 fn new_forbidding_prefs() -> Option<NonNull<XsltSecurityPrefs>> {
     let prefs = NonNull::new(unsafe { xsltNewSecurityPrefs() })?;
@@ -147,7 +179,12 @@ fn engine() {
     static INIT: Once = Once::new();
     INIT.call_once(|| unsafe {
         xmlInitParser();
+        xmlSetExternalEntityLoader(xmlNoNetExternalEntityLoader);
         xsltSetGenericErrorFunc(ptr::null_mut(), Some(discard));
+        if let Some(default) = xsltDocDefaultLoader {
+            let _ = DEFAULT_LOADER.set(default);
+            xsltSetLoaderFunc(load_secondary);
+        }
         if let Some(prefs) = new_forbidding_prefs() {
             xsltSetDefaultSecurityPrefs(prefs.as_ptr());
         }
@@ -328,6 +365,10 @@ impl Prepared {
             NonNull::new(unsafe { xsltNewTransformContext(self.style.as_ptr(), input.0.as_ptr()) })
                 .map(Context)
                 .ok_or_else(format_error)?;
+        // The status is the previous option set; only a negative value is an error.
+        if unsafe { xsltSetCtxtParseOptions(context.0.as_ptr(), SECONDARY_OPTIONS) } < 0 {
+            return Err(format_error());
+        }
         let prefs = new_forbidding_prefs().map(Prefs).ok_or_else(format_error)?;
         if unsafe { xsltSetCtxtSecurityPrefs(prefs.0.as_ptr(), context.0.as_ptr()) } != 0 {
             return Err(format_error());

@@ -84,8 +84,21 @@ pub fn cpu_load_percent(interval: std::time::Duration) -> Option<u8> {
     Some(((total - idle) * 100 / total) as u8)
 }
 
-/// Number of processes visible to the caller.
+/// Number of processes visible to the caller. The size query over-reports, so the count comes
+/// from a filled buffer.
 pub fn process_count() -> Option<usize> {
-    let bytes = unsafe { libc::proc_listallpids(std::ptr::null_mut(), 0) };
-    (bytes > 0).then(|| bytes as usize / std::mem::size_of::<libc::pid_t>())
+    let mut capacity = usize::try_from(unsafe { libc::proc_listallpids(std::ptr::null_mut(), 0) })
+        .ok()?
+        .max(1)
+        + 64;
+    loop {
+        let mut pids = vec![0 as libc::pid_t; capacity];
+        let bytes = i32::try_from(capacity * std::mem::size_of::<libc::pid_t>()).ok()?;
+        let filled = unsafe { libc::proc_listallpids(pids.as_mut_ptr().cast(), bytes) };
+        let filled = usize::try_from(filled).ok().filter(|n| *n > 0)?;
+        if filled < capacity {
+            return Some(filled);
+        }
+        capacity *= 2;
+    }
 }

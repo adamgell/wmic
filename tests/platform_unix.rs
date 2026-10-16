@@ -246,3 +246,108 @@ fn start_time_in_a_recording_has_the_command_line_format() {
         }
     }
 }
+
+fn switch_value(args: &[&str]) -> (String, SwitchValue) {
+    let line = rebuild(args);
+    let command = parse_command(&wide(&line), EntryMode::Process).unwrap();
+    assert_eq!(command.modifiers.len(), 1, "{line}");
+    (
+        command.modifiers[0].name.to_string_lossy(),
+        command.modifiers[0].value.clone(),
+    )
+}
+
+#[test]
+fn a_switch_value_with_whitespace_stays_a_switch_value() {
+    for (arg, name, value) in [
+        ("/output:/tmp/a b.txt", "output", "/tmp/a b.txt"),
+        ("/password:a b", "password", "a b"),
+        ("/output:say \"hi there\"", "output", "say \"hi there\""),
+    ] {
+        let args = ["wmic", arg, "os", "get", "Caption"];
+        assert_eq!(
+            switch_value(&args),
+            (name.to_string(), SwitchValue::Value(wide(value))),
+            "{arg}"
+        );
+        let command = parse_command(&wide(&rebuild(&args)), EntryMode::Process).unwrap();
+        assert_eq!(command.target, Some(Target::Alias(wide("os"))), "{arg}");
+    }
+}
+
+#[test]
+fn a_verb_level_switch_value_with_whitespace_stays_a_switch_value() {
+    let line = rebuild(&["wmic", "os", "get", "Caption", "/format:my style.xsl"]);
+    let command = parse_command(&wide(&line), EntryMode::Process).unwrap();
+    let format = command
+        .modifiers
+        .iter()
+        .find(|m| m.name.eq_ignore_case("format"))
+        .unwrap();
+    assert_eq!(format.value, SwitchValue::Value(wide("my style.xsl")));
+    assert_eq!(command.properties, vec![wide("Caption")]);
+}
+
+#[test]
+fn a_switch_prefix_with_whitespace_is_wrapped_as_one_token() {
+    assert_eq!(quote_argument(&wide("/a b:c").0), wide("\"/a b:c\"").0);
+    assert_eq!(quote_argument(&wide("/a b").0), wide("\"/a b\"").0);
+}
+
+#[test]
+fn a_password_never_reaches_stderr_when_the_alias_is_unknown() {
+    use wmic_compat::{
+        backend::{Management, ResolvedRequest},
+        model::{ManagementError, ManagementResult, ObjectSet},
+        render::{DestinationProfile, OutputError, encode_output},
+        session::{OutputSink, OutputStream, Session},
+    };
+    struct Provider;
+    impl Management for Provider {
+        fn execute(&mut self, _: &ResolvedRequest) -> Result<ManagementResult, ManagementError> {
+            Ok(ManagementResult::Objects(ObjectSet::default()))
+        }
+    }
+    #[derive(Default)]
+    struct Sink(Vec<u8>);
+    impl OutputSink for Sink {
+        fn write(&mut self, _: OutputStream, text: &WideText) -> Result<(), OutputError> {
+            self.0
+                .extend(encode_output(text, &DestinationProfile::pipe(1252))?);
+            Ok(())
+        }
+    }
+    for line in [
+        rebuild(&["wmic", "/password:a b", "bogus", "get", "Caption"]),
+        rebuild(&["wmic", "/PASSWORD:a b", "bogus", "get", "Caption"]),
+        rebuild(&["wmic", "bogus", "get", "Caption", "/password:a b"]),
+    ] {
+        let mut sink = Sink::default();
+        let out = Session::new("TEST".into()).unwrap().execute(
+            &wide(&line),
+            EntryMode::Process,
+            &mut Provider,
+            &mut sink,
+        );
+        let text = String::from_utf8_lossy(&sink.0).into_owned();
+        assert_ne!(out.exit_status, 0, "{line}: {text}");
+        assert!(!text.contains("a b"), "{line}: {text}");
+    }
+}
+
+#[test]
+fn wrapped_arguments_keep_their_text_unless_they_mix_both_quote_kinds_or_end_in_a_backslash() {
+    for arg in [
+        "a b",
+        "say \"hi there\"",
+        "it's a test",
+        "tab\tseparated",
+        "line\nbreak",
+        r"C:\my dir\file.txt",
+        "a, b",
+    ] {
+        let line = rebuild(&["wmic", "process", "call", "create", arg]);
+        let command = parse_command(&wide(&line), EntryMode::Process).unwrap();
+        assert_eq!(command.arguments, vec![wide(arg)], "{arg:?} -> {line}");
+    }
+}

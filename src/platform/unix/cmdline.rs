@@ -6,6 +6,8 @@ use std::os::unix::ffi::OsStringExt;
 const QUOTE: u16 = b'"' as u16;
 const APOSTROPHE: u16 = b'\'' as u16;
 const BACKSLASH: u16 = b'\\' as u16;
+const SLASH: u16 = b'/' as u16;
+const COLON: u16 = b':' as u16;
 
 /// Non-UTF-8 bytes become U+FFFD.
 pub fn argument_units(args: impl IntoIterator<Item = OsString>) -> Vec<Vec<u16>> {
@@ -34,6 +36,7 @@ pub fn command_line(args: &[Vec<u16>]) -> WideText {
 }
 
 /// Keeps every argument a single parser token without changing arguments the shell already shaped.
+/// A switch keeps its `/name:` prefix verbatim so that only the value is quoted.
 pub fn quote_argument(arg: &[u16]) -> Vec<u16> {
     if arg.is_empty() {
         return vec![QUOTE, QUOTE];
@@ -41,6 +44,20 @@ pub fn quote_argument(arg: &[u16]) -> Vec<u16> {
     if !arg.iter().any(|u| matches!(u, 9 | 10 | 13 | 32)) || is_single_token(arg) {
         return arg.to_vec();
     }
+    if arg[0] == SLASH
+        && let Some(colon) = arg.iter().position(|u| *u == COLON)
+        && !arg[..colon]
+            .iter()
+            .any(|u| matches!(u, 9 | 10 | 13 | 32 | 34 | 39))
+    {
+        let mut out = arg[..=colon].to_vec();
+        out.extend(quote_value(&arg[colon + 1..]));
+        return out;
+    }
+    quote_value(arg)
+}
+
+fn quote_value(arg: &[u16]) -> Vec<u16> {
     if !arg.contains(&QUOTE) {
         return wrap(arg, QUOTE);
     }

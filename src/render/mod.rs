@@ -291,6 +291,13 @@ pub fn render_parse_error(e: &ParseError) -> RenderedOutput {
     )
 }
 pub fn render_resolve_error(e: &crate::alias::ResolveError) -> RenderedOutput {
+    render_resolve_error_for(e, &WideText::default())
+}
+/// Withholds the error token when the command line carries a password switch.
+pub fn render_resolve_error_for(
+    e: &crate::alias::ResolveError,
+    command_line: &WideText,
+) -> RenderedOutput {
     if e.code & 0x80000000 != 0 {
         return diagnostic::management(
             &ManagementError {
@@ -304,7 +311,11 @@ pub fn render_resolve_error(e: &crate::alias::ResolveError) -> RenderedOutput {
             &WideText::default(),
         );
     }
-    diagnostic::text(&e.message, e.token.as_ref())
+    let secret = command_line
+        .to_string_lossy()
+        .to_ascii_lowercase()
+        .contains("/password");
+    diagnostic::text(&e.message, e.token.as_ref().filter(|_| !secret))
 }
 pub mod help;
 pub mod mof;

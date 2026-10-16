@@ -5,6 +5,7 @@ enum Token {
     Word(WideText),
     Text(WideText),
     Number(i128),
+    Real(f64),
     Operator(String),
     Left,
     Right,
@@ -13,6 +14,7 @@ enum Token {
 enum Literal {
     Text(WideText),
     Number(i128),
+    Real(f64),
     Bool(bool),
     Null,
 }
@@ -94,8 +96,11 @@ fn lex(text: &WideText) -> Result<Vec<Token>, ()> {
                     return Err(());
                 }
                 let value = WideText(text.0[start..at].to_vec());
-                if let Ok(n) = value.to_string_lossy().parse::<i128>() {
+                let word = value.to_string_lossy();
+                if let Ok(n) = word.parse::<i128>() {
                     tokens.push(Token::Number(n))
+                } else if let Some(r) = decimal(&word) {
+                    tokens.push(Token::Real(r))
                 } else {
                     tokens.push(Token::Word(value))
                 }
@@ -103,6 +108,32 @@ fn lex(text: &WideText) -> Result<Vec<Token>, ()> {
         }
     }
     Ok(tokens)
+}
+/// A finite decimal or exponent literal; words such as `inf` and `nan` stay words.
+fn decimal(word: &str) -> Option<f64> {
+    (word
+        .bytes()
+        .all(|b| b.is_ascii_digit() || matches!(b, b'.' | b'+' | b'-' | b'e' | b'E'))
+        && word.bytes().any(|b| b.is_ascii_digit()))
+    .then(|| word.parse::<f64>().ok())
+    .flatten()
+    .filter(|r| r.is_finite())
+}
+/// A quoted literal compared with a numeric or boolean property is read as that kind of value.
+fn coerce(text: &WideText) -> Option<Literal> {
+    let text = text.to_string_lossy();
+    let text = text.trim();
+    if let Ok(n) = text.parse::<i128>() {
+        Some(Literal::Number(n))
+    } else if let Some(r) = decimal(text) {
+        Some(Literal::Real(r))
+    } else if text.eq_ignore_ascii_case("true") {
+        Some(Literal::Bool(true))
+    } else if text.eq_ignore_ascii_case("false") {
+        Some(Literal::Bool(false))
+    } else {
+        None
+    }
 }
 struct Parser {
     tokens: Vec<Token>,
@@ -191,6 +222,7 @@ impl Parser {
         let value = match self.tokens.get(self.at).cloned() {
             Some(Token::Text(s)) => Literal::Text(s),
             Some(Token::Number(n)) => Literal::Number(n),
+            Some(Token::Real(r)) => Literal::Real(r),
             Some(Token::Word(w)) if w.eq_ignore_case("null") => Literal::Null,
             Some(Token::Word(w)) if w.eq_ignore_case("true") => Literal::Bool(true),
             Some(Token::Word(w)) if w.eq_ignore_case("false") => Literal::Bool(false),
@@ -254,6 +286,22 @@ impl Expr {
             },
             Self::Compare(name, op, right) => {
                 let left = field(record, name)?;
+                let coerced;
+                let right = match (left, right) {
+                    (
+                        CimValue::Null
+                        | CimValue::Empty
+                        | CimValue::String(_)
+                        | CimValue::DateTime(_)
+                        | CimValue::Reference(_),
+                        _,
+                    ) => right,
+                    (_, Literal::Text(text)) => {
+                        coerced = coerce(text).ok_or(())?;
+                        &coerced
+                    }
+                    _ => right,
+                };
                 let order = match (left, right) {
                     (CimValue::Null | CimValue::Empty, _) | (_, Literal::Null) => return Ok(false),
                     (
@@ -269,18 +317,23 @@ impl Expr {
                         }
                     }
                     (CimValue::Boolean(a), Literal::Bool(b)) => a.cmp(b),
-                    (CimValue::Real32(a), Literal::Number(b)) => {
-                        match (f32::from_bits(*a) as f64).partial_cmp(&(*b as f64)) {
+                    (
+                        CimValue::Real32(_) | CimValue::Real64(_),
+                        Literal::Number(_) | Literal::Real(_),
+                    ) => match real(left).zip(approximate(right)) {
+                        Some((a, b)) => match a.partial_cmp(&b) {
                             Some(order) => order,
                             None => return Ok(false),
-                        }
-                    }
-                    (CimValue::Real64(a), Literal::Number(b)) => {
-                        match f64::from_bits(*a).partial_cmp(&(*b as f64)) {
+                        },
+                        None => return Err(()),
+                    },
+                    (left, Literal::Real(b)) => match integer(left) {
+                        Some(a) => match (a as f64).partial_cmp(b) {
                             Some(order) => order,
                             None => return Ok(false),
-                        }
-                    }
+                        },
+                        None => return Err(()),
+                    },
                     (left, Literal::Number(b)) => match integer(left) {
                         Some(a) => a.cmp(b),
                         None => return Err(()),
@@ -299,6 +352,20 @@ impl Expr {
                 }
             }
         })
+    }
+}
+fn real(value: &CimValue) -> Option<f64> {
+    match value {
+        CimValue::Real32(bits) => Some(f32::from_bits(*bits) as f64),
+        CimValue::Real64(bits) => Some(f64::from_bits(*bits)),
+        _ => None,
+    }
+}
+fn approximate(literal: &Literal) -> Option<f64> {
+    match literal {
+        Literal::Number(n) => Some(*n as f64),
+        Literal::Real(r) => Some(*r),
+        _ => None,
     }
 }
 fn integer(value: &CimValue) -> Option<i128> {
@@ -486,5 +553,45 @@ mod tests {
         assert_eq!(check("S = 1", &r), Err(()));
         assert_eq!(check("I LIKE '1'", &r), Err(()));
         assert_eq!(check("Missing = 1", &r), Err(()));
+    }
+    #[test]
+    fn quoted_literals_coerce_to_numeric_and_boolean_properties() {
+        let r = record(vec![
+            ("OSType", CimValue::Uint16(2)),
+            ("Load", CimValue::Uint16(7)),
+            ("Ratio", CimValue::Real64(2.5f64.to_bits())),
+            ("Primary", CimValue::Boolean(true)),
+            ("Name", CimValue::String("x".into())),
+        ]);
+        assert_eq!(check("OSType='2'", &r), Ok(true));
+        assert_eq!(check("OSType='3'", &r), Ok(false));
+        assert_eq!(check("OSType > '1'", &r), Ok(true));
+        assert_eq!(check("Load < '7.5'", &r), Ok(true));
+        assert_eq!(check("Ratio = '2.5'", &r), Ok(true));
+        assert_eq!(check("Primary='TRUE'", &r), Ok(true));
+        assert_eq!(check("Primary='false'", &r), Ok(false));
+        assert_eq!(check("Name = 'X'", &r), Ok(true));
+        assert_eq!(check("OSType = 'two'", &r), Err(()));
+        assert_eq!(check("OSType = ''", &r), Err(()));
+        assert_eq!(check("Primary = '2'", &r), Err(()));
+        assert_eq!(check("Load = 'TRUE'", &r), Err(()));
+    }
+    #[test]
+    fn decimal_literals_compare_with_integer_and_real_values() {
+        let r = record(vec![
+            ("LoadPercentage", CimValue::Uint16(2)),
+            ("Ratio", CimValue::Real32(1.5f32.to_bits())),
+            ("Name", CimValue::String("x".into())),
+        ]);
+        assert_eq!(check("LoadPercentage > 1.5", &r), Ok(true));
+        assert_eq!(check("LoadPercentage < 1.5", &r), Ok(false));
+        assert_eq!(check("LoadPercentage = 2.0", &r), Ok(true));
+        assert_eq!(check("LoadPercentage > -0.5", &r), Ok(true));
+        assert_eq!(check("Ratio = 1.5", &r), Ok(true));
+        assert_eq!(check("Ratio >= 1.6", &r), Ok(false));
+        assert_eq!(check("Ratio < 1e1", &r), Ok(true));
+        assert_eq!(check("Name = 1.5", &r), Err(()));
+        assert_eq!(check("Name = inf", &r), Err(()));
+        assert_eq!(check("Name = nan", &r), Err(()));
     }
 }

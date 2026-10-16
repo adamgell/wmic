@@ -46,19 +46,30 @@ fn condition(request: &ResolvedRequest) -> Option<WideText> {
     }
 }
 
-/// A record with every schema property null: evaluating a condition on it finds unknown names.
+/// A record with every system and schema property null: evaluating a condition on it finds
+/// unknown names.
 fn probe(info: &ClassInfo) -> Record {
+    let system = crate::render::system_property_order().map(|name| Property {
+        name: name.into(),
+        value: CimValue::Null,
+        cim_type: match name {
+            "__GENUS" | "__PROPERTY_COUNT" => 3,
+            "__DERIVATION" => 8 | 0x2000,
+            _ => 8,
+        },
+        system: true,
+        qualifiers: vec![],
+    });
     Record {
-        properties: info
-            .properties
-            .iter()
-            .map(|p| Property {
+        properties: system
+            .into_iter()
+            .chain(info.properties.iter().map(|p| Property {
                 name: p.name.as_str().into(),
                 value: CimValue::Null,
                 cim_type: p.cim_type,
                 system: false,
                 qualifiers: vec![],
-            })
+            }))
             .collect(),
         ..Default::default()
     }
@@ -127,10 +138,11 @@ fn equals(value: &CimValue, literal: &str) -> bool {
     }
 }
 
-/// Keeps the records an object path names; `None` when the path is malformed or names a non-key.
+/// Keeps the records an object path names; `None` when the path is malformed, names a non-key,
+/// omits a key, or uses the singleton form on a class that is not a singleton.
 fn by_path(info: &ClassInfo, path: &WideText, records: Vec<Record>) -> Option<Vec<Record>> {
     let Some(keys) = parse_path(&path.to_string_lossy())? else {
-        return Some(records);
+        return (info.singleton || info.keys().is_empty()).then_some(records);
     };
     let mut wanted = vec![];
     for (name, literal) in &keys {
@@ -139,6 +151,14 @@ fn by_path(info: &ClassInfo, path: &WideText, records: Vec<Record>) -> Option<Ve
             return None;
         }
         wanted.push((property.name.as_str(), literal.as_str()));
+    }
+    let complete = info.keys().iter().all(|k| {
+        wanted
+            .iter()
+            .any(|(name, _)| *name == info.properties[*k].name)
+    });
+    if !complete || wanted.len() != info.keys().len() {
+        return None;
     }
     Some(
         records
@@ -180,7 +200,7 @@ pub(super) fn select(
     }
     let mut records = entry.provider.instances(ctx)?;
     if let Some(path) = &request.instance_path {
-        records = by_path(info, path, records).ok_or_else(invalid)?;
+        records = by_path(info, path, records).ok_or_else(|| error::invalid_object_path(node))?;
     }
     if let Some(predicate) = &predicate {
         let mut kept = vec![];

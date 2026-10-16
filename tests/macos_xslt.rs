@@ -232,3 +232,150 @@ fn stylesheets_cannot_write_files() {
     let _ = std::fs::remove_file(&target);
     assert!(!created, "the stylesheet created {}", target.display());
 }
+
+mod secondary_documents {
+    use super::*;
+    use std::net::TcpListener;
+    use std::time::{Duration, Instant};
+
+    const SECRET: &str = "TOPSECRET";
+
+    struct Fixture {
+        listener: TcpListener,
+        _secret: Sheet,
+        dtd: String,
+        entity: String,
+    }
+
+    fn fixture_files() -> Fixture {
+        let listener = TcpListener::bind("127.0.0.1:0").unwrap();
+        listener.set_nonblocking(true).unwrap();
+        let port = listener.local_addr().unwrap().port();
+        let secret = Sheet::new(SECRET);
+        Fixture {
+            listener,
+            dtd: format!("http://127.0.0.1:{port}/x.dtd"),
+            entity: format!("file://{}", secret.0.display()),
+            _secret: secret,
+        }
+    }
+
+    fn nobody_connected(listener: &TcpListener) -> bool {
+        let deadline = Instant::now() + Duration::from_millis(300);
+        while Instant::now() < deadline {
+            match listener.accept() {
+                Ok(_) => return false,
+                Err(e) if e.kind() == std::io::ErrorKind::WouldBlock => {
+                    std::thread::sleep(Duration::from_millis(20))
+                }
+                Err(_) => return true,
+            }
+        }
+        true
+    }
+
+    fn document_sheet(path: &std::path::Path) -> Sheet {
+        Sheet::new(&format!(
+            r#"<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"><xsl:output method="text"/><xsl:template match="/">[<xsl:value-of select="document('{}')"/>]</xsl:template></xsl:stylesheet>"#,
+            path.display()
+        ))
+    }
+
+    fn include_sheet(path: &std::path::Path) -> Sheet {
+        Sheet::new(&format!(
+            r#"<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"><xsl:include href="{}"/><xsl:output method="text"/><xsl:template match="/">[<xsl:call-template name="t"/>]</xsl:template></xsl:stylesheet>"#,
+            path.display()
+        ))
+    }
+
+    fn included(doctype: &str, body: &str) -> Sheet {
+        Sheet::new(&format!(
+            r#"{doctype}<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"><xsl:template name="t">{body}</xsl:template></xsl:stylesheet>"#
+        ))
+    }
+
+    #[test]
+    fn document_does_not_load_a_network_dtd() {
+        let f = fixture_files();
+        let data = Sheet::new(&format!(r#"<!DOCTYPE r SYSTEM "{}"><r>visible</r>"#, f.dtd));
+        let sheet = document_sheet(&data.0);
+        let out = transform(&wide("<r/>"), &sheet.spec(&[]));
+        assert!(nobody_connected(&f.listener));
+        assert_eq!(out.unwrap(), wide("[visible]"));
+    }
+
+    #[test]
+    fn document_does_not_expand_an_external_entity() {
+        let f = fixture_files();
+        let data = Sheet::new(&format!(
+            r#"<!DOCTYPE r [<!ENTITY e SYSTEM "{}">]><r>a&e;b</r>"#,
+            f.entity
+        ));
+        let sheet = document_sheet(&data.0);
+        let out = transform(&wide("<r/>"), &sheet.spec(&[]));
+        if let Ok(text) = out {
+            assert!(!text.to_string_lossy().contains(SECRET), "{text:?}");
+        }
+    }
+
+    #[test]
+    fn document_does_not_expand_an_external_entity_through_a_network_dtd() {
+        let f = fixture_files();
+        let data = Sheet::new(&format!(
+            r#"<!DOCTYPE r SYSTEM "{}" [<!ENTITY e SYSTEM "{}">]><r>&e;</r>"#,
+            f.dtd, f.entity
+        ));
+        let sheet = document_sheet(&data.0);
+        let out = transform(&wide("<r/>"), &sheet.spec(&[]));
+        assert!(nobody_connected(&f.listener));
+        if let Ok(text) = out {
+            assert!(!text.to_string_lossy().contains(SECRET), "{text:?}");
+        }
+    }
+
+    #[test]
+    fn include_does_not_load_a_network_dtd() {
+        let f = fixture_files();
+        let part = included(
+            &format!(r#"<!DOCTYPE xsl:stylesheet SYSTEM "{}">"#, f.dtd),
+            "visible",
+        );
+        let sheet = include_sheet(&part.0);
+        let out = transform(&wide("<r/>"), &sheet.spec(&[]));
+        assert!(nobody_connected(&f.listener));
+        assert_eq!(out.unwrap(), wide("[visible]"));
+    }
+
+    #[test]
+    fn include_does_not_expand_an_external_entity() {
+        let f = fixture_files();
+        let part = included(
+            &format!(
+                r#"<!DOCTYPE xsl:stylesheet [<!ENTITY e SYSTEM "{}">]>"#,
+                f.entity
+            ),
+            "<xsl:text>a&e;b</xsl:text>",
+        );
+        let sheet = include_sheet(&part.0);
+        let out = transform(&wide("<r/>"), &sheet.spec(&[]));
+        if let Ok(text) = out {
+            assert!(!text.to_string_lossy().contains(SECRET), "{text:?}");
+        }
+    }
+
+    #[test]
+    fn import_does_not_load_a_network_dtd() {
+        let f = fixture_files();
+        let part = included(
+            &format!(r#"<!DOCTYPE xsl:stylesheet SYSTEM "{}">"#, f.dtd),
+            "visible",
+        );
+        let sheet = Sheet::new(&format!(
+            r#"<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"><xsl:import href="{}"/><xsl:output method="text"/><xsl:template match="/">[<xsl:call-template name="t"/>]</xsl:template></xsl:stylesheet>"#,
+            part.0.display()
+        ));
+        let out = transform(&wide("<r/>"), &sheet.spec(&[]));
+        assert!(nobody_connected(&f.listener));
+        assert_eq!(out.unwrap(), wide("[visible]"));
+    }
+}

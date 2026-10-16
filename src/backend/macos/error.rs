@@ -36,6 +36,10 @@ pub fn invalid_query(node: &WideText) -> ManagementError {
     error(node, 0x80041017, "Invalid query", "query")
 }
 
+pub fn invalid_object_path(node: &WideText) -> ManagementError {
+    error(node, 0x8004103a, "Invalid object path", "query")
+}
+
 pub fn not_supported(node: &WideText, operation: &str) -> ManagementError {
     error(node, 0x8004100c, "Not supported", operation)
 }

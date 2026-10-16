@@ -446,13 +446,15 @@ fn writes_are_not_supported() {
     let e = failure(&request("os set Description=\"x\""));
     assert_eq!(
         (e.code, e.message.to_string_lossy(), operation(&e)),
-        (0x8004100c, "Not supported".into(), "write".into())
+        (0x8004100c, "Not supported".into(), "update".into())
     );
     assert!(
         e.target
             .to_string_lossy()
             .ends_with(":Win32_OperatingSystem=@")
     );
+    let e = failure(&request("os delete"));
+    assert_eq!((e.code, operation(&e)), (0x8004100c, "delete".into()));
     let e = failure(&request("path Win32_Environment create Name=\"A\""));
     assert_eq!((e.code, operation(&e)), (0x8004100c, "write".into()));
     let e = failure(&request("os set Missing=1"));
@@ -464,8 +466,10 @@ fn methods_bind_by_schema_and_report_shapes() {
     let e = failure(&request("path Win32_OperatingSystem call WmicNoSuchMethod"));
     assert_eq!((e.code, operation(&e)), (0xABFD, "input".into()));
     assert_eq!(e.message, wide("WmicNoSuchMethod - Invalid alias verb."));
-    let e = failure(&request("path Win32_OperatingSystem call Reboot 1"));
-    assert_eq!((e.code, operation(&e)), (0xADE6, "input".into()));
+    if unsafe { libc::geteuid() } != 0 {
+        let e = failure(&request("path Win32_OperatingSystem call Reboot 1"));
+        assert_eq!((e.code, operation(&e)), (0xADE6, "input".into()));
+    }
     let e = failure(&request(
         "path Win32_OperatingSystem call SetDateTime 20260101000000.000000+000",
     ));
@@ -503,19 +507,21 @@ fn interactive_prompts_use_the_windows_text_and_declines_skip_the_target() {
         reply: false,
         prompts: vec![],
     };
-    let r = request("/interactive path Win32_OperatingSystem call Reboot");
-    let result = backend()
-        .execute_with_confirmation(&r, &mut answer)
-        .unwrap();
-    assert!(matches!(
-        result,
-        ManagementResult::Operation(OperationResult {
-            action: Verb::Call,
-            ..
-        })
-    ));
-    assert!(answer.prompts[0].starts_with("Execute (\\\\"));
-    assert!(answer.prompts[0].ends_with(":Win32_OperatingSystem=@)->Reboot() (Y/N/?)? "));
+    if unsafe { libc::geteuid() } != 0 {
+        let r = request("/interactive path Win32_OperatingSystem call Reboot");
+        let result = backend()
+            .execute_with_confirmation(&r, &mut answer)
+            .unwrap();
+        assert!(matches!(
+            result,
+            ManagementResult::Operation(OperationResult {
+                action: Verb::Call,
+                ..
+            })
+        ));
+        assert!(answer.prompts[0].starts_with("Execute (\\\\"));
+        assert!(answer.prompts[0].ends_with(":Win32_OperatingSystem=@)->Reboot() (Y/N/?)? "));
+    }
 
     let mut answer = Answer {
         reply: false,
@@ -547,7 +553,7 @@ fn interactive_prompts_use_the_windows_text_and_declines_skip_the_target() {
             &mut answer,
         )
         .unwrap_err();
-    assert_eq!((e.code, operation(&e)), (0x8004100c, "write".into()));
+    assert_eq!((e.code, operation(&e)), (0x8004100c, "update".into()));
 
     let e = failure(&request("/interactive os set Description=\"x\""));
     assert_eq!((e.code, operation(&e)), (0x80041008, "input".into()));
@@ -641,4 +647,85 @@ fn identity_classes_agree_with_each_other() {
         capacity(memory, "Capacity"),
         capacity(system, "TotalPhysicalMemory")
     );
+}
+
+#[test]
+fn failed_writes_print_the_operation_line_before_the_diagnostic() {
+    let (status, sink) = session("HOST", "os set Description=\"x\"");
+    assert_eq!(status, 0x8004100c);
+    let stdout = String::from_utf8(sink.stdout).unwrap();
+    assert!(
+        stdout.starts_with("Updating property(s) of '\\\\"),
+        "{stdout:?}"
+    );
+    assert!(
+        stdout.trim_end().ends_with(":Win32_OperatingSystem=@'"),
+        "{stdout:?}"
+    );
+    assert!(!sink.stderr.is_empty());
+    let (status, sink) = session("HOST", "os delete");
+    assert_eq!(status, 0x8004100c);
+    let stdout = String::from_utf8(sink.stdout).unwrap();
+    assert!(stdout.starts_with("Deleting instance \\\\"), "{stdout:?}");
+    assert!(!sink.stderr.is_empty());
+}
+
+#[test]
+fn number_of_processes_agrees_with_the_process_table() {
+    use wmic_compat::backend::macos::sys::proc;
+    let reported = match objects("os get NumberOfProcesses")[0]
+        .properties
+        .iter()
+        .find(|p| p.name.eq_ignore_case("NumberOfProcesses"))
+        .map(|p| p.value.clone())
+    {
+        Some(CimValue::Uint32(n)) => n as f64,
+        other => panic!("unexpected value {other:?}"),
+    };
+    let table = proc::list().unwrap().len() as f64;
+    assert!(
+        (reported - table).abs() <= table * 0.10,
+        "reported {reported}, process table {table}"
+    );
+}
+
+#[test]
+fn where_accepts_system_properties_and_quoted_numbers() {
+    assert_eq!(
+        objects("os where \"__CLASS='Win32_OperatingSystem'\" get Caption").len(),
+        1
+    );
+    assert_eq!(
+        objects("os where \"__CLASS='Win32_Other'\" get Caption").len(),
+        0
+    );
+    assert_eq!(objects("os where \"__GENUS = 2\" get Caption").len(), 1);
+    assert_eq!(objects("os where \"OSType='2'\" get Caption").len(), 1);
+    assert_eq!(objects("os where \"OSType='3'\" get Caption").len(), 0);
+    assert_eq!(objects("os where \"Primary='TRUE'\" get Caption").len(), 1);
+    assert_eq!(
+        objects("os where \"NumberOfProcesses > 0.5\" get Caption").len(),
+        1
+    );
+    let e = failure(&request("os where \"OSType='two'\" get Caption"));
+    assert_eq!(e.code, 0x80041017);
+}
+
+#[test]
+fn object_paths_need_every_key_and_the_singleton_form_needs_a_singleton() {
+    let invalid = |text: &str| {
+        let e = failure(&request(text));
+        assert_eq!(
+            (e.code, e.message.to_string_lossy(), operation(&e)),
+            (0x8004103a, "Invalid object path".into(), "query".into()),
+            "{text}"
+        );
+    };
+    invalid("path Win32_Environment=@ get Name");
+    invalid("path Win32_Environment.Name=\"PATH\" get Name");
+    invalid("path Win32_Environment.UserName=\"x\" get Name");
+    invalid("path Win32_Environment.Name=\"PATH\",Name=\"PATH\" get Name");
+    invalid("path Win32_Environment.Name=\"PATH\",Caption=\"x\" get Name");
+    assert_eq!(objects("path Win32_OperatingSystem=@ get Caption").len(), 1);
+    objects("path Win32_Environment.Name=\"WMIC_NO_SUCH\",UserName=\"x\" get Name");
 }

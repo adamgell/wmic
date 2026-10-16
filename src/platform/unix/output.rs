@@ -82,6 +82,7 @@ pub(super) fn write_fd(fd: i32, bytes: &[u8]) -> io::Result<()> {
 
 struct EchoOff {
     saved: libc::termios,
+    _hold: super::console::TerminalHold,
 }
 impl EchoOff {
     fn enter() -> Option<Self> {
@@ -92,12 +93,13 @@ impl EchoOff {
         if unsafe { libc::tcgetattr(0, &mut saved) } != 0 {
             return None;
         }
+        let hold = super::console::TerminalHold::acquire(&saved);
         let mut quiet = saved;
         quiet.c_lflag &= !libc::ECHO;
         if unsafe { libc::tcsetattr(0, libc::TCSANOW, &quiet) } != 0 {
             return None;
         }
-        Some(Self { saved })
+        Some(Self { saved, _hold: hold })
     }
 }
 impl Drop for EchoOff {
