@@ -1,7 +1,8 @@
 //! Management backend for nodes reached over WS-Management.
 use super::{
-    Endpoint, catalog,
+    Endpoint, InvalidPort, catalog,
     client::{Connector, Found, Target, WsmanClient, default_connector, listener_reachable},
+    fault::detail_properties,
     listener_port,
     path::{Keys, ObjectPath, parse_object_path},
     record::infer_schema,
@@ -19,8 +20,12 @@ use crate::{
     },
 };
 
+/// Where the listener port comes from.
+pub type PortSource = fn() -> Result<u16, InvalidPort>;
+
 pub struct WsmanManagement {
     client: WsmanClient,
+    port: PortSource,
 }
 
 fn error(node: &WideText, code: u32, message: &str, operation: &str) -> ManagementError {
@@ -40,6 +45,13 @@ fn not_supported(node: &WideText, operation: &str) -> ManagementError {
 
 fn invalid_query(node: &WideText) -> ManagementError {
     error(node, 0x80041017, "Invalid query", "query")
+}
+
+fn invalid_port(node: &WideText, invalid: &InvalidPort) -> ManagementError {
+    ManagementError {
+        extended: detail_properties(&invalid.to_string(), None),
+        ..error(node, 0x80041008, "Invalid parameter", "query")
+    }
 }
 
 fn invalid_object_path(node: &WideText) -> ManagementError {
@@ -82,7 +94,7 @@ pub fn host_of(node: &WideText) -> String {
 }
 
 /// Connection settings for a request: account from the `/user` and `/password` options.
-fn target_of(request: &ResolvedRequest) -> Target {
+fn target_of(request: &ResolvedRequest, port: u16) -> Target {
     let connection = &request.connection;
     let host = host_of(&connection.node);
     let (user, domain) = connection.identity_parts();
@@ -91,7 +103,7 @@ fn target_of(request: &ResolvedRequest) -> Target {
     Target {
         endpoint: Endpoint {
             host: host.clone(),
-            port: listener_port(),
+            port,
             user: user.to_string_lossy(),
             domain: domain.to_string_lossy(),
             password: connection.password.clone().unwrap_or_default(),
@@ -216,7 +228,16 @@ impl WsmanManagement {
     }
 
     pub fn with_client(client: WsmanClient) -> Self {
-        Self { client }
+        Self {
+            client,
+            port: listener_port,
+        }
+    }
+
+    /// Replaces the source of the listener port.
+    pub fn with_port_source(mut self, port: PortSource) -> Self {
+        self.port = port;
+        self
     }
 
     /// Reaches nodes with NTLM over HTTP.
@@ -233,7 +254,8 @@ impl WsmanManagement {
         if interrupted() {
             return Err(cancelled(node, None));
         }
-        let target = target_of(request);
+        let port = (self.port)().map_err(|e| invalid_port(node, &e))?;
+        let target = target_of(request, port);
         match request.verb {
             Verb::Get | Verb::List if request.class_mode => self.schema(&target, request),
             Verb::Get | Verb::List => {
@@ -295,9 +317,12 @@ impl WsmanManagement {
         let class = request.class_name.to_string_lossy();
         let class = catalog::lookup(&class).map_or(class, |info| info.name.clone());
         let Some(path) = &request.instance_path else {
-            return self
-                .client
-                .enumerate(target, &class, Some(&wql_of(request)));
+            let wql = wql_of(request);
+            return if request.query.is_none() {
+                self.client.enumerate_class(target, &class, Some(&wql))
+            } else {
+                self.client.enumerate(target, &class, Some(&wql))
+            };
         };
         let parsed: ObjectPath =
             parse_object_path(&path.to_string_lossy()).ok_or_else(|| invalid_object_path(node))?;
@@ -438,7 +463,7 @@ impl WsmanManagement {
 
 impl Management for WsmanManagement {
     fn reachable(&mut self, node: &WideText, timeout_ms: u32) -> bool {
-        listener_reachable(&host_of(node), listener_port(), timeout_ms)
+        (self.port)().is_ok_and(|port| listener_reachable(&host_of(node), port, timeout_ms))
     }
 
     fn execute(&mut self, request: &ResolvedRequest) -> Result<ManagementResult, ManagementError> {

@@ -129,6 +129,7 @@ mod probe {
         };
         let mut transport = NtlmHttpTransport::connect(&endpoint).map_err(|e| e.to_string())?;
         let reply = transport.post(IDENTIFY).map_err(|e| e.to_string())?;
+        println!("computer name: {:?}", transport.server_name());
         println!("HTTP {}", reply.status);
         println!("{}", reply.body);
         Ok(())

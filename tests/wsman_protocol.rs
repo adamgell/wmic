@@ -80,6 +80,10 @@ struct Wire {
     rules: Vec<Rule>,
     sent: Vec<Sent>,
     connections: usize,
+    /// Computer name the transports report after their first reply.
+    server_name: Option<String>,
+    /// Number of upcoming reuse checks that find the connection closed by the peer.
+    stale: usize,
 }
 
 type Shared = Rc<RefCell<Wire>>;
@@ -112,6 +116,17 @@ fn kinds(wire: &Shared) -> Vec<String> {
 struct FakeTransport(Shared);
 
 impl Transport for FakeTransport {
+    fn server_name(&self) -> Option<String> {
+        self.0.borrow().server_name.clone()
+    }
+
+    fn is_reusable(&mut self) -> bool {
+        let mut wire = self.0.borrow_mut();
+        let stale = wire.stale > 0;
+        wire.stale = wire.stale.saturating_sub(1);
+        !stale
+    }
+
     fn post(&mut self, envelope: &str) -> Result<Response, TransportError> {
         let doc = roxmltree::Document::parse(envelope).expect("request is well-formed XML");
         let text = |local: &str| {
@@ -301,7 +316,7 @@ fn typed_operating_system_instance_with_paths_and_system_properties() {
             "__GENUS"
         ]
     );
-    assert_eq!(text(os, "__NAMESPACE"), "ROOT\\cimv2");
+    assert_eq!(text(os, "__NAMESPACE"), "ROOT\\CIMV2");
     assert_eq!(text(os, "__RELPATH"), "Win32_OperatingSystem=@");
     assert_eq!(text(os, "__SUPERCLASS"), "CIM_OperatingSystem");
     assert_eq!(text(os, "__DYNASTY"), "CIM_ManagedSystemElement");
@@ -1356,6 +1371,373 @@ fn requests_carry_the_required_headers() {
     assert!(message.resource.contains(CIMV2));
 }
 
+fn deep_reply(depth: usize) -> Reply {
+    enumerate_reply(&format!(
+        "<w:Item>{}{}</w:Item>",
+        "<a>".repeat(depth),
+        "</a>".repeat(depth)
+    ))
+}
+
+fn detail_mentions(error: &ManagementError, needle: &str) -> bool {
+    error
+        .extended
+        .iter()
+        .any(|p| matches!(&p.value, CimValue::String(s) if s.to_string_lossy().contains(needle)))
+}
+
+#[test]
+fn deeply_nested_and_oversized_replies_fail_as_malformed_instead_of_aborting() {
+    for depth in [300, 20_000] {
+        let w = wire();
+        script(&w, "/Enumerate", None, vec![deep_reply(depth)]);
+        let error = client(&w)
+            .enumerate(&target(), "A", Some("SELECT * FROM A"))
+            .unwrap_err();
+        assert_eq!(
+            failure(error.clone()),
+            expect(0x80041001, "Generic failure", "query"),
+            "depth {depth}"
+        );
+        assert!(detail_mentions(&error, "too deeply"), "depth {depth}");
+    }
+
+    let w = wire();
+    script(
+        &w,
+        "/Enumerate",
+        None,
+        vec![enumerate_reply(&format!(
+            "<w:Item><a>{}</a></w:Item>",
+            "<b/>".repeat(250_000)
+        ))],
+    );
+    let error = client(&w)
+        .enumerate(&target(), "A", Some("SELECT * FROM A"))
+        .unwrap_err();
+    assert_eq!(error.code, 0x80041001);
+
+    let w = wire();
+    script(&w, "/Enumerate", None, vec![deep_reply(100)]);
+    assert!(
+        client(&w)
+            .enumerate(&target(), "A", Some("SELECT * FROM A"))
+            .is_ok()
+    );
+}
+
+#[test]
+fn a_pull_that_times_out_is_pulled_again_with_the_same_context() {
+    let w = wire();
+    script(&w, "/Enumerate", None, vec![ok("enumerate-driver-page1")]);
+    script(
+        &w,
+        "/Pull",
+        None,
+        vec![
+            fault("fault-timed-out"),
+            fault("fault-timed-out"),
+            ok("pull-driver-page2"),
+            ok("pull-driver-page3"),
+        ],
+    );
+    let found = client(&w)
+        .enumerate(&target(), "Win32_SystemDriver", None)
+        .unwrap();
+    assert_eq!(found.len(), 3);
+    assert_eq!(
+        kinds(&w),
+        ["Enumerate", "Pull", "Pull", "Pull", "Pull"],
+        "no Release and no restart"
+    );
+    let messages = sent(&w);
+    let first = messages[1].texts("EnumerationContext");
+    assert_eq!(messages[2].texts("EnumerationContext"), first);
+    assert_eq!(messages[3].texts("EnumerationContext"), first);
+}
+
+static CHECKS: std::sync::atomic::AtomicUsize = std::sync::atomic::AtomicUsize::new(0);
+
+#[test]
+fn an_interrupt_ends_the_retries_of_a_pull_that_keeps_timing_out() {
+    let w = wire();
+    script(&w, "/Enumerate", None, vec![ok("enumerate-driver-page1")]);
+    script(
+        &w,
+        "/Pull",
+        None,
+        (0..10).map(|_| fault("fault-timed-out")).collect(),
+    );
+    script(&w, "/Release", None, vec![ok("release")]);
+    let error = client(&w)
+        .with_interrupt(|| CHECKS.fetch_add(1, std::sync::atomic::Ordering::SeqCst) >= 3)
+        .enumerate(&target(), "Win32_SystemDriver", None)
+        .unwrap_err();
+    assert_eq!(error.code, 0xC000013A);
+    assert_eq!(kinds(&w), ["Enumerate", "Pull", "Pull", "Pull", "Release"]);
+}
+
+#[test]
+fn a_transport_error_during_a_pull_releases_the_context_on_a_new_connection() {
+    let w = wire();
+    script(&w, "/Enumerate", None, vec![ok("enumerate-driver-page1")]);
+    script(&w, "/Pull", None, vec![Reply::Io]);
+    script(&w, "/Release", None, vec![ok("release")]);
+    let error = client(&w)
+        .enumerate(&target(), "Win32_SystemDriver", None)
+        .unwrap_err();
+    assert_eq!(error.code, 0x80041001);
+    assert!(matches!(
+        error.partial.as_deref(),
+        Some(ManagementResult::Objects(set)) if set.objects.len() == 1
+    ));
+    assert_eq!(kinds(&w), ["Enumerate", "Pull", "Release"]);
+    assert_eq!(w.borrow().connections, 2);
+    assert_eq!(
+        sent(&w)[2].texts("EnumerationContext"),
+        sent(&w)[1].texts("EnumerationContext")
+    );
+}
+
+#[test]
+fn server_is_the_computer_name_the_service_reports_for_every_kind_of_host() {
+    let cases = [
+        ("10.1.2.3", Some("LABHOST"), "LABHOST"),
+        ("labhost.corp.example.test", Some("LABHOST"), "LABHOST"),
+        ("localhost", Some("LABHOST"), "LABHOST"),
+        (".", Some("LABHOST"), "LABHOST"),
+        ("\\\\labhost", Some("LABHOST"), "LABHOST"),
+        (
+            "labhost.corp.example.test",
+            None,
+            "LABHOST.CORP.EXAMPLE.TEST",
+        ),
+        ("10.1.2.3", None, "10.1.2.3"),
+        ("localhost", None, "LOCALHOST"),
+    ];
+    for (host, reported, expected) in cases {
+        let w = wire();
+        w.borrow_mut().server_name = reported.map(str::to_owned);
+        script(&w, "/Enumerate", None, vec![ok("enumerate-os")]);
+        let mut r = remote("os get");
+        r.connection.node = wide(host);
+        let records = objects(management(&w).execute(&r).unwrap());
+        assert_eq!(text(&records[0], "__SERVER"), expected, "{host}");
+        assert_eq!(records[0].server, Some(wide(expected)), "{host}");
+        assert_eq!(
+            records[0].path,
+            Some(wide(&format!(
+                "\\\\{expected}\\ROOT\\CIMV2:Win32_OperatingSystem=@"
+            ))),
+            "{host}"
+        );
+    }
+}
+
+#[test]
+fn get_and_method_targets_use_the_reported_computer_name() {
+    let w = wire();
+    w.borrow_mut().server_name = Some("LABHOST".into());
+    script(&w, "/Get", None, vec![ok("get-process-4")]);
+    let mut r = remote("path Win32_Process.Handle=\"4\" get Name");
+    r.connection.node = wide("10.1.2.3");
+    let records = objects(management(&w).execute(&r).unwrap());
+    assert_eq!(
+        records[0].path,
+        Some(wide("\\\\LABHOST\\ROOT\\CIMV2:Win32_Process.Handle=\"4\""))
+    );
+    assert_eq!(text(&records[0], "__SERVER"), "LABHOST");
+
+    let w = wire();
+    w.borrow_mut().server_name = Some("LABHOST".into());
+    script(&w, "/Enumerate", None, vec![ok("wql-process-fragment")]);
+    script(
+        &w,
+        "/Win32_Process/GetOwner",
+        None,
+        vec![ok("invoke-getowner")],
+    );
+    let mut r = remote("process where \"Handle='4'\" call getowner");
+    r.connection.node = wide("10.1.2.3");
+    let ManagementResult::Methods(results) = management(&w).execute(&r).unwrap() else {
+        panic!("not a method result")
+    };
+    assert_eq!(
+        results[0].path,
+        wide("\\\\LABHOST\\ROOT\\CIMV2:Win32_Process.Handle=\"4\"")
+    );
+}
+
+#[test]
+fn association_instances_render_nested_reference_keys_as_quoted_paths() {
+    let w = wire();
+    script(&w, "/Enumerate", None, vec![ok("enumerate-association")]);
+    let found = client(&w)
+        .enumerate(&target(), "Win32_LogicalDiskToPartition", None)
+        .unwrap();
+    assert_eq!(found.len(), 1);
+    let relative = concat!(
+        r##"Win32_LogicalDiskToPartition.Antecedent="\\\\AYW\\ROOT\\CIMV2:Win32_DiskPartition.DeviceID=\"Disk #0, Partition #1\"","##,
+        r##"Dependent="\\\\AYW\\ROOT\\CIMV2:Win32_LogicalDisk.DeviceID=\"C:\"""##
+    );
+    let record = &found[0].record;
+    assert_eq!(
+        record.path,
+        Some(wide(&format!("\\\\AYW\\ROOT\\CIMV2:{relative}")))
+    );
+    assert_eq!(text(record, "__RELPATH"), relative);
+    assert!(
+        found[0].selectors.is_empty(),
+        "reference keys are not flattened into plain selectors"
+    );
+    assert_eq!(
+        property(record, "Antecedent").value,
+        CimValue::Reference(wide(
+            "\\\\AYW\\ROOT\\CIMV2:Win32_DiskPartition.DeviceID=\"Disk #0, Partition #1\""
+        ))
+    );
+}
+
+#[test]
+fn only_the_direct_selectors_of_the_outer_set_are_keys() {
+    let xml = enumerate_reply(
+        r#"<w:Item><p:Vendor_Thing xmlns:p="http://schemas.microsoft.com/wbem/wsman/1/wmi/root/cimv2/Vendor_Thing"><p:Id>1</p:Id></p:Vendor_Thing><a:EndpointReference><a:Address>x</a:Address><a:ReferenceParameters><w:ResourceURI>http://schemas.microsoft.com/wbem/wsman/1/wmi/root/cimv2/Vendor_Thing</w:ResourceURI><w:SelectorSet><w:Selector Name="Id">1</w:Selector><w:Selector Name="Owner"><a:EndpointReference><a:Address>x</a:Address><a:ReferenceParameters><w:ResourceURI>http://schemas.microsoft.com/wbem/wsman/1/wmi/root/cimv2/Win32_Process</w:ResourceURI><w:SelectorSet><w:Selector Name="Handle">4</w:Selector></w:SelectorSet></a:ReferenceParameters></a:EndpointReference></w:Selector></w:SelectorSet></a:ReferenceParameters></a:EndpointReference></w:Item>"#,
+    );
+    let w = wire();
+    script(&w, "/Enumerate", None, vec![xml]);
+    let found = client(&w)
+        .enumerate(&target(), "Vendor_Thing", None)
+        .unwrap();
+    assert_eq!(found[0].selectors, [("Id".to_owned(), "1".to_owned())]);
+    assert_eq!(
+        found[0].record.path,
+        Some(wide(
+            r#"\\AYW\ROOT\CIMV2:Vendor_Thing.Id="1",Owner="\\\\AYW\\ROOT\\CIMV2:Win32_Process.Handle=\"4\"""#
+        ))
+    );
+}
+
+#[test]
+fn a_connection_the_peer_closed_is_replaced_before_a_request_that_changes_state() {
+    let w = wire();
+    script(
+        &w,
+        "/Create",
+        None,
+        vec![ok("invoke-create"), ok("invoke-create")],
+    );
+    let mut c = client(&w);
+    c.invoke(&target(), "Win32_Process", "Create", &[], None, &[])
+        .unwrap();
+    w.borrow_mut().stale = 1;
+    c.invoke(&target(), "Win32_Process", "Create", &[], None, &[])
+        .unwrap();
+    assert_eq!(kinds(&w), ["Create", "Create"], "each Invoke is sent once");
+    assert_eq!(w.borrow().connections, 2);
+}
+
+#[test]
+fn a_401_reply_evicts_the_connection() {
+    let w = wire();
+    script(
+        &w,
+        "/Enumerate",
+        None,
+        vec![Reply::Xml(401, String::new()), ok("enumerate-empty")],
+    );
+    let mut c = client(&w);
+    let error = c
+        .enumerate(&target(), "A", Some("SELECT * FROM A"))
+        .unwrap_err();
+    assert_eq!(failure(error), expect(0x80070005, "Access denied", "query"));
+    assert_eq!(w.borrow().connections, 1);
+    c.enumerate(&target(), "A", Some("SELECT * FROM A"))
+        .unwrap();
+    assert_eq!(
+        w.borrow().connections,
+        2,
+        "the next request authenticates again"
+    );
+}
+
+#[test]
+fn a_different_password_opens_a_new_connection() {
+    let w = wire();
+    script(
+        &w,
+        "/Enumerate",
+        None,
+        (0..4).map(|_| ok("enumerate-empty")).collect(),
+    );
+    let mut c = client(&w);
+    let mut other = target();
+    other.endpoint.password = SecretWide::new(wide("another secret"));
+    let query = |c: &mut WsmanClient, t: &Target| {
+        c.enumerate(t, "A", Some("SELECT * FROM A")).unwrap();
+    };
+    query(&mut c, &target());
+    query(&mut c, &target());
+    assert_eq!(w.borrow().connections, 1, "same account and password share");
+    query(&mut c, &other);
+    assert_eq!(w.borrow().connections, 2);
+    query(&mut c, &other);
+    assert_eq!(w.borrow().connections, 2);
+}
+
+#[test]
+fn unknown_classes_of_paths_are_not_found_but_queries_keep_invalid_class() {
+    for name in ["fault-unknown-class-enumerate", "fault-wql-unknown-class"] {
+        let w = wire();
+        script(&w, "/Enumerate", None, vec![fault(name)]);
+        let error = management(&w)
+            .execute(&remote("path Win32_NoSuchClass get Name"))
+            .unwrap_err();
+        assert_eq!(
+            failure(error),
+            expect(0x80041002, "Not found", "class"),
+            "{name}"
+        );
+
+        let w = wire();
+        script(&w, "/Enumerate", None, vec![fault(name)]);
+        let error = client(&w)
+            .enumerate_class(&target(), "Win32_NoSuchClass", Some("SELECT * FROM X"))
+            .unwrap_err();
+        assert_eq!(
+            failure(error),
+            expect(0x80041002, "Not found", "class"),
+            "{name}"
+        );
+
+        let w = wire();
+        script(&w, "/Enumerate", None, vec![fault(name)]);
+        let error = management(&w)
+            .execute(&remote("os get Caption"))
+            .unwrap_err();
+        assert_eq!(
+            failure(error),
+            expect(0x80041010, "Invalid class", "query"),
+            "{name}"
+        );
+    }
+}
+
+#[test]
+fn a_port_the_environment_names_wrongly_is_an_invalid_parameter() {
+    let w = wire();
+    let mut backend = management(&w)
+        .with_port_source(|| Err(wmic_compat::backend::wsman::InvalidPort("0".into())));
+    let error = backend.execute(&remote("os get Caption")).unwrap_err();
+    assert_eq!(
+        failure(error.clone()),
+        expect(0x80041008, "Invalid parameter", "query")
+    );
+    assert_eq!(error.target, wide("AYW"));
+    assert!(detail_mentions(&error, "WMIC_WSMAN_PORT"));
+    assert!(!backend.reachable(&wide("AYW"), 100));
+    assert!(sent(&w).is_empty());
+}
+
 #[cfg(target_os = "macos")]
 mod routing {
     use super::*;
@@ -1378,12 +1760,15 @@ mod routing {
         assert!(is_remote(&connection("localhost", Some("DOM\\user"))));
     }
 
-    fn dispatcher(wire: &Shared) -> Dispatcher {
+    fn dispatcher(wire: &Shared, tunnel: bool) -> Dispatcher {
         let wire = wire.clone();
-        Dispatcher::with_connector(Box::new(move |_| {
-            wire.borrow_mut().connections += 1;
-            Ok(Box::new(FakeTransport(wire.clone())) as Box<dyn Transport>)
-        }))
+        Dispatcher::with_connector_and_tunnel(
+            Box::new(move |_| {
+                wire.borrow_mut().connections += 1;
+                Ok(Box::new(FakeTransport(wire.clone())) as Box<dyn Transport>)
+            }),
+            tunnel,
+        )
         .unwrap()
     }
 
@@ -1396,7 +1781,8 @@ mod routing {
             None,
             vec![ok("enumerate-os"), ok("enumerate-os")],
         );
-        let mut backend = dispatcher(&w);
+        w.borrow_mut().server_name = Some("LABHOST".into());
+        let mut backend = dispatcher(&w, true);
 
         let mut other = request("os get Caption");
         other.connection.node = wide("other.example.test");
@@ -1407,7 +1793,7 @@ mod routing {
         let mut with_user = request("os get Caption");
         with_user.connection.user = Some(wide("admin"));
         let records = objects(backend.execute(&with_user).unwrap());
-        assert_eq!(text(&records[0], "__SERVER"), "LOCALHOST");
+        assert_eq!(text(&records[0], "__SERVER"), "LABHOST");
         assert_eq!(kinds(&w), ["Enumerate", "Enumerate"]);
 
         let local = objects(backend.execute(&request("os get Caption")).unwrap());
@@ -1433,6 +1819,67 @@ mod routing {
         assert_eq!(seen[0].user, "admin");
         assert_eq!(seen[0].domain, "AYW");
         assert_eq!(seen[0].password.expose(), &wide("secret"));
-        assert_eq!(seen[0].port, wmic_compat::backend::wsman::listener_port());
+        assert_eq!(
+            seen[0].port,
+            wmic_compat::backend::wsman::listener_port().unwrap()
+        );
+    }
+
+    #[test]
+    fn a_local_node_with_an_account_is_refused_unless_the_port_is_named() {
+        let w = wire();
+        script(&w, "/Enumerate", None, vec![ok("enumerate-os")]);
+        let mut with_user = request("os get Caption");
+        with_user.connection.user = Some(wide("admin"));
+        for node in [".", "localhost"] {
+            with_user.connection.node = wide(node);
+            let mut backend = dispatcher(&w, false);
+            let refused = expect(
+                0x80041064,
+                "User credentials cannot be used for local connections",
+                "query",
+            );
+            let error = backend.execute(&with_user).unwrap_err();
+            assert_eq!(failure(error.clone()), refused, "{node}");
+            assert_eq!(error.target, wide(node));
+            struct Never;
+            impl Confirmation for Never {
+                fn confirm(&mut self, _: &WideText) -> Result<bool, ManagementError> {
+                    panic!("no prompt")
+                }
+            }
+            let error = backend
+                .execute_with_confirmation(&with_user, &mut Never)
+                .unwrap_err();
+            assert_eq!(failure(error), refused, "{node}");
+        }
+        assert!(sent(&w).is_empty(), "nothing reaches the wire");
+
+        let mut backend = dispatcher(&w, true);
+        with_user.connection.node = wide(".");
+        assert!(backend.execute(&with_user).is_ok());
+        assert_eq!(kinds(&w), ["Enumerate"], "a named port routes remote");
+    }
+
+    #[test]
+    fn failfast_probes_the_backend_that_serves_the_request() {
+        let w = wire();
+        let mut tunnel = dispatcher(&w, true);
+        let mut plain = dispatcher(&w, false);
+        let local = connection(".", None);
+        assert!(plain.reachable_for(&local, 200));
+        assert!(tunnel.reachable_for(&local, 200));
+
+        let with_user = connection(".", Some("admin"));
+        assert!(
+            plain.reachable_for(&with_user, 200),
+            "the request is refused before it needs a listener"
+        );
+        let port = wmic_compat::backend::wsman::listener_port().unwrap();
+        assert_eq!(
+            tunnel.reachable_for(&with_user, 200),
+            listener_reachable("localhost", port, 200),
+            "an account on the tunnel probes the listener"
+        );
     }
 }

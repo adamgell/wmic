@@ -376,6 +376,13 @@ struct Behavior {
     close_after: Option<usize>,
     corrupt_reply: bool,
     plain_error: bool,
+    /// Answers every request after this many with an unsealed 200 reply, as an attacker on the
+    /// path could.
+    forged_after: Option<usize>,
+    /// Answers every request after this many with HTTP 401 and no body.
+    unauthorized_after: Option<usize>,
+    /// Answers the NEGOTIATE request with HTTP 401 and no challenge.
+    no_challenge: bool,
     timestamp: bool,
 }
 
@@ -555,6 +562,10 @@ fn serve(stream: TcpStream, behavior: Behavior) -> ServerLog {
     while let Some(request) = read_request(&mut reader) {
         if session.is_none() {
             if negotiate.is_empty() {
+                if behavior.no_challenge {
+                    respond(&mut writer, "401", &[], b"");
+                    return log;
+                }
                 let header = request
                     .header("Authorization")
                     .expect("Type1 Authorization");
@@ -607,7 +618,21 @@ fn serve(stream: TcpStream, behavior: Behavior) -> ServerLog {
         handled += 1;
         let reply = format!("<s:Envelope><s:Body>echo {handled}: {text}</s:Body></s:Envelope>");
         log.requests.push(text);
-        if behavior.plain_error {
+        if behavior
+            .unauthorized_after
+            .is_some_and(|after| handled > after)
+        {
+            respond(&mut writer, "401", &[], b"");
+            continue;
+        }
+        if behavior.forged_after.is_some_and(|after| handled > after) {
+            respond(
+                &mut writer,
+                "200",
+                &[("Content-Type", "application/soap+xml;charset=UTF-8".into())],
+                b"<s:Envelope><s:Body>forged</s:Body></s:Envelope>",
+            );
+        } else if behavior.plain_error {
             respond(
                 &mut writer,
                 "500",
@@ -723,17 +748,171 @@ fn loopback_chunked_responses_are_reassembled() {
 }
 
 #[test]
-fn loopback_plaintext_error_reply_is_returned_as_is() {
+fn loopback_unsealed_replies_are_protocol_errors() {
+    for behavior in [
+        Behavior {
+            plain_error: true,
+            timestamp: true,
+            ..Behavior::default()
+        },
+        Behavior {
+            forged_after: Some(0),
+            timestamp: true,
+            ..Behavior::default()
+        },
+    ] {
+        let (port, server) = spawn(behavior);
+        let mut transport = NtlmHttpTransport::connect(&endpoint(port, LAB.password)).unwrap();
+        assert!(matches!(
+            transport.post("<one/>"),
+            Err(TransportError::Protocol(_))
+        ));
+        assert!(matches!(
+            transport.post("<two/>"),
+            Err(TransportError::Io(_))
+        ));
+        drop(transport);
+        server.join().unwrap();
+    }
+}
+
+#[test]
+fn loopback_unsealed_reply_after_a_sealed_one_is_still_rejected() {
     let (port, server) = spawn(Behavior {
-        plain_error: true,
+        forged_after: Some(1),
         timestamp: true,
         ..Behavior::default()
     });
     let mut transport = NtlmHttpTransport::connect(&endpoint(port, LAB.password)).unwrap();
-    let reply = transport.post("<one/>").unwrap();
-    assert_eq!((reply.status, reply.body.as_str()), (500, "boom"));
+    assert!(transport.post("<one/>").is_ok());
+    assert!(matches!(
+        transport.post("<two/>"),
+        Err(TransportError::Protocol(_))
+    ));
     drop(transport);
     server.join().unwrap();
+}
+
+#[test]
+fn loopback_401_after_the_handshake_is_reported_with_an_empty_body() {
+    let (port, server) = spawn(Behavior {
+        unauthorized_after: Some(1),
+        timestamp: true,
+        ..Behavior::default()
+    });
+    let mut transport = NtlmHttpTransport::connect(&endpoint(port, LAB.password)).unwrap();
+    assert!(transport.post("<one/>").is_ok());
+    let reply = transport.post("<two/>").unwrap();
+    assert_eq!((reply.status, reply.body.as_str()), (401, ""));
+    assert!(matches!(
+        transport.post("<three/>"),
+        Err(TransportError::Io(_))
+    ));
+    assert!(!transport.is_reusable());
+    drop(transport);
+    server.join().unwrap();
+}
+
+#[test]
+fn loopback_401_without_a_challenge_is_an_authentication_error() {
+    let (port, server) = spawn(Behavior {
+        no_challenge: true,
+        ..Behavior::default()
+    });
+    let mut transport = NtlmHttpTransport::connect(&endpoint(port, LAB.password)).unwrap();
+    assert!(matches!(
+        transport.post("<one/>"),
+        Err(TransportError::Authentication)
+    ));
+    drop(transport);
+    server.join().unwrap();
+}
+
+#[test]
+fn loopback_reports_the_computer_name_from_the_challenge() {
+    let (port, server) = spawn(Behavior {
+        timestamp: true,
+        ..Behavior::default()
+    });
+    let mut transport = NtlmHttpTransport::connect(&endpoint(port, LAB.password)).unwrap();
+    assert_eq!(transport.server_name(), None);
+    transport.post("<one/>").unwrap();
+    assert_eq!(transport.server_name().as_deref(), Some("LABHOST"));
+    drop(transport);
+    server.join().unwrap();
+}
+
+#[test]
+fn loopback_connection_closed_by_the_peer_is_not_reusable() {
+    let (port, server) = spawn(Behavior {
+        close_after: Some(2),
+        timestamp: true,
+        ..Behavior::default()
+    });
+    let mut transport = NtlmHttpTransport::connect(&endpoint(port, LAB.password)).unwrap();
+    assert!(transport.is_reusable());
+    assert!(transport.post("<one/>").is_ok());
+    assert!(
+        transport.is_reusable(),
+        "the check leaves the stream intact"
+    );
+    assert!(transport.post("<two/>").is_ok());
+    server.join().unwrap();
+    assert!(!transport.is_reusable());
+}
+
+fn spawn_sequence(
+    behavior: Behavior,
+    connections: usize,
+) -> (
+    u16,
+    std::sync::mpsc::Receiver<()>,
+    JoinHandle<Vec<ServerLog>>,
+) {
+    let listener = TcpListener::bind("127.0.0.1:0").unwrap();
+    let port = listener.local_addr().unwrap().port();
+    let (done, finished) = std::sync::mpsc::channel();
+    let handle = std::thread::spawn(move || {
+        let mut logs = Vec::new();
+        for _ in 0..connections {
+            let (stream, _) = listener.accept().unwrap();
+            logs.push(serve(stream, behavior.clone()));
+            done.send(()).unwrap();
+        }
+        logs
+    });
+    (port, finished, handle)
+}
+
+#[test]
+fn a_connection_closed_while_idle_is_replaced_before_an_invoke_and_the_invoke_is_sent_once() {
+    use wmic_compat::backend::wsman::client::{Target, WsmanClient, default_connector};
+    let (port, finished, server) = spawn_sequence(
+        Behavior {
+            close_after: Some(1),
+            timestamp: true,
+            ..Behavior::default()
+        },
+        2,
+    );
+    let target = Target {
+        endpoint: endpoint(port, LAB.password),
+        namespace: r"root\cimv2".into(),
+        node: "127.0.0.1".into(),
+        server: "127.0.0.1".into(),
+    };
+    let mut client = WsmanClient::new(default_connector());
+    let _ = client.get(&target, "Win32_Process", &[("Handle".into(), "4".into())]);
+    finished.recv().unwrap();
+    let _ = client.invoke(&target, "Win32_Process", "Terminate", &[], None, &[]);
+    finished.recv().unwrap();
+    let logs = server.join().unwrap();
+    assert_eq!(logs.len(), 2);
+    assert!(logs.iter().all(|log| log.authenticated));
+    assert_eq!(logs[0].requests.len(), 1);
+    assert!(logs[0].requests[0].contains("transfer/Get"));
+    assert_eq!(logs[1].requests.len(), 1, "the Invoke is sent once");
+    assert!(logs[1].requests[0].contains("Terminate"));
 }
 
 #[test]
@@ -816,4 +995,30 @@ fn http_client_reads_content_length_and_close_delimited_bodies() {
         connection.post("/wsman", &[], b"c"),
         Err(TransportError::Io(_))
     ));
+}
+
+#[test]
+fn http_client_refuses_bodies_far_above_the_envelope_size() {
+    let listener = TcpListener::bind("127.0.0.1:0").unwrap();
+    let port = listener.local_addr().unwrap().port();
+    let server = std::thread::spawn(move || {
+        let (stream, _) = listener.accept().unwrap();
+        let mut writer = stream.try_clone().unwrap();
+        let mut reader = BufReader::new(stream);
+        read_request(&mut reader).unwrap();
+        let _ = writer.write_all(b"HTTP/1.1 200 OK\r\nContent-Length: 134217728\r\n\r\n");
+    });
+    let mut connection = http::HttpConnection::connect("127.0.0.1", port).unwrap();
+    assert!(matches!(
+        connection.post("/wsman", &[], b"a"),
+        Err(TransportError::Protocol(_))
+    ));
+    server.join().unwrap();
+}
+
+#[test]
+fn wipe_zeroes_key_material() {
+    let mut key = [0xaau8; 16];
+    ntlm::wipe(&mut key);
+    assert_eq!(key, [0u8; 16]);
 }

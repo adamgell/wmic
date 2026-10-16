@@ -49,15 +49,6 @@ fn namespace_text(epr: Option<&Epr>, raw: Option<&RawInstance>, ctx: &RecordCont
         )
 }
 
-/// `__NAMESPACE` form: `root` in upper case, other segments as given.
-fn display_namespace(namespace: &str) -> String {
-    match namespace.split_once('\\') {
-        Some((root, rest)) if root.eq_ignore_ascii_case("root") => format!("ROOT\\{rest}"),
-        None if namespace.eq_ignore_ascii_case("root") => "ROOT".into(),
-        _ => namespace.to_owned(),
-    }
-}
-
 /// Key literal for a selector value, quoted by the key property's type.
 fn key_literal_for(info: Option<&ClassInfo>, name: &str, value: &str) -> (String, String) {
     let Some((_, property)) = info.and_then(|i| i.property(name)) else {
@@ -78,18 +69,27 @@ fn key_literal_for(info: Option<&ClassInfo>, name: &str, value: &str) -> (String
 }
 
 /// Relative object path: `Class.Key="v",Key2=5`, or `Class=@` without keys. Keys sort by name.
+/// A reference key holds the quoted full path of the instance it names.
 pub fn relative_path(
     class: &str,
     selectors: &[(String, String)],
+    references: &[(String, Epr)],
     info: Option<&ClassInfo>,
+    ctx: &RecordContext,
 ) -> String {
-    if selectors.is_empty() {
+    if selectors.is_empty() && references.is_empty() {
         return format!("{class}=@");
     }
     let mut keys: Vec<(String, String)> = selectors
         .iter()
         .map(|(name, value)| key_literal_for(info, name, value))
         .collect();
+    keys.extend(references.iter().map(|(name, nested)| {
+        let name = info
+            .and_then(|i| i.property(name))
+            .map_or(name.as_str(), |(_, p)| p.name.as_str());
+        (name.to_owned(), quoted(&full_path(nested, ctx)))
+    }));
     keys.sort_by_key(|(name, _)| name.to_ascii_lowercase());
     let parts: Vec<String> = keys.iter().map(|(n, l)| format!("{n}={l}")).collect();
     format!("{class}.{}", parts.join(","))
@@ -104,7 +104,7 @@ pub fn full_path(epr: &Epr, ctx: &RecordContext) -> String {
         "\\\\{}\\{}:{}",
         ctx.server,
         namespace_text(Some(epr), None, ctx).to_uppercase(),
-        relative_path(class, &epr.selectors, info.as_deref())
+        relative_path(class, &epr.selectors, &epr.references, info.as_deref(), ctx)
     )
 }
 
@@ -283,14 +283,14 @@ pub fn build(
     let info = catalog::lookup(wire_class);
     let class = info.as_ref().map_or(wire_class, |i| i.name.as_str());
     let values = properties(raw, info.as_deref(), ctx);
-    let selectors = match epr {
-        Some(epr) => Some(epr.selectors.clone()),
-        None => selectors_from_keys(info.as_deref(), &values),
+    let (selectors, references) = match epr {
+        Some(epr) => (Some(epr.selectors.clone()), epr.references.as_slice()),
+        None => (selectors_from_keys(info.as_deref(), &values), &[][..]),
     };
     let namespace = namespace_text(epr, Some(raw), ctx);
     let (path, relpath) = match &selectors {
         Some(selectors) => {
-            let relpath = relative_path(class, selectors, info.as_deref());
+            let relpath = relative_path(class, selectors, references, info.as_deref(), ctx);
             (
                 Some(format!(
                     "\\\\{}\\{}:{relpath}",
@@ -314,7 +314,7 @@ pub fn build(
     };
     let mut all = vec![
         system("__PATH", path.as_deref().map_or(CimValue::Null, text), 8),
-        system("__NAMESPACE", text(&display_namespace(&namespace)), 8),
+        system("__NAMESPACE", text(&namespace.to_uppercase()), 8),
         system("__SERVER", text(ctx.server), 8),
         system(
             "__DERIVATION",
@@ -420,10 +420,13 @@ mod tests {
         ];
         let process = catalog::lookup("win32_process");
         assert_eq!(
-            relative_path("Win32_Process", &selectors, process.as_deref()),
+            relative_path("Win32_Process", &selectors, &[], process.as_deref(), &ctx()),
             "Win32_Process.Handle=\"4\",Name=\"a\\\"b\\\\c\""
         );
-        assert_eq!(relative_path("Unknown", &[], None), "Unknown=@");
+        assert_eq!(
+            relative_path("Unknown", &[], &[], None, &ctx()),
+            "Unknown=@"
+        );
     }
 
     #[test]
@@ -438,6 +441,7 @@ mod tests {
             resource_uri: "http://schemas.microsoft.com/wbem/wsman/1/wmi/root/cimv2/Vendor_Widget"
                 .into(),
             selectors: vec![("Id".into(), "7".into())],
+            references: vec![],
         };
         let record = build(&raw, Some(&epr), &ctx(), "");
         let plain: Vec<_> = record.properties.iter().filter(|p| !p.system).collect();

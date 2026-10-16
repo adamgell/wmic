@@ -13,8 +13,8 @@ pub const ACTION_GET: &str = "http://schemas.xmlsoap.org/ws/2004/09/transfer/Get
 pub const ACTION_ENUMERATE: &str = "http://schemas.xmlsoap.org/ws/2004/09/enumeration/Enumerate";
 pub const ACTION_PULL: &str = "http://schemas.xmlsoap.org/ws/2004/09/enumeration/Pull";
 pub const ACTION_RELEASE: &str = "http://schemas.xmlsoap.org/ws/2004/09/enumeration/Release";
-const MAX_ENVELOPE_SIZE: u32 = 512_000;
-const OPERATION_TIMEOUT: &str = "PT60.000S";
+pub const MAX_ENVELOPE_SIZE: u32 = 512_000;
+pub const OPERATION_TIMEOUT: &str = "PT60.000S";
 
 /// Name/value pairs of a `SelectorSet`.
 pub type Selectors = [(String, String)];

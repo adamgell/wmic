@@ -5,6 +5,7 @@ use super::{
     parse::{self, Epr, RawInstance, RawItem, ReplyError},
     record::{self, RecordContext},
     soap::{self, Call},
+    transport::ntlm,
 };
 use crate::model::{
     CimValue, ManagementError, ManagementResult, MethodSchema, ObjectSet, ParameterSchema,
@@ -39,18 +40,11 @@ pub struct Target {
     pub namespace: String,
     /// Node as typed; the target of errors.
     pub node: WideText,
-    /// Value of `__SERVER` in records.
+    /// Value of `__SERVER` when the service does not report its computer name.
     pub server: String,
 }
 
 impl Target {
-    fn context(&self) -> RecordContext<'_> {
-        RecordContext {
-            server: &self.server,
-            namespace: &self.namespace,
-        }
-    }
-
     fn to(&self) -> String {
         soap::endpoint_url(&self.endpoint.host, self.endpoint.port)
     }
@@ -159,19 +153,36 @@ fn error_for(failure: Failure, target: &Target, scope: Scope) -> ManagementError
     }
 }
 
-fn connection_key(endpoint: &Endpoint) -> String {
-    format!(
-        "{}\0{}\0{}\0{}",
+/// Connections are shared by node and account. The password enters the key as a keyed hash, so a
+/// changed password never reuses a connection opened with another one.
+fn connection_key(endpoint: &Endpoint, salt: &[u8; 16]) -> String {
+    let mut password: Vec<u8> = endpoint
+        .password
+        .expose()
+        .0
+        .iter()
+        .flat_map(|unit| unit.to_le_bytes())
+        .collect();
+    let mut proof = ntlm::hmac_md5(salt, &[&password]);
+    ntlm::wipe(&mut password);
+    let key = format!(
+        "{}\0{}\0{}\0{}\0{}",
         endpoint.host.to_ascii_lowercase(),
         endpoint.port,
         endpoint.domain.to_ascii_lowercase(),
-        endpoint.user.to_ascii_lowercase()
-    )
+        endpoint.user.to_ascii_lowercase(),
+        proof.iter().map(|b| format!("{b:02x}")).collect::<String>()
+    );
+    ntlm::wipe(&mut proof);
+    key
 }
 
 pub struct WsmanClient {
     connector: Connector,
     connections: HashMap<String, Box<dyn Transport>>,
+    /// Computer name each connection reported while authenticating.
+    names: HashMap<String, String>,
+    salt: [u8; 16],
     interrupted: fn() -> bool,
 }
 
@@ -180,6 +191,8 @@ impl WsmanClient {
         Self {
             connector,
             connections: HashMap::new(),
+            names: HashMap::new(),
+            salt: ntlm::random_bytes::<16>().unwrap_or_default(),
             interrupted: crate::platform::unix::console::interrupted,
         }
     }
@@ -190,14 +203,26 @@ impl WsmanClient {
         self
     }
 
+    fn key(&self, endpoint: &Endpoint) -> String {
+        connection_key(endpoint, &self.salt)
+    }
+
     fn send(&mut self, endpoint: &Endpoint, envelope: &str) -> Result<Response, TransportError> {
-        let key = connection_key(endpoint);
+        let key = self.key(endpoint);
         if !self.connections.contains_key(&key) {
             let transport = (self.connector)(endpoint)?;
             self.connections.insert(key.clone(), transport);
         }
         let outcome = match self.connections.get_mut(&key) {
-            Some(transport) => transport.post(envelope),
+            Some(transport) => {
+                let outcome = transport.post(envelope);
+                if outcome.is_ok()
+                    && let Some(name) = transport.server_name()
+                {
+                    self.names.insert(key.clone(), name);
+                }
+                outcome
+            }
             None => return Err(TransportError::Protocol("no connection".into())),
         };
         if outcome.is_err() {
@@ -206,15 +231,31 @@ impl WsmanClient {
         outcome
     }
 
+    /// Value of `__SERVER` for records of a node: the computer name the service reported, else
+    /// the typed host.
+    fn server_name(&self, target: &Target) -> String {
+        self.names
+            .get(&self.key(&target.endpoint))
+            .cloned()
+            .unwrap_or_else(|| target.server.clone())
+    }
+
     /// Posts an envelope. A request that cannot change state is repeated once on a new
-    /// connection when a reused connection fails.
+    /// connection when a reused connection fails. A connection the peer already closed is
+    /// replaced before the request is sent, so a request that can change state is sent once.
     fn exchange(
         &mut self,
         endpoint: &Endpoint,
         envelope: &str,
         repeatable: bool,
     ) -> Result<Response, Failure> {
-        let reused = self.connections.contains_key(&connection_key(endpoint));
+        let key = self.key(endpoint);
+        if let Some(transport) = self.connections.get_mut(&key)
+            && !transport.is_reusable()
+        {
+            self.connections.remove(&key);
+        }
+        let reused = self.connections.contains_key(&key);
         let mut outcome = self.send(endpoint, envelope);
         if repeatable
             && reused
@@ -227,6 +268,7 @@ impl WsmanClient {
         }
         let response = outcome.map_err(Failure::Transport)?;
         if response.status == 401 {
+            self.connections.remove(&key);
             return Err(Failure::Transport(TransportError::Authentication));
         }
         Ok(response)
@@ -327,10 +369,18 @@ impl WsmanClient {
             );
             match self.call(&target.endpoint, &envelope, false, parse::parse_enumeration) {
                 Ok(next) => page = next,
+                Err(Failure::Fault(fault)) if fault.is_timed_out() => {
+                    // The service keeps the context after a Pull deadline, so the same context is
+                    // pulled again. Only the interrupt check above ends this loop.
+                    continue;
+                }
                 Err(failure) => {
                     let alive = match &failure {
                         Failure::Fault(fault) => !fault.is_stale_context(),
                         Failure::Malformed(_) => true,
+                        Failure::Transport(TransportError::Io(_) | TransportError::Protocol(_)) => {
+                            true
+                        }
                         _ => false,
                     };
                     if alive {
@@ -365,7 +415,12 @@ impl WsmanClient {
 
     fn found(&self, target: &Target, item: RawItem, class: &str) -> Option<Found> {
         let raw = item.instance?;
-        let record = record::build(&raw, item.epr.as_ref(), &target.context(), class);
+        let server = self.server_name(target);
+        let context = RecordContext {
+            server: &server,
+            namespace: &target.namespace,
+        };
+        let record = record::build(&raw, item.epr.as_ref(), &context, class);
         let selectors = item.epr.map(|e| e.selectors).unwrap_or_default();
         Some(Found { record, selectors })
     }
@@ -378,13 +433,34 @@ impl WsmanClient {
         class: &str,
         wql: Option<&str>,
     ) -> Result<Vec<Found>, ManagementError> {
+        self.enumerate_scoped(target, class, wql, QUERY)
+    }
+
+    /// Like `enumerate`, for a request that names a class or an object path rather than a
+    /// query: an unknown class reports "Not found" for the class.
+    pub fn enumerate_class(
+        &mut self,
+        target: &Target,
+        class: &str,
+        wql: Option<&str>,
+    ) -> Result<Vec<Found>, ManagementError> {
+        self.enumerate_scoped(target, class, wql, LOOKUP)
+    }
+
+    fn enumerate_scoped(
+        &mut self,
+        target: &Target,
+        class: &str,
+        wql: Option<&str>,
+        scope: Scope,
+    ) -> Result<Vec<Found>, ManagementError> {
         match self.enumerate_raw(target, class, wql, MAX_ELEMENTS, None) {
             Ok(items) => Ok(items
                 .into_iter()
                 .filter_map(|item| self.found(target, item, class))
                 .collect()),
             Err(Partial { failure, items }) => {
-                let mut error = error_for(failure, target, QUERY);
+                let mut error = error_for(failure, target, scope);
                 let objects: Vec<Record> = items
                     .into_iter()
                     .filter_map(|item| self.found(target, item, class))
@@ -435,8 +511,14 @@ impl WsmanClient {
                 let epr = Epr {
                     resource_uri: uri,
                     selectors: selectors.to_vec(),
+                    references: vec![],
                 };
-                let record = record::build(&raw, Some(&epr), &target.context(), class);
+                let server = self.server_name(target);
+                let context = RecordContext {
+                    server: &server,
+                    namespace: &target.namespace,
+                };
+                let record = record::build(&raw, Some(&epr), &context, class);
                 Ok(Some(Found {
                     record,
                     selectors: selectors.to_vec(),
@@ -476,7 +558,12 @@ impl WsmanClient {
             .map_err(|failure| error_for(failure, target, METHOD))?;
         let declared: &[ParameterSchema] = schema.map_or(&[], |m| m.output.as_slice());
         let mut outcome = MethodOutcome::default();
-        for property in record::parameters(&raw, declared, &target.context()) {
+        let server = self.server_name(target);
+        let context = RecordContext {
+            server: &server,
+            namespace: &target.namespace,
+        };
+        for property in record::parameters(&raw, declared, &context) {
             if property.name.eq_ignore_case("ReturnValue") {
                 outcome.return_value = Some(property.value);
             } else {

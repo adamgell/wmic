@@ -1,9 +1,15 @@
 //! Reply parsing. Elements match on namespace-qualified local names; prefixes vary on the wire.
 use super::{fault::Fault, soap::WMI_URI};
-use roxmltree::{Document, Node};
+use roxmltree::{Document, Node, ParsingOptions};
 
 const NS_SOAP: &str = "http://www.w3.org/2003/05/soap-envelope";
 const NS_XSI: &str = "http://www.w3.org/2001/XMLSchema-instance";
+
+/// Deepest element nesting a reply may have. The parser and the value reader recurse once per
+/// level, so an unbounded depth would exhaust the stack.
+const MAX_DEPTH: usize = 256;
+/// Upper bound on the nodes of one reply; the transport caps a reply near 2 MiB.
+const MAX_NODES: u32 = 200_000;
 
 /// A reply that carries no usable result.
 #[derive(Debug)]
@@ -16,7 +22,10 @@ pub enum ReplyError {
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct Epr {
     pub resource_uri: String,
+    /// Keys with a plain value.
     pub selectors: Vec<(String, String)>,
+    /// Keys that hold a reference, as in association instances.
+    pub references: Vec<(String, Epr)>,
 }
 
 impl Epr {
@@ -113,12 +122,88 @@ fn malformed(error: impl std::fmt::Display) -> ReplyError {
     ReplyError::Malformed(error.to_string())
 }
 
+/// Offset just past the first `end` at or after `from`.
+fn after(bytes: &[u8], end: &[u8], from: usize) -> Option<usize> {
+    bytes
+        .get(from..)?
+        .windows(end.len())
+        .position(|window| window == end)
+        .map(|at| from + at + end.len())
+}
+
+/// Length of the start tag at the front of `tag` and whether it closes itself. A `>` inside an
+/// attribute value does not end the tag.
+fn start_tag(tag: &[u8]) -> Option<(usize, bool)> {
+    let mut quote = None;
+    for (at, byte) in tag.iter().enumerate() {
+        match (quote, byte) {
+            (None, b'"' | b'\'') => quote = Some(*byte),
+            (Some(open), close) if open == *close => quote = None,
+            (None, b'>') => return Some((at + 1, tag[at - 1] == b'/')),
+            _ => {}
+        }
+    }
+    None
+}
+
+/// Fails when elements nest deeper than `MAX_DEPTH`. Scans tags without recursion, so it can run
+/// before the parser sees the text; input the scan cannot follow is left to the parser.
+fn check_depth(xml: &str) -> Result<(), ReplyError> {
+    let bytes = xml.as_bytes();
+    let (mut at, mut depth) = (0, 0usize);
+    while let Some(offset) = bytes[at..].iter().position(|byte| *byte == b'<') {
+        at += offset;
+        let tag = &bytes[at..];
+        let length = if tag.starts_with(b"<!--") {
+            after(tag, b"-->", 4)
+        } else if tag.starts_with(b"<![CDATA[") {
+            after(tag, b"]]>", 9)
+        } else if tag.starts_with(b"<?") {
+            after(tag, b"?>", 2)
+        } else if tag.starts_with(b"<!") {
+            return Ok(());
+        } else if tag.starts_with(b"</") {
+            depth = depth.saturating_sub(1);
+            after(tag, b">", 2)
+        } else {
+            start_tag(tag).map(|(length, closed)| {
+                if !closed {
+                    depth += 1;
+                }
+                length
+            })
+        };
+        if depth > MAX_DEPTH {
+            return Err(ReplyError::Malformed(
+                "reply nests elements too deeply".into(),
+            ));
+        }
+        match length {
+            Some(length) => at += length,
+            None => return Ok(()),
+        }
+    }
+    Ok(())
+}
+
+fn parse_document(xml: &str) -> Result<Document<'_>, ReplyError> {
+    check_depth(xml)?;
+    Document::parse_with_options(
+        xml,
+        ParsingOptions {
+            nodes_limit: MAX_NODES,
+            ..ParsingOptions::default()
+        },
+    )
+    .map_err(malformed)
+}
+
 /// First element in the body, or `None` for an empty body. A fault becomes an error.
 fn with_body<T>(
     xml: &str,
     read: impl FnOnce(Option<Node>) -> Result<T, ReplyError>,
 ) -> Result<T, ReplyError> {
-    let doc = Document::parse(xml).map_err(malformed)?;
+    let doc = parse_document(xml)?;
     let envelope = doc.root_element();
     if local(envelope) != "Envelope" {
         return Err(ReplyError::Malformed("reply is not a SOAP envelope".into()));
@@ -143,20 +228,36 @@ pub fn parse_fault(xml: &str) -> Option<Fault> {
     }
 }
 
+/// Reads an endpoint reference. Only the `Selector` children of its own `SelectorSet` are keys;
+/// a selector that wraps another reference is a reference key.
 fn epr_of(node: Node) -> Epr {
-    let resource_uri = node
-        .descendants()
-        .find(|n| n.is_element() && local(*n) == "ResourceURI")
+    let parameters = child(node, "ReferenceParameters").unwrap_or(node);
+    let resource_uri = child(parameters, "ResourceURI")
         .map(|n| text_of(n).trim().to_owned())
         .unwrap_or_default();
-    let selectors = node
-        .descendants()
-        .filter(|n| n.is_element() && local(*n) == "Selector")
-        .filter_map(|n| Some((n.attribute("Name")?.to_owned(), text_of(n))))
-        .collect();
+    let mut selectors = vec![];
+    let mut references = vec![];
+    let keys = child(parameters, "SelectorSet")
+        .into_iter()
+        .flat_map(|set| {
+            set.children()
+                .filter(|n| n.is_element() && local(*n) == "Selector")
+        });
+    for key in keys {
+        let Some(name) = key.attribute("Name") else {
+            continue;
+        };
+        let nested = child(key, "EndpointReference")
+            .or_else(|| child(key, "ReferenceParameters").map(|_| key));
+        match nested {
+            Some(nested) => references.push((name.to_owned(), epr_of(nested))),
+            None => selectors.push((name.to_owned(), text_of(key))),
+        }
+    }
     Epr {
         resource_uri,
         selectors,
+        references,
     }
 }
 

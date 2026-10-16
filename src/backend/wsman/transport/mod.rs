@@ -22,13 +22,16 @@ impl From<ntlm::NtlmError> for TransportError {
 ///
 /// The NTLM exchange runs on the first `post`; the closing NTLM message travels with the first
 /// sealed envelope. The security context belongs to the connection, so a connection that closes
-/// or fails makes every later `post` return `TransportError::Io`.
+/// or fails makes every later `post` return `TransportError::Io`. An HTTP 401 reply after the
+/// handshake is returned once with an empty body and ends the connection the same way.
 pub struct NtlmHttpTransport {
     connection: HttpConnection,
     host: String,
     user: String,
     domain: String,
-    password: SecretWide,
+    /// Held until the NTLM exchange has used it.
+    password: Option<SecretWide>,
+    server_name: Option<String>,
     session: Option<Session>,
     unusable: bool,
 }
@@ -52,7 +55,8 @@ impl NtlmHttpTransport {
             host: endpoint.host.clone(),
             user: endpoint.user.clone(),
             domain: endpoint.domain.clone(),
-            password: endpoint.password.clone(),
+            password: Some(endpoint.password.clone()),
+            server_name: None,
             session: None,
             unusable: false,
         })
@@ -77,33 +81,39 @@ impl NtlmHttpTransport {
                 reply.status
             )));
         }
-        let token = negotiate_token(&reply)
-            .ok_or_else(|| TransportError::Protocol("HTTP 401 without an NTLM challenge".into()))?;
+        let token = negotiate_token(&reply).ok_or(TransportError::Authentication)?;
         let raw = base64::decode(token)
             .ok_or_else(|| TransportError::Protocol("challenge is not base64".into()))?;
         let challenge = ntlm::parse_challenge(&raw)?;
 
-        let exported_session_key = ntlm::random_bytes::<16>().map_err(TransportError::Io)?;
+        self.server_name = challenge.computer_name();
+        let password = self
+            .password
+            .take()
+            .ok_or_else(|| TransportError::Protocol("credentials already used".into()))?;
+        let mut exported_session_key = ntlm::random_bytes::<16>().map_err(TransportError::Io)?;
         let client_challenge = ntlm::random_bytes::<8>().map_err(TransportError::Io)?;
         let target_name = format!("HTTP/{}", self.host);
-        let authenticate = ntlm::build_authenticate(
-            &negotiate,
-            &challenge,
-            &AuthenticateParams {
-                identity: Identity {
-                    user: &self.user,
-                    domain: &self.domain,
-                    password: &self.password.expose().0,
-                },
-                target_name: &target_name,
-                client_challenge,
-                exported_session_key,
-                fallback_time: ntlm::filetime_now(),
+        let mut params = AuthenticateParams {
+            identity: Identity {
+                user: &self.user,
+                domain: &self.domain,
+                password: &password.expose().0,
             },
-        )?;
+            target_name: &target_name,
+            client_challenge,
+            exported_session_key,
+            fallback_time: ntlm::filetime_now(),
+        };
+        ntlm::wipe(&mut exported_session_key);
+        let built = ntlm::build_authenticate(&negotiate, &challenge, &params);
+        ntlm::wipe(&mut params.exported_session_key);
+        let mut authenticate = built?;
+        let session = Session::new(&authenticate.exported_session_key, Role::Client);
+        ntlm::wipe(&mut authenticate.exported_session_key);
         Ok((
             format!("Negotiate {}", base64::encode(&authenticate.message)),
-            Session::new(&authenticate.exported_session_key, Role::Client),
+            session,
         ))
     }
 
@@ -140,7 +150,14 @@ impl NtlmHttpTransport {
                 String::from_utf8(plain)
                     .map_err(|_| TransportError::Protocol("decrypted body is not UTF-8".into()))?
             }
-            _ => String::from_utf8_lossy(&reply.body).into_owned(),
+            // Only the sealed channel is trusted: a plaintext body could come from anyone on the
+            // path, so only an empty body (HTTP 401, 413) is accepted unsealed.
+            _ if reply.body.is_empty() => String::new(),
+            _ => {
+                return Err(TransportError::Protocol(
+                    "reply body is not encrypted".into(),
+                ));
+            }
         };
         Ok(Response {
             status: reply.status,
@@ -158,9 +175,18 @@ impl Transport for NtlmHttpTransport {
             )));
         }
         let result = self.exchange(envelope);
-        if result.is_err() {
+        let rejected = matches!(&result, Ok(reply) if reply.status == 401);
+        if result.is_err() || rejected {
             self.unusable = true;
         }
         result
+    }
+
+    fn server_name(&self) -> Option<String> {
+        self.server_name.clone()
+    }
+
+    fn is_reusable(&mut self) -> bool {
+        !self.unusable && self.connection.is_idle()
     }
 }

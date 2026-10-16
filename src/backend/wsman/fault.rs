@@ -126,6 +126,11 @@ impl Fault {
         self.subcode_is("InvalidEnumerationContext")
     }
 
+    /// The Pull ran into its operation timeout; the enumeration context stays valid.
+    pub fn is_timed_out(&self) -> bool {
+        self.subcode_is("TimedOut")
+    }
+
     /// The class exists and the addressed instance does not.
     pub fn is_instance_not_found(&self) -> bool {
         self.hresult() == 0x8004_1002

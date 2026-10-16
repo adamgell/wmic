@@ -1,15 +1,18 @@
 //! Blocking HTTP/1.1 client bound to one TCP connection.
 
-use super::super::TransportError;
+use super::super::{TransportError, soap::MAX_ENVELOPE_SIZE};
 use std::io::{self, BufRead, BufReader, Read, Write};
 use std::net::{TcpStream, ToSocketAddrs};
 use std::time::Duration;
 
 pub const CONNECT_TIMEOUT: Duration = Duration::from_secs(5);
-pub const IO_TIMEOUT: Duration = Duration::from_secs(60);
+/// Socket timeout. It must exceed the `OperationTimeout` the requests carry, or the client gives
+/// up before the service answers with its own timeout fault.
+pub const IO_TIMEOUT: Duration = Duration::from_secs(90);
 const MAX_LINE: u64 = 64 * 1024;
 const MAX_HEADERS: usize = 200;
-const MAX_BODY: usize = 128 * 1024 * 1024;
+/// The service never sends an envelope above `MaxEnvelopeSize`; the cap leaves room for framing.
+const MAX_BODY: usize = 4 * MAX_ENVELOPE_SIZE as usize;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct HttpResponse {
@@ -72,6 +75,24 @@ impl HttpConnection {
             }
         }
         Err(TransportError::Connect(last))
+    }
+
+    /// True when the connection is open and holds no unread byte. A peer that closed the socket
+    /// or sent data nobody asked for makes the connection unfit for the next request.
+    pub fn is_idle(&mut self) -> bool {
+        if self.closed || !self.reader.buffer().is_empty() {
+            return false;
+        }
+        let stream = self.reader.get_ref();
+        if stream.set_nonblocking(true).is_err() {
+            return false;
+        }
+        let mut byte = [0u8; 1];
+        let quiet = matches!(
+            stream.peek(&mut byte),
+            Err(e) if matches!(e.kind(), io::ErrorKind::WouldBlock | io::ErrorKind::Interrupted)
+        );
+        quiet && stream.set_nonblocking(false).is_ok()
     }
 
     /// Sends one POST and reads the complete response.
@@ -261,5 +282,20 @@ impl HttpConnection {
                 return Err(protocol("chunk is not followed by a line break"));
             }
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn socket_timeout_exceeds_the_operation_timeout_in_the_request_header() {
+        let seconds: f64 = crate::backend::wsman::soap::OPERATION_TIMEOUT
+            .strip_prefix("PT")
+            .and_then(|text| text.strip_suffix('S'))
+            .and_then(|text| text.parse().ok())
+            .expect("OperationTimeout is a duration in seconds");
+        assert!(IO_TIMEOUT.as_secs_f64() > seconds);
     }
 }

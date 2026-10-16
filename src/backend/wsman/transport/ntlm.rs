@@ -79,6 +79,15 @@ fn fail<T>(message: &str) -> Result<T, NtlmError> {
     Err(NtlmError(message.to_owned()))
 }
 
+/// Overwrites key material with zeros. The volatile writes keep the optimizer from dropping the
+/// stores of a buffer that is never read again.
+pub fn wipe(bytes: &mut [u8]) {
+    for byte in bytes.iter_mut() {
+        unsafe { core::ptr::write_volatile(byte, 0) };
+    }
+    std::sync::atomic::compiler_fence(std::sync::atomic::Ordering::SeqCst);
+}
+
 pub fn md5(data: &[u8]) -> [u8; 16] {
     Md5::digest(data).into()
 }
@@ -124,14 +133,20 @@ fn uppercase(text: &str) -> String {
 
 /// MD4 of the UTF-16LE password.
 pub fn ntowf_v1(password: &[u16]) -> [u8; 16] {
-    Md4::digest(units_le(password)).into()
+    let mut bytes = units_le(password);
+    let digest: [u8; 16] = Md4::digest(&bytes).into();
+    wipe(&mut bytes);
+    digest
 }
 
 /// HMAC_MD5(NTOWFv1, UTF16LE(UPPER(user) + domain)).
 pub fn ntowf_v2(password: &[u16], user: &str, domain: &str) -> [u8; 16] {
     let mut identity = utf16le(&uppercase(user));
     identity.extend(utf16le(domain));
-    hmac_md5(&ntowf_v1(password), &[&identity])
+    let mut hash = ntowf_v1(password);
+    let key = hmac_md5(&hash, &[&identity]);
+    wipe(&mut hash);
+    key
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -364,7 +379,7 @@ pub fn build_authenticate(
         )));
     }
     let identity = params.identity;
-    let response_key = ntowf_v2(identity.password, identity.user, identity.domain);
+    let mut response_key = ntowf_v2(identity.password, identity.user, identity.domain);
 
     let mut pairs = challenge.av_pairs.clone();
     let server_flags = challenge
@@ -382,7 +397,7 @@ pub fn build_authenticate(
 
     let timestamp = challenge.timestamp();
     let time = timestamp.unwrap_or(params.fallback_time);
-    let nt = ntlmv2_response(
+    let mut nt = ntlmv2_response(
         &response_key,
         &challenge.server_challenge,
         &time,
@@ -433,6 +448,8 @@ pub fn build_authenticate(
 
     let mic = compute_mic(&params.exported_session_key, negotiate, &challenge.raw, &m);
     m[MIC_OFFSET..MIC_OFFSET + 16].copy_from_slice(&mic);
+    wipe(&mut response_key);
+    wipe(&mut nt.session_base_key);
     Ok(Authenticate {
         message: m,
         exported_session_key: params.exported_session_key,
@@ -505,14 +522,19 @@ impl Session {
             Role::Client => (Direction::ClientToServer, Direction::ServerToClient),
             Role::Server => (Direction::ServerToClient, Direction::ClientToServer),
         };
-        Self {
+        let mut send_seal = seal_key(exported_session_key, send);
+        let mut recv_seal = seal_key(exported_session_key, recv);
+        let session = Self {
             send_sign: sign_key(exported_session_key, send),
             recv_sign: sign_key(exported_session_key, recv),
-            send_seal: rc4_handle(&seal_key(exported_session_key, send)),
-            recv_seal: rc4_handle(&seal_key(exported_session_key, recv)),
+            send_seal: rc4_handle(&send_seal),
+            recv_seal: rc4_handle(&recv_seal),
             send_seq: 0,
             recv_seq: 0,
-        }
+        };
+        wipe(&mut send_seal);
+        wipe(&mut recv_seal);
+        session
     }
 
     /// Returns the 16-byte signature and the sealed message.
@@ -574,4 +596,11 @@ pub fn filetime_now() -> [u8; 8] {
     let ticks =
         (now.as_secs() + UNIX_TO_FILETIME_SECS) * 10_000_000 + u64::from(now.subsec_nanos() / 100);
     ticks.to_le_bytes()
+}
+
+impl Drop for Session {
+    fn drop(&mut self) {
+        wipe(&mut self.send_sign);
+        wipe(&mut self.recv_sign);
+    }
 }
