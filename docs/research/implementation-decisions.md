@@ -1,6 +1,6 @@
 # Implementation decisions
 
-Decisions recorded during the approved13-task native implementation and its final independent review. Later decisions explicitly supersede earlier ones where stated. Each preserves its reason and compatibility cost.
+Decisions recorded during the approved 13-task native implementation and its final independent review. Later decisions explicitly supersede earlier ones where stated. Each preserves its reason and compatibility cost.
 
 1. Ruling: Work in the current clean codex/wmic-compatibility-spec checkout because the user explicitly selected execution here and this branch contains only this project's research/specification — do not request another environment approval — cost if wrong: changes could mix if another process edits this checkout; inspect status before each commit.
 
