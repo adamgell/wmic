@@ -1,0 +1,14 @@
+{
+  "vm": "{ec3bc428-7a31-4f17-8424-7ce78923f7f3}",
+  "account": "NT AUTHORITY\\SYSTEM",
+  "architecture": "ARM64",
+  "test_binary_sha256": "a46fd898cdd2eb04f82988cafa25e9319a7b676aadd30b694e8a615699352db7",
+  "tests": {
+    "live::local_os_query": "passed",
+    "live::invalid_class_preserves_hresult": "passed",
+    "live::local_schema_retains_static_method_and_parameter_id": "passed"
+  },
+  "result": "3 passed; 0 failed; 5 filtered out",
+  "command": "backend-contract.exe --ignored --nocapture --test-threads=1",
+  "runtime": "native WMI COM; static CRT; no original WMIC invocation"
+}

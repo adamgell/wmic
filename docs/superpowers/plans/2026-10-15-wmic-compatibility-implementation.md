@@ -162,7 +162,7 @@ the original installation; live metadata is supplied through a testable loader.
 The request operation initially supports queries and class/instance retrieval;
 later operations must return a tracked unsupported result until implemented.
 
-- [ ] Add typed adapter cases for null versus empty string/array, unsigned 64-bit values, embedded objects, and errors after partial enumeration. Assert retained types, objects, target and original WMI code. Pin the preliminary missing direct-path class status to `0x80041002`; do not substitute a different raw `ExecQuery` error.
+- [x] Add typed adapter cases for null versus empty string/array, unsigned 64-bit values, embedded objects, and errors after partial enumeration. Assert retained types, objects, target and original WMI code. Pin the preliminary missing direct-path class status to `0x80041002`; do not substitute a different raw `ExecQuery` error.
 
   ```rust
   assert_eq!(missing_class.code, 0x80041002);
@@ -170,9 +170,9 @@ later operations must return a tracked unsupported result until implemented.
   assert_ne!(null_value, empty_string_value);
   ```
 
-- [ ] Run `cargo test --test backend_contract`; confirm unimplemented conversions fail. Add Windows-only ignored live tests `local_os_query` and `invalid_class_preserves_hresult`.
-- [ ] Implement RAII COM initialization, process security, native WMI connection/schema/query calls and typed conversion. Localize unsafe code and document apartment/interface ownership. Preserve extended errors and partial enumeration outcomes in the result model.
-- [ ] Run portable adapter tests; cross-build with `PATH="/opt/homebrew/opt/llvm/bin:$PATH" cargo xwin build --target aarch64-pc-windows-msvc`. Run the explicit live tests on the selected guest through the development transport. Expected: real OS data and the reference invalid-class error. Commit as `feat: query local WMI through native COM`.
+- [x] Run `cargo test --test backend_contract`; confirm unimplemented conversions fail. Add Windows-only ignored live tests `local_os_query` and `invalid_class_preserves_hresult`.
+- [x] Implement RAII COM initialization, process security, native WMI connection/schema/query calls and typed conversion. Localize unsafe code and document apartment/interface ownership. Preserve extended errors and partial enumeration outcomes in the result model.
+- [x] Run portable adapter tests; cross-build with `PATH="/opt/homebrew/opt/llvm/bin:$PATH" cargo xwin build --target aarch64-pc-windows-msvc`. Run the explicit live tests on the selected guest through the development transport. Expected: real OS data and the reference invalid-class error. Commit as `feat: query local WMI through native COM`.
 
 ## Task 5: table, value and diagnostic rendering — Stage 1
 

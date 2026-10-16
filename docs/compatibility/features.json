@@ -881,10 +881,21 @@
       "native_runtime_verified": false
     },
     "alias_resolver": {
-      "implemented": false
+      "implemented": true,
+      "portable_tests": 9,
+      "native_runtime_verified": false
     },
     "native_backend": {
-      "implemented": false
+      "implemented": true,
+      "portable_tests": 5,
+      "native_tests": 3,
+      "native_profile": "ARM64 en-US SYSTEM",
+      "operations_verified": [
+        "local query",
+        "class schema",
+        "missing class HRESULT"
+      ],
+      "other_operations": "pending"
     },
     "executable": {
       "implemented": false
