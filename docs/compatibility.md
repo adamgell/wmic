@@ -2,6 +2,8 @@
 
 Development build `0.1.0-dev`, 2026-10-16; measured application baseline source commit `ac390d4`. All 13 planned implementation tasks are delivered. **Full classic WMIC compatibility is not claimed.** This is a measured development replacement with explicit differences and incomplete platform/provider acceptance. The corpus results below apply to the local unsigned baseline. GitHub release builds use a separate build environment and acquire different hashes after signing; their manifests and signature receipts identify their exact bytes, source commit, and workflow run. Signing does not establish additional runtime compatibility.
 
+A macOS build exists. Every result in this report applies to the Windows build only. The macOS build has no reference executable, because Microsoft WMIC does not exist for macOS. Its formatting is checked against the Windows captures, its data shape against the Windows class schema, and its data values against the macOS system sources on one machine. See the [macOS guide](https://github.com/adamgell/wmic/blob/main/docs/macos.md) for scope, evidence, and unverified areas.
+
 ## Reference profile and architecture matrix
 
 The selected Parallels guest is `Windows 11 Home Domain`, UUID `{ec3bc428-7a31-4f17-8424-7ce78923f7f3}`, hostname `DESKTOP-N4H9E7R`, endpoint `192.168.2.107`. The installed OS is Windows 11 Pro 25H2 ARM64, build 26200.8037, en-US. Captures run as `NT AUTHORITY\SYSTEM`, ACP 1252, OEM/console code page 437. Ordinary-user acceptance is separate and unverified.
