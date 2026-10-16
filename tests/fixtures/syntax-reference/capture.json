@@ -1,0 +1,403 @@
+{
+  "schema_version": 1,
+  "profile": {
+    "role": "reference",
+    "executable": "C:\\Windows\\System32\\wbem\\WMIC.exe",
+    "executable_sha256": "2EF794C4940AFEA56C6D6D3B9BC9E66965BC7333E79C5DCB2DEF3C0E36F0834C",
+    "version": "10.0.26100.1 (WinBuild.160101.0800)",
+    "signature": "Valid",
+    "computer": "DESKTOP-N4H9E7R",
+    "identity": "NT AUTHORITY\\SYSTEM",
+    "launcher_architecture": "ARM64",
+    "culture": "en-US",
+    "ui_culture": "en-US",
+    "ansi_codepage": 1252,
+    "oem_codepage": 437,
+    "console_output_codepage": 437,
+    "directory": "C:\\",
+    "launch_api": "CreateProcessW",
+    "output_mode": "native pipes"
+  },
+  "cases": [
+    {
+      "id": "reset-namespace",
+      "arguments_utf16_base64": "LwBuAGEAbQBlAHMAcABhAGMAZQA6ACIAIgAgAG8AcwAgAGcAZQB0ACAAQwBhAHAAdABpAG8AbgA=",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiACAALwBuAGEAbQBlAHMAcABhAGMAZQA6ACIAIgAgAG8AcwAgAGcAZQB0ACAAQwBhAHAAdABpAG8AbgA=",
+      "state": "completed",
+      "exit_status": 0,
+      "duration_ms": 145,
+      "process_id": 1708,
+      "normalizations": [],
+      "stdout": {
+        "file": "reset-namespace.stdout.bin",
+        "bytes": 61,
+        "sha256": "bc1b2ef2608f7afb80262bf378d545ab4aca257d0298f84069ed1a5e1f8680b3"
+      },
+      "stderr": {
+        "file": "reset-namespace.stderr.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "id": "reset-node",
+      "arguments_utf16_base64": "LwBuAG8AZABlADoAIgAiACAAbwBzACAAZwBlAHQAIABDAGEAcAB0AGkAbwBuAA==",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiACAALwBuAG8AZABlADoAIgAiACAAbwBzACAAZwBlAHQAIABDAGEAcAB0AGkAbwBuAA==",
+      "state": "completed",
+      "exit_status": 0,
+      "duration_ms": 118,
+      "process_id": 7876,
+      "normalizations": [],
+      "stdout": {
+        "file": "reset-node.stdout.bin",
+        "bytes": 61,
+        "sha256": "bc1b2ef2608f7afb80262bf378d545ab4aca257d0298f84069ed1a5e1f8680b3"
+      },
+      "stderr": {
+        "file": "reset-node.stderr.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "id": "where-unquoted",
+      "arguments_utf16_base64": "bwBzACAAdwBoAGUAcgBlACAAVgBlAHIAcwBpAG8AbgAgAGwAaQBrAGUAIAAnADEAMAAuACUAJwAgAGcAZQB0ACAAQwBhAHAAdABpAG8AbgAsAFYAZQByAHMAaQBvAG4A",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiACAAbwBzACAAdwBoAGUAcgBlACAAVgBlAHIAcwBpAG8AbgAgAGwAaQBrAGUAIAAnADEAMAAuACUAJwAgAGcAZQB0ACAAQwBhAHAAdABpAG8AbgAsAFYAZQByAHMAaQBvAG4A",
+      "state": "completed",
+      "exit_status": 44029,
+      "duration_ms": 88,
+      "process_id": 4600,
+      "normalizations": [],
+      "stdout": {
+        "file": "where-unquoted.stdout.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "file": "where-unquoted.stderr.bin",
+        "bytes": 29,
+        "sha256": "c0c1b99f2adf57c2b573af509ed14c695519febbd379394d4653d72f9e3fb9de"
+      }
+    },
+    {
+      "id": "where-parenthesized",
+      "arguments_utf16_base64": "bwBzACAAdwBoAGUAcgBlACAAKABWAGUAcgBzAGkAbwBuACAAbABpAGsAZQAgACcAMQAwAC4AJQAnACkAIABnAGUAdAAgAEMAYQBwAHQAaQBvAG4ALABWAGUAcgBzAGkAbwBuAA==",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiACAAbwBzACAAdwBoAGUAcgBlACAAKABWAGUAcgBzAGkAbwBuACAAbABpAGsAZQAgACcAMQAwAC4AJQAnACkAIABnAGUAdAAgAEMAYQBwAHQAaQBvAG4ALABWAGUAcgBzAGkAbwBuAA==",
+      "state": "completed",
+      "exit_status": 0,
+      "duration_ms": 108,
+      "process_id": 1368,
+      "normalizations": [],
+      "stdout": {
+        "file": "where-parenthesized.stdout.bin",
+        "bytes": 85,
+        "sha256": "96ed17ca852287fc0093bbe89f0502c8a09ed5fac1e7e02441b2af874ab32c83"
+      },
+      "stderr": {
+        "file": "where-parenthesized.stderr.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "id": "where-double-value",
+      "arguments_utf16_base64": "bwBzACAAdwBoAGUAcgBlACAAQwBhAHAAdABpAG8AbgA9ACIATQBpAGMAcgBvAHMAbwBmAHQAIABXAGkAbgBkAG8AdwBzACAAMQAxACAAUAByAG8AIgAgAGcAZQB0ACAAVgBlAHIAcwBpAG8AbgA=",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiACAAbwBzACAAdwBoAGUAcgBlACAAQwBhAHAAdABpAG8AbgA9ACIATQBpAGMAcgBvAHMAbwBmAHQAIABXAGkAbgBkAG8AdwBzACAAMQAxACAAUAByAG8AIgAgAGcAZQB0ACAAVgBlAHIAcwBpAG8AbgA=",
+      "state": "completed",
+      "exit_status": 0,
+      "duration_ms": 156,
+      "process_id": 5824,
+      "normalizations": [],
+      "stdout": {
+        "file": "where-double-value.stdout.bin",
+        "bytes": 33,
+        "sha256": "27653909459f7d2324ed914af6415b19936c56a1f5c7cf2519e67423dc934c5f"
+      },
+      "stderr": {
+        "file": "where-double-value.stderr.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "id": "where-outer-quoted",
+      "arguments_utf16_base64": "bwBzACAAdwBoAGUAcgBlACAAIgBDAGEAcAB0AGkAbwBuAD0AJwBNAGkAYwByAG8AcwBvAGYAdAAgAFcAaQBuAGQAbwB3AHMAIAAxADEAIABQAHIAbwAnACIAIABnAGUAdAAgAFYAZQByAHMAaQBvAG4A",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiACAAbwBzACAAdwBoAGUAcgBlACAAIgBDAGEAcAB0AGkAbwBuAD0AJwBNAGkAYwByAG8AcwBvAGYAdAAgAFcAaQBuAGQAbwB3AHMAIAAxADEAIABQAHIAbwAnACIAIABnAGUAdAAgAFYAZQByAHMAaQBvAG4A",
+      "state": "completed",
+      "exit_status": 0,
+      "duration_ms": 161,
+      "process_id": 15236,
+      "normalizations": [],
+      "stdout": {
+        "file": "where-outer-quoted.stdout.bin",
+        "bytes": 33,
+        "sha256": "27653909459f7d2324ed914af6415b19936c56a1f5c7cf2519e67423dc934c5f"
+      },
+      "stderr": {
+        "file": "where-outer-quoted.stderr.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "id": "get-quoted-properties",
+      "arguments_utf16_base64": "bwBzACAAZwBlAHQAIAAiAEMAYQBwAHQAaQBvAG4ALABWAGUAcgBzAGkAbwBuACIA",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiACAAbwBzACAAZwBlAHQAIAAiAEMAYQBwAHQAaQBvAG4ALABWAGUAcgBzAGkAbwBuACIA",
+      "state": "completed",
+      "exit_status": 2147749911,
+      "duration_ms": 107,
+      "process_id": 14968,
+      "normalizations": [],
+      "stdout": {
+        "file": "get-quoted-properties.stdout.bin",
+        "bytes": 6,
+        "sha256": "44d77e47b3618da142fc59ae22795fb2005824045758fa4f4dbbc64d9ab44453"
+      },
+      "stderr": {
+        "file": "get-quoted-properties.stderr.bin",
+        "bytes": 64,
+        "sha256": "1f57dbbd9635b184972a5d57b4bbaa8ab74dac051d3dfdbf93d95823a5d5ccea"
+      }
+    },
+    {
+      "id": "get-spaced-properties",
+      "arguments_utf16_base64": "bwBzACAAZwBlAHQAIABDAGEAcAB0AGkAbwBuACwAIABWAGUAcgBzAGkAbwBuAA==",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiACAAbwBzACAAZwBlAHQAIABDAGEAcAB0AGkAbwBuACwAIABWAGUAcgBzAGkAbwBuAA==",
+      "state": "completed",
+      "exit_status": 0,
+      "duration_ms": 121,
+      "process_id": 14640,
+      "normalizations": [],
+      "stdout": {
+        "file": "get-spaced-properties.stdout.bin",
+        "bytes": 85,
+        "sha256": "96ed17ca852287fc0093bbe89f0502c8a09ed5fac1e7e02441b2af874ab32c83"
+      },
+      "stderr": {
+        "file": "get-spaced-properties.stderr.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "id": "get-without-comma",
+      "arguments_utf16_base64": "bwBzACAAZwBlAHQAIABDAGEAcAB0AGkAbwBuACAAVgBlAHIAcwBpAG8AbgA=",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiACAAbwBzACAAZwBlAHQAIABDAGEAcAB0AGkAbwBuACAAVgBlAHIAcwBpAG8AbgA=",
+      "state": "completed",
+      "exit_status": 44220,
+      "duration_ms": 73,
+      "process_id": 13952,
+      "normalizations": [],
+      "stdout": {
+        "file": "get-without-comma.stdout.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "file": "get-without-comma.stderr.bin",
+        "bytes": 26,
+        "sha256": "219a5a6de727681f732a6f8e55c76247f1fe3a3ab32c958ed7c1e9d6e5cc5e23"
+      }
+    },
+    {
+      "id": "get-abbreviation",
+      "arguments_utf16_base64": "bwBzACAAZwBlACAAQwBhAHAAdABpAG8AbgA=",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiACAAbwBzACAAZwBlACAAQwBhAHAAdABpAG8AbgA=",
+      "state": "completed",
+      "exit_status": 44010,
+      "duration_ms": 79,
+      "process_id": 12088,
+      "normalizations": [],
+      "stdout": {
+        "file": "get-abbreviation.stdout.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "file": "get-abbreviation.stderr.bin",
+        "bytes": 47,
+        "sha256": "10809e3925976e9fbcdb161f10bb1902b69b263f9a05cee0d8ed58e9c1713ae8"
+      }
+    },
+    {
+      "id": "value-abbreviation",
+      "arguments_utf16_base64": "bwBzACAAZwBlAHQAIABDAGEAcAB0AGkAbwBuACAALwB2AA==",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiACAAbwBzACAAZwBlAHQAIABDAGEAcAB0AGkAbwBuACAALwB2AA==",
+      "state": "completed",
+      "exit_status": 44212,
+      "duration_ms": 79,
+      "process_id": 5636,
+      "normalizations": [],
+      "stdout": {
+        "file": "value-abbreviation.stdout.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "file": "value-abbreviation.stderr.bin",
+        "bytes": 22,
+        "sha256": "26726fd35d10a2dea95d526a84c159afb1e7e308886c5c91c631b5e3f03f0b46"
+      }
+    },
+    {
+      "id": "modifier-all",
+      "arguments_utf16_base64": "bwBzACAAZwBlAHQAIABDAGEAcAB0AGkAbwBuACAALwBhAGwAbAA=",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiACAAbwBzACAAZwBlAHQAIABDAGEAcAB0AGkAbwBuACAALwBhAGwAbAA=",
+      "state": "completed",
+      "exit_status": 0,
+      "duration_ms": 78,
+      "process_id": 12468,
+      "normalizations": [],
+      "stdout": {
+        "file": "modifier-all.stdout.bin",
+        "bytes": 61,
+        "sha256": "bc1b2ef2608f7afb80262bf378d545ab4aca257d0298f84069ed1a5e1f8680b3"
+      },
+      "stderr": {
+        "file": "modifier-all.stderr.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "id": "unknown-verb",
+      "arguments_utf16_base64": "bwBzACAAbgBvAG4AcwBlAG4AcwBlAA==",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiACAAbwBzACAAbgBvAG4AcwBlAG4AcwBlAA==",
+      "state": "completed",
+      "exit_status": 44010,
+      "duration_ms": 67,
+      "process_id": 12648,
+      "normalizations": [],
+      "stdout": {
+        "file": "unknown-verb.stdout.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "file": "unknown-verb.stderr.bin",
+        "bytes": 47,
+        "sha256": "10809e3925976e9fbcdb161f10bb1902b69b263f9a05cee0d8ed58e9c1713ae8"
+      }
+    },
+    {
+      "id": "global-after-alias",
+      "arguments_utf16_base64": "bwBzACAALwBuAGEAbQBlAHMAcABhAGMAZQA6AHIAbwBvAHQAXABjAGkAbQB2ADIAIABnAGUAdAAgAEMAYQBwAHQAaQBvAG4A",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiACAAbwBzACAALwBuAGEAbQBlAHMAcABhAGMAZQA6AHIAbwBvAHQAXABjAGkAbQB2ADIAIABnAGUAdAAgAEMAYQBwAHQAaQBvAG4A",
+      "state": "completed",
+      "exit_status": 44124,
+      "duration_ms": 73,
+      "process_id": 6876,
+      "normalizations": [],
+      "stdout": {
+        "file": "global-after-alias.stdout.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "file": "global-after-alias.stderr.bin",
+        "bytes": 35,
+        "sha256": "2d46c542862cb3fc9f22bb3eb29e1efe31aa02b438a40d62485470981f58cbd3"
+      }
+    },
+    {
+      "id": "global-after-get",
+      "arguments_utf16_base64": "bwBzACAAZwBlAHQAIABDAGEAcAB0AGkAbwBuACAALwBuAGEAbQBlAHMAcABhAGMAZQA6AHIAbwBvAHQAXABjAGkAbQB2ADIA",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiACAAbwBzACAAZwBlAHQAIABDAGEAcAB0AGkAbwBuACAALwBuAGEAbQBlAHMAcABhAGMAZQA6AHIAbwBvAHQAXABjAGkAbQB2ADIA",
+      "state": "completed",
+      "exit_status": 44212,
+      "duration_ms": 71,
+      "process_id": 436,
+      "normalizations": [],
+      "stdout": {
+        "file": "global-after-get.stdout.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "file": "global-after-get.stderr.bin",
+        "bytes": 22,
+        "sha256": "26726fd35d10a2dea95d526a84c159afb1e7e308886c5c91c631b5e3f03f0b46"
+      }
+    },
+    {
+      "id": "class-get",
+      "arguments_utf16_base64": "YwBsAGEAcwBzACAAVwBpAG4AMwAyAF8ATwBwAGUAcgBhAHQAaQBuAGcAUwB5AHMAdABlAG0AIABnAGUAdAAgAEMAYQBwAHQAaQBvAG4A",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiACAAYwBsAGEAcwBzACAAVwBpAG4AMwAyAF8ATwBwAGUAcgBhAHQAaQBuAGcAUwB5AHMAdABlAG0AIABnAGUAdAAgAEMAYQBwAHQAaQBvAG4A",
+      "state": "completed",
+      "exit_status": 44220,
+      "duration_ms": 71,
+      "process_id": 11220,
+      "normalizations": [],
+      "stdout": {
+        "file": "class-get.stdout.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "file": "class-get.stderr.bin",
+        "bytes": 26,
+        "sha256": "219a5a6de727681f732a6f8e55c76247f1fe3a3ab32c958ed7c1e9d6e5cc5e23"
+      }
+    },
+    {
+      "id": "help-brief",
+      "arguments_utf16_base64": "LwA/ADoAQgBSAEkARQBGAA==",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiACAALwA/ADoAQgBSAEkARQBGAA==",
+      "state": "completed",
+      "exit_status": 0,
+      "duration_ms": 102,
+      "process_id": 4984,
+      "normalizations": [],
+      "stdout": {
+        "file": "help-brief.stdout.bin",
+        "bytes": 7087,
+        "sha256": "7db9c37ee4b9d84cedcf0242d84c89e180d5e26e5b684835ce4d3cabd9583c6a"
+      },
+      "stderr": {
+        "file": "help-brief.stderr.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "id": "quit-one-shot",
+      "arguments_utf16_base64": "cQB1AGkAdAA=",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiACAAcQB1AGkAdAA=",
+      "state": "completed",
+      "exit_status": 0,
+      "duration_ms": 56,
+      "process_id": 10060,
+      "normalizations": [],
+      "stdout": {
+        "file": "quit-one-shot.stdout.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "file": "quit-one-shot.stderr.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "id": "exit-one-shot",
+      "arguments_utf16_base64": "ZQB4AGkAdAA=",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiACAAZQB4AGkAdAA=",
+      "state": "completed",
+      "exit_status": 0,
+      "duration_ms": 52,
+      "process_id": 1360,
+      "normalizations": [],
+      "stdout": {
+        "file": "exit-one-shot.stdout.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "file": "exit-one-shot.stderr.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    }
+  ]
+}

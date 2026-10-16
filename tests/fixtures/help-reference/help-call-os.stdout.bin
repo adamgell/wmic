@@ -1,0 +1,24 @@
+
+Method execution operations.
+USAGE:
+
+CALL <method name> [<actual paramlist>]
+NOTE: <actual paramlist> ::= <actual param> | <actual param>,  <actual paramlist>
+
+The following alias verb(s)/method(s) are available:
+
+Call			[ In/Out ]Params&type			Status
+====			=====================			======
+Reboot                  					(null)         
+
+
+SetDateTime             [IN ]LocalDateTime(DATETIME)        	(null)         
+
+Shutdown                					(null)         
+
+
+Win32Shutdown           [IN ]Flags(SINT32)                  	(null)         
+
+			[IN ]Reserved(SINT32)               	
+
+

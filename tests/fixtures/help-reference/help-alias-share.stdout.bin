@@ -1,0 +1,15 @@
+
+SHARE - Shared resource management. 
+
+HINT: BNF for Alias usage.
+(<alias> [WMIObject] | <alias> [<path where>] | [<alias>] <path where>) [<verb clause>].
+
+USAGE:
+
+SHARE ASSOC [<format specifier>]
+SHARE CALL <method name> [<actual param list>]
+SHARE CREATE <assign list>
+SHARE DELETE
+SHARE GET [<property list>] [<get switches>]
+SHARE LIST [<list format>] [<list switches>]
+

@@ -1,0 +1,15 @@
+
+PAGEFILESET - Page file settings management. 
+
+HINT: BNF for Alias usage.
+(<alias> [WMIObject] | <alias> [<path where>] | [<alias>] <path where>) [<verb clause>].
+
+USAGE:
+
+PAGEFILESET ASSOC [<format specifier>]
+PAGEFILESET CREATE <assign list>
+PAGEFILESET DELETE
+PAGEFILESET GET [<property list>] [<get switches>]
+PAGEFILESET LIST [<list format>] [<list switches>]
+PAGEFILESET SET [<assign list>]
+

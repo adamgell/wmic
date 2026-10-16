@@ -1,0 +1,14 @@
+
+DESKTOPMONITOR - Desktop Monitor management.
+
+HINT: BNF for Alias usage.
+(<alias> [WMIObject] | <alias> [<path where>] | [<alias>] <path where>) [<verb clause>].
+
+USAGE:
+
+DESKTOPMONITOR ASSOC [<format specifier>]
+DESKTOPMONITOR CREATE <assign list>
+DESKTOPMONITOR DELETE
+DESKTOPMONITOR GET [<property list>] [<get switches>]
+DESKTOPMONITOR LIST [<list format>] [<list switches>]
+

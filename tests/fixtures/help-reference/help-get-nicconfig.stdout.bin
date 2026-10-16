@@ -1,0 +1,81 @@
+
+Property get operations.
+USAGE:
+
+GET [<property list>] [<get switches>]
+NOTE: <property list> ::= <property name> | <property name>,  <property list>
+
+The following properties are available:
+Property				Type			Operation
+========				====			=========
+ArpAlwaysSourceRoute               	N/A                 	N/A       
+ArpUseEtherSNAP                    	N/A                 	N/A       
+DHCPEnabled                        	N/A                 	N/A       
+DHCPLeaseExpires                   	N/A                 	N/A       
+DHCPLeaseObtained                  	N/A                 	N/A       
+DHCPServer                         	N/A                 	N/A       
+DNSDomain                          	N/A                 	N/A       
+DNSDomainSuffixSearchOrder         	N/A                 	N/A       
+DNSEnabledForWINSResolution        	N/A                 	N/A       
+DNSHostName                        	N/A                 	N/A       
+DNSServerSearchOrder               	N/A                 	N/A       
+DeadGWDetectEnabled                	N/A                 	N/A       
+DefaultIPGateway                   	N/A                 	N/A       
+DefaultTOS                         	N/A                 	N/A       
+DefaultTTL                         	N/A                 	N/A       
+Description                        	N/A                 	N/A       
+DomainDNSRegistrationEnabled       	N/A                 	N/A       
+ForwardBufferMemory                	N/A                 	N/A       
+FullDNSRegistrationEnabled         	N/A                 	N/A       
+GatewayCostMetric                  	N/A                 	N/A       
+IGMPLevel                          	N/A                 	N/A       
+IPAddress                          	N/A                 	N/A       
+IPConnectionMetric                 	N/A                 	N/A       
+IPEnabled                          	N/A                 	N/A       
+IPFilterSecurityEnabled            	N/A                 	N/A       
+IPPortSecurityEnabled              	N/A                 	N/A       
+IPSecPermitIPProtocols             	N/A                 	N/A       
+IPSecPermitTCPPorts                	N/A                 	N/A       
+IPSecPermitUDPPorts                	N/A                 	N/A       
+IPSubnet                           	N/A                 	N/A       
+IPUseZeroBroadcast                 	N/A                 	N/A       
+IPXAddress                         	N/A                 	N/A       
+IPXEnabled                         	N/A                 	N/A       
+IPXFrameType                       	N/A                 	N/A       
+IPXMediaType                       	N/A                 	N/A       
+IPXNetworkNumber                   	N/A                 	N/A       
+IPXVirtualNetNumber                	N/A                 	N/A       
+Index                              	N/A                 	N/A       
+KeepAliveInterval                  	N/A                 	N/A       
+KeepAliveTime                      	N/A                 	N/A       
+MACAddress                         	N/A                 	N/A       
+MTU                                	N/A                 	N/A       
+NumForwardPackets                  	N/A                 	N/A       
+PMTUBHDetectEnabled                	N/A                 	N/A       
+PMTUDiscoveryEnabled               	N/A                 	N/A       
+ServiceName                        	N/A                 	N/A       
+SettingID                          	N/A                 	N/A       
+TcpMaxConnectRetransmissions       	N/A                 	N/A       
+TcpMaxDataRetransmissions          	N/A                 	N/A       
+TcpNumConnections                  	N/A                 	N/A       
+TcpUseRFC1122UrgentPointer         	N/A                 	N/A       
+TcpWindowSize                      	N/A                 	N/A       
+TcpipNetbiosOptions                	N/A                 	N/A       
+WINSEnableLMHostsLookup            	N/A                 	N/A       
+WINSHostLookupFile                 	N/A                 	N/A       
+WINSPrimaryServer                  	N/A                 	N/A       
+WINSScopeID                        	N/A                 	N/A       
+WINSSecondaryServer                	N/A                 	N/A       
+
+The following GET switches are available:
+
+/VALUE                       - Return value.
+/ALL(default)                - Return the data and metadata for the attribute.
+/TRANSLATE:<table name>      - Translate output via values from <table name>.
+/EVERY:<interval> [/REPEAT:<repeat count>] - Returns value every (X interval) seconds, If /REPEAT specified the command is executed <repeat count> times.
+/FORMAT:<format specifier>   - Keyword/XSL filename to process the XML results.
+
+NOTE: Order of /TRANSLATE and /FORMAT switches influences the appearance of output.
+Case1: If /TRANSLATE precedes /FORMAT, then translation of results will be followed by formatting.
+Case2: If /TRANSLATE succeeds /FORMAT, then translation of the formatted results will be done.
+

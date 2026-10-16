@@ -1,0 +1,8 @@
+
+RECORD - Logs all entered commands and WMIC's output to a file in XML format.
+USAGE:
+
+/RECORD:<filepath>
+
+NOTE: Enclose the switch value in  double quotes, if the value contains special  characters like '-' or '/'.
+

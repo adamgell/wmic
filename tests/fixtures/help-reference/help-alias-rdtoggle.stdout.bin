@@ -1,0 +1,15 @@
+
+RDTOGGLE - Turning Remote Desktop listener on or off remotely.
+
+HINT: BNF for Alias usage.
+(<alias> [WMIObject] | <alias> [<path where>] | [<alias>] <path where>) [<verb clause>].
+
+USAGE:
+
+RDTOGGLE ASSOC [<format specifier>]
+RDTOGGLE CALL <method name> [<actual param list>]
+RDTOGGLE CREATE <assign list>
+RDTOGGLE DELETE
+RDTOGGLE GET [<property list>] [<get switches>]
+RDTOGGLE LIST [<list format>] [<list switches>]
+

@@ -1,0 +1,44 @@
+
+Property get operations.
+USAGE:
+
+GET [<property list>] [<get switches>]
+NOTE: <property list> ::= <property name> | <property name>,  <property list>
+
+The following properties are available:
+Property				Type			Operation
+========				====			=========
+Auto Mount Enabled                 	N/A                 	N/A       
+BlockSize                          	N/A                 	N/A       
+Capacity                           	N/A                 	N/A       
+Compressed                         	N/A                 	N/A       
+Dirty Bit Set                      	N/A                 	N/A       
+Drive Letter                       	N/A                 	N/A       
+DriveType                          	N/A                 	N/A       
+File System                        	N/A                 	N/A       
+Free Space                         	N/A                 	N/A       
+ID                                 	N/A                 	N/A       
+Indexing Enabled                   	N/A                 	N/A       
+Label                              	N/A                 	N/A       
+Maximum File Name Length           	N/A                 	N/A       
+Name                               	N/A                 	N/A       
+Quotas Enabled                     	N/A                 	N/A       
+Quotas Incomplete                  	N/A                 	N/A       
+Quotas Rebuilding                  	N/A                 	N/A       
+Serial Number                      	N/A                 	N/A       
+Supports Disk Quotas               	N/A                 	N/A       
+Supports File Based Compression    	N/A                 	N/A       
+SystemName                         	N/A                 	N/A       
+
+The following GET switches are available:
+
+/VALUE                       - Return value.
+/ALL(default)                - Return the data and metadata for the attribute.
+/TRANSLATE:<table name>      - Translate output via values from <table name>.
+/EVERY:<interval> [/REPEAT:<repeat count>] - Returns value every (X interval) seconds, If /REPEAT specified the command is executed <repeat count> times.
+/FORMAT:<format specifier>   - Keyword/XSL filename to process the XML results.
+
+NOTE: Order of /TRANSLATE and /FORMAT switches influences the appearance of output.
+Case1: If /TRANSLATE precedes /FORMAT, then translation of results will be followed by formatting.
+Case2: If /TRANSLATE succeeds /FORMAT, then translation of the formatted results will be done.
+

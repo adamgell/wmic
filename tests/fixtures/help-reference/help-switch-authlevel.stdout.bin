@@ -1,0 +1,18 @@
+
+AUTHLEVEL - Specify the level the command line should authenticate.
+            Default is 'Pktprivacy'.
+USAGE:
+
+/AUTHLEVEL:<authlevel>
+
+Various authlevels are as follows:
+Authlevel
+---------
+Default
+None
+Connect
+Call
+Pkt
+Pktintegrity
+Pktprivacy
+

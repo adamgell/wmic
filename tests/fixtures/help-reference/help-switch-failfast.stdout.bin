@@ -1,0 +1,7 @@
+
+FAILFAST - Sets or resets the FailFast mode.
+USAGE:
+
+/FAILFAST:<option>
+NOTE: Allowed value(s) for <option> is either ON or OFF.
+

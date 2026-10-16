@@ -1,0 +1,14 @@
+
+LOADORDER - Management of system services that define execution dependencies. 
+
+HINT: BNF for Alias usage.
+(<alias> [WMIObject] | <alias> [<path where>] | [<alias>] <path where>) [<verb clause>].
+
+USAGE:
+
+LOADORDER ASSOC [<format specifier>]
+LOADORDER CREATE <assign list>
+LOADORDER DELETE
+LOADORDER GET [<property list>] [<get switches>]
+LOADORDER LIST [<list format>] [<list switches>]
+

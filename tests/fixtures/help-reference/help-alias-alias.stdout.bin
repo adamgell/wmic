@@ -1,0 +1,15 @@
+
+ALIAS - Access to the aliases available on the local system
+
+HINT: BNF for Alias usage.
+(<alias> [WMIObject] | <alias> [<path where>] | [<alias>] <path where>) [<verb clause>].
+
+USAGE:
+
+ALIAS ASSOC [<format specifier>]
+ALIAS CALL <method name> [<actual param list>]
+ALIAS CREATE <assign list>
+ALIAS DELETE
+ALIAS GET [<property list>] [<get switches>]
+ALIAS LIST [<list format>] [<list switches>]
+

@@ -1,0 +1,16 @@
+
+Method execution operations.
+USAGE:
+
+CALL <method name> [<actual paramlist>]
+NOTE: <actual paramlist> ::= <actual param> | <actual param>,  <actual paramlist>
+
+The following alias verb(s)/method(s) are available:
+
+Call			[ In/Out ]Params&type			Status
+====			=====================			======
+BackupEventlog          [IN ]ArchiveFileName(STRING)        	(null)         
+
+ClearEventlog           [IN ]ArchiveFileName(STRING)        	(null)         
+
+

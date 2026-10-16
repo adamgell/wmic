@@ -1,0 +1,74 @@
+
+Property get operations.
+USAGE:
+
+GET [<property list>] [<get switches>]
+NOTE: <property list> ::= <property name> | <property name>,  <property list>
+
+The following properties are available:
+Property				Type			Operation
+========				====			=========
+BootDevice                         	N/A                 	N/A       
+BuildNumber                        	N/A                 	N/A       
+BuildType                          	N/A                 	N/A       
+CSDVersion                         	N/A                 	N/A       
+CSName                             	N/A                 	N/A       
+CodeSet                            	N/A                 	N/A       
+CountryCode                        	N/A                 	N/A       
+CurrentTimeZone                    	N/A                 	N/A       
+Debug                              	N/A                 	N/A       
+Description                        	N/A                 	N/A       
+Distributed                        	N/A                 	N/A       
+EncryptionLevel                    	N/A                 	N/A       
+ForegroundApplicationBoost         	N/A                 	N/A       
+FreePhysicalMemory                 	N/A                 	N/A       
+FreeSpaceInPagingFiles             	N/A                 	N/A       
+FreeVirtualMemory                  	N/A                 	N/A       
+InstallDate                        	N/A                 	N/A       
+LastBootUpTime                     	N/A                 	N/A       
+LocalDateTime                      	N/A                 	N/A       
+Locale                             	N/A                 	N/A       
+Manufacturer                       	N/A                 	N/A       
+MaxNumberOfProcesses               	N/A                 	N/A       
+MaxProcessMemorySize               	N/A                 	N/A       
+Name                               	N/A                 	N/A       
+NumberOfLicensedUsers              	N/A                 	N/A       
+NumberOfProcesses                  	N/A                 	N/A       
+NumberOfUsers                      	N/A                 	N/A       
+OSLanguage                         	N/A                 	N/A       
+OSProductSuite                     	N/A                 	N/A       
+OSType                             	N/A                 	N/A       
+Organization                       	N/A                 	N/A       
+OtherTypeDescription               	N/A                 	N/A       
+PlusProductID                      	N/A                 	N/A       
+PlusVersionNumber                  	N/A                 	N/A       
+Primary                            	N/A                 	N/A       
+QuantumLength                      	N/A                 	N/A       
+QuantumType                        	N/A                 	N/A       
+RegisteredUser                     	N/A                 	N/A       
+SerialNumber                       	N/A                 	N/A       
+ServicePackMajorVersion            	N/A                 	N/A       
+ServicePackMinorVersion            	N/A                 	N/A       
+SizeStoredInPagingFiles            	N/A                 	N/A       
+Status                             	N/A                 	N/A       
+SystemDevice                       	N/A                 	N/A       
+SystemDirectory                    	N/A                 	N/A       
+SystemDrive                        	N/A                 	N/A       
+TotalSwapSpaceSize                 	N/A                 	N/A       
+TotalVirtualMemorySize             	N/A                 	N/A       
+TotalVisibleMemorySize             	N/A                 	N/A       
+Version                            	N/A                 	N/A       
+WindowsDirectory                   	N/A                 	N/A       
+
+The following GET switches are available:
+
+/VALUE                       - Return value.
+/ALL(default)                - Return the data and metadata for the attribute.
+/TRANSLATE:<table name>      - Translate output via values from <table name>.
+/EVERY:<interval> [/REPEAT:<repeat count>] - Returns value every (X interval) seconds, If /REPEAT specified the command is executed <repeat count> times.
+/FORMAT:<format specifier>   - Keyword/XSL filename to process the XML results.
+
+NOTE: Order of /TRANSLATE and /FORMAT switches influences the appearance of output.
+Case1: If /TRANSLATE precedes /FORMAT, then translation of results will be followed by formatting.
+Case2: If /TRANSLATE succeeds /FORMAT, then translation of the formatted results will be done.
+

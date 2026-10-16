@@ -3,8 +3,8 @@
 Date: 2026-10-15, America/New_York.
 
 Status: architecture and written specification approved by the user on
-2026-10-15. Implementation has not started. The implementation plan is being
-prepared for review and execution-method selection.
+2026-10-15. The user also approved the implementation plan and native execution
+in this chat at 19:57 EDT. Implementation is in progress.
 
 ## Intended outcome
 

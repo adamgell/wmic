@@ -1,0 +1,14 @@
+
+PORT - I/O port management.
+
+HINT: BNF for Alias usage.
+(<alias> [WMIObject] | <alias> [<path where>] | [<alias>] <path where>) [<verb clause>].
+
+USAGE:
+
+PORT ASSOC [<format specifier>]
+PORT CREATE <assign list>
+PORT DELETE
+PORT GET [<property list>] [<get switches>]
+PORT LIST [<list format>] [<list switches>]
+

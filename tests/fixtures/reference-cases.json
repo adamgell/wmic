@@ -1,0 +1,150 @@
+{
+  "schema_version": 1,
+  "reference_sha256": "2EF794C4940AFEA56C6D6D3B9BC9E66965BC7333E79C5DCB2DEF3C0E36F0834C",
+  "cases": [
+    {
+      "id": "global-help",
+      "arguments": "/?",
+      "arguments_utf16_base64": "LwA/AA==",
+      "operation": "read_only"
+    },
+    {
+      "id": "context",
+      "arguments": "context",
+      "arguments_utf16_base64": "YwBvAG4AdABlAHgAdAA=",
+      "operation": "read_only"
+    },
+    {
+      "id": "os-help",
+      "arguments": "os /?",
+      "arguments_utf16_base64": "bwBzACAALwA/AA==",
+      "operation": "read_only"
+    },
+    {
+      "id": "os-get-help",
+      "arguments": "os get /?",
+      "arguments_utf16_base64": "bwBzACAAZwBlAHQAIAAvAD8A",
+      "operation": "read_only"
+    },
+    {
+      "id": "os-list-help",
+      "arguments": "os list /?",
+      "arguments_utf16_base64": "bwBzACAAbABpAHMAdAAgAC8APwA=",
+      "operation": "read_only"
+    },
+    {
+      "id": "process-call-help",
+      "arguments": "process call /?",
+      "arguments_utf16_base64": "cAByAG8AYwBlAHMAcwAgAGMAYQBsAGwAIAAvAD8A",
+      "operation": "read_only"
+    },
+    {
+      "id": "os-get",
+      "arguments": "os get Caption,Version",
+      "arguments_utf16_base64": "bwBzACAAZwBlAHQAIABDAGEAcAB0AGkAbwBuACwAVgBlAHIAcwBpAG8AbgA=",
+      "operation": "read_only"
+    },
+    {
+      "id": "os-get-reversed",
+      "arguments": "os get Version,Caption",
+      "arguments_utf16_base64": "bwBzACAAZwBlAHQAIABWAGUAcgBzAGkAbwBuACwAQwBhAHAAdABpAG8AbgA=",
+      "operation": "read_only"
+    },
+    {
+      "id": "os-get-value",
+      "arguments": "os get Caption,Version /value",
+      "arguments_utf16_base64": "bwBzACAAZwBlAHQAIABDAGEAcAB0AGkAbwBuACwAVgBlAHIAcwBpAG8AbgAgAC8AdgBhAGwAdQBlAA==",
+      "operation": "read_only"
+    },
+    {
+      "id": "os-list-brief",
+      "arguments": "os list brief",
+      "arguments_utf16_base64": "bwBzACAAbABpAHMAdAAgAGIAcgBpAGUAZgA=",
+      "operation": "read_only"
+    },
+    {
+      "id": "os-get-csv",
+      "arguments": "os get Caption,Version /format:csv",
+      "arguments_utf16_base64": "bwBzACAAZwBlAHQAIABDAGEAcAB0AGkAbwBuACwAVgBlAHIAcwBpAG8AbgAgAC8AZgBvAHIAbQBhAHQAOgBjAHMAdgA=",
+      "operation": "read_only"
+    },
+    {
+      "id": "os-get-rawxml",
+      "arguments": "os get Caption,Version /format:rawxml",
+      "arguments_utf16_base64": "bwBzACAAZwBlAHQAIABDAGEAcAB0AGkAbwBuACwAVgBlAHIAcwBpAG8AbgAgAC8AZgBvAHIAbQBhAHQAOgByAGEAdwB4AG0AbAA=",
+      "operation": "read_only",
+      "normalizations": [
+        {
+          "stream": "stdout",
+          "kind": "wmic-command-starttime"
+        }
+      ]
+    },
+    {
+      "id": "os-get-mof",
+      "arguments": "os get Caption,Version /format:mof",
+      "arguments_utf16_base64": "bwBzACAAZwBlAHQAIABDAGEAcAB0AGkAbwBuACwAVgBlAHIAcwBpAG8AbgAgAC8AZgBvAHIAbQBhAHQAOgBtAG8AZgA=",
+      "operation": "read_only"
+    },
+    {
+      "id": "os-get-list",
+      "arguments": "os get Caption,Version /format:list",
+      "arguments_utf16_base64": "bwBzACAAZwBlAHQAIABDAGEAcAB0AGkAbwBuACwAVgBlAHIAcwBpAG8AbgAgAC8AZgBvAHIAbQBhAHQAOgBsAGkAcwB0AA==",
+      "operation": "read_only"
+    },
+    {
+      "id": "os-casefold",
+      "arguments": "OS GeT cApTiOn,vErSiOn",
+      "arguments_utf16_base64": "TwBTACAARwBlAFQAIABjAEEAcABUAGkATwBuACwAdgBFAHIAUwBpAE8AbgA=",
+      "operation": "read_only"
+    },
+    {
+      "id": "path-os-get",
+      "arguments": "path Win32_OperatingSystem get Caption,Version",
+      "arguments_utf16_base64": "cABhAHQAaAAgAFcAaQBuADMAMgBfAE8AcABlAHIAYQB0AGkAbgBnAFMAeQBzAHQAZQBtACAAZwBlAHQAIABDAGEAcAB0AGkAbwBuACwAVgBlAHIAcwBpAG8AbgA=",
+      "operation": "read_only"
+    },
+    {
+      "id": "os-where",
+      "arguments": "os where \"Version like '10.%'\" get Caption,Version",
+      "arguments_utf16_base64": "bwBzACAAdwBoAGUAcgBlACAAIgBWAGUAcgBzAGkAbwBuACAAbABpAGsAZQAgACcAMQAwAC4AJQAnACIAIABnAGUAdAAgAEMAYQBwAHQAaQBvAG4ALABWAGUAcgBzAGkAbwBuAA==",
+      "operation": "read_only"
+    },
+    {
+      "id": "os-empty",
+      "arguments": "os where \"Version='__WMIC_RESEARCH_NO_MATCH__'\" get Caption",
+      "arguments_utf16_base64": "bwBzACAAdwBoAGUAcgBlACAAIgBWAGUAcgBzAGkAbwBuAD0AJwBfAF8AVwBNAEkAQwBfAFIARQBTAEUAQQBSAEMASABfAE4ATwBfAE0AQQBUAEMASABfAF8AJwAiACAAZwBlAHQAIABDAGEAcAB0AGkAbwBuAA==",
+      "operation": "read_only"
+    },
+    {
+      "id": "alias-os-brief",
+      "arguments": "alias os list brief",
+      "arguments_utf16_base64": "YQBsAGkAYQBzACAAbwBzACAAbABpAHMAdAAgAGIAcgBpAGUAZgA=",
+      "operation": "read_only"
+    },
+    {
+      "id": "error-property",
+      "arguments": "os get WmicResearchPropertyDoesNotExist",
+      "arguments_utf16_base64": "bwBzACAAZwBlAHQAIABXAG0AaQBjAFIAZQBzAGUAYQByAGMAaABQAHIAbwBwAGUAcgB0AHkARABvAGUAcwBOAG8AdABFAHgAaQBzAHQA",
+      "operation": "read_only"
+    },
+    {
+      "id": "error-class",
+      "arguments": "path WmicResearchClassDoesNotExist get Name",
+      "arguments_utf16_base64": "cABhAHQAaAAgAFcAbQBpAGMAUgBlAHMAZQBhAHIAYwBoAEMAbABhAHMAcwBEAG8AZQBzAE4AbwB0AEUAeABpAHMAdAAgAGcAZQB0ACAATgBhAG0AZQA=",
+      "operation": "read_only"
+    },
+    {
+      "id": "error-alias",
+      "arguments": "WmicResearchAliasDoesNotExist get Name",
+      "arguments_utf16_base64": "VwBtAGkAYwBSAGUAcwBlAGEAcgBjAGgAQQBsAGkAYQBzAEQAbwBlAHMATgBvAHQARQB4AGkAcwB0ACAAZwBlAHQAIABOAGEAbQBlAA==",
+      "operation": "read_only"
+    },
+    {
+      "id": "error-switch",
+      "arguments": "/wmic_research_invalid:1 os get Caption",
+      "arguments_utf16_base64": "LwB3AG0AaQBjAF8AcgBlAHMAZQBhAHIAYwBoAF8AaQBuAHYAYQBsAGkAZAA6ADEAIABvAHMAIABnAGUAdAAgAEMAYQBwAHQAaQBvAG4A",
+      "operation": "read_only"
+    }
+  ]
+}

@@ -1,0 +1,62 @@
+
+Property get operations.
+USAGE:
+
+GET [<property list>] [<get switches>]
+NOTE: <property list> ::= <property name> | <property name>,  <property list>
+
+The following properties are available:
+Property				Type			Operation
+========				====			=========
+ActiveInputVoltage                 	N/A                 	N/A       
+Availability                       	N/A                 	N/A       
+BatteryInstalled                   	N/A                 	N/A       
+CanTurnOffRemotely                 	N/A                 	N/A       
+CommandFile                        	N/A                 	N/A       
+ConfigManagerErrorCode             	N/A                 	N/A       
+ConfigManagerUserConfig            	N/A                 	N/A       
+Description                        	N/A                 	N/A       
+DeviceID                           	N/A                 	N/A       
+ErrorCleared                       	N/A                 	N/A       
+ErrorDescription                   	N/A                 	N/A       
+EstimatedChargeRemaining           	N/A                 	N/A       
+EstimatedRunTime                   	N/A                 	N/A       
+FirstMessageDelay                  	N/A                 	N/A       
+InstallDate                        	N/A                 	N/A       
+IsSwitchingSupply                  	N/A                 	N/A       
+LastErrorCode                      	N/A                 	N/A       
+LowBatterySignal                   	N/A                 	N/A       
+MessageInterval                    	N/A                 	N/A       
+Name                               	N/A                 	N/A       
+PNPDeviceID                        	N/A                 	N/A       
+PowerFailSignal                    	N/A                 	N/A       
+PowerManagementCapabilities        	N/A                 	N/A       
+PowerManagementSupported           	N/A                 	N/A       
+Range1InputFrequencyHigh           	N/A                 	N/A       
+Range1InputFrequencyLow            	N/A                 	N/A       
+Range1InputVoltageHigh             	N/A                 	N/A       
+Range1InputVoltageLow              	N/A                 	N/A       
+Range2InputFrequencyHigh           	N/A                 	N/A       
+Range2InputFrequencyLow            	N/A                 	N/A       
+Range2InputVoltageHigh             	N/A                 	N/A       
+Range2InputVoltageLow              	N/A                 	N/A       
+RemainingCapacityStatus            	N/A                 	N/A       
+Status                             	N/A                 	N/A       
+StatusInfo                         	N/A                 	N/A       
+TimeOnBackup                       	N/A                 	N/A       
+TotalOutputPower                   	N/A                 	N/A       
+TypeOfRangeSwitching               	N/A                 	N/A       
+UPSPort                            	N/A                 	N/A       
+
+The following GET switches are available:
+
+/VALUE                       - Return value.
+/ALL(default)                - Return the data and metadata for the attribute.
+/TRANSLATE:<table name>      - Translate output via values from <table name>.
+/EVERY:<interval> [/REPEAT:<repeat count>] - Returns value every (X interval) seconds, If /REPEAT specified the command is executed <repeat count> times.
+/FORMAT:<format specifier>   - Keyword/XSL filename to process the XML results.
+
+NOTE: Order of /TRANSLATE and /FORMAT switches influences the appearance of output.
+Case1: If /TRANSLATE precedes /FORMAT, then translation of results will be followed by formatting.
+Case2: If /TRANSLATE succeeds /FORMAT, then translation of the formatted results will be done.
+

@@ -1,0 +1,16 @@
+
+PRINTER - Printer device management. 
+
+HINT: BNF for Alias usage.
+(<alias> [WMIObject] | <alias> [<path where>] | [<alias>] <path where>) [<verb clause>].
+
+USAGE:
+
+PRINTER ASSOC [<format specifier>]
+PRINTER CALL <method name> [<actual param list>]
+PRINTER CREATE <assign list>
+PRINTER DELETE
+PRINTER GET [<property list>] [<get switches>]
+PRINTER LIST [<list format>] [<list switches>]
+PRINTER SET [<assign list>]
+

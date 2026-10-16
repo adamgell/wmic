@@ -1,0 +1,58 @@
+
+Property get operations.
+USAGE:
+
+GET [<property list>] [<get switches>]
+NOTE: <property list> ::= <property name> | <property name>,  <property list>
+
+The following properties are available:
+Property				Type			Operation
+========				====			=========
+Blocking Requests Rejected         	N/A                 	N/A       
+Bytes Received/sec                 	N/A                 	N/A       
+Bytes Total/sec                    	N/A                 	N/A       
+Bytes Transmitted/sec              	N/A                 	N/A       
+Caption                            	N/A                 	N/A       
+Context Blocks Queued/sec          	N/A                 	N/A       
+Description                        	N/A                 	N/A       
+Errors Access Permissions          	N/A                 	N/A       
+Errors Granted Access              	N/A                 	N/A       
+Errors Logon                       	N/A                 	N/A       
+Errors System                      	N/A                 	N/A       
+File Directory Searches            	N/A                 	N/A       
+Files Open                         	N/A                 	N/A       
+Files Opened Total                 	N/A                 	N/A       
+Frequency_Object                   	N/A                 	N/A       
+Frequency_PerfTime                 	N/A                 	N/A       
+Frequency_Sys100NS                 	N/A                 	N/A       
+Logon Total                        	N/A                 	N/A       
+Logon/sec                          	N/A                 	N/A       
+Name                               	N/A                 	N/A       
+Pool Nonpaged Bytes                	N/A                 	N/A       
+Pool Nonpaged Failures             	N/A                 	N/A       
+Pool Nonpaged Peak                 	N/A                 	N/A       
+Pool Paged Bytes                   	N/A                 	N/A       
+Pool Paged Failures                	N/A                 	N/A       
+Pool Paged Peak                    	N/A                 	N/A       
+Server Sessions                    	N/A                 	N/A       
+Sessions Errored Out               	N/A                 	N/A       
+Sessions Forced Off                	N/A                 	N/A       
+Sessions Logged Off                	N/A                 	N/A       
+Sessions Timed Out                 	N/A                 	N/A       
+Timestamp_Object                   	N/A                 	N/A       
+Timestamp_PerfTime                 	N/A                 	N/A       
+Timestamp_Sys100NS                 	N/A                 	N/A       
+Work Item Shortages                	N/A                 	N/A       
+
+The following GET switches are available:
+
+/VALUE                       - Return value.
+/ALL(default)                - Return the data and metadata for the attribute.
+/TRANSLATE:<table name>      - Translate output via values from <table name>.
+/EVERY:<interval> [/REPEAT:<repeat count>] - Returns value every (X interval) seconds, If /REPEAT specified the command is executed <repeat count> times.
+/FORMAT:<format specifier>   - Keyword/XSL filename to process the XML results.
+
+NOTE: Order of /TRANSLATE and /FORMAT switches influences the appearance of output.
+Case1: If /TRANSLATE precedes /FORMAT, then translation of results will be followed by formatting.
+Case2: If /TRANSLATE succeeds /FORMAT, then translation of the formatted results will be done.
+

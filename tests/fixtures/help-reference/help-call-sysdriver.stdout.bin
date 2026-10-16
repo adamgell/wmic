@@ -1,0 +1,23 @@
+
+Method execution operations.
+USAGE:
+
+CALL <method name> [<actual paramlist>]
+NOTE: <actual paramlist> ::= <actual param> | <actual param>,  <actual paramlist>
+
+The following alias verb(s)/method(s) are available:
+
+Call			[ In/Out ]Params&type			Status
+====			=====================			======
+InterrogateService      					(null)         
+
+
+PauseService            					(null)         
+
+
+ResumeService           					(null)         
+
+
+UserControlService      [IN ]ControlCode(UINT8)             	(null)         
+
+

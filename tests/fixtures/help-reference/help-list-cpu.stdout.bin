@@ -1,0 +1,24 @@
+
+Property list operations.
+USAGE:
+
+LIST [<list format>] [<list switches>]
+
+The following LIST formats are available:
+
+BRIEF                     - Caption, DeviceID, Manufacturer, MaxClockSpeed, Name, SocketDesignation
+CONFIG                    - AddressWidth, DataWidth, DeviceID, ExtClock, L2CacheSize, L2CacheSpeed, MaxClockSpeed, PowerManagementSupported, ProcessorType, Revision, SocketDesignation, Version, VoltageCaps
+FULL                      - AddressWidth, Architecture, Availability, Caption, ConfigManagerErrorCode, ConfigManagerUserConfig, CpuStatus, CreationClassName, CurrentClockSpeed, CurrentVoltage, DataWidth, Description, DeviceID, ErrorCleared, ErrorDescription, ExtClock, Family, InstallDate, L2CacheSize, L2CacheSpeed, LastErrorCode, Level, LoadPercentage, Manufacturer, MaxClockSpeed, Name, OtherFamilyDescription, PNPDeviceID, PowerManagementCapabilities, PowerManagementSupported, ProcessorId, ProcessorType, Revision, Role, SocketDesignation, Status, StatusInfo, Stepping, SystemCreationClassName, SystemName, UniqueId, UpgradeMethod, Version, VoltageCaps
+INSTANCE                  - DeviceID
+STATUS                    - Availability, CpuStatus, CurrentVoltage, DeviceID, ErrorCleared, ErrorDescription, LastErrorCode, LoadPercentage, Status, StatusInfo
+
+The following LIST switches are available:
+
+/TRANSLATE:<table name>      - Translate output via values from <table name>.
+/EVERY:<interval> [/REPEAT:<repeat count>] - Returns value every (X interval) seconds, If /REPEAT specified the command is executed <repeat count> times.
+/FORMAT:<format specifier>   - Keyword/XSL filename to process the XML results.
+
+NOTE: Order of /TRANSLATE and /FORMAT switches influences the appearance of output.
+Case1: If /TRANSLATE precedes /FORMAT, then translation of results will be followed by formatting.
+Case2: If /TRANSLATE succeeds /FORMAT, then translation of the formatted results will be done.
+

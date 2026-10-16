@@ -1,0 +1,23 @@
+
+Property list operations.
+USAGE:
+
+LIST [<list format>] [<list switches>]
+
+The following LIST formats are available:
+
+BRIEF                     - Caption, Logon/sec, Logon Total, Name, Server Sessions, Work Item Shortages
+FULL                      - Blocking Requests Rejected, Bytes Received/sec, Bytes Total/sec, Bytes Transmitted/sec, Caption, Context Blocks Queued/sec, Description, Errors Access Permissions, Errors Granted Access, Errors Logon, Errors System, File Directory Searches, Files Open, Files Opened Total, Frequency_Object, Frequency_PerfTime, Frequency_Sys100NS, Logon/sec, Logon Total, Name, Pool Nonpaged Bytes, Pool Nonpaged Failures, Pool Nonpaged Peak, Pool Paged Bytes, Pool Paged Failures, Pool Paged Peak, Server Sessions, Sessions Errored Out, Sessions Forced Off, Sessions Logged Off, Sessions Timed Out, Timestamp_Object, Timestamp_PerfTime, Timestamp_Sys100NS, Work Item Shortages
+INSTANCE                  - __PATH
+SYSTEM                    - __CLASS, __DERIVATION, __DYNASTY, __GENUS, __NAMESPACE, __PATH, __PROPERTY_COUNT, __RELPATH, __SERVER, __SUPERCLASS
+
+The following LIST switches are available:
+
+/TRANSLATE:<table name>      - Translate output via values from <table name>.
+/EVERY:<interval> [/REPEAT:<repeat count>] - Returns value every (X interval) seconds, If /REPEAT specified the command is executed <repeat count> times.
+/FORMAT:<format specifier>   - Keyword/XSL filename to process the XML results.
+
+NOTE: Order of /TRANSLATE and /FORMAT switches influences the appearance of output.
+Case1: If /TRANSLATE precedes /FORMAT, then translation of results will be followed by formatting.
+Case2: If /TRANSLATE succeeds /FORMAT, then translation of the formatted results will be done.
+

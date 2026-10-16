@@ -1,0 +1,14 @@
+
+STARTUP - Management of commands that run automatically when users log onto the computer system.
+
+HINT: BNF for Alias usage.
+(<alias> [WMIObject] | <alias> [<path where>] | [<alias>] <path where>) [<verb clause>].
+
+USAGE:
+
+STARTUP ASSOC [<format specifier>]
+STARTUP CREATE <assign list>
+STARTUP DELETE
+STARTUP GET [<property list>] [<get switches>]
+STARTUP LIST [<list format>] [<list switches>]
+

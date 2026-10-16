@@ -1,0 +1,129 @@
+
+Method execution operations.
+USAGE:
+
+CALL <method name> [<actual paramlist>]
+NOTE: <actual paramlist> ::= <actual param> | <actual param>,  <actual paramlist>
+
+The following alias verb(s)/method(s) are available:
+
+Call			[ In/Out ]Params&type			Status
+====			=====================			======
+DisableIPSec            					(null)         
+
+
+EnableDHCP              					(null)         
+
+
+EnableDNS               [IN ]DNSDomain(STRING)              	(null)         
+
+			[IN ]DNSDomainSuffixSearchOrder(ARRAY OF STRING)	
+
+			[IN ]DNSHostName(STRING)            	
+
+			[IN ]DNSServerSearchOrder(ARRAY OF STRING)	
+
+EnableIPFilterSec       [IN ]IPFilterSecurityEnabled(BOOLEAN)	(null)         
+
+EnableIPSec             [IN ]IPSecPermitIPProtocols(ARRAY OF STRING)	(null)         
+
+			[IN ]IPSecPermitTCPPorts(ARRAY OF STRING)	
+
+			[IN ]IPSecPermitUDPPorts(ARRAY OF STRING)	
+
+EnableStatic            [IN ]IPAddress(ARRAY OF STRING)     	(null)         
+
+			[IN ]SubnetMask(ARRAY OF STRING)    	
+
+EnableWINS              [IN ]DNSEnabledForWINSResolution(BOOLEAN)	(null)         
+
+			[IN ]WINSEnableLMHostsLookup(BOOLEAN)	
+
+			[IN ]WINSHostLookupFile(STRING)     	
+
+			[IN ]WINSScopeID(STRING)            	
+
+FlushDns                					(null)         
+
+
+ReleaseDHCPLease        					(null)         
+
+
+ReleaseDHCPLeaseAll     					(null)         
+
+
+RenewDHCPLease          					(null)         
+
+
+RenewDHCPLeaseAll       					(null)         
+
+
+SetArpAlwaysSourceRoute [IN ]ArpAlwaysSourceRoute(BOOLEAN)  	(null)         
+
+SetArpUseEtherSNAP      [IN ]ArpUseEtherSNAP(BOOLEAN)       	(null)         
+
+SetDNSDomain            [IN ]DNSDomain(STRING)              	(null)         
+
+SetDNSServerSearchOrder [IN ]DNSServerSearchOrder(ARRAY OF STRING)	(null)         
+
+SetDNSSuffixSearchOrder [IN ]DNSDomainSuffixSearchOrder(ARRAY OF STRING)	(null)         
+
+SetDatabasePath         [IN ]DatabasePath(STRING)           	(null)         
+
+SetDeadGWDetect         [IN ]DeadGWDetectEnabled(BOOLEAN)   	(null)         
+
+SetDefaultTOS           [IN ]DefaultTOS(UINT8)              	(null)         
+
+SetDefaultTTL           [IN ]DefaultTTL(UINT8)              	(null)         
+
+SetDynamicDNSRegistration[IN ]DomainDNSRegistrationEnabled(BOOLEAN)	(null)         
+
+			[IN ]FullDNSRegistrationEnabled(BOOLEAN)	
+
+SetForwardBufferMemory  [IN ]ForwardBufferMemory(UINT32)    	(null)         
+
+SetGateways             [IN ]DefaultIPGateway(ARRAY OF STRING)	(null)         
+
+			[IN ]GatewayCostMetric(ARRAY OF UINT16)	
+
+SetIGMPLevel            [IN ]IGMPLevel(UINT8)               	(null)         
+
+SetIPConnectionMetric   [IN ]IPConnectionMetric(UINT32)     	(null)         
+
+SetIPUseZeroBroadcast   [IN ]IPUseZeroBroadcast(BOOLEAN)    	(null)         
+
+SetIPXFrameTypeNetworkPairs[IN ]IPXFrameType(ARRAY OF UINT32)  	(null)         
+
+			[IN ]IPXNetworkNumber(ARRAY OF STRING)	
+
+SetIPXVirtualNetworkNumber[IN ]IPXVirtualNetNumber(STRING)    	(null)         
+
+SetKeepAliveInterval    [IN ]KeepAliveInterval(UINT32)      	(null)         
+
+SetKeepAliveTime        [IN ]KeepAliveTime(UINT32)          	(null)         
+
+SetMTU                  [IN ]MTU(UINT32)                    	(null)         
+
+SetNumForwardPackets    [IN ]NumForwardPackets(UINT32)      	(null)         
+
+SetPMTUBHDetect         [IN ]PMTUBHDetectEnabled(BOOLEAN)   	(null)         
+
+SetPMTUDiscovery        [IN ]PMTUDiscoveryEnabled(BOOLEAN)  	(null)         
+
+SetTcpMaxConnectRetransmissions[IN ]TcpMaxConnectRetransmissions(UINT32)	(null)         
+
+SetTcpMaxDataRetransmissions[IN ]TcpMaxDataRetransmissions(UINT32)	(null)         
+
+SetTcpNumConnections    [IN ]TcpNumConnections(UINT32)      	(null)         
+
+SetTcpUseRFC1122UrgentPointer[IN ]TcpUseRFC1122UrgentPointer(BOOLEAN)	(null)         
+
+SetTcpWindowSize        [IN ]TcpWindowSize(UINT16)          	(null)         
+
+SetTcpipNetbios         [IN ]TcpipNetbiosOptions(UINT32)    	(null)         
+
+SetWINSServer           [IN ]WINSPrimaryServer(STRING)      	(null)         
+
+			[IN ]WINSSecondaryServer(STRING)    	
+
+

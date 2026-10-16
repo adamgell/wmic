@@ -1,0 +1,9 @@
+
+Method execution operations.
+USAGE:
+
+CALL <method name> [<actual paramlist>]
+NOTE: <actual paramlist> ::= <actual param> | <actual param>,  <actual paramlist>
+
+User defined verb(s) or method(s) not available for the target WMI class.
+

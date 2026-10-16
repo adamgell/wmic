@@ -1,0 +1,120 @@
+{
+  "schema_version": 1,
+  "reference_sha256": "2EF794C4940AFEA56C6D6D3B9BC9E66965BC7333E79C5DCB2DEF3C0E36F0834C",
+  "cases": [
+    {
+      "id": "reset-namespace",
+      "arguments": "/namespace:\"\" os get Caption",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "reset-node",
+      "arguments": "/node:\"\" os get Caption",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "where-unquoted",
+      "arguments": "os where Version like '10.%' get Caption,Version",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "where-parenthesized",
+      "arguments": "os where (Version like '10.%') get Caption,Version",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "where-double-value",
+      "arguments": "os where Caption=\"Microsoft Windows 11 Pro\" get Version",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "where-outer-quoted",
+      "arguments": "os where \"Caption='Microsoft Windows 11 Pro'\" get Version",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "get-quoted-properties",
+      "arguments": "os get \"Caption,Version\"",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "get-spaced-properties",
+      "arguments": "os get Caption, Version",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "get-without-comma",
+      "arguments": "os get Caption Version",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "get-abbreviation",
+      "arguments": "os ge Caption",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "value-abbreviation",
+      "arguments": "os get Caption /v",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "modifier-all",
+      "arguments": "os get Caption /all",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "unknown-verb",
+      "arguments": "os nonsense",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "global-after-alias",
+      "arguments": "os /namespace:root\\cimv2 get Caption",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "global-after-get",
+      "arguments": "os get Caption /namespace:root\\cimv2",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "class-get",
+      "arguments": "class Win32_OperatingSystem get Caption",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-brief",
+      "arguments": "/?:BRIEF",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "quit-one-shot",
+      "arguments": "quit",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "exit-one-shot",
+      "arguments": "exit",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    }
+  ]
+}

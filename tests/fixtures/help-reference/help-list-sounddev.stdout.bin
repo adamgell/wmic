@@ -1,0 +1,24 @@
+
+Property list operations.
+USAGE:
+
+LIST [<list format>] [<list switches>]
+
+The following LIST formats are available:
+
+BRIEF                     - Manufacturer, Name, Status, StatusInfo
+FULL                      - Availability, ConfigManagerErrorCode, ConfigManagerUserConfig, DMABufferSize, Description, DeviceID, ErrorCleared, ErrorDescription, InstallDate, LastErrorCode, MPU401Address, Manufacturer, Name, PNPDeviceID, PowerManagementCapabilities, PowerManagementSupported, ProductName, Status, StatusInfo
+INSTANCE                  - Name
+STATUS                    - ConfigManagerUserConfig, Name, Status, StatusInfo
+SYSTEM                    - __CLASS, __DERIVATION, __DYNASTY, __GENUS, __NAMESPACE, __PATH, __PROPERTY_COUNT, __RELPATH, __SERVER, __SUPERCLASS
+
+The following LIST switches are available:
+
+/TRANSLATE:<table name>      - Translate output via values from <table name>.
+/EVERY:<interval> [/REPEAT:<repeat count>] - Returns value every (X interval) seconds, If /REPEAT specified the command is executed <repeat count> times.
+/FORMAT:<format specifier>   - Keyword/XSL filename to process the XML results.
+
+NOTE: Order of /TRANSLATE and /FORMAT switches influences the appearance of output.
+Case1: If /TRANSLATE precedes /FORMAT, then translation of results will be followed by formatting.
+Case2: If /TRANSLATE succeeds /FORMAT, then translation of the formatted results will be done.
+

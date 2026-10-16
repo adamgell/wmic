@@ -1,0 +1,47 @@
+
+Property get operations.
+USAGE:
+
+GET [<property list>] [<get switches>]
+NOTE: <property list> ::= <property name> | <property name>,  <property list>
+
+The following properties are available:
+Property				Type			Operation
+========				====			=========
+Availability                       	N/A                 	N/A       
+Bandwidth                          	N/A                 	N/A       
+ConfigManagerErrorCode             	N/A                 	N/A       
+ConfigManagerUserConfig            	N/A                 	N/A       
+Description                        	N/A                 	N/A       
+DeviceID                           	N/A                 	N/A       
+DisplayType                        	N/A                 	N/A       
+ErrorCleared                       	N/A                 	N/A       
+ErrorDescription                   	N/A                 	N/A       
+InstallDate                        	N/A                 	N/A       
+IsLocked                           	N/A                 	N/A       
+LastErrorCode                      	N/A                 	N/A       
+MonitorManufacturer                	N/A                 	N/A       
+MonitorType                        	N/A                 	N/A       
+Name                               	N/A                 	N/A       
+PNPDeviceID                        	N/A                 	N/A       
+PixelsPerXLogicalInch              	N/A                 	N/A       
+PixelsPerYLogicalInch              	N/A                 	N/A       
+PowerManagementCapabilities        	N/A                 	N/A       
+PowerManagementSupported           	N/A                 	N/A       
+ScreenHeight                       	N/A                 	N/A       
+ScreenWidth                        	N/A                 	N/A       
+Status                             	N/A                 	N/A       
+StatusInfo                         	N/A                 	N/A       
+
+The following GET switches are available:
+
+/VALUE                       - Return value.
+/ALL(default)                - Return the data and metadata for the attribute.
+/TRANSLATE:<table name>      - Translate output via values from <table name>.
+/EVERY:<interval> [/REPEAT:<repeat count>] - Returns value every (X interval) seconds, If /REPEAT specified the command is executed <repeat count> times.
+/FORMAT:<format specifier>   - Keyword/XSL filename to process the XML results.
+
+NOTE: Order of /TRANSLATE and /FORMAT switches influences the appearance of output.
+Case1: If /TRANSLATE precedes /FORMAT, then translation of results will be followed by formatting.
+Case2: If /TRANSLATE succeeds /FORMAT, then translation of the formatted results will be done.
+

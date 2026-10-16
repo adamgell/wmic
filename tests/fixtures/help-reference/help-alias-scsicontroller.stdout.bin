@@ -1,0 +1,15 @@
+
+SCSICONTROLLER - SCSI Controller management.  
+
+HINT: BNF for Alias usage.
+(<alias> [WMIObject] | <alias> [<path where>] | [<alias>] <path where>) [<verb clause>].
+
+USAGE:
+
+SCSICONTROLLER ASSOC [<format specifier>]
+SCSICONTROLLER CALL <method name> [<actual param list>]
+SCSICONTROLLER CREATE <assign list>
+SCSICONTROLLER DELETE
+SCSICONTROLLER GET [<property list>] [<get switches>]
+SCSICONTROLLER LIST [<list format>] [<list switches>]
+

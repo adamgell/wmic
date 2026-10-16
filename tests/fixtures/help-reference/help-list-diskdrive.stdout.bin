@@ -1,0 +1,26 @@
+
+Property list operations.
+USAGE:
+
+LIST [<list format>] [<list switches>]
+
+The following LIST formats are available:
+
+BRIEF                     - Partitions, DeviceID, Model, Size, Caption
+CONFIG                    - BytesPerSector, ConfigManagerUserConfig, DefaultBlockSize, DeviceID, Index, InstallDate, InterfaceType, MaxBlockSize, MaxMediaSize, MinBlockSize, NumberOfMediaSupported, Partitions, SectorsPerTrack, Size, TotalCylinders, TotalHeads, TotalSectors, TotalTracks, TracksPerCylinder
+FULL                      - Availability, BytesPerSector, Capabilities, CapabilityDescriptions, CompressionMethod, ConfigManagerErrorCode, ConfigManagerUserConfig, DefaultBlockSize, Description, DeviceID, ErrorCleared, ErrorDescription, ErrorMethodology, Index, InstallDate, InterfaceType, LastErrorCode, Manufacturer, MaxBlockSize, MaxMediaSize, MediaLoaded, MediaType, MinBlockSize, Model, Name, NeedsCleaning, NumberOfMediaSupported, Partitions, PNPDeviceID, PowerManagementCapabilities, PowerManagementSupported, SCSIBus, SCSILogicalUnit, SCSIPort, SCSITargetId, SectorsPerTrack, Signature, Size, Status, StatusInfo, SystemName, TotalCylinders, TotalHeads, TotalSectors, TotalTracks, TracksPerCylinder
+INSTANCE                  - Index
+SCSI                      - DeviceID, Index, SCSIBus, SCSILogicalUnit, SCSIPort, SCSITargetId
+STATUS                    - ConfigManagerErrorCode, LastErrorCode, NeedsCleaning, Status, DeviceID, StatusInfo, Partitions
+SYSTEM                    - __CLASS, __DERIVATION, __DYNASTY, __GENUS, __NAMESPACE, __PATH, __PROPERTY_COUNT, __RELPATH, __SERVER, __SUPERCLASS
+
+The following LIST switches are available:
+
+/TRANSLATE:<table name>      - Translate output via values from <table name>.
+/EVERY:<interval> [/REPEAT:<repeat count>] - Returns value every (X interval) seconds, If /REPEAT specified the command is executed <repeat count> times.
+/FORMAT:<format specifier>   - Keyword/XSL filename to process the XML results.
+
+NOTE: Order of /TRANSLATE and /FORMAT switches influences the appearance of output.
+Case1: If /TRANSLATE precedes /FORMAT, then translation of results will be followed by formatting.
+Case2: If /TRANSLATE succeeds /FORMAT, then translation of the formatted results will be done.
+

@@ -1,0 +1,14 @@
+
+SOUNDDEV - Sound Device management.
+
+HINT: BNF for Alias usage.
+(<alias> [WMIObject] | <alias> [<path where>] | [<alias>] <path where>) [<verb clause>].
+
+USAGE:
+
+SOUNDDEV ASSOC [<format specifier>]
+SOUNDDEV CREATE <assign list>
+SOUNDDEV DELETE
+SOUNDDEV GET [<property list>] [<get switches>]
+SOUNDDEV LIST [<list format>] [<list switches>]
+

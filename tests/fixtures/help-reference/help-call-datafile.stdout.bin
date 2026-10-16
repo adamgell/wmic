@@ -1,0 +1,74 @@
+
+Method execution operations.
+USAGE:
+
+CALL <method name> [<actual paramlist>]
+NOTE: <actual paramlist> ::= <actual param> | <actual param>,  <actual paramlist>
+
+The following alias verb(s)/method(s) are available:
+
+Call			[ In/Out ]Params&type			Status
+====			=====================			======
+ChangeSecurityPermissions[IN ]Option(UINT32)                 	(null)         
+
+			[IN ]SecurityDescriptor(OBJECT)     	
+
+ChangeSecurityPermissionsEx[IN ]Option(UINT32)                 	(null)         
+
+			[IN ]Recursive(BOOLEAN)             	
+
+			[IN ]SecurityDescriptor(OBJECT)     	
+
+			[IN ]StartFileName(STRING)          	
+
+			[OUT]StopFileName(STRING)           	
+
+Compress                					(null)         
+
+
+CompressEx              [IN ]Recursive(BOOLEAN)             	(null)         
+
+			[IN ]StartFileName(STRING)          	
+
+			[OUT]StopFileName(STRING)           	
+
+Copy                    [IN ]FileName(STRING)               	(null)         
+
+CopyEx                  [IN ]FileName(STRING)               	(null)         
+
+			[IN ]Recursive(BOOLEAN)             	
+
+			[IN ]StartFileName(STRING)          	
+
+			[OUT]StopFileName(STRING)           	
+
+Delete                  					(null)         
+
+
+DeleteEx                [IN ]StartFileName(STRING)          	(null)         
+
+			[OUT]StopFileName(STRING)           	
+
+GetEffectivePermission  [IN ]Permissions(UINT32)            	(null)         
+
+Rename                  [IN ]FileName(STRING)               	(null)         
+
+TakeOwnerShip           					(null)         
+
+
+TakeOwnerShipEx         [IN ]Recursive(BOOLEAN)             	(null)         
+
+			[IN ]StartFileName(STRING)          	
+
+			[OUT]StopFileName(STRING)           	
+
+Uncompress              					(null)         
+
+
+UncompressEx            [IN ]Recursive(BOOLEAN)             	(null)         
+
+			[IN ]StartFileName(STRING)          	
+
+			[OUT]StopFileName(STRING)           	
+
+

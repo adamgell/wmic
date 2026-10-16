@@ -1,0 +1,466 @@
+{
+  "schema_version": 1,
+  "profile": {
+    "role": "reference",
+    "executable": "C:\\Windows\\System32\\wbem\\WMIC.exe",
+    "executable_sha256": "2EF794C4940AFEA56C6D6D3B9BC9E66965BC7333E79C5DCB2DEF3C0E36F0834C",
+    "version": "10.0.26100.1 (WinBuild.160101.0800)",
+    "signature": "Valid",
+    "computer": "DESKTOP-N4H9E7R",
+    "identity": "NT AUTHORITY\\SYSTEM",
+    "launcher_architecture": "ARM64",
+    "culture": "en-US",
+    "ui_culture": "en-US",
+    "ansi_codepage": 1252,
+    "oem_codepage": 437,
+    "console_output_codepage": 437,
+    "directory": "C:\\",
+    "launch_api": "CreateProcessW",
+    "output_mode": "native pipes"
+  },
+  "cases": [
+    {
+      "id": "global-help",
+      "arguments_utf16_base64": "LwA/AA==",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiACAALwA/AA==",
+      "state": "completed",
+      "exit_status": 0,
+      "duration_ms": 79,
+      "process_id": 14396,
+      "stdout": {
+        "file": "global-help.stdout.bin",
+        "bytes": 7379,
+        "sha256": "1fc2344de7fe22b0b10891888dbed20494bffffb0e842c44953e6594fa0b50d5"
+      },
+      "stderr": {
+        "file": "global-help.stderr.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "id": "context",
+      "arguments_utf16_base64": "YwBvAG4AdABlAHgAdAA=",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiACAAYwBvAG4AdABlAHgAdAA=",
+      "state": "completed",
+      "exit_status": 0,
+      "duration_ms": 43,
+      "process_id": 12220,
+      "stdout": {
+        "file": "context.stdout.bin",
+        "bytes": 534,
+        "sha256": "762a6351bfd56046441bfe1ad07db3b896129415d69bba302f517f4635a6b567"
+      },
+      "stderr": {
+        "file": "context.stderr.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "id": "os-help",
+      "arguments_utf16_base64": "bwBzACAALwA/AA==",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiACAAbwBzACAALwA/AA==",
+      "state": "completed",
+      "exit_status": 0,
+      "duration_ms": 50,
+      "process_id": 7900,
+      "stdout": {
+        "file": "os-help.stdout.bin",
+        "bytes": 422,
+        "sha256": "0f33420f5c18f19d0f8e58bf5d561c149877ff9690beec31844405012301c991"
+      },
+      "stderr": {
+        "file": "os-help.stderr.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "id": "os-get-help",
+      "arguments_utf16_base64": "bwBzACAAZwBlAHQAIAAvAD8A",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiACAAbwBzACAAZwBlAHQAIAAvAD8A",
+      "state": "completed",
+      "exit_status": 0,
+      "duration_ms": 50,
+      "process_id": 9484,
+      "stdout": {
+        "file": "os-get-help.stdout.bin",
+        "bytes": 4626,
+        "sha256": "74a70fbaf56110f62fbfcfc553896786ae0153ee7d3c8c6bc9552e20a4781205"
+      },
+      "stderr": {
+        "file": "os-get-help.stderr.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "id": "os-list-help",
+      "arguments_utf16_base64": "bwBzACAAbABpAHMAdAAgAC8APwA=",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiACAAbwBzACAAbABpAHMAdAAgAC8APwA=",
+      "state": "completed",
+      "exit_status": 0,
+      "duration_ms": 55,
+      "process_id": 8456,
+      "stdout": {
+        "file": "os-list-help.stdout.bin",
+        "bytes": 2177,
+        "sha256": "c6cdda3df37f5040c4128b424777b5d97f167e8190ce85a08494190e34763e03"
+      },
+      "stderr": {
+        "file": "os-list-help.stderr.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "id": "process-call-help",
+      "arguments_utf16_base64": "cAByAG8AYwBlAHMAcwAgAGMAYQBsAGwAIAAvAD8A",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiACAAcAByAG8AYwBlAHMAcwAgAGMAYQBsAGwAIAAvAD8A",
+      "state": "completed",
+      "exit_status": 0,
+      "duration_ms": 54,
+      "process_id": 13936,
+      "stdout": {
+        "file": "process-call-help.stdout.bin",
+        "bytes": 955,
+        "sha256": "42a039f83c3bd8e0800e3f93787c3dbd4b486e9a0ed21c5eeb182b917e860398"
+      },
+      "stderr": {
+        "file": "process-call-help.stderr.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "id": "os-get",
+      "arguments_utf16_base64": "bwBzACAAZwBlAHQAIABDAGEAcAB0AGkAbwBuACwAVgBlAHIAcwBpAG8AbgA=",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiACAAbwBzACAAZwBlAHQAIABDAGEAcAB0AGkAbwBuACwAVgBlAHIAcwBpAG8AbgA=",
+      "state": "completed",
+      "exit_status": 0,
+      "duration_ms": 117,
+      "process_id": 5544,
+      "stdout": {
+        "file": "os-get.stdout.bin",
+        "bytes": 85,
+        "sha256": "96ed17ca852287fc0093bbe89f0502c8a09ed5fac1e7e02441b2af874ab32c83"
+      },
+      "stderr": {
+        "file": "os-get.stderr.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "id": "os-get-reversed",
+      "arguments_utf16_base64": "bwBzACAAZwBlAHQAIABWAGUAcgBzAGkAbwBuACwAQwBhAHAAdABpAG8AbgA=",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiACAAbwBzACAAZwBlAHQAIABWAGUAcgBzAGkAbwBuACwAQwBhAHAAdABpAG8AbgA=",
+      "state": "completed",
+      "exit_status": 0,
+      "duration_ms": 76,
+      "process_id": 12092,
+      "stdout": {
+        "file": "os-get-reversed.stdout.bin",
+        "bytes": 85,
+        "sha256": "96ed17ca852287fc0093bbe89f0502c8a09ed5fac1e7e02441b2af874ab32c83"
+      },
+      "stderr": {
+        "file": "os-get-reversed.stderr.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "id": "os-get-value",
+      "arguments_utf16_base64": "bwBzACAAZwBlAHQAIABDAGEAcAB0AGkAbwBuACwAVgBlAHIAcwBpAG8AbgAgAC8AdgBhAGwAdQBlAA==",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiACAAbwBzACAAZwBlAHQAIABDAGEAcAB0AGkAbwBuACwAVgBlAHIAcwBpAG8AbgAgAC8AdgBhAGwAdQBlAA==",
+      "state": "completed",
+      "exit_status": 0,
+      "duration_ms": 78,
+      "process_id": 12200,
+      "stdout": {
+        "file": "os-get-value.stdout.bin",
+        "bytes": 71,
+        "sha256": "f08b77e14f281f380bb9dae4b63a1faf115d80dfe913c920fa1d427742e7d610"
+      },
+      "stderr": {
+        "file": "os-get-value.stderr.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "id": "os-list-brief",
+      "arguments_utf16_base64": "bwBzACAAbABpAHMAdAAgAGIAcgBpAGUAZgA=",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiACAAbwBzACAAbABpAHMAdAAgAGIAcgBpAGUAZgA=",
+      "state": "completed",
+      "exit_status": 0,
+      "duration_ms": 77,
+      "process_id": 12432,
+      "stdout": {
+        "file": "os-list-brief.stdout.bin",
+        "bytes": 211,
+        "sha256": "21749cc9d3b44ab1882894f2a7ce9a93787071a533974747c467d3ee5cbc4c3b"
+      },
+      "stderr": {
+        "file": "os-list-brief.stderr.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "id": "os-get-csv",
+      "arguments_utf16_base64": "bwBzACAAZwBlAHQAIABDAGEAcAB0AGkAbwBuACwAVgBlAHIAcwBpAG8AbgAgAC8AZgBvAHIAbQBhAHQAOgBjAHMAdgA=",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiACAAbwBzACAAZwBlAHQAIABDAGEAcAB0AGkAbwBuACwAVgBlAHIAcwBpAG8AbgAgAC8AZgBvAHIAbQBhAHQAOgBjAHMAdgA=",
+      "state": "completed",
+      "exit_status": 0,
+      "duration_ms": 68,
+      "process_id": 1916,
+      "stdout": {
+        "file": "os-get-csv.stdout.bin",
+        "bytes": 80,
+        "sha256": "462ee9668c57e687d254961fb74f82e0e0126fe44d93cccc53a96fc949258e4b"
+      },
+      "stderr": {
+        "file": "os-get-csv.stderr.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "id": "os-get-rawxml",
+      "arguments_utf16_base64": "bwBzACAAZwBlAHQAIABDAGEAcAB0AGkAbwBuACwAVgBlAHIAcwBpAG8AbgAgAC8AZgBvAHIAbQBhAHQAOgByAGEAdwB4AG0AbAA=",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiACAAbwBzACAAZwBlAHQAIABDAGEAcAB0AGkAbwBuACwAVgBlAHIAcwBpAG8AbgAgAC8AZgBvAHIAbQBhAHQAOgByAGEAdwB4AG0AbAA=",
+      "state": "completed",
+      "exit_status": 0,
+      "duration_ms": 67,
+      "process_id": 1912,
+      "stdout": {
+        "file": "os-get-rawxml.stdout.bin",
+        "bytes": 1036,
+        "sha256": "f3e638767074988c2e4a918906f9aac1e0d39bf8b2d17d0b73b6740d80ea0303"
+      },
+      "stderr": {
+        "file": "os-get-rawxml.stderr.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "normalizations": [
+        {
+          "stream": "stdout",
+          "kind": "wmic-command-starttime"
+        }
+      ]
+    },
+    {
+      "id": "os-get-mof",
+      "arguments_utf16_base64": "bwBzACAAZwBlAHQAIABDAGEAcAB0AGkAbwBuACwAVgBlAHIAcwBpAG8AbgAgAC8AZgBvAHIAbQBhAHQAOgBtAG8AZgA=",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiACAAbwBzACAAZwBlAHQAIABDAGEAcAB0AGkAbwBuACwAVgBlAHIAcwBpAG8AbgAgAC8AZgBvAHIAbQBhAHQAOgBtAG8AZgA=",
+      "state": "completed",
+      "exit_status": 0,
+      "duration_ms": 65,
+      "process_id": 7372,
+      "stdout": {
+        "file": "os-get-mof.stdout.bin",
+        "bytes": 841,
+        "sha256": "fb97a4bb9a365187c4008b247eea19811870fc99c46ab9a354f23c494ce8a5d9"
+      },
+      "stderr": {
+        "file": "os-get-mof.stderr.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "id": "os-get-list",
+      "arguments_utf16_base64": "bwBzACAAZwBlAHQAIABDAGEAcAB0AGkAbwBuACwAVgBlAHIAcwBpAG8AbgAgAC8AZgBvAHIAbQBhAHQAOgBsAGkAcwB0AA==",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiACAAbwBzACAAZwBlAHQAIABDAGEAcAB0AGkAbwBuACwAVgBlAHIAcwBpAG8AbgAgAC8AZgBvAHIAbQBhAHQAOgBsAGkAcwB0AA==",
+      "state": "completed",
+      "exit_status": 0,
+      "duration_ms": 62,
+      "process_id": 5580,
+      "stdout": {
+        "file": "os-get-list.stdout.bin",
+        "bytes": 71,
+        "sha256": "f08b77e14f281f380bb9dae4b63a1faf115d80dfe913c920fa1d427742e7d610"
+      },
+      "stderr": {
+        "file": "os-get-list.stderr.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "id": "os-casefold",
+      "arguments_utf16_base64": "TwBTACAARwBlAFQAIABjAEEAcABUAGkATwBuACwAdgBFAHIAUwBpAE8AbgA=",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiACAATwBTACAARwBlAFQAIABjAEEAcABUAGkATwBuACwAdgBFAHIAUwBpAE8AbgA=",
+      "state": "completed",
+      "exit_status": 0,
+      "duration_ms": 65,
+      "process_id": 6100,
+      "stdout": {
+        "file": "os-casefold.stdout.bin",
+        "bytes": 85,
+        "sha256": "96ed17ca852287fc0093bbe89f0502c8a09ed5fac1e7e02441b2af874ab32c83"
+      },
+      "stderr": {
+        "file": "os-casefold.stderr.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "id": "path-os-get",
+      "arguments_utf16_base64": "cABhAHQAaAAgAFcAaQBuADMAMgBfAE8AcABlAHIAYQB0AGkAbgBnAFMAeQBzAHQAZQBtACAAZwBlAHQAIABDAGEAcAB0AGkAbwBuACwAVgBlAHIAcwBpAG8AbgA=",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiACAAcABhAHQAaAAgAFcAaQBuADMAMgBfAE8AcABlAHIAYQB0AGkAbgBnAFMAeQBzAHQAZQBtACAAZwBlAHQAIABDAGEAcAB0AGkAbwBuACwAVgBlAHIAcwBpAG8AbgA=",
+      "state": "completed",
+      "exit_status": 0,
+      "duration_ms": 66,
+      "process_id": 15088,
+      "stdout": {
+        "file": "path-os-get.stdout.bin",
+        "bytes": 85,
+        "sha256": "96ed17ca852287fc0093bbe89f0502c8a09ed5fac1e7e02441b2af874ab32c83"
+      },
+      "stderr": {
+        "file": "path-os-get.stderr.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "id": "os-where",
+      "arguments_utf16_base64": "bwBzACAAdwBoAGUAcgBlACAAIgBWAGUAcgBzAGkAbwBuACAAbABpAGsAZQAgACcAMQAwAC4AJQAnACIAIABnAGUAdAAgAEMAYQBwAHQAaQBvAG4ALABWAGUAcgBzAGkAbwBuAA==",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiACAAbwBzACAAdwBoAGUAcgBlACAAIgBWAGUAcgBzAGkAbwBuACAAbABpAGsAZQAgACcAMQAwAC4AJQAnACIAIABnAGUAdAAgAEMAYQBwAHQAaQBvAG4ALABWAGUAcgBzAGkAbwBuAA==",
+      "state": "completed",
+      "exit_status": 0,
+      "duration_ms": 70,
+      "process_id": 12580,
+      "stdout": {
+        "file": "os-where.stdout.bin",
+        "bytes": 85,
+        "sha256": "96ed17ca852287fc0093bbe89f0502c8a09ed5fac1e7e02441b2af874ab32c83"
+      },
+      "stderr": {
+        "file": "os-where.stderr.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "id": "os-empty",
+      "arguments_utf16_base64": "bwBzACAAdwBoAGUAcgBlACAAIgBWAGUAcgBzAGkAbwBuAD0AJwBfAF8AVwBNAEkAQwBfAFIARQBTAEUAQQBSAEMASABfAE4ATwBfAE0AQQBUAEMASABfAF8AJwAiACAAZwBlAHQAIABDAGEAcAB0AGkAbwBuAA==",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiACAAbwBzACAAdwBoAGUAcgBlACAAIgBWAGUAcgBzAGkAbwBuAD0AJwBfAF8AVwBNAEkAQwBfAFIARQBTAEUAQQBSAEMASABfAE4ATwBfAE0AQQBUAEMASABfAF8AJwAiACAAZwBlAHQAIABDAGEAcAB0AGkAbwBuAA==",
+      "state": "completed",
+      "exit_status": 0,
+      "duration_ms": 58,
+      "process_id": 4844,
+      "stdout": {
+        "file": "os-empty.stdout.bin",
+        "bytes": 6,
+        "sha256": "44d77e47b3618da142fc59ae22795fb2005824045758fa4f4dbbc64d9ab44453"
+      },
+      "stderr": {
+        "file": "os-empty.stderr.bin",
+        "bytes": 28,
+        "sha256": "0356a869fc7e6495bac33303b002935c317166d0ea5d403be162573cf01055d8"
+      }
+    },
+    {
+      "id": "alias-os-brief",
+      "arguments_utf16_base64": "YQBsAGkAYQBzACAAbwBzACAAbABpAHMAdAAgAGIAcgBpAGUAZgA=",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiACAAYQBsAGkAYQBzACAAbwBzACAAbABpAHMAdAAgAGIAcgBpAGUAZgA=",
+      "state": "completed",
+      "exit_status": 0,
+      "duration_ms": 61,
+      "process_id": 11252,
+      "stdout": {
+        "file": "alias-os-brief.stdout.bin",
+        "bytes": 127,
+        "sha256": "4a7de465fb018d2cf9591e455c704bbadae469abc3a45e9a949bae951c78e707"
+      },
+      "stderr": {
+        "file": "alias-os-brief.stderr.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "id": "error-property",
+      "arguments_utf16_base64": "bwBzACAAZwBlAHQAIABXAG0AaQBjAFIAZQBzAGUAYQByAGMAaABQAHIAbwBwAGUAcgB0AHkARABvAGUAcwBOAG8AdABFAHgAaQBzAHQA",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiACAAbwBzACAAZwBlAHQAIABXAG0AaQBjAFIAZQBzAGUAYQByAGMAaABQAHIAbwBwAGUAcgB0AHkARABvAGUAcwBOAG8AdABFAHgAaQBzAHQA",
+      "state": "completed",
+      "exit_status": 2147749911,
+      "duration_ms": 83,
+      "process_id": 14912,
+      "stdout": {
+        "file": "error-property.stdout.bin",
+        "bytes": 6,
+        "sha256": "44d77e47b3618da142fc59ae22795fb2005824045758fa4f4dbbc64d9ab44453"
+      },
+      "stderr": {
+        "file": "error-property.stderr.bin",
+        "bytes": 64,
+        "sha256": "1f57dbbd9635b184972a5d57b4bbaa8ab74dac051d3dfdbf93d95823a5d5ccea"
+      }
+    },
+    {
+      "id": "error-class",
+      "arguments_utf16_base64": "cABhAHQAaAAgAFcAbQBpAGMAUgBlAHMAZQBhAHIAYwBoAEMAbABhAHMAcwBEAG8AZQBzAE4AbwB0AEUAeABpAHMAdAAgAGcAZQB0ACAATgBhAG0AZQA=",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiACAAcABhAHQAaAAgAFcAbQBpAGMAUgBlAHMAZQBhAHIAYwBoAEMAbABhAHMAcwBEAG8AZQBzAE4AbwB0AEUAeABpAHMAdAAgAGcAZQB0ACAATgBhAG0AZQA=",
+      "state": "completed",
+      "exit_status": 2147749890,
+      "duration_ms": 56,
+      "process_id": 1748,
+      "stdout": {
+        "file": "error-class.stdout.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "file": "error-class.stderr.bin",
+        "bytes": 35,
+        "sha256": "6846bf4365133830ac9edea65d405015cf6d7020bd1478aeb25544edb8eaedca"
+      }
+    },
+    {
+      "id": "error-alias",
+      "arguments_utf16_base64": "VwBtAGkAYwBSAGUAcwBlAGEAcgBjAGgAQQBsAGkAYQBzAEQAbwBlAHMATgBvAHQARQB4AGkAcwB0ACAAZwBlAHQAIABOAGEAbQBlAA==",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiACAAVwBtAGkAYwBSAGUAcwBlAGEAcgBjAGgAQQBsAGkAYQBzAEQAbwBlAHMATgBvAHQARQB4AGkAcwB0ACAAZwBlAHQAIABOAGEAbQBlAA==",
+      "state": "completed",
+      "exit_status": 44135,
+      "duration_ms": 66,
+      "process_id": 11948,
+      "stdout": {
+        "file": "error-alias.stdout.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "file": "error-alias.stderr.bin",
+        "bytes": 51,
+        "sha256": "a27e09461b93c74bd6660fc75c0d798411f42f62e0eae7cb16e78fea5b822178"
+      }
+    },
+    {
+      "id": "error-switch",
+      "arguments_utf16_base64": "LwB3AG0AaQBjAF8AcgBlAHMAZQBhAHIAYwBoAF8AaQBuAHYAYQBsAGkAZAA6ADEAIABvAHMAIABnAGUAdAAgAEMAYQBwAHQAaQBvAG4A",
+      "command_line_utf16_base64": "IgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAdwBiAGUAbQBcAFcATQBJAEMALgBlAHgAZQAiACAALwB3AG0AaQBjAF8AcgBlAHMAZQBhAHIAYwBoAF8AaQBuAHYAYQBsAGkAZAA6ADEAIABvAHMAIABnAGUAdAAgAEMAYQBwAHQAaQBvAG4A",
+      "state": "completed",
+      "exit_status": 44125,
+      "duration_ms": 54,
+      "process_id": 12104,
+      "stdout": {
+        "file": "error-switch.stdout.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "file": "error-switch.stderr.bin",
+        "bytes": 25,
+        "sha256": "1edf8f8f0d529fde2b0228e74e7e4eab15149496b64ee3bb8acbb15d1978f220"
+      }
+    }
+  ]
+}

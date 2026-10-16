@@ -1,0 +1,39 @@
+
+Property get operations.
+USAGE:
+
+GET [<property list>] [<get switches>]
+NOTE: <property list> ::= <property name> | <property name>,  <property list>
+
+The following properties are available:
+Property				Type			Operation
+========				====			=========
+Category                           	N/A                 	N/A       
+CategoryString                     	N/A                 	N/A       
+ComputerName                       	N/A                 	N/A       
+Data                               	N/A                 	N/A       
+EventCode                          	N/A                 	N/A       
+EventIdentifier                    	N/A                 	N/A       
+InsertionStrings                   	N/A                 	N/A       
+LogFile                            	N/A                 	N/A       
+Message                            	N/A                 	N/A       
+RecordNumber                       	N/A                 	N/A       
+SourceName                         	N/A                 	N/A       
+TimeGenerated                      	N/A                 	N/A       
+TimeWritten                        	N/A                 	N/A       
+Type                               	N/A                 	N/A       
+TypeEvent                          	N/A                 	N/A       
+UserName                           	N/A                 	N/A       
+
+The following GET switches are available:
+
+/VALUE                       - Return value.
+/ALL(default)                - Return the data and metadata for the attribute.
+/TRANSLATE:<table name>      - Translate output via values from <table name>.
+/EVERY:<interval> [/REPEAT:<repeat count>] - Returns value every (X interval) seconds, If /REPEAT specified the command is executed <repeat count> times.
+/FORMAT:<format specifier>   - Keyword/XSL filename to process the XML results.
+
+NOTE: Order of /TRANSLATE and /FORMAT switches influences the appearance of output.
+Case1: If /TRANSLATE precedes /FORMAT, then translation of results will be followed by formatting.
+Case2: If /TRANSLATE succeeds /FORMAT, then translation of the formatted results will be done.
+

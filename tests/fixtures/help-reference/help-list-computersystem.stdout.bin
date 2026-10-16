@@ -1,0 +1,26 @@
+
+Property list operations.
+USAGE:
+
+LIST [<list format>] [<list switches>]
+
+The following LIST formats are available:
+
+BRIEF                     - Domain, Manufacturer, Model, Name, PrimaryOwnerName, TotalPhysicalMemory
+FULL                      - AdminPasswordStatus, AutomaticResetBootOption, AutomaticResetCapability, BootOptionOnLimit, BootOptionOnWatchDog, BootROMSupported, BootupState, Caption, ChassisBootupState, CreationClassName, CurrentTimeZone, DaylightInEffect, Description, Domain, DomainRole, EnableDaylightSavingsTime, FrontPanelResetStatus, InfraredSupported, InitialLoadInfo, InstallDate, KeyboardPasswordStatus, LastLoadInfo, Manufacturer, Model, Name, NameFormat, NetworkServerModeEnabled, NumberOfProcessors, OEMStringArray, PartOfDomain, PauseAfterReset, PowerManagementCapabilities, PowerManagementSupported, PowerOnPasswordStatus, PowerState, PowerSupplyState, PrimaryOwnerContact, PrimaryOwnerName, ResetCapability, ResetCount, ResetLimit, Roles, Status, SupportContactDescription, SystemStartupDelay, SystemStartupOptions, SystemStartupSetting, SystemType, ThermalState, TotalPhysicalMemory, UserName, Workgroup, WakeUpType
+INSTANCE                  - Name
+POWER                     - Name, PowerManagementCapabilities, PowerManagementSupported, PowerOnPasswordStatus, PowerState, PowerSupplyState
+STATUS                    - AdminPasswordStatus, BootupState, ChassisBootupState, KeyboardPasswordStatus, PowerOnPasswordStatus, PowerSupplyState, PowerState, FrontPanelResetStatus, ThermalState, Status, Name
+SYSTEM                    - __CLASS, __DERIVATION, __DYNASTY, __GENUS, __NAMESPACE, __PATH, __PROPERTY_COUNT, __RELPATH, __SERVER, __SUPERCLASS
+WRITEABLE                 - AutomaticResetBootOption, CurrentTimeZone, EnableDaylightSavingsTime, Roles, SystemStartupDelay, SystemStartupOptions, SystemStartupSetting, Workgroup
+
+The following LIST switches are available:
+
+/TRANSLATE:<table name>      - Translate output via values from <table name>.
+/EVERY:<interval> [/REPEAT:<repeat count>] - Returns value every (X interval) seconds, If /REPEAT specified the command is executed <repeat count> times.
+/FORMAT:<format specifier>   - Keyword/XSL filename to process the XML results.
+
+NOTE: Order of /TRANSLATE and /FORMAT switches influences the appearance of output.
+Case1: If /TRANSLATE precedes /FORMAT, then translation of results will be followed by formatting.
+Case2: If /TRANSLATE succeeds /FORMAT, then translation of the formatted results will be done.
+

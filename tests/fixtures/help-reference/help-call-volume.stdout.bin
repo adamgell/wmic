@@ -1,0 +1,55 @@
+
+Method execution operations.
+USAGE:
+
+CALL <method name> [<actual paramlist>]
+NOTE: <actual paramlist> ::= <actual param> | <actual param>,  <actual paramlist>
+
+The following alias verb(s)/method(s) are available:
+
+Call			[ In/Out ]Params&type			Status
+====			=====================			======
+AddMountPoint           [IN ]Directory(STRING)              	(null)         
+
+Chkdsk                  [IN ]FixErrors(BOOLEAN)             	(null)         
+
+			[IN ]ForceDismount(BOOLEAN)         	
+
+			[IN ]OkToRunAtBootUp(BOOLEAN)       	
+
+			[IN ]RecoverBadSectors(BOOLEAN)     	
+
+			[IN ]SkipFolderCycle(BOOLEAN)       	
+
+			[IN ]VigorousIndexCheck(BOOLEAN)    	
+
+Defrag                  [IN ]Force(BOOLEAN)                 	(null)         
+
+			[OUT]DefragAnalysis(OBJECT)         	
+
+DefragAnalysis          [OUT]DefragAnalysis(OBJECT)         	(null)         
+
+			[OUT]DefragRecommended(BOOLEAN)     	
+
+Dismount                [IN ]Force(BOOLEAN)                 	(null)         
+
+			[IN ]Permanent(BOOLEAN)             	
+
+ExcludeFromAutoChk      [IN ]Volume(ARRAY OF STRING)        	(null)         
+
+Format                  [IN ]ClusterSize(UINT32)            	(null)         
+
+			[IN ]EnableCompression(BOOLEAN)     	
+
+			[IN ]FileSystem(STRING)             	
+
+			[IN ]Label(STRING)                  	
+
+			[IN ]QuickFormat(BOOLEAN)           	
+
+Mount                   					(null)         
+
+
+ScheduleAutoChk         [IN ]Volume(ARRAY OF STRING)        	(null)         
+
+

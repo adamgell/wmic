@@ -1,0 +1,28 @@
+
+Method execution operations.
+USAGE:
+
+CALL <method name> [<actual paramlist>]
+NOTE: <actual paramlist> ::= <actual param> | <actual param>,  <actual paramlist>
+
+The following alias verb(s)/method(s) are available:
+
+Call			[ In/Out ]Params&type			Status
+====			=====================			======
+Chkdsk                  [IN ]FixErrors(BOOLEAN)             	(null)         
+
+			[IN ]ForceDismount(BOOLEAN)         	
+
+			[IN ]OkToRunAtBootUp(BOOLEAN)       	
+
+			[IN ]RecoverBadSectors(BOOLEAN)     	
+
+			[IN ]SkipFolderCycle(BOOLEAN)       	
+
+			[IN ]VigorousIndexCheck(BOOLEAN)    	
+
+ExcludeFromAutochk      [IN ]LogicalDisk(ARRAY OF STRING)   	(null)         
+
+ScheduleAutoChk         [IN ]LogicalDisk(ARRAY OF STRING)   	(null)         
+
+

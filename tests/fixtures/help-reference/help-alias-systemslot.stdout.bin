@@ -1,0 +1,14 @@
+
+SYSTEMSLOT - Management of physical connection points including ports,  slots and peripherals, and proprietary connections points.
+
+HINT: BNF for Alias usage.
+(<alias> [WMIObject] | <alias> [<path where>] | [<alias>] <path where>) [<verb clause>].
+
+USAGE:
+
+SYSTEMSLOT ASSOC [<format specifier>]
+SYSTEMSLOT CREATE <assign list>
+SYSTEMSLOT DELETE
+SYSTEMSLOT GET [<property list>] [<get switches>]
+SYSTEMSLOT LIST [<list format>] [<list switches>]
+

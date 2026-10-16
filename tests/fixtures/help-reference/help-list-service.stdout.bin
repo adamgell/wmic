@@ -1,0 +1,26 @@
+
+Property list operations.
+USAGE:
+
+LIST [<list format>] [<list switches>]
+
+The following LIST formats are available:
+
+BRIEF                     - ExitCode, Name, ProcessId, StartMode, State, Status
+CONFIG                    - DesktopInteract, ErrorControl, Name, PathName, ServiceType, StartMode
+CONTROL                   - AcceptPause, AcceptStop, ErrorControl, Name, StartMode, StartName
+FULL                      - AcceptPause, AcceptStop, Caption, CheckPoint, CreationClassName, Description, DesktopInteract, DisplayName, ErrorControl, ExitCode, InstallDate, Name, PathName, ProcessId, ServiceSpecificExitCode, ServiceType, StartMode, StartName, Started, State, Status, SystemCreationClassName, SystemName, TagId, WaitHint
+INSTANCE                  - Name
+STATUS                    - Name, Status, ExitCode
+SYSTEM                    - __CLASS, __DERIVATION, __DYNASTY, __GENUS, __NAMESPACE, __PATH, __PROPERTY_COUNT, __RELPATH, __SERVER, __SUPERCLASS
+
+The following LIST switches are available:
+
+/TRANSLATE:<table name>      - Translate output via values from <table name>.
+/EVERY:<interval> [/REPEAT:<repeat count>] - Returns value every (X interval) seconds, If /REPEAT specified the command is executed <repeat count> times.
+/FORMAT:<format specifier>   - Keyword/XSL filename to process the XML results.
+
+NOTE: Order of /TRANSLATE and /FORMAT switches influences the appearance of output.
+Case1: If /TRANSLATE precedes /FORMAT, then translation of results will be followed by formatting.
+Case2: If /TRANSLATE succeeds /FORMAT, then translation of the formatted results will be done.
+

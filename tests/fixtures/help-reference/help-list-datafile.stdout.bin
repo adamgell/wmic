@@ -1,0 +1,24 @@
+
+Property list operations.
+USAGE:
+
+LIST [<list format>] [<list switches>]
+
+The following LIST formats are available:
+
+BRIEF                     - Compressed, Encrypted, Size, Hidden, Name, Readable, System File, Version, Writeable
+FULL                      - Access Rights, Should Be Archived, Caption, Compressed, Compression Method, Class Name, Creation Date, Computer System Class Name, Computer System Name, Description, Drive, Eight Dot Three File Name, Encrypted, Encryption Method, File Extension, File Name, Size, File Type, File System Class Name, File System Name, Hidden, Install Date, Current File Open Count, Last Accessed, Last Modified, Manufacturer, Name, Path, Readable, Status, System File, Version, Writeable
+INSTANCE                  - Name
+STATUS                    - Status, Name
+SYSTEM                    - __CLASS, __DERIVATION, __DYNASTY, __GENUS, __NAMESPACE, __PATH, __PROPERTY_COUNT, __RELPATH, __SERVER, __SUPERCLASS
+
+The following LIST switches are available:
+
+/TRANSLATE:<table name>      - Translate output via values from <table name>.
+/EVERY:<interval> [/REPEAT:<repeat count>] - Returns value every (X interval) seconds, If /REPEAT specified the command is executed <repeat count> times.
+/FORMAT:<format specifier>   - Keyword/XSL filename to process the XML results.
+
+NOTE: Order of /TRANSLATE and /FORMAT switches influences the appearance of output.
+Case1: If /TRANSLATE precedes /FORMAT, then translation of results will be followed by formatting.
+Case2: If /TRANSLATE succeeds /FORMAT, then translation of the formatted results will be done.
+

@@ -1,0 +1,15 @@
+
+NTDOMAIN - NT Domain management.  
+
+HINT: BNF for Alias usage.
+(<alias> [WMIObject] | <alias> [<path where>] | [<alias>] <path where>) [<verb clause>].
+
+USAGE:
+
+NTDOMAIN ASSOC [<format specifier>]
+NTDOMAIN CREATE <assign list>
+NTDOMAIN DELETE
+NTDOMAIN GET [<property list>] [<get switches>]
+NTDOMAIN LIST [<list format>] [<list switches>]
+NTDOMAIN SET [<assign list>]
+

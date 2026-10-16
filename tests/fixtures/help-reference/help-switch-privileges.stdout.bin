@@ -1,0 +1,7 @@
+
+PRIVILEGES - Enable or disable all privileges.
+USAGE:
+
+/PRIVILEGES:<option>
+NOTE: Allowed value(s) for <option> is either ENABLE or DISABLE.
+

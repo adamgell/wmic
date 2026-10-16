@@ -1,0 +1,24 @@
+
+Property list operations.
+USAGE:
+
+LIST [<list format>] [<list switches>]
+
+The following LIST formats are available:
+
+BRIEF                     - NumberOfBlocks, BootPartition, Name, PrimaryPartition, Size, Index
+FULL                      - Access, Availability, BlockSize, Bootable, BootPartition, ConfigManagerErrorCode, ConfigManagerUserConfig, Description, DeviceID, DiskIndex, ErrorCleared, ErrorDescription, ErrorMethodology, HiddenSectors, Index, InstallDate, LastErrorCode, Name, NumberOfBlocks, PNPDeviceID, PowerManagementCapabilities, PowerManagementSupported, PrimaryPartition, Purpose, RewritePartition, Size, StartingOffset, Status, StatusInfo, Type
+INSTANCE                  - Index
+STATUS                    - Index, Status, StatusInfo, Name
+SYSTEM                    - __CLASS, __DERIVATION, __DYNASTY, __GENUS, __NAMESPACE, __PATH, __PROPERTY_COUNT, __RELPATH, __SERVER, Name
+
+The following LIST switches are available:
+
+/TRANSLATE:<table name>      - Translate output via values from <table name>.
+/EVERY:<interval> [/REPEAT:<repeat count>] - Returns value every (X interval) seconds, If /REPEAT specified the command is executed <repeat count> times.
+/FORMAT:<format specifier>   - Keyword/XSL filename to process the XML results.
+
+NOTE: Order of /TRANSLATE and /FORMAT switches influences the appearance of output.
+Case1: If /TRANSLATE precedes /FORMAT, then translation of results will be followed by formatting.
+Case2: If /TRANSLATE succeeds /FORMAT, then translation of the formatted results will be done.
+

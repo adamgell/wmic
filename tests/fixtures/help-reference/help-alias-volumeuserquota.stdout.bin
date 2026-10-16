@@ -1,0 +1,15 @@
+
+VOLUMEUSERQUOTA - Per user storage volume quota management.
+
+HINT: BNF for Alias usage.
+(<alias> [WMIObject] | <alias> [<path where>] | [<alias>] <path where>) [<verb clause>].
+
+USAGE:
+
+VOLUMEUSERQUOTA ASSOC [<format specifier>]
+VOLUMEUSERQUOTA CREATE <assign list>
+VOLUMEUSERQUOTA DELETE
+VOLUMEUSERQUOTA GET [<property list>] [<get switches>]
+VOLUMEUSERQUOTA LIST [<list format>] [<list switches>]
+VOLUMEUSERQUOTA SET [<assign list>]
+

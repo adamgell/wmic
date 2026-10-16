@@ -1,0 +1,15 @@
+
+DATAFILE - DataFile Management.  
+
+HINT: BNF for Alias usage.
+(<alias> [WMIObject] | <alias> [<path where>] | [<alias>] <path where>) [<verb clause>].
+
+USAGE:
+
+DATAFILE ASSOC [<format specifier>]
+DATAFILE CALL <method name> [<actual param list>]
+DATAFILE CREATE <assign list>
+DATAFILE DELETE
+DATAFILE GET [<property list>] [<get switches>]
+DATAFILE LIST [<list format>] [<list switches>]
+

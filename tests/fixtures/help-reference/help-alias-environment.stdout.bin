@@ -1,0 +1,15 @@
+
+ENVIRONMENT - System environment settings management.
+
+HINT: BNF for Alias usage.
+(<alias> [WMIObject] | <alias> [<path where>] | [<alias>] <path where>) [<verb clause>].
+
+USAGE:
+
+ENVIRONMENT ASSOC [<format specifier>]
+ENVIRONMENT CREATE <assign list>
+ENVIRONMENT DELETE
+ENVIRONMENT GET [<property list>] [<get switches>]
+ENVIRONMENT LIST [<list format>] [<list switches>]
+ENVIRONMENT SET [<assign list>]
+

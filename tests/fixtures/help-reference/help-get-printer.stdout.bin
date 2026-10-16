@@ -1,0 +1,97 @@
+
+Property get operations.
+USAGE:
+
+GET [<property list>] [<get switches>]
+NOTE: <property list> ::= <property name> | <property name>,  <property list>
+
+The following properties are available:
+Property				Type			Operation
+========				====			=========
+Attributes                         	N/A                 	N/A       
+Availability                       	N/A                 	N/A       
+AvailableJobSheets                 	N/A                 	N/A       
+AveragePagesPerMinute              	N/A                 	N/A       
+Capabilities                       	N/A                 	N/A       
+CapabilityDescriptions             	N/A                 	N/A       
+Caption                            	N/A                 	N/A       
+CharSetsSupported                  	N/A                 	N/A       
+Comment                            	N/A                 	N/A       
+ConfigManagerErrorCode             	N/A                 	N/A       
+ConfigManagerUserConfig            	N/A                 	N/A       
+CurrentCapabilities                	N/A                 	N/A       
+CurrentCharSet                     	N/A                 	N/A       
+CurrentLanguage                    	N/A                 	N/A       
+CurrentMimeType                    	N/A                 	N/A       
+CurrentNaturalLanguage             	N/A                 	N/A       
+CurrentPaperType                   	N/A                 	N/A       
+Default                            	N/A                 	N/A       
+DefaultCapabilities                	N/A                 	N/A       
+DefaultCopies                      	N/A                 	N/A       
+DefaultLanguage                    	N/A                 	N/A       
+DefaultMimeType                    	N/A                 	N/A       
+DefaultNumberUp                    	N/A                 	N/A       
+DefaultPaperType                   	N/A                 	N/A       
+DefaultPriority                    	N/A                 	N/A       
+Description                        	N/A                 	N/A       
+DetectedErrorState                 	N/A                 	N/A       
+DeviceID                           	N/A                 	N/A       
+Direct                             	N/A                 	N/A       
+DoCompleteFirst                    	N/A                 	N/A       
+DriverName                         	N/A                 	N/A       
+EnableBIDI                         	N/A                 	N/A       
+EnableDevQueryPrint                	N/A                 	N/A       
+ErrorCleared                       	N/A                 	N/A       
+ErrorDescription                   	N/A                 	N/A       
+ErrorInformation                   	N/A                 	N/A       
+ExtendedDetectedErrorState         	N/A                 	N/A       
+ExtendedPrinterStatus              	N/A                 	N/A       
+Hidden                             	N/A                 	N/A       
+HorizontalResolution               	N/A                 	N/A       
+InstallDate                        	N/A                 	N/A       
+JobCountSinceLastReset             	N/A                 	N/A       
+KeepPrintedJobs                    	N/A                 	N/A       
+LanguagesSupported                 	N/A                 	N/A       
+LastErrorCode                      	N/A                 	N/A       
+Local                              	N/A                 	N/A       
+Location                           	N/A                 	N/A       
+MarkingTechnology                  	N/A                 	N/A       
+MaxCopies                          	N/A                 	N/A       
+MaxNumberUp                        	N/A                 	N/A       
+MaxSizeSupported                   	N/A                 	N/A       
+MimeTypesSupported                 	N/A                 	N/A       
+Name                               	N/A                 	N/A       
+PNPDeviceID                        	N/A                 	N/A       
+PaperSizesSupported                	N/A                 	N/A       
+PortName                           	N/A                 	N/A       
+PowerManagementCapabilities        	N/A                 	N/A       
+PowerManagementSupported           	N/A                 	N/A       
+PrintJobDataType                   	N/A                 	N/A       
+PrintProcessor                     	N/A                 	N/A       
+PrinterPaperNames                  	N/A                 	N/A       
+PrinterState                       	N/A                 	N/A       
+PrinterStatus                      	N/A                 	N/A       
+SeparatorFile                      	N/A                 	N/A       
+ServerName                         	N/A                 	N/A       
+ShareName                          	N/A                 	N/A       
+SpoolEnabled                       	N/A                 	N/A       
+StartTime                          	N/A                 	N/A       
+Status                             	N/A                 	N/A       
+StatusInfo                         	N/A                 	N/A       
+SystemName                         	N/A                 	N/A       
+TimeOfLastReset                    	N/A                 	N/A       
+UntilTime                          	N/A                 	N/A       
+VerticalResolution                 	N/A                 	N/A       
+
+The following GET switches are available:
+
+/VALUE                       - Return value.
+/ALL(default)                - Return the data and metadata for the attribute.
+/TRANSLATE:<table name>      - Translate output via values from <table name>.
+/EVERY:<interval> [/REPEAT:<repeat count>] - Returns value every (X interval) seconds, If /REPEAT specified the command is executed <repeat count> times.
+/FORMAT:<format specifier>   - Keyword/XSL filename to process the XML results.
+
+NOTE: Order of /TRANSLATE and /FORMAT switches influences the appearance of output.
+Case1: If /TRANSLATE precedes /FORMAT, then translation of results will be followed by formatting.
+Case2: If /TRANSLATE succeeds /FORMAT, then translation of the formatted results will be done.
+

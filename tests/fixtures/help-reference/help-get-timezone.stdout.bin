@@ -1,0 +1,46 @@
+
+Property get operations.
+USAGE:
+
+GET [<property list>] [<get switches>]
+NOTE: <property list> ::= <property name> | <property name>,  <property list>
+
+The following properties are available:
+Property				Type			Operation
+========				====			=========
+Bias                               	N/A                 	N/A       
+DaylightBias                       	N/A                 	N/A       
+DaylightDay                        	N/A                 	N/A       
+DaylightDayOfWeek                  	N/A                 	N/A       
+DaylightHour                       	N/A                 	N/A       
+DaylightMillisecond                	N/A                 	N/A       
+DaylightMinute                     	N/A                 	N/A       
+DaylightMonth                      	N/A                 	N/A       
+DaylightName                       	N/A                 	N/A       
+DaylightSecond                     	N/A                 	N/A       
+DaylightYear                       	N/A                 	N/A       
+Description                        	N/A                 	N/A       
+SettingID                          	N/A                 	N/A       
+StandardBias                       	N/A                 	N/A       
+StandardDay                        	N/A                 	N/A       
+StandardDayOfWeek                  	N/A                 	N/A       
+StandardHour                       	N/A                 	N/A       
+StandardMillisecond                	N/A                 	N/A       
+StandardMinute                     	N/A                 	N/A       
+StandardMonth                      	N/A                 	N/A       
+StandardName                       	N/A                 	N/A       
+StandardSecond                     	N/A                 	N/A       
+StandardYear                       	N/A                 	N/A       
+
+The following GET switches are available:
+
+/VALUE                       - Return value.
+/ALL(default)                - Return the data and metadata for the attribute.
+/TRANSLATE:<table name>      - Translate output via values from <table name>.
+/EVERY:<interval> [/REPEAT:<repeat count>] - Returns value every (X interval) seconds, If /REPEAT specified the command is executed <repeat count> times.
+/FORMAT:<format specifier>   - Keyword/XSL filename to process the XML results.
+
+NOTE: Order of /TRANSLATE and /FORMAT switches influences the appearance of output.
+Case1: If /TRANSLATE precedes /FORMAT, then translation of results will be followed by formatting.
+Case2: If /TRANSLATE succeeds /FORMAT, then translation of the formatted results will be done.
+

@@ -1,0 +1,14 @@
+
+SERVER - Server information management. 
+
+HINT: BNF for Alias usage.
+(<alias> [WMIObject] | <alias> [<path where>] | [<alias>] <path where>) [<verb clause>].
+
+USAGE:
+
+SERVER ASSOC [<format specifier>]
+SERVER CREATE <assign list>
+SERVER DELETE
+SERVER GET [<property list>] [<get switches>]
+SERVER LIST [<list format>] [<list switches>]
+

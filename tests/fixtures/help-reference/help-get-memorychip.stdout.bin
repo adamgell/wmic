@@ -1,0 +1,51 @@
+
+Property get operations.
+USAGE:
+
+GET [<property list>] [<get switches>]
+NOTE: <property list> ::= <property name> | <property name>,  <property list>
+
+The following properties are available:
+Property				Type			Operation
+========				====			=========
+BankLabel                          	N/A                 	N/A       
+Capacity                           	N/A                 	N/A       
+DataWidth                          	N/A                 	N/A       
+Description                        	N/A                 	N/A       
+DeviceLocator                      	N/A                 	N/A       
+FormFactor                         	N/A                 	N/A       
+HotSwappable                       	N/A                 	N/A       
+InstallDate                        	N/A                 	N/A       
+InterleaveDataDepth                	N/A                 	N/A       
+InterleavePosition                 	N/A                 	N/A       
+Manufacturer                       	N/A                 	N/A       
+MemoryType                         	N/A                 	N/A       
+Model                              	N/A                 	N/A       
+Name                               	N/A                 	N/A       
+OtherIdentifyingInfo               	N/A                 	N/A       
+PartNumber                         	N/A                 	N/A       
+PositionInRow                      	N/A                 	N/A       
+PoweredOn                          	N/A                 	N/A       
+Removable                          	N/A                 	N/A       
+Replaceable                        	N/A                 	N/A       
+SKU                                	N/A                 	N/A       
+SerialNumber                       	N/A                 	N/A       
+Speed                              	N/A                 	N/A       
+Status                             	N/A                 	N/A       
+Tag                                	N/A                 	N/A       
+TotalWidth                         	N/A                 	N/A       
+TypeDetail                         	N/A                 	N/A       
+Version                            	N/A                 	N/A       
+
+The following GET switches are available:
+
+/VALUE                       - Return value.
+/ALL(default)                - Return the data and metadata for the attribute.
+/TRANSLATE:<table name>      - Translate output via values from <table name>.
+/EVERY:<interval> [/REPEAT:<repeat count>] - Returns value every (X interval) seconds, If /REPEAT specified the command is executed <repeat count> times.
+/FORMAT:<format specifier>   - Keyword/XSL filename to process the XML results.
+
+NOTE: Order of /TRANSLATE and /FORMAT switches influences the appearance of output.
+Case1: If /TRANSLATE precedes /FORMAT, then translation of results will be followed by formatting.
+Case2: If /TRANSLATE succeeds /FORMAT, then translation of the formatted results will be done.
+

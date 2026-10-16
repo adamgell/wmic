@@ -1,0 +1,16 @@
+
+USERACCOUNT - User account management.
+
+HINT: BNF for Alias usage.
+(<alias> [WMIObject] | <alias> [<path where>] | [<alias>] <path where>) [<verb clause>].
+
+USAGE:
+
+USERACCOUNT ASSOC [<format specifier>]
+USERACCOUNT CALL <method name> [<actual param list>]
+USERACCOUNT CREATE <assign list>
+USERACCOUNT DELETE
+USERACCOUNT GET [<property list>] [<get switches>]
+USERACCOUNT LIST [<list format>] [<list switches>]
+USERACCOUNT SET [<assign list>]
+

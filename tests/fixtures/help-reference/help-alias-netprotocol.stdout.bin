@@ -1,0 +1,14 @@
+
+NETPROTOCOL - Protocols (and their network characteristics) management.
+
+HINT: BNF for Alias usage.
+(<alias> [WMIObject] | <alias> [<path where>] | [<alias>] <path where>) [<verb clause>].
+
+USAGE:
+
+NETPROTOCOL ASSOC [<format specifier>]
+NETPROTOCOL CREATE <assign list>
+NETPROTOCOL DELETE
+NETPROTOCOL GET [<property list>] [<get switches>]
+NETPROTOCOL LIST [<list format>] [<list switches>]
+

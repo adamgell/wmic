@@ -1,0 +1,35 @@
+
+Method execution operations.
+USAGE:
+
+CALL <method name> [<actual paramlist>]
+NOTE: <actual paramlist> ::= <actual param> | <actual param>,  <actual paramlist>
+
+The following alias verb(s)/method(s) are available:
+
+Call			[ In/Out ]Params&type			Status
+====			=====================			======
+Create                  [IN ]Access(OBJECT)                 	(null)         
+
+			[IN ]Description(STRING)            	
+
+			[IN ]MaximumAllowed(UINT32)         	
+
+			[IN ]Name(STRING)                   	
+
+			[IN ]Password(STRING)               	
+
+			[IN ]Path(STRING)                   	
+
+			[IN ]Type(UINT32)                   	
+
+Delete                  					(null)         
+
+
+SetShareInfo            [IN ]Access(OBJECT)                 	(null)         
+
+			[IN ]Description(STRING)            	
+
+			[IN ]MaximumAllowed(UINT32)         	
+
+

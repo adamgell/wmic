@@ -8,7 +8,7 @@
 
 **Tech Stack:** Rust 1.98.1, edition 2024; Microsoft's typed `windows` bindings; `serde`/`serde_json` for metadata and fixtures; Python 3 standard library and Windows PowerShell for development-only capture; `cargo-xwin` for MSVC cross-builds from macOS.
 
-**Spec:** [Approved design](../specs/2026-10-15-wmic-compatibility-design.md). Read it alongside this plan. Architecture and written-spec approval have been received; implementation-plan review and execution-method selection remain outstanding.
+**Spec:** [Approved design](../specs/2026-10-15-wmic-compatibility-design.md). Read it alongside this plan. The user approved this implementation plan and native execution here on 2026-10-15 at 19:57 EDT.
 
 ## Global Constraints
 
@@ -98,7 +98,7 @@ path; returns JSON with UTF-16 command line, base64 streams, `exit_status`, and
 not an oversized `-EncodedCommand`. `compare.py EXPECTED ACTUAL` exits zero only
 when the selected fields/bytes match.
 
-- [ ] Add transport/comparison tests that assert preservation of `b'\xff\xfeA\x00\r\x00\n\x00'`, independent stderr, exit `0x80041017`, and a timeout distinct from exit zero.
+- [x] Add transport/comparison tests that assert preservation of `b'\xff\xfeA\x00\r\x00\n\x00'`, independent stderr, exit `0x80041017`, and a timeout distinct from exit zero.
 
   ```python
   self.assertEqual(base64.b64decode(result['stdout_base64']), b'\xff\xfeA\x00\r\x00\n\x00')
@@ -106,10 +106,10 @@ when the selected fields/bytes match.
   self.assertEqual(timeout_result['state'], 'timeout')
   ```
 
-- [ ] Run `python3 -m unittest discover -s tools/reference/tests -v`; confirm these tests fail before implementation.
-- [ ] Implement capture using redirected native process byte streams with concurrent stdout/stderr draining. Pin executable identity and refuse a replacement executable as the oracle. Record account and launch context; close unused stdin for one-shot cases.
-- [ ] Seed the corpus from the 23 preliminary pipe cases and installed profile under `docs/research/evidence/2026-10-15/`. Capture global/contextual help, stable OS queries, reversed properties, table/value/CSV/XML/MOF modes, case variants, empty results, and parse/provider errors with the reproducible tool. Use explicit original executable paths. Verify alias metadata after installation and link the captured profile to the existing evidence.
-- [ ] Run the Python tests and compare two repeated stable captures. Expected: identical selected bytes/status, with volatile environment fields reported separately. Commit as `test: add byte-preserving WMIC reference captures`.
+- [x] Run `python3 -m unittest discover -s tools/reference/tests -v`; confirm these tests fail before implementation.
+- [x] Implement capture using redirected native process byte streams with concurrent stdout/stderr draining. Pin executable identity and refuse a replacement executable as the oracle. Record account and launch context; close unused stdin for one-shot cases.
+- [x] Seed the corpus from the 23 preliminary pipe cases and installed profile under `docs/research/evidence/2026-10-15/`. Capture global/contextual help, stable OS queries, reversed properties, table/value/CSV/XML/MOF modes, case variants, empty results, and parse/provider errors with the reproducible tool. Use explicit original executable paths. Verify alias metadata after installation and link the captured profile to the existing evidence.
+- [x] Run the Python tests and compare two repeated stable captures. Expected: identical selected bytes/status, with volatile environment fields reported separately. Commit as `test: add byte-preserving WMIC reference captures`.
 
 ## Task 2: portable data model and WMIC parser — Stage 1
 
@@ -364,7 +364,7 @@ binary. Keep approval/endpoint-dependent live tests open and continue independen
 authorized tasks. Do not fabricate results or substitute cross-compilation for
 runtime acceptance.
 
-Before implementation, the user must review this concrete plan and select the
-execution method. That review has not yet occurred. Reference-machine
-investigation and the explicitly discussed WMIC installation may continue
-independently of product implementation.
+The user reviewed this concrete plan and selected native execution in this
+chat. Continue task-by-task without requesting approval between tasks. Preserve
+the separate boundaries for external publication, additional live endpoints,
+and changes to unrelated machine state.

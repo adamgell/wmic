@@ -1,0 +1,14 @@
+
+DISKDRIVE - Physical disk drive management. 
+
+HINT: BNF for Alias usage.
+(<alias> [WMIObject] | <alias> [<path where>] | [<alias>] <path where>) [<verb clause>].
+
+USAGE:
+
+DISKDRIVE ASSOC [<format specifier>]
+DISKDRIVE CREATE <assign list>
+DISKDRIVE DELETE
+DISKDRIVE GET [<property list>] [<get switches>]
+DISKDRIVE LIST [<list format>] [<list switches>]
+

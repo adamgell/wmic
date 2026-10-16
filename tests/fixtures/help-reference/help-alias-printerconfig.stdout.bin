@@ -1,0 +1,14 @@
+
+PRINTERCONFIG - Printer device configuration management.  
+
+HINT: BNF for Alias usage.
+(<alias> [WMIObject] | <alias> [<path where>] | [<alias>] <path where>) [<verb clause>].
+
+USAGE:
+
+PRINTERCONFIG ASSOC [<format specifier>]
+PRINTERCONFIG CREATE <assign list>
+PRINTERCONFIG DELETE
+PRINTERCONFIG GET [<property list>] [<get switches>]
+PRINTERCONFIG LIST [<list format>] [<list switches>]
+

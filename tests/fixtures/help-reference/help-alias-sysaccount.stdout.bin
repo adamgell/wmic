@@ -1,0 +1,14 @@
+
+SYSACCOUNT - System account management.  
+
+HINT: BNF for Alias usage.
+(<alias> [WMIObject] | <alias> [<path where>] | [<alias>] <path where>) [<verb clause>].
+
+USAGE:
+
+SYSACCOUNT ASSOC [<format specifier>]
+SYSACCOUNT CREATE <assign list>
+SYSACCOUNT DELETE
+SYSACCOUNT GET [<property list>] [<get switches>]
+SYSACCOUNT LIST [<list format>] [<list switches>]
+

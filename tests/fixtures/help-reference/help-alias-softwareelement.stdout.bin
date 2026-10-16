@@ -1,0 +1,14 @@
+
+SOFTWAREELEMENT - Management of the  elements of a software product installed on a system.
+
+HINT: BNF for Alias usage.
+(<alias> [WMIObject] | <alias> [<path where>] | [<alias>] <path where>) [<verb clause>].
+
+USAGE:
+
+SOFTWAREELEMENT ASSOC [<format specifier>]
+SOFTWAREELEMENT CREATE <assign list>
+SOFTWAREELEMENT DELETE
+SOFTWAREELEMENT GET [<property list>] [<get switches>]
+SOFTWAREELEMENT LIST [<list format>] [<list switches>]
+

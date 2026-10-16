@@ -1,0 +1,10 @@
+
+NAMESPACE - Path for the namespace the alias is to operate against. Namespaces
+            are always relative i.e. if the namespace does not begin with a
+            '\\' it will be assumed to be relative to the current namespace.
+USAGE:
+
+/NAMESPACE:<namespace>
+
+NOTE: Enclose the switch value in  double quotes, if the value contains special  characters like '-' or '/'.
+

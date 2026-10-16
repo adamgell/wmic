@@ -1,0 +1,17 @@
+
+IMPLEVEL - Determine which level the command line should impersonate.
+           Default is 'Impersonate'.
+USAGE:
+
+/IMPLEVEL:<implevel>[/AUTHORITY:<authority type>]
+
+Various implevels are as follows:
+Impersonation Level
+------------------
+Anonymous
+Identify
+Impersonate
+Delegate
+
+Note: Use /AUTHORITY switch for specifying the authority type.
+

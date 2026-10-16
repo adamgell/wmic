@@ -1,0 +1,7 @@
+
+INTERACTIVE - Sets or resets the interactive mode.
+USAGE:
+
+/INTERACTIVE:<option>
+NOTE: Allowed value(s) for <option> is either ON or OFF.
+

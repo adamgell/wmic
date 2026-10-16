@@ -1,0 +1,29 @@
+
+Method execution operations.
+USAGE:
+
+CALL <method name> [<actual paramlist>]
+NOTE: <actual paramlist> ::= <actual param> | <actual param>,  <actual paramlist>
+
+The following alias verb(s)/method(s) are available:
+
+Call			[ In/Out ]Params&type			Status
+====			=====================			======
+Create                  [IN ]Command(STRING)                	(null)         
+
+			[IN ]DaysOfMonth(UINT32)            	
+
+			[IN ]DaysOfWeek(UINT32)             	
+
+			[IN ]InteractWithDesktop(BOOLEAN)   	
+
+			[IN ]RunRepeatedly(BOOLEAN)         	
+
+			[IN ]StartTime(DATETIME)            	
+
+			[OUT]JobId(UINT32)                  	
+
+Delete                  					(null)         
+
+
+

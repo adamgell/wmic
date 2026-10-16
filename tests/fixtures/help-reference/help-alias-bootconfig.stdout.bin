@@ -1,0 +1,14 @@
+
+BOOTCONFIG - Boot configuration management.
+
+HINT: BNF for Alias usage.
+(<alias> [WMIObject] | <alias> [<path where>] | [<alias>] <path where>) [<verb clause>].
+
+USAGE:
+
+BOOTCONFIG ASSOC [<format specifier>]
+BOOTCONFIG CREATE <assign list>
+BOOTCONFIG DELETE
+BOOTCONFIG GET [<property list>] [<get switches>]
+BOOTCONFIG LIST [<list format>] [<list switches>]
+

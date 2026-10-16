@@ -1,0 +1,49 @@
+
+Property get operations.
+USAGE:
+
+GET [<property list>] [<get switches>]
+NOTE: <property list> ::= <property name> | <property name>,  <property list>
+
+The following properties are available:
+Property				Type			Operation
+========				====			=========
+ASPScriptDefaultNamespace          	N/A                 	N/A       
+ASPScriptEnabled                   	N/A                 	N/A       
+AutoStartWin9X                     	N/A                 	N/A       
+AutorecoverMofs                    	N/A                 	N/A       
+BackupInterval                     	N/A                 	N/A       
+BackupLastTime                     	N/A                 	N/A       
+BuildVersion                       	N/A                 	N/A       
+DatabaseDirectory                  	N/A                 	N/A       
+DatabaseMaxSize                    	N/A                 	N/A       
+Description                        	N/A                 	N/A       
+EnableAnonWin9xConnections         	N/A                 	N/A       
+EnableEvents                       	N/A                 	N/A       
+EnableStartupHeapPreallocation     	N/A                 	N/A       
+HighThresholdOnClientObjects       	N/A                 	N/A       
+HighThresholdOnEvents              	N/A                 	N/A       
+InstallationDirectory              	N/A                 	N/A       
+LastStartupHeapPreallocation       	N/A                 	N/A       
+LoggingDirectory                   	N/A                 	N/A       
+LoggingLevel                       	N/A                 	N/A       
+LowThresholdOnClientObjects        	N/A                 	N/A       
+LowThresholdOnEvents               	N/A                 	N/A       
+MaxLogFileSize                     	N/A                 	N/A       
+MaxWaitOnClientObjects             	N/A                 	N/A       
+MaxWaitOnEvents                    	N/A                 	N/A       
+MofSelfInstallDirectory            	N/A                 	N/A       
+SettingID                          	N/A                 	N/A       
+
+The following GET switches are available:
+
+/VALUE                       - Return value.
+/ALL(default)                - Return the data and metadata for the attribute.
+/TRANSLATE:<table name>      - Translate output via values from <table name>.
+/EVERY:<interval> [/REPEAT:<repeat count>] - Returns value every (X interval) seconds, If /REPEAT specified the command is executed <repeat count> times.
+/FORMAT:<format specifier>   - Keyword/XSL filename to process the XML results.
+
+NOTE: Order of /TRANSLATE and /FORMAT switches influences the appearance of output.
+Case1: If /TRANSLATE precedes /FORMAT, then translation of results will be followed by formatting.
+Case2: If /TRANSLATE succeeds /FORMAT, then translation of the formatted results will be done.
+

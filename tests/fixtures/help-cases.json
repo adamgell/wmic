@@ -1,0 +1,2071 @@
+{
+  "schema_version": 1,
+  "reference_sha256": "2EF794C4940AFEA56C6D6D3B9BC9E66965BC7333E79C5DCB2DEF3C0E36F0834C",
+  "timeout_seconds": 900,
+  "cases": [
+    {
+      "id": "help-alias-alias",
+      "arguments": "Alias /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-get-alias",
+      "arguments": "Alias get /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-list-alias",
+      "arguments": "Alias list /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-call-alias",
+      "arguments": "Alias call /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-alias-baseboard",
+      "arguments": "BaseBoard /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-get-baseboard",
+      "arguments": "BaseBoard get /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-list-baseboard",
+      "arguments": "BaseBoard list /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-call-baseboard",
+      "arguments": "BaseBoard call /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-alias-bios",
+      "arguments": "BIOS /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-get-bios",
+      "arguments": "BIOS get /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-list-bios",
+      "arguments": "BIOS list /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-call-bios",
+      "arguments": "BIOS call /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-alias-bootconfig",
+      "arguments": "BootConfig /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-get-bootconfig",
+      "arguments": "BootConfig get /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-list-bootconfig",
+      "arguments": "BootConfig list /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-call-bootconfig",
+      "arguments": "BootConfig call /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-alias-cdrom",
+      "arguments": "CDROM /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-get-cdrom",
+      "arguments": "CDROM get /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-list-cdrom",
+      "arguments": "CDROM list /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-call-cdrom",
+      "arguments": "CDROM call /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-alias-computersystem",
+      "arguments": "ComputerSystem /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-get-computersystem",
+      "arguments": "ComputerSystem get /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-list-computersystem",
+      "arguments": "ComputerSystem list /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-call-computersystem",
+      "arguments": "ComputerSystem call /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-alias-cpu",
+      "arguments": "CPU /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-get-cpu",
+      "arguments": "CPU get /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-list-cpu",
+      "arguments": "CPU list /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-call-cpu",
+      "arguments": "CPU call /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-alias-csproduct",
+      "arguments": "CSProduct /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-get-csproduct",
+      "arguments": "CSProduct get /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-list-csproduct",
+      "arguments": "CSProduct list /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-call-csproduct",
+      "arguments": "CSProduct call /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-alias-datafile",
+      "arguments": "DataFile /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-get-datafile",
+      "arguments": "DataFile get /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-list-datafile",
+      "arguments": "DataFile list /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-call-datafile",
+      "arguments": "DataFile call /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-alias-dcomapp",
+      "arguments": "DCOMAPP /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-get-dcomapp",
+      "arguments": "DCOMAPP get /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-list-dcomapp",
+      "arguments": "DCOMAPP list /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-call-dcomapp",
+      "arguments": "DCOMAPP call /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-alias-desktop",
+      "arguments": "DESKTOP /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-get-desktop",
+      "arguments": "DESKTOP get /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-list-desktop",
+      "arguments": "DESKTOP list /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-call-desktop",
+      "arguments": "DESKTOP call /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-alias-desktopmonitor",
+      "arguments": "DesktopMonitor /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-get-desktopmonitor",
+      "arguments": "DesktopMonitor get /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-list-desktopmonitor",
+      "arguments": "DesktopMonitor list /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-call-desktopmonitor",
+      "arguments": "DesktopMonitor call /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-alias-devicememoryaddress",
+      "arguments": "DeviceMemoryAddress /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-get-devicememoryaddress",
+      "arguments": "DeviceMemoryAddress get /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-list-devicememoryaddress",
+      "arguments": "DeviceMemoryAddress list /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-call-devicememoryaddress",
+      "arguments": "DeviceMemoryAddress call /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-alias-diskdrive",
+      "arguments": "DiskDrive /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-get-diskdrive",
+      "arguments": "DiskDrive get /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-list-diskdrive",
+      "arguments": "DiskDrive list /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-call-diskdrive",
+      "arguments": "DiskDrive call /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-alias-diskquota",
+      "arguments": "DiskQuota /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-get-diskquota",
+      "arguments": "DiskQuota get /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-list-diskquota",
+      "arguments": "DiskQuota list /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-call-diskquota",
+      "arguments": "DiskQuota call /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-alias-dmachannel",
+      "arguments": "DMAChannel /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-get-dmachannel",
+      "arguments": "DMAChannel get /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-list-dmachannel",
+      "arguments": "DMAChannel list /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-call-dmachannel",
+      "arguments": "DMAChannel call /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-alias-environment",
+      "arguments": "Environment /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-get-environment",
+      "arguments": "Environment get /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-list-environment",
+      "arguments": "Environment list /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-call-environment",
+      "arguments": "Environment call /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-alias-fsdir",
+      "arguments": "FSDir /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-get-fsdir",
+      "arguments": "FSDir get /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-list-fsdir",
+      "arguments": "FSDir list /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-call-fsdir",
+      "arguments": "FSDir call /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-alias-group",
+      "arguments": "Group /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-get-group",
+      "arguments": "Group get /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-list-group",
+      "arguments": "Group list /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-call-group",
+      "arguments": "Group call /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-alias-idecontroller",
+      "arguments": "IDECONTROLLER /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-get-idecontroller",
+      "arguments": "IDECONTROLLER get /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-list-idecontroller",
+      "arguments": "IDECONTROLLER list /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-call-idecontroller",
+      "arguments": "IDECONTROLLER call /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-alias-irq",
+      "arguments": "IRQ /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-get-irq",
+      "arguments": "IRQ get /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-list-irq",
+      "arguments": "IRQ list /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-call-irq",
+      "arguments": "IRQ call /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-alias-job",
+      "arguments": "Job /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-get-job",
+      "arguments": "Job get /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-list-job",
+      "arguments": "Job list /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-call-job",
+      "arguments": "Job call /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-alias-loadorder",
+      "arguments": "LoadOrder /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-get-loadorder",
+      "arguments": "LoadOrder get /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-list-loadorder",
+      "arguments": "LoadOrder list /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-call-loadorder",
+      "arguments": "LoadOrder call /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-alias-logicaldisk",
+      "arguments": "LogicalDisk /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-get-logicaldisk",
+      "arguments": "LogicalDisk get /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-list-logicaldisk",
+      "arguments": "LogicalDisk list /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-call-logicaldisk",
+      "arguments": "LogicalDisk call /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-alias-logon",
+      "arguments": "LOGON /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-get-logon",
+      "arguments": "LOGON get /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-list-logon",
+      "arguments": "LOGON list /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-call-logon",
+      "arguments": "LOGON call /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-alias-memcache",
+      "arguments": "MEMCACHE /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-get-memcache",
+      "arguments": "MEMCACHE get /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-list-memcache",
+      "arguments": "MEMCACHE list /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-call-memcache",
+      "arguments": "MEMCACHE call /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-alias-memorychip",
+      "arguments": "MemoryChip /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-get-memorychip",
+      "arguments": "MemoryChip get /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-list-memorychip",
+      "arguments": "MemoryChip list /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-call-memorychip",
+      "arguments": "MemoryChip call /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-alias-memphysical",
+      "arguments": "MemPhysical /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-get-memphysical",
+      "arguments": "MemPhysical get /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-list-memphysical",
+      "arguments": "MemPhysical list /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-call-memphysical",
+      "arguments": "MemPhysical call /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-alias-netclient",
+      "arguments": "NetClient /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-get-netclient",
+      "arguments": "NetClient get /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-list-netclient",
+      "arguments": "NetClient list /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-call-netclient",
+      "arguments": "NetClient call /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-alias-netlogin",
+      "arguments": "NetLogin /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-get-netlogin",
+      "arguments": "NetLogin get /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-list-netlogin",
+      "arguments": "NetLogin list /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-call-netlogin",
+      "arguments": "NetLogin call /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-alias-netprotocol",
+      "arguments": "NetProtocol /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-get-netprotocol",
+      "arguments": "NetProtocol get /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-list-netprotocol",
+      "arguments": "NetProtocol list /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-call-netprotocol",
+      "arguments": "NetProtocol call /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-alias-netuse",
+      "arguments": "NetUse /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-get-netuse",
+      "arguments": "NetUse get /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-list-netuse",
+      "arguments": "NetUse list /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-call-netuse",
+      "arguments": "NetUse call /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-alias-nic",
+      "arguments": "NIC /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-get-nic",
+      "arguments": "NIC get /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-list-nic",
+      "arguments": "NIC list /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-call-nic",
+      "arguments": "NIC call /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-alias-nicconfig",
+      "arguments": "NICConfig /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-get-nicconfig",
+      "arguments": "NICConfig get /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-list-nicconfig",
+      "arguments": "NICConfig list /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-call-nicconfig",
+      "arguments": "NICConfig call /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-alias-ntdomain",
+      "arguments": "NTDOMAIN /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-get-ntdomain",
+      "arguments": "NTDOMAIN get /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-list-ntdomain",
+      "arguments": "NTDOMAIN list /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-call-ntdomain",
+      "arguments": "NTDOMAIN call /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-alias-ntevent",
+      "arguments": "NTEvent /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-get-ntevent",
+      "arguments": "NTEvent get /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-list-ntevent",
+      "arguments": "NTEvent list /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-call-ntevent",
+      "arguments": "NTEvent call /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-alias-nteventlog",
+      "arguments": "NTEventLog /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-get-nteventlog",
+      "arguments": "NTEventLog get /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-list-nteventlog",
+      "arguments": "NTEventLog list /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-call-nteventlog",
+      "arguments": "NTEventLog call /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-alias-onboarddevice",
+      "arguments": "OnBoardDevice /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-get-onboarddevice",
+      "arguments": "OnBoardDevice get /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-list-onboarddevice",
+      "arguments": "OnBoardDevice list /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-call-onboarddevice",
+      "arguments": "OnBoardDevice call /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-alias-os",
+      "arguments": "OS /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-get-os",
+      "arguments": "OS get /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-list-os",
+      "arguments": "OS list /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-call-os",
+      "arguments": "OS call /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-alias-pagefile",
+      "arguments": "PageFile /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-get-pagefile",
+      "arguments": "PageFile get /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-list-pagefile",
+      "arguments": "PageFile list /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-call-pagefile",
+      "arguments": "PageFile call /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-alias-pagefileset",
+      "arguments": "PageFileSet /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-get-pagefileset",
+      "arguments": "PageFileSet get /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-list-pagefileset",
+      "arguments": "PageFileSet list /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-call-pagefileset",
+      "arguments": "PageFileSet call /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-alias-partition",
+      "arguments": "Partition /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-get-partition",
+      "arguments": "Partition get /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-list-partition",
+      "arguments": "Partition list /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-call-partition",
+      "arguments": "Partition call /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-alias-port",
+      "arguments": "Port /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-get-port",
+      "arguments": "Port get /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-list-port",
+      "arguments": "Port list /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-call-port",
+      "arguments": "Port call /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-alias-portconnector",
+      "arguments": "PortConnector /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-get-portconnector",
+      "arguments": "PortConnector get /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-list-portconnector",
+      "arguments": "PortConnector list /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-call-portconnector",
+      "arguments": "PortConnector call /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-alias-printer",
+      "arguments": "Printer /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-get-printer",
+      "arguments": "Printer get /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-list-printer",
+      "arguments": "Printer list /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-call-printer",
+      "arguments": "Printer call /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-alias-printerconfig",
+      "arguments": "PrinterConfig /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-get-printerconfig",
+      "arguments": "PrinterConfig get /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-list-printerconfig",
+      "arguments": "PrinterConfig list /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-call-printerconfig",
+      "arguments": "PrinterConfig call /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-alias-printjob",
+      "arguments": "PrintJob /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-get-printjob",
+      "arguments": "PrintJob get /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-list-printjob",
+      "arguments": "PrintJob list /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-call-printjob",
+      "arguments": "PrintJob call /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-alias-process",
+      "arguments": "Process /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-get-process",
+      "arguments": "Process get /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-list-process",
+      "arguments": "Process list /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-call-process",
+      "arguments": "Process call /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-alias-product",
+      "arguments": "Product /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-get-product",
+      "arguments": "Product get /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-list-product",
+      "arguments": "Product list /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-call-product",
+      "arguments": "Product call /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-alias-qfe",
+      "arguments": "QFE /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-get-qfe",
+      "arguments": "QFE get /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-list-qfe",
+      "arguments": "QFE list /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-call-qfe",
+      "arguments": "QFE call /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-alias-quotasetting",
+      "arguments": "QuotaSetting /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-get-quotasetting",
+      "arguments": "QuotaSetting get /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-list-quotasetting",
+      "arguments": "QuotaSetting list /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-call-quotasetting",
+      "arguments": "QuotaSetting call /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-alias-rdaccount",
+      "arguments": "RDAccount /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-get-rdaccount",
+      "arguments": "RDAccount get /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-list-rdaccount",
+      "arguments": "RDAccount list /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-call-rdaccount",
+      "arguments": "RDAccount call /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-alias-rdnic",
+      "arguments": "RDNIC /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-get-rdnic",
+      "arguments": "RDNIC get /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-list-rdnic",
+      "arguments": "RDNIC list /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-call-rdnic",
+      "arguments": "RDNIC call /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-alias-rdpermissions",
+      "arguments": "RDPermissions /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-get-rdpermissions",
+      "arguments": "RDPermissions get /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-list-rdpermissions",
+      "arguments": "RDPermissions list /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-call-rdpermissions",
+      "arguments": "RDPermissions call /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-alias-rdtoggle",
+      "arguments": "RDToggle /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-get-rdtoggle",
+      "arguments": "RDToggle get /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-list-rdtoggle",
+      "arguments": "RDToggle list /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-call-rdtoggle",
+      "arguments": "RDToggle call /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-alias-recoveros",
+      "arguments": "RecoverOS /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-get-recoveros",
+      "arguments": "RecoverOS get /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-list-recoveros",
+      "arguments": "RecoverOS list /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-call-recoveros",
+      "arguments": "RecoverOS call /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-alias-registry",
+      "arguments": "Registry /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-get-registry",
+      "arguments": "Registry get /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-list-registry",
+      "arguments": "Registry list /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-call-registry",
+      "arguments": "Registry call /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-alias-scsicontroller",
+      "arguments": "SCSICONTROLLER /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-get-scsicontroller",
+      "arguments": "SCSICONTROLLER get /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-list-scsicontroller",
+      "arguments": "SCSICONTROLLER list /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-call-scsicontroller",
+      "arguments": "SCSICONTROLLER call /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-alias-server",
+      "arguments": "Server /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-get-server",
+      "arguments": "Server get /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-list-server",
+      "arguments": "Server list /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-call-server",
+      "arguments": "Server call /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-alias-service",
+      "arguments": "Service /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-get-service",
+      "arguments": "Service get /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-list-service",
+      "arguments": "Service list /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-call-service",
+      "arguments": "Service call /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-alias-shadowcopy",
+      "arguments": "ShadowCopy /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-get-shadowcopy",
+      "arguments": "ShadowCopy get /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-list-shadowcopy",
+      "arguments": "ShadowCopy list /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-call-shadowcopy",
+      "arguments": "ShadowCopy call /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-alias-shadowstorage",
+      "arguments": "ShadowStorage /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-get-shadowstorage",
+      "arguments": "ShadowStorage get /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-list-shadowstorage",
+      "arguments": "ShadowStorage list /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-call-shadowstorage",
+      "arguments": "ShadowStorage call /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-alias-share",
+      "arguments": "Share /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-get-share",
+      "arguments": "Share get /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-list-share",
+      "arguments": "Share list /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-call-share",
+      "arguments": "Share call /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-alias-softwareelement",
+      "arguments": "SoftwareElement /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-get-softwareelement",
+      "arguments": "SoftwareElement get /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-list-softwareelement",
+      "arguments": "SoftwareElement list /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-call-softwareelement",
+      "arguments": "SoftwareElement call /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-alias-softwarefeature",
+      "arguments": "SoftwareFeature /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-get-softwarefeature",
+      "arguments": "SoftwareFeature get /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-list-softwarefeature",
+      "arguments": "SoftwareFeature list /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-call-softwarefeature",
+      "arguments": "SoftwareFeature call /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-alias-sounddev",
+      "arguments": "SoundDev /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-get-sounddev",
+      "arguments": "SoundDev get /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-list-sounddev",
+      "arguments": "SoundDev list /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-call-sounddev",
+      "arguments": "SoundDev call /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-alias-startup",
+      "arguments": "Startup /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-get-startup",
+      "arguments": "Startup get /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-list-startup",
+      "arguments": "Startup list /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-call-startup",
+      "arguments": "Startup call /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-alias-sysaccount",
+      "arguments": "SysAccount /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-get-sysaccount",
+      "arguments": "SysAccount get /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-list-sysaccount",
+      "arguments": "SysAccount list /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-call-sysaccount",
+      "arguments": "SysAccount call /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-alias-sysdriver",
+      "arguments": "SysDriver /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-get-sysdriver",
+      "arguments": "SysDriver get /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-list-sysdriver",
+      "arguments": "SysDriver list /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-call-sysdriver",
+      "arguments": "SysDriver call /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-alias-systemenclosure",
+      "arguments": "SystemEnclosure /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-get-systemenclosure",
+      "arguments": "SystemEnclosure get /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-list-systemenclosure",
+      "arguments": "SystemEnclosure list /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-call-systemenclosure",
+      "arguments": "SystemEnclosure call /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-alias-systemslot",
+      "arguments": "SystemSlot /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-get-systemslot",
+      "arguments": "SystemSlot get /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-list-systemslot",
+      "arguments": "SystemSlot list /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-call-systemslot",
+      "arguments": "SystemSlot call /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-alias-tapedrive",
+      "arguments": "TapeDrive /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-get-tapedrive",
+      "arguments": "TapeDrive get /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-list-tapedrive",
+      "arguments": "TapeDrive list /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-call-tapedrive",
+      "arguments": "TapeDrive call /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-alias-temperature",
+      "arguments": "Temperature /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-get-temperature",
+      "arguments": "Temperature get /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-list-temperature",
+      "arguments": "Temperature list /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-call-temperature",
+      "arguments": "Temperature call /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-alias-timezone",
+      "arguments": "TimeZone /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-get-timezone",
+      "arguments": "TimeZone get /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-list-timezone",
+      "arguments": "TimeZone list /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-call-timezone",
+      "arguments": "TimeZone call /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-alias-ups",
+      "arguments": "UPS /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-get-ups",
+      "arguments": "UPS get /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-list-ups",
+      "arguments": "UPS list /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-call-ups",
+      "arguments": "UPS call /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-alias-useraccount",
+      "arguments": "UserAccount /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-get-useraccount",
+      "arguments": "UserAccount get /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-list-useraccount",
+      "arguments": "UserAccount list /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-call-useraccount",
+      "arguments": "UserAccount call /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-alias-voltage",
+      "arguments": "Voltage /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-get-voltage",
+      "arguments": "Voltage get /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-list-voltage",
+      "arguments": "Voltage list /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-call-voltage",
+      "arguments": "Voltage call /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-alias-volume",
+      "arguments": "Volume /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-get-volume",
+      "arguments": "Volume get /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-list-volume",
+      "arguments": "Volume list /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-call-volume",
+      "arguments": "Volume call /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-alias-volumequotasetting",
+      "arguments": "VolumeQuotaSetting /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-get-volumequotasetting",
+      "arguments": "VolumeQuotaSetting get /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-list-volumequotasetting",
+      "arguments": "VolumeQuotaSetting list /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-call-volumequotasetting",
+      "arguments": "VolumeQuotaSetting call /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-alias-volumeuserquota",
+      "arguments": "VolumeUserQuota /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-get-volumeuserquota",
+      "arguments": "VolumeUserQuota get /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-list-volumeuserquota",
+      "arguments": "VolumeUserQuota list /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-call-volumeuserquota",
+      "arguments": "VolumeUserQuota call /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-alias-wmiset",
+      "arguments": "WMISet /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-get-wmiset",
+      "arguments": "WMISet get /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-list-wmiset",
+      "arguments": "WMISet list /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-call-wmiset",
+      "arguments": "WMISet call /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-switch-namespace",
+      "arguments": "/NAMESPACE /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-switch-role",
+      "arguments": "/ROLE /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-switch-node",
+      "arguments": "/NODE /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-switch-implevel",
+      "arguments": "/IMPLEVEL /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-switch-authlevel",
+      "arguments": "/AUTHLEVEL /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-switch-locale",
+      "arguments": "/LOCALE /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-switch-privileges",
+      "arguments": "/PRIVILEGES /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-switch-trace",
+      "arguments": "/TRACE /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-switch-record",
+      "arguments": "/RECORD /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-switch-interactive",
+      "arguments": "/INTERACTIVE /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-switch-failfast",
+      "arguments": "/FAILFAST /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-switch-user",
+      "arguments": "/USER /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-switch-password",
+      "arguments": "/PASSWORD /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-switch-output",
+      "arguments": "/OUTPUT /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-switch-append",
+      "arguments": "/APPEND /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-switch-aggregate",
+      "arguments": "/AGGREGATE /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-switch-authority",
+      "arguments": "/AUTHORITY /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-command-class",
+      "arguments": "class /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-command-path",
+      "arguments": "path /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "help-command-context",
+      "arguments": "context /?",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    }
+  ]
+}

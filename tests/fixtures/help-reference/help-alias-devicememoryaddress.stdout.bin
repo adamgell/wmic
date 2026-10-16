@@ -1,0 +1,14 @@
+
+DEVICEMEMORYADDRESS - Device memory addresses management.
+
+HINT: BNF for Alias usage.
+(<alias> [WMIObject] | <alias> [<path where>] | [<alias>] <path where>) [<verb clause>].
+
+USAGE:
+
+DEVICEMEMORYADDRESS ASSOC [<format specifier>]
+DEVICEMEMORYADDRESS CREATE <assign list>
+DEVICEMEMORYADDRESS DELETE
+DEVICEMEMORYADDRESS GET [<property list>] [<get switches>]
+DEVICEMEMORYADDRESS LIST [<list format>] [<list switches>]
+

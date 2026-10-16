@@ -1,0 +1,14 @@
+
+IRQ - Interrupt request line (IRQ) management. 
+
+HINT: BNF for Alias usage.
+(<alias> [WMIObject] | <alias> [<path where>] | [<alias>] <path where>) [<verb clause>].
+
+USAGE:
+
+IRQ ASSOC [<format specifier>]
+IRQ CREATE <assign list>
+IRQ DELETE
+IRQ GET [<property list>] [<get switches>]
+IRQ LIST [<list format>] [<list switches>]
+

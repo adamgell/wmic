@@ -1,0 +1,14 @@
+
+TEMPERATURE - Data management of a temperature sensor (electronic thermometer).
+
+HINT: BNF for Alias usage.
+(<alias> [WMIObject] | <alias> [<path where>] | [<alias>] <path where>) [<verb clause>].
+
+USAGE:
+
+TEMPERATURE ASSOC [<format specifier>]
+TEMPERATURE CREATE <assign list>
+TEMPERATURE DELETE
+TEMPERATURE GET [<property list>] [<get switches>]
+TEMPERATURE LIST [<list format>] [<list switches>]
+

@@ -1,0 +1,14 @@
+
+PAGEFILE - Virtual memory file swapping management. 
+
+HINT: BNF for Alias usage.
+(<alias> [WMIObject] | <alias> [<path where>] | [<alias>] <path where>) [<verb clause>].
+
+USAGE:
+
+PAGEFILE ASSOC [<format specifier>]
+PAGEFILE CREATE <assign list>
+PAGEFILE DELETE
+PAGEFILE GET [<property list>] [<get switches>]
+PAGEFILE LIST [<list format>] [<list switches>]
+

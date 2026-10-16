@@ -1,0 +1,14 @@
+
+NETCLIENT - Network Client management.
+
+HINT: BNF for Alias usage.
+(<alias> [WMIObject] | <alias> [<path where>] | [<alias>] <path where>) [<verb clause>].
+
+USAGE:
+
+NETCLIENT ASSOC [<format specifier>]
+NETCLIENT CREATE <assign list>
+NETCLIENT DELETE
+NETCLIENT GET [<property list>] [<get switches>]
+NETCLIENT LIST [<list format>] [<list switches>]
+

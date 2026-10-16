@@ -1,0 +1,16 @@
+
+VOLUME - Local storage volume management.
+
+HINT: BNF for Alias usage.
+(<alias> [WMIObject] | <alias> [<path where>] | [<alias>] <path where>) [<verb clause>].
+
+USAGE:
+
+VOLUME ASSOC [<format specifier>]
+VOLUME CALL <method name> [<actual param list>]
+VOLUME CREATE <assign list>
+VOLUME DELETE
+VOLUME GET [<property list>] [<get switches>]
+VOLUME LIST [<list format>] [<list switches>]
+VOLUME SET [<assign list>]
+

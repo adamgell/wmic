@@ -1,0 +1,34 @@
+
+Method execution operations.
+USAGE:
+
+CALL <method name> [<actual paramlist>]
+NOTE: <actual paramlist> ::= <actual param> | <actual param>,  <actual paramlist>
+
+The following alias verb(s)/method(s) are available:
+
+Call			[ In/Out ]Params&type			Status
+====			=====================			======
+JoinDomainOrWorkgroup   [IN ]AccountOU(STRING)              	(null)         
+
+			[IN ]FJoinOptions(UINT32)           	
+
+			[IN ]Name(STRING)                   	
+
+			[IN ]Password(STRING)               	
+
+			[IN ]UserName(STRING)               	
+
+Rename                  [IN ]Name(STRING)                   	(null)         
+
+			[IN ]Password(STRING)               	
+
+			[IN ]UserName(STRING)               	
+
+UnjoinDomainOrWorkgroup [IN ]FUnjoinOptions(UINT32)         	(null)         
+
+			[IN ]Password(STRING)               	
+
+			[IN ]UserName(STRING)               	
+
+

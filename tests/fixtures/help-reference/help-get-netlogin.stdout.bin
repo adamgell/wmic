@@ -1,0 +1,53 @@
+
+Property get operations.
+USAGE:
+
+GET [<property list>] [<get switches>]
+NOTE: <property list> ::= <property name> | <property name>,  <property list>
+
+The following properties are available:
+Property				Type			Operation
+========				====			=========
+AccountExpires                     	N/A                 	N/A       
+AuthorizationFlags                 	N/A                 	N/A       
+BadPasswordCount                   	N/A                 	N/A       
+Comment                            	N/A                 	N/A       
+CountryCode                        	N/A                 	N/A       
+Description                        	N/A                 	N/A       
+Flags                              	N/A                 	N/A       
+FullName                           	N/A                 	N/A       
+HomeDirectory                      	N/A                 	N/A       
+HomeDirectoryDrive                 	N/A                 	N/A       
+LastLogoff                         	N/A                 	N/A       
+LastLogon                          	N/A                 	N/A       
+LogonHours                         	N/A                 	N/A       
+LogonServer                        	N/A                 	N/A       
+MaximumStorage                     	N/A                 	N/A       
+Name                               	N/A                 	N/A       
+NumberOfLogons                     	N/A                 	N/A       
+Parameters                         	N/A                 	N/A       
+PasswordAge                        	N/A                 	N/A       
+PasswordExpires                    	N/A                 	N/A       
+PrimaryGroupId                     	N/A                 	N/A       
+Privileges                         	N/A                 	N/A       
+Profile                            	N/A                 	N/A       
+ScriptPath                         	N/A                 	N/A       
+SettingID                          	N/A                 	N/A       
+UnitsPerWeek                       	N/A                 	N/A       
+UserComment                        	N/A                 	N/A       
+UserId                             	N/A                 	N/A       
+UserType                           	N/A                 	N/A       
+Workstations                       	N/A                 	N/A       
+
+The following GET switches are available:
+
+/VALUE                       - Return value.
+/ALL(default)                - Return the data and metadata for the attribute.
+/TRANSLATE:<table name>      - Translate output via values from <table name>.
+/EVERY:<interval> [/REPEAT:<repeat count>] - Returns value every (X interval) seconds, If /REPEAT specified the command is executed <repeat count> times.
+/FORMAT:<format specifier>   - Keyword/XSL filename to process the XML results.
+
+NOTE: Order of /TRANSLATE and /FORMAT switches influences the appearance of output.
+Case1: If /TRANSLATE precedes /FORMAT, then translation of results will be followed by formatting.
+Case2: If /TRANSLATE succeeds /FORMAT, then translation of the formatted results will be done.
+

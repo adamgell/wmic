@@ -1,0 +1,56 @@
+
+Property get operations.
+USAGE:
+
+GET [<property list>] [<get switches>]
+NOTE: <property list> ::= <property name> | <property name>,  <property list>
+
+The following properties are available:
+Property				Type			Operation
+========				====			=========
+Access Rights                      	N/A                 	N/A       
+Caption                            	N/A                 	N/A       
+Class Name                         	N/A                 	N/A       
+Compressed                         	N/A                 	N/A       
+Compression Method                 	N/A                 	N/A       
+Computer System Class Name         	N/A                 	N/A       
+Computer System Name               	N/A                 	N/A       
+Creation Date                      	N/A                 	N/A       
+Current File Open Count            	N/A                 	N/A       
+Description                        	N/A                 	N/A       
+Drive                              	N/A                 	N/A       
+Eight Dot Three File Name          	N/A                 	N/A       
+Encrypted                          	N/A                 	N/A       
+Encryption Method                  	N/A                 	N/A       
+File Extension                     	N/A                 	N/A       
+File Name                          	N/A                 	N/A       
+File System Class Name             	N/A                 	N/A       
+File System Name                   	N/A                 	N/A       
+File Type                          	N/A                 	N/A       
+Hidden                             	N/A                 	N/A       
+Install Date                       	N/A                 	N/A       
+Last Accessed                      	N/A                 	N/A       
+Last Modified                      	N/A                 	N/A       
+Manufacturer                       	N/A                 	N/A       
+Name                               	N/A                 	N/A       
+Path                               	N/A                 	N/A       
+Readable                           	N/A                 	N/A       
+Should Be Archived                 	N/A                 	N/A       
+Size                               	N/A                 	N/A       
+Status                             	N/A                 	N/A       
+System File                        	N/A                 	N/A       
+Version                            	N/A                 	N/A       
+Writeable                          	N/A                 	N/A       
+
+The following GET switches are available:
+
+/VALUE                       - Return value.
+/ALL(default)                - Return the data and metadata for the attribute.
+/TRANSLATE:<table name>      - Translate output via values from <table name>.
+/EVERY:<interval> [/REPEAT:<repeat count>] - Returns value every (X interval) seconds, If /REPEAT specified the command is executed <repeat count> times.
+/FORMAT:<format specifier>   - Keyword/XSL filename to process the XML results.
+
+NOTE: Order of /TRANSLATE and /FORMAT switches influences the appearance of output.
+Case1: If /TRANSLATE precedes /FORMAT, then translation of results will be followed by formatting.
+Case2: If /TRANSLATE succeeds /FORMAT, then translation of the formatted results will be done.
+

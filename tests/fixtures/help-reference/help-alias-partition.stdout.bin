@@ -1,0 +1,14 @@
+
+PARTITION - Management of partitioned areas of a physical disk.
+
+HINT: BNF for Alias usage.
+(<alias> [WMIObject] | <alias> [<path where>] | [<alias>] <path where>) [<verb clause>].
+
+USAGE:
+
+PARTITION ASSOC [<format specifier>]
+PARTITION CREATE <assign list>
+PARTITION DELETE
+PARTITION GET [<property list>] [<get switches>]
+PARTITION LIST [<list format>] [<list switches>]
+

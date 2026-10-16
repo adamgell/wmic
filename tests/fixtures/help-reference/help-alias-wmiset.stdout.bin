@@ -1,0 +1,15 @@
+
+WMISET - WMI service operational parameters management. 
+
+HINT: BNF for Alias usage.
+(<alias> [WMIObject] | <alias> [<path where>] | [<alias>] <path where>) [<verb clause>].
+
+USAGE:
+
+WMISET ASSOC [<format specifier>]
+WMISET CREATE <assign list>
+WMISET DELETE
+WMISET GET [<property list>] [<get switches>]
+WMISET LIST [<list format>] [<list switches>]
+WMISET SET [<assign list>]
+

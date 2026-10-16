@@ -1,0 +1,28 @@
+
+Property list operations.
+USAGE:
+
+LIST [<list format>] [<list switches>]
+
+The following LIST formats are available:
+
+BRIEF                     - DHCPEnabled, IPAddress, DefaultIPGateway, DNSDomain, ServiceName, Description, Index
+DHCP                      - Description, DHCPEnabled, DHCPLeaseExpires, DHCPLeaseObtained, DHCPServer, Index
+DNS                       - Description, DNSDomain, DNSDomainSuffixSearchOrder, DNSEnabledForWINSResolution, DNSHostName, DNSServerSearchOrder, DomainDNSRegistrationEnabled, FullDNSRegistrationEnabled, Index
+FULL                      - ArpAlwaysSourceRoute, ArpUseEtherSNAP, DeadGWDetectEnabled, DefaultIPGateway, DefaultTOS, DefaultTTL, Description, DHCPEnabled, DHCPLeaseExpires, DHCPLeaseObtained, DHCPServer, DNSDomain, DNSDomainSuffixSearchOrder, DNSEnabledForWINSResolution, DNSHostName, DNSServerSearchOrder, DomainDNSRegistrationEnabled, ForwardBufferMemory, FullDNSRegistrationEnabled, GatewayCostMetric, IGMPLevel, Index, IPAddress, IPConnectionMetric, IPEnabled, IPFilterSecurityEnabled, IPPortSecurityEnabled, IPSecPermitIPProtocols, IPSecPermitTCPPorts, IPSecPermitUDPPorts, IPSubnet, IPUseZeroBroadcast, IPXAddress, IPXEnabled, IPXFrameType, IPXMediaType, IPXNetworkNumber, IPXVirtualNetNumber, KeepAliveInterval, KeepAliveTime, MACAddress, MTU, NumForwardPackets, PMTUBHDetectEnabled, PMTUDiscoveryEnabled, ServiceName, SettingID, TcpipNetbiosOptions, TcpMaxConnectRetransmissions, TcpMaxDataRetransmissions, TcpNumConnections, TcpUseRFC1122UrgentPointer, TcpWindowSize, WINSEnableLMHostsLookup, WINSHostLookupFile, WINSPrimaryServer, WINSScopeID, WINSSecondaryServer
+INSTANCE                  - Index
+IP                        - Description, Index, IPAddress, IPConnectionMetric, IPEnabled, IPFilterSecurityEnabled
+STATUS                    - DHCPLeaseExpires, Index, Description
+SYSTEM                    - __CLASS, __DERIVATION, __DYNASTY, __GENUS, __NAMESPACE, __PATH, __PROPERTY_COUNT, __RELPATH, __SERVER, __SUPERCLASS
+WINS                      - Description, Index, WINSEnableLMHostsLookup, WINSHostLookupFile, WINSPrimaryServer, WINSScopeID, WINSSecondaryServer
+
+The following LIST switches are available:
+
+/TRANSLATE:<table name>      - Translate output via values from <table name>.
+/EVERY:<interval> [/REPEAT:<repeat count>] - Returns value every (X interval) seconds, If /REPEAT specified the command is executed <repeat count> times.
+/FORMAT:<format specifier>   - Keyword/XSL filename to process the XML results.
+
+NOTE: Order of /TRANSLATE and /FORMAT switches influences the appearance of output.
+Case1: If /TRANSLATE precedes /FORMAT, then translation of results will be followed by formatting.
+Case2: If /TRANSLATE succeeds /FORMAT, then translation of the formatted results will be done.
+

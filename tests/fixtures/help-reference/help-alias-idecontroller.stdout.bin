@@ -1,0 +1,14 @@
+
+IDECONTROLLER - IDE Controller management.  
+
+HINT: BNF for Alias usage.
+(<alias> [WMIObject] | <alias> [<path where>] | [<alias>] <path where>) [<verb clause>].
+
+USAGE:
+
+IDECONTROLLER ASSOC [<format specifier>]
+IDECONTROLLER CREATE <assign list>
+IDECONTROLLER DELETE
+IDECONTROLLER GET [<property list>] [<get switches>]
+IDECONTROLLER LIST [<list format>] [<list switches>]
+

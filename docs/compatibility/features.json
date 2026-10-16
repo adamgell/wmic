@@ -1,0 +1,877 @@
+{
+  "schema_version": 1,
+  "reference_profile": "wmic-10.0.26100.1-arm64-en-US-system-pipe",
+  "stages": {
+    "1": {
+      "implemented": false,
+      "verified": false
+    },
+    "2": {
+      "implemented": false,
+      "verified": false
+    },
+    "3": {
+      "implemented": false,
+      "verified": false
+    },
+    "4": {
+      "implemented": false,
+      "verified": false
+    },
+    "5": {
+      "implemented": false,
+      "verified": false
+    }
+  },
+  "features": [
+    {
+      "id": "global-help",
+      "documented": true,
+      "observed": true,
+      "implemented": false,
+      "verified": false
+    },
+    {
+      "id": "context",
+      "documented": true,
+      "observed": true,
+      "implemented": false,
+      "verified": false
+    },
+    {
+      "id": "os-help",
+      "documented": true,
+      "observed": true,
+      "implemented": false,
+      "verified": false
+    },
+    {
+      "id": "os-get-help",
+      "documented": true,
+      "observed": true,
+      "implemented": false,
+      "verified": false
+    },
+    {
+      "id": "os-list-help",
+      "documented": true,
+      "observed": true,
+      "implemented": false,
+      "verified": false
+    },
+    {
+      "id": "process-call-help",
+      "documented": true,
+      "observed": true,
+      "implemented": false,
+      "verified": false
+    },
+    {
+      "id": "os-get",
+      "documented": true,
+      "observed": true,
+      "implemented": false,
+      "verified": false
+    },
+    {
+      "id": "os-get-reversed",
+      "documented": false,
+      "observed": true,
+      "implemented": false,
+      "verified": false
+    },
+    {
+      "id": "os-get-value",
+      "documented": true,
+      "observed": true,
+      "implemented": false,
+      "verified": false
+    },
+    {
+      "id": "os-list-brief",
+      "documented": true,
+      "observed": true,
+      "implemented": false,
+      "verified": false
+    },
+    {
+      "id": "os-get-csv",
+      "documented": true,
+      "observed": true,
+      "implemented": false,
+      "verified": false
+    },
+    {
+      "id": "os-get-rawxml",
+      "documented": true,
+      "observed": true,
+      "implemented": false,
+      "verified": false
+    },
+    {
+      "id": "os-get-mof",
+      "documented": true,
+      "observed": true,
+      "implemented": false,
+      "verified": false
+    },
+    {
+      "id": "os-get-list",
+      "documented": true,
+      "observed": true,
+      "implemented": false,
+      "verified": false
+    },
+    {
+      "id": "os-casefold",
+      "documented": false,
+      "observed": true,
+      "implemented": false,
+      "verified": false
+    },
+    {
+      "id": "path-os-get",
+      "documented": true,
+      "observed": true,
+      "implemented": false,
+      "verified": false
+    },
+    {
+      "id": "os-where",
+      "documented": true,
+      "observed": true,
+      "implemented": false,
+      "verified": false
+    },
+    {
+      "id": "os-empty",
+      "documented": true,
+      "observed": true,
+      "implemented": false,
+      "verified": false
+    },
+    {
+      "id": "alias-os-brief",
+      "documented": true,
+      "observed": true,
+      "implemented": false,
+      "verified": false
+    },
+    {
+      "id": "error-property",
+      "documented": false,
+      "observed": true,
+      "implemented": false,
+      "verified": false
+    },
+    {
+      "id": "error-class",
+      "documented": false,
+      "observed": true,
+      "implemented": false,
+      "verified": false
+    },
+    {
+      "id": "error-alias",
+      "documented": false,
+      "observed": true,
+      "implemented": false,
+      "verified": false
+    },
+    {
+      "id": "error-switch",
+      "documented": false,
+      "observed": true,
+      "implemented": false,
+      "verified": false
+    }
+  ],
+  "tooling": {
+    "native_capture_implemented": true,
+    "native_capture_verified": true,
+    "python_tests": 12,
+    "reference_cases": 23,
+    "help_cases": 344,
+    "syntax_cases": 19,
+    "replacement_implemented": false
+  },
+  "global_switches": [
+    {
+      "name": "NAMESPACE",
+      "observed_in_help": true,
+      "implemented": false,
+      "verified": false
+    },
+    {
+      "name": "ROLE",
+      "observed_in_help": true,
+      "implemented": false,
+      "verified": false
+    },
+    {
+      "name": "NODE",
+      "observed_in_help": true,
+      "implemented": false,
+      "verified": false
+    },
+    {
+      "name": "IMPLEVEL",
+      "observed_in_help": true,
+      "implemented": false,
+      "verified": false
+    },
+    {
+      "name": "AUTHLEVEL",
+      "observed_in_help": true,
+      "implemented": false,
+      "verified": false
+    },
+    {
+      "name": "LOCALE",
+      "observed_in_help": true,
+      "implemented": false,
+      "verified": false
+    },
+    {
+      "name": "PRIVILEGES",
+      "observed_in_help": true,
+      "implemented": false,
+      "verified": false
+    },
+    {
+      "name": "TRACE",
+      "observed_in_help": true,
+      "implemented": false,
+      "verified": false
+    },
+    {
+      "name": "RECORD",
+      "observed_in_help": true,
+      "implemented": false,
+      "verified": false
+    },
+    {
+      "name": "INTERACTIVE",
+      "observed_in_help": true,
+      "implemented": false,
+      "verified": false
+    },
+    {
+      "name": "FAILFAST",
+      "observed_in_help": true,
+      "implemented": false,
+      "verified": false
+    },
+    {
+      "name": "USER",
+      "observed_in_help": true,
+      "implemented": false,
+      "verified": false
+    },
+    {
+      "name": "PASSWORD",
+      "observed_in_help": true,
+      "implemented": false,
+      "verified": false
+    },
+    {
+      "name": "OUTPUT",
+      "observed_in_help": true,
+      "implemented": false,
+      "verified": false
+    },
+    {
+      "name": "APPEND",
+      "observed_in_help": true,
+      "implemented": false,
+      "verified": false
+    },
+    {
+      "name": "AGGREGATE",
+      "observed_in_help": true,
+      "implemented": false,
+      "verified": false
+    },
+    {
+      "name": "AUTHORITY",
+      "observed_in_help": true,
+      "implemented": false,
+      "verified": false
+    },
+    {
+      "name": "?",
+      "observed_in_help": true,
+      "implemented": false,
+      "verified": false
+    }
+  ],
+  "aliases": [
+    {
+      "name": "Alias",
+      "target": "Select * from Msft_CliAlias",
+      "observed_in_metadata": true,
+      "implemented": false,
+      "verified": false
+    },
+    {
+      "name": "BaseBoard",
+      "target": "Select * from Win32_BaseBoard",
+      "observed_in_metadata": true,
+      "implemented": false,
+      "verified": false
+    },
+    {
+      "name": "BIOS",
+      "target": "Select * from Win32_BIOS",
+      "observed_in_metadata": true,
+      "implemented": false,
+      "verified": false
+    },
+    {
+      "name": "BootConfig",
+      "target": "Select * from Win32_BootConfiguration",
+      "observed_in_metadata": true,
+      "implemented": false,
+      "verified": false
+    },
+    {
+      "name": "CDROM",
+      "target": "Select * from Win32_CDROMDrive",
+      "observed_in_metadata": true,
+      "implemented": false,
+      "verified": false
+    },
+    {
+      "name": "ComputerSystem",
+      "target": "Select * from Win32_ComputerSystem",
+      "observed_in_metadata": true,
+      "implemented": false,
+      "verified": false
+    },
+    {
+      "name": "CPU",
+      "target": "Select * from WIN32_PROCESSOR",
+      "observed_in_metadata": true,
+      "implemented": false,
+      "verified": false
+    },
+    {
+      "name": "CSProduct",
+      "target": "Select * from Win32_ComputerSystemProduct",
+      "observed_in_metadata": true,
+      "implemented": false,
+      "verified": false
+    },
+    {
+      "name": "DataFile",
+      "target": "Select * from CIM_DataFile",
+      "observed_in_metadata": true,
+      "implemented": false,
+      "verified": false
+    },
+    {
+      "name": "DCOMAPP",
+      "target": "Select * from WIN32_DCOMApplication",
+      "observed_in_metadata": true,
+      "implemented": false,
+      "verified": false
+    },
+    {
+      "name": "DESKTOP",
+      "target": "Select * from WIN32_DESKTOP",
+      "observed_in_metadata": true,
+      "implemented": false,
+      "verified": false
+    },
+    {
+      "name": "DesktopMonitor",
+      "target": "Select * from WIN32_DESKTOPMONITOR",
+      "observed_in_metadata": true,
+      "implemented": false,
+      "verified": false
+    },
+    {
+      "name": "DeviceMemoryAddress",
+      "target": "Select * from Win32_DeviceMemoryAddress",
+      "observed_in_metadata": true,
+      "implemented": false,
+      "verified": false
+    },
+    {
+      "name": "DiskDrive",
+      "target": "Select * from Win32_DiskDrive",
+      "observed_in_metadata": true,
+      "implemented": false,
+      "verified": false
+    },
+    {
+      "name": "DiskQuota",
+      "target": "Select * from Win32_DiskQuota",
+      "observed_in_metadata": true,
+      "implemented": false,
+      "verified": false
+    },
+    {
+      "name": "DMAChannel",
+      "target": "Select * from Win32_DMAChannel",
+      "observed_in_metadata": true,
+      "implemented": false,
+      "verified": false
+    },
+    {
+      "name": "Environment",
+      "target": "Select * from Win32_Environment",
+      "observed_in_metadata": true,
+      "implemented": false,
+      "verified": false
+    },
+    {
+      "name": "FSDir",
+      "target": "Select * from Win32_Directory",
+      "observed_in_metadata": true,
+      "implemented": false,
+      "verified": false
+    },
+    {
+      "name": "Group",
+      "target": "Select * from Win32_Group",
+      "observed_in_metadata": true,
+      "implemented": false,
+      "verified": false
+    },
+    {
+      "name": "IDECONTROLLER",
+      "target": "Select * from Win32_IDEController",
+      "observed_in_metadata": true,
+      "implemented": false,
+      "verified": false
+    },
+    {
+      "name": "IRQ",
+      "target": "Select * from Win32_IRQResource",
+      "observed_in_metadata": true,
+      "implemented": false,
+      "verified": false
+    },
+    {
+      "name": "Job",
+      "target": "Select * from Win32_ScheduledJob",
+      "observed_in_metadata": true,
+      "implemented": false,
+      "verified": false
+    },
+    {
+      "name": "LoadOrder",
+      "target": "Select * from Win32_LoadOrderGroup",
+      "observed_in_metadata": true,
+      "implemented": false,
+      "verified": false
+    },
+    {
+      "name": "LogicalDisk",
+      "target": "Select * from Win32_LogicalDisk",
+      "observed_in_metadata": true,
+      "implemented": false,
+      "verified": false
+    },
+    {
+      "name": "LOGON",
+      "target": "Select * from Win32_LogonSession",
+      "observed_in_metadata": true,
+      "implemented": false,
+      "verified": false
+    },
+    {
+      "name": "MEMCACHE",
+      "target": "Select * from WIN32_CACHEMEMORY",
+      "observed_in_metadata": true,
+      "implemented": false,
+      "verified": false
+    },
+    {
+      "name": "MemoryChip",
+      "target": "Select * from Win32_PhysicalMemory",
+      "observed_in_metadata": true,
+      "implemented": false,
+      "verified": false
+    },
+    {
+      "name": "MemPhysical",
+      "target": "Select * from Win32_PhysicalMemoryArray",
+      "observed_in_metadata": true,
+      "implemented": false,
+      "verified": false
+    },
+    {
+      "name": "NetClient",
+      "target": "Select * from WIN32_NetworkClient",
+      "observed_in_metadata": true,
+      "implemented": false,
+      "verified": false
+    },
+    {
+      "name": "NetLogin",
+      "target": "Select * from Win32_NetworkLoginProfile",
+      "observed_in_metadata": true,
+      "implemented": false,
+      "verified": false
+    },
+    {
+      "name": "NetProtocol",
+      "target": "Select * from Win32_NetworkProtocol",
+      "observed_in_metadata": true,
+      "implemented": false,
+      "verified": false
+    },
+    {
+      "name": "NetUse",
+      "target": "Select * from Win32_NetworkConnection",
+      "observed_in_metadata": true,
+      "implemented": false,
+      "verified": false
+    },
+    {
+      "name": "NIC",
+      "target": "Select * from Win32_NetworkAdapter",
+      "observed_in_metadata": true,
+      "implemented": false,
+      "verified": false
+    },
+    {
+      "name": "NICConfig",
+      "target": "Select * from Win32_NetworkAdapterConfiguration",
+      "observed_in_metadata": true,
+      "implemented": false,
+      "verified": false
+    },
+    {
+      "name": "NTDOMAIN",
+      "target": "Select * from Win32_NTDomain",
+      "observed_in_metadata": true,
+      "implemented": false,
+      "verified": false
+    },
+    {
+      "name": "NTEvent",
+      "target": "Select * from Win32_NTLogEvent",
+      "observed_in_metadata": true,
+      "implemented": false,
+      "verified": false
+    },
+    {
+      "name": "NTEventLog",
+      "target": "Select * from Win32_NTEventlogFile",
+      "observed_in_metadata": true,
+      "implemented": false,
+      "verified": false
+    },
+    {
+      "name": "OnBoardDevice",
+      "target": "Select * from Win32_OnBoardDevice",
+      "observed_in_metadata": true,
+      "implemented": false,
+      "verified": false
+    },
+    {
+      "name": "OS",
+      "target": "Select * from Win32_OperatingSystem",
+      "observed_in_metadata": true,
+      "implemented": false,
+      "verified": false
+    },
+    {
+      "name": "PageFile",
+      "target": "Select * from Win32_PageFileUsage",
+      "observed_in_metadata": true,
+      "implemented": false,
+      "verified": false
+    },
+    {
+      "name": "PageFileSet",
+      "target": "Select * from Win32_PageFileSetting",
+      "observed_in_metadata": true,
+      "implemented": false,
+      "verified": false
+    },
+    {
+      "name": "Partition",
+      "target": "Select * from Win32_DiskPartition",
+      "observed_in_metadata": true,
+      "implemented": false,
+      "verified": false
+    },
+    {
+      "name": "Port",
+      "target": "Select * from Win32_PortResource",
+      "observed_in_metadata": true,
+      "implemented": false,
+      "verified": false
+    },
+    {
+      "name": "PortConnector",
+      "target": "Select * from Win32_PortConnector",
+      "observed_in_metadata": true,
+      "implemented": false,
+      "verified": false
+    },
+    {
+      "name": "Printer",
+      "target": "Select * from Win32_Printer",
+      "observed_in_metadata": true,
+      "implemented": false,
+      "verified": false
+    },
+    {
+      "name": "PrinterConfig",
+      "target": "Select * from Win32_PrinterConfiguration",
+      "observed_in_metadata": true,
+      "implemented": false,
+      "verified": false
+    },
+    {
+      "name": "PrintJob",
+      "target": "Select * from Win32_PrintJob",
+      "observed_in_metadata": true,
+      "implemented": false,
+      "verified": false
+    },
+    {
+      "name": "Process",
+      "target": "Select * from Win32_Process",
+      "observed_in_metadata": true,
+      "implemented": false,
+      "verified": false
+    },
+    {
+      "name": "Product",
+      "target": "Select * from Win32_Product",
+      "observed_in_metadata": true,
+      "implemented": false,
+      "verified": false
+    },
+    {
+      "name": "QFE",
+      "target": "Select * from Win32_QuickFixEngineering",
+      "observed_in_metadata": true,
+      "implemented": false,
+      "verified": false
+    },
+    {
+      "name": "QuotaSetting",
+      "target": "Select * from Win32_QuotaSetting",
+      "observed_in_metadata": true,
+      "implemented": false,
+      "verified": false
+    },
+    {
+      "name": "RDAccount",
+      "target": "Select * from Win32_TSAccount",
+      "observed_in_metadata": true,
+      "implemented": false,
+      "verified": false
+    },
+    {
+      "name": "RDNIC",
+      "target": "Select * from Win32_TSNetworkAdapterSetting",
+      "observed_in_metadata": true,
+      "implemented": false,
+      "verified": false
+    },
+    {
+      "name": "RDPermissions",
+      "target": "Select * from Win32_TSPermissionsSetting",
+      "observed_in_metadata": true,
+      "implemented": false,
+      "verified": false
+    },
+    {
+      "name": "RDToggle",
+      "target": "Select * from Win32_TerminalServiceSetting",
+      "observed_in_metadata": true,
+      "implemented": false,
+      "verified": false
+    },
+    {
+      "name": "RecoverOS",
+      "target": "Select * from Win32_OSRecoveryConfiguration",
+      "observed_in_metadata": true,
+      "implemented": false,
+      "verified": false
+    },
+    {
+      "name": "Registry",
+      "target": "Select * from Win32_Registry",
+      "observed_in_metadata": true,
+      "implemented": false,
+      "verified": false
+    },
+    {
+      "name": "SCSICONTROLLER",
+      "target": "Select * from Win32_SCSIController",
+      "observed_in_metadata": true,
+      "implemented": false,
+      "verified": false
+    },
+    {
+      "name": "Server",
+      "target": "Select * from Win32_PerfRawData_PerfNet_Server",
+      "observed_in_metadata": true,
+      "implemented": false,
+      "verified": false
+    },
+    {
+      "name": "Service",
+      "target": "Select * from Win32_Service",
+      "observed_in_metadata": true,
+      "implemented": false,
+      "verified": false
+    },
+    {
+      "name": "ShadowCopy",
+      "target": "Select * from Win32_ShadowCopy",
+      "observed_in_metadata": true,
+      "implemented": false,
+      "verified": false
+    },
+    {
+      "name": "ShadowStorage",
+      "target": "Select * from Win32_ShadowStorage",
+      "observed_in_metadata": true,
+      "implemented": false,
+      "verified": false
+    },
+    {
+      "name": "Share",
+      "target": "Select * from Win32_Share",
+      "observed_in_metadata": true,
+      "implemented": false,
+      "verified": false
+    },
+    {
+      "name": "SoftwareElement",
+      "target": "Select * from Win32_SoftwareElement",
+      "observed_in_metadata": true,
+      "implemented": false,
+      "verified": false
+    },
+    {
+      "name": "SoftwareFeature",
+      "target": "Select * from Win32_SoftwareFeature",
+      "observed_in_metadata": true,
+      "implemented": false,
+      "verified": false
+    },
+    {
+      "name": "SoundDev",
+      "target": "Select * from WIN32_SoundDevice",
+      "observed_in_metadata": true,
+      "implemented": false,
+      "verified": false
+    },
+    {
+      "name": "Startup",
+      "target": "Select * from Win32_StartupCommand",
+      "observed_in_metadata": true,
+      "implemented": false,
+      "verified": false
+    },
+    {
+      "name": "SysAccount",
+      "target": "Select * from Win32_SystemAccount",
+      "observed_in_metadata": true,
+      "implemented": false,
+      "verified": false
+    },
+    {
+      "name": "SysDriver",
+      "target": "Select * from Win32_SystemDriver",
+      "observed_in_metadata": true,
+      "implemented": false,
+      "verified": false
+    },
+    {
+      "name": "SystemEnclosure",
+      "target": "Select * from Win32_SystemEnclosure",
+      "observed_in_metadata": true,
+      "implemented": false,
+      "verified": false
+    },
+    {
+      "name": "SystemSlot",
+      "target": "Select * from Win32_SystemSlot",
+      "observed_in_metadata": true,
+      "implemented": false,
+      "verified": false
+    },
+    {
+      "name": "TapeDrive",
+      "target": "Select * from Win32_TapeDrive",
+      "observed_in_metadata": true,
+      "implemented": false,
+      "verified": false
+    },
+    {
+      "name": "Temperature",
+      "target": "Select * from Win32_TemperatureProbe",
+      "observed_in_metadata": true,
+      "implemented": false,
+      "verified": false
+    },
+    {
+      "name": "TimeZone",
+      "target": "Select * from Win32_TimeZone",
+      "observed_in_metadata": true,
+      "implemented": false,
+      "verified": false
+    },
+    {
+      "name": "UPS",
+      "target": "Select * from Win32_UninterruptiblePowerSupply",
+      "observed_in_metadata": true,
+      "implemented": false,
+      "verified": false
+    },
+    {
+      "name": "UserAccount",
+      "target": "Select * from Win32_UserAccount",
+      "observed_in_metadata": true,
+      "implemented": false,
+      "verified": false
+    },
+    {
+      "name": "Voltage",
+      "target": "Select * from Win32_VoltageProbe",
+      "observed_in_metadata": true,
+      "implemented": false,
+      "verified": false
+    },
+    {
+      "name": "Volume",
+      "target": "Select * from Win32_Volume",
+      "observed_in_metadata": true,
+      "implemented": false,
+      "verified": false
+    },
+    {
+      "name": "VolumeQuotaSetting",
+      "target": "Select * from Win32_VolumeQuotaSetting",
+      "observed_in_metadata": true,
+      "implemented": false,
+      "verified": false
+    },
+    {
+      "name": "VolumeUserQuota",
+      "target": "Select * from Win32_VolumeUserQuota",
+      "observed_in_metadata": true,
+      "implemented": false,
+      "verified": false
+    },
+    {
+      "name": "WMISet",
+      "target": "Select * from Win32_WMISetting",
+      "observed_in_metadata": true,
+      "implemented": false,
+      "verified": false
+    }
+  ]
+}

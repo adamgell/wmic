@@ -1,0 +1,8 @@
+
+LOCALE - Specify the language id the command line should use.
+USAGE:
+
+/LOCALE:<locale identifier>
+NOTE: The parameter to the 'LOCALE' switch is of the form MS_XXX.
+      Where XXX for English is 409, XXX for Finnish is 40b.
+

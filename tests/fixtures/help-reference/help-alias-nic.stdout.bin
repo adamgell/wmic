@@ -1,0 +1,14 @@
+
+NIC - Network Interface Controller (NIC) management.
+
+HINT: BNF for Alias usage.
+(<alias> [WMIObject] | <alias> [<path where>] | [<alias>] <path where>) [<verb clause>].
+
+USAGE:
+
+NIC ASSOC [<format specifier>]
+NIC CREATE <assign list>
+NIC DELETE
+NIC GET [<property list>] [<get switches>]
+NIC LIST [<list format>] [<list switches>]
+

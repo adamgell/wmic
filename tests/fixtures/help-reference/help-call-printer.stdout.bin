@@ -1,0 +1,38 @@
+
+Method execution operations.
+USAGE:
+
+CALL <method name> [<actual paramlist>]
+NOTE: <actual paramlist> ::= <actual param> | <actual param>,  <actual paramlist>
+
+The following alias verb(s)/method(s) are available:
+
+Call			[ In/Out ]Params&type			Status
+====			=====================			======
+AddPrinterConnection    [IN ]Name(STRING)                   	(null)         
+
+CancelAllJobs           					(null)         
+
+
+Pause                   					(null)         
+
+
+PrintTestPage           					(null)         
+
+
+RenamePrinter           [IN ]NewPrinterName(STRING)         	(null)         
+
+Reset                   					(null)         
+
+
+Resume                  					(null)         
+
+
+SetDefaultPrinter       					(null)         
+
+
+SetPowerState           [IN ]PowerState(UINT16)             	(null)         
+
+			[IN ]Time(DATETIME)                 	
+
+

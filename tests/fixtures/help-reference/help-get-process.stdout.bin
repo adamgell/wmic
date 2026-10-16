@@ -1,0 +1,63 @@
+
+Property get operations.
+USAGE:
+
+GET [<property list>] [<get switches>]
+NOTE: <property list> ::= <property name> | <property name>,  <property list>
+
+The following properties are available:
+Property				Type			Operation
+========				====			=========
+CSName                             	N/A                 	N/A       
+CommandLine                        	N/A                 	N/A       
+Description                        	N/A                 	N/A       
+ExecutablePath                     	N/A                 	N/A       
+ExecutionState                     	N/A                 	N/A       
+Handle                             	N/A                 	N/A       
+HandleCount                        	N/A                 	N/A       
+InstallDate                        	N/A                 	N/A       
+KernelModeTime                     	N/A                 	N/A       
+MaximumWorkingSetSize              	N/A                 	N/A       
+MinimumWorkingSetSize              	N/A                 	N/A       
+Name                               	N/A                 	N/A       
+OSName                             	N/A                 	N/A       
+OtherOperationCount                	N/A                 	N/A       
+OtherTransferCount                 	N/A                 	N/A       
+PageFaults                         	N/A                 	N/A       
+PageFileUsage                      	N/A                 	N/A       
+ParentProcessId                    	N/A                 	N/A       
+PeakPageFileUsage                  	N/A                 	N/A       
+PeakVirtualSize                    	N/A                 	N/A       
+PeakWorkingSetSize                 	N/A                 	N/A       
+Priority                           	N/A                 	N/A       
+PrivatePageCount                   	N/A                 	N/A       
+ProcessId                          	N/A                 	N/A       
+QuotaNonPagedPoolUsage             	N/A                 	N/A       
+QuotaPagedPoolUsage                	N/A                 	N/A       
+QuotaPeakNonPagedPoolUsage         	N/A                 	N/A       
+QuotaPeakPagedPoolUsage            	N/A                 	N/A       
+ReadOperationCount                 	N/A                 	N/A       
+ReadTransferCount                  	N/A                 	N/A       
+SessionId                          	N/A                 	N/A       
+Status                             	N/A                 	N/A       
+TerminationDate                    	N/A                 	N/A       
+ThreadCount                        	N/A                 	N/A       
+UserModeTime                       	N/A                 	N/A       
+VirtualSize                        	N/A                 	N/A       
+WindowsVersion                     	N/A                 	N/A       
+WorkingSetSize                     	N/A                 	N/A       
+WriteOperationCount                	N/A                 	N/A       
+WriteTransferCount                 	N/A                 	N/A       
+
+The following GET switches are available:
+
+/VALUE                       - Return value.
+/ALL(default)                - Return the data and metadata for the attribute.
+/TRANSLATE:<table name>      - Translate output via values from <table name>.
+/EVERY:<interval> [/REPEAT:<repeat count>] - Returns value every (X interval) seconds, If /REPEAT specified the command is executed <repeat count> times.
+/FORMAT:<format specifier>   - Keyword/XSL filename to process the XML results.
+
+NOTE: Order of /TRANSLATE and /FORMAT switches influences the appearance of output.
+Case1: If /TRANSLATE precedes /FORMAT, then translation of results will be followed by formatting.
+Case2: If /TRANSLATE succeeds /FORMAT, then translation of the formatted results will be done.
+

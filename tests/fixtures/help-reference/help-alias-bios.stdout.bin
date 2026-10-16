@@ -1,0 +1,14 @@
+
+BIOS - Basic input/output services (BIOS) management.
+
+HINT: BNF for Alias usage.
+(<alias> [WMIObject] | <alias> [<path where>] | [<alias>] <path where>) [<verb clause>].
+
+USAGE:
+
+BIOS ASSOC [<format specifier>]
+BIOS CREATE <assign list>
+BIOS DELETE
+BIOS GET [<property list>] [<get switches>]
+BIOS LIST [<list format>] [<list switches>]
+

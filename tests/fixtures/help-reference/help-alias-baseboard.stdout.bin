@@ -1,0 +1,14 @@
+
+BASEBOARD - Base board (also known as a motherboard or system board) management.
+
+HINT: BNF for Alias usage.
+(<alias> [WMIObject] | <alias> [<path where>] | [<alias>] <path where>) [<verb clause>].
+
+USAGE:
+
+BASEBOARD ASSOC [<format specifier>]
+BASEBOARD CREATE <assign list>
+BASEBOARD DELETE
+BASEBOARD GET [<property list>] [<get switches>]
+BASEBOARD LIST [<list format>] [<list switches>]
+

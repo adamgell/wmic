@@ -1,0 +1,12 @@
+
+APPEND - Specifies the mode for output redirection.
+USAGE:
+
+/APPEND:<outputspec>
+NOTE: <outputspec> ::= (STDOUT | CLIPBOARD | <filename>)
+      STDOUT     - Output will be redirected to the STDOUT.
+      CLIPBOARD  - Output will be copied on to CLIPBOARD.
+      <filename> - Output will be appended to the specified file.
+
+NOTE: Enclose the switch value in  double quotes, if the value contains special  characters like '-' or '/'.
+

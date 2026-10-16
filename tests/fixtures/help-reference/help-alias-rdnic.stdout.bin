@@ -1,0 +1,16 @@
+
+RDNIC - Remote Desktop connection management on a specific network adapter.
+
+HINT: BNF for Alias usage.
+(<alias> [WMIObject] | <alias> [<path where>] | [<alias>] <path where>) [<verb clause>].
+
+USAGE:
+
+RDNIC ASSOC [<format specifier>]
+RDNIC CALL <method name> [<actual param list>]
+RDNIC CREATE <assign list>
+RDNIC DELETE
+RDNIC GET [<property list>] [<get switches>]
+RDNIC LIST [<list format>] [<list switches>]
+RDNIC SET [<assign list>]
+

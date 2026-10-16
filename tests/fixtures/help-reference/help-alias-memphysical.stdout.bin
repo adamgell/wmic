@@ -1,0 +1,14 @@
+
+MEMPHYSICAL - Computer system's physical memory management. 
+
+HINT: BNF for Alias usage.
+(<alias> [WMIObject] | <alias> [<path where>] | [<alias>] <path where>) [<verb clause>].
+
+USAGE:
+
+MEMPHYSICAL ASSOC [<format specifier>]
+MEMPHYSICAL CREATE <assign list>
+MEMPHYSICAL DELETE
+MEMPHYSICAL GET [<property list>] [<get switches>]
+MEMPHYSICAL LIST [<list format>] [<list switches>]
+

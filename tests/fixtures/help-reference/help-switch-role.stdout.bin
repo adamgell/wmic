@@ -1,0 +1,12 @@
+
+ROLE - Path for the role containing the alias definitions to be available for
+       the utility session.
+USAGE:
+
+/ROLE:<namespace>
+NOTE: Roles are actually namespaces and should be treated in the same way -
+      i.e. relative paths should behave appropriately (default namespace is
+      '\\root\cli').
+
+NOTE: Enclose the switch value in  double quotes, if the value contains special  characters like '-' or '/'.
+

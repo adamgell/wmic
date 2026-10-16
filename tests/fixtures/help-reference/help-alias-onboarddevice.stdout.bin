@@ -1,0 +1,14 @@
+
+ONBOARDDEVICE - Management of common adapter devices built into the motherboard (system board).
+
+HINT: BNF for Alias usage.
+(<alias> [WMIObject] | <alias> [<path where>] | [<alias>] <path where>) [<verb clause>].
+
+USAGE:
+
+ONBOARDDEVICE ASSOC [<format specifier>]
+ONBOARDDEVICE CREATE <assign list>
+ONBOARDDEVICE DELETE
+ONBOARDDEVICE GET [<property list>] [<get switches>]
+ONBOARDDEVICE LIST [<list format>] [<list switches>]
+

@@ -1,0 +1,25 @@
+
+Property list operations.
+USAGE:
+
+LIST [<list format>] [<list switches>]
+
+The following LIST formats are available:
+
+BRIEF                     - Location, Name, PrinterState, PrinterStatus, ShareName, SystemName
+FULL                      - Attributes, Availability, AvailableJobSheets, AveragePagesPerMinute, Capabilities, CapabilityDescriptions, Caption, CharSetsSupported, Comment, ConfigManagerErrorCode, ConfigManagerUserConfig, CurrentCapabilities, CurrentCharSet, CurrentLanguage, CurrentMimeType, CurrentNaturalLanguage, CurrentPaperType, Default, DefaultCapabilities, DefaultCopies, DefaultLanguage, DefaultMimeType, DefaultNumberUp, DefaultPaperType, DefaultPriority, Description, DetectedErrorState, DeviceID, Direct, DoCompleteFirst, DriverName, EnableBIDI, EnableDevQueryPrint, ErrorCleared, ErrorDescription, ErrorInformation, ExtendedDetectedErrorState, ExtendedPrinterStatus, Hidden, HorizontalResolution, InstallDate, JobCountSinceLastReset, KeepPrintedJobs, LanguagesSupported, LastErrorCode, Local, Location, MarkingTechnology, MaxCopies, MaxNumberUp, MaxSizeSupported, MimeTypesSupported, Name, PaperSizesSupported, PNPDeviceID, PortName, PowerManagementCapabilities, PowerManagementSupported, PrinterPaperNames, PrinterState, PrinterStatus, PrintJobDataType, PrintProcessor, SeparatorFile, ServerName, ShareName, SpoolEnabled, StartTime, Status, StatusInfo, SystemName, TimeOfLastReset, UntilTime, VerticalResolution
+INSTANCE                  - Name
+STATUS                    - Status, Name
+SYSTEM                    - __CLASS, __DERIVATION, __DYNASTY, __GENUS, __NAMESPACE, __PATH, __PROPERTY_COUNT, __RELPATH, __SERVER, __SUPERCLASS
+WRITEABLE                 - Attributes, Comment, DefaultPriority, Direct, DoCompleteFirst, DriverName, EnableBIDI, EnableDevQueryPrint, ErrorInformation, Hidden, KeepPrintedJobs, Local, Location, Network, Parameters, PortName, PrintJobDataType, PrintProcessor, Priority, Published, Queued, RawOnly, SeparatorFile, Shared, ShareName, StartTime, UntilTime, WorkOffline
+
+The following LIST switches are available:
+
+/TRANSLATE:<table name>      - Translate output via values from <table name>.
+/EVERY:<interval> [/REPEAT:<repeat count>] - Returns value every (X interval) seconds, If /REPEAT specified the command is executed <repeat count> times.
+/FORMAT:<format specifier>   - Keyword/XSL filename to process the XML results.
+
+NOTE: Order of /TRANSLATE and /FORMAT switches influences the appearance of output.
+Case1: If /TRANSLATE precedes /FORMAT, then translation of results will be followed by formatting.
+Case2: If /TRANSLATE succeeds /FORMAT, then translation of the formatted results will be done.
+

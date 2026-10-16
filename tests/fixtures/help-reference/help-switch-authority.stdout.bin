@@ -1,0 +1,6 @@
+
+AUTHORITY - Specifies the <authority type> for the connection.
+USAGE:
+
+/AUTHORITY:<authority type>
+

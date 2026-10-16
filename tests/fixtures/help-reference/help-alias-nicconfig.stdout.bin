@@ -1,0 +1,15 @@
+
+NICCONFIG - Network adapter management. 
+
+HINT: BNF for Alias usage.
+(<alias> [WMIObject] | <alias> [<path where>] | [<alias>] <path where>) [<verb clause>].
+
+USAGE:
+
+NICCONFIG ASSOC [<format specifier>]
+NICCONFIG CALL <method name> [<actual param list>]
+NICCONFIG CREATE <assign list>
+NICCONFIG DELETE
+NICCONFIG GET [<property list>] [<get switches>]
+NICCONFIG LIST [<list format>] [<list switches>]
+

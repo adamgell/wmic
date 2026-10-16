@@ -1,0 +1,14 @@
+
+PORTCONNECTOR - Physical connection ports management.
+
+HINT: BNF for Alias usage.
+(<alias> [WMIObject] | <alias> [<path where>] | [<alias>] <path where>) [<verb clause>].
+
+USAGE:
+
+PORTCONNECTOR ASSOC [<format specifier>]
+PORTCONNECTOR CREATE <assign list>
+PORTCONNECTOR DELETE
+PORTCONNECTOR GET [<property list>] [<get switches>]
+PORTCONNECTOR LIST [<list format>] [<list switches>]
+

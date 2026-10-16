@@ -1,0 +1,27 @@
+
+Property list operations.
+USAGE:
+
+LIST [<list format>] [<list switches>]
+
+The following LIST formats are available:
+
+BRIEF                     - ThreadCount, HandleCount, Name, Priority, ProcessId, WorkingSetSize
+FULL                      - CommandLine, CSName, Description, ExecutablePath, ExecutionState, Handle, HandleCount, InstallDate, KernelModeTime, MaximumWorkingSetSize, MinimumWorkingSetSize, Name, OSName, OtherOperationCount, OtherTransferCount, PageFaults, PageFileUsage, ParentProcessId, PeakPageFileUsage, PeakVirtualSize, PeakWorkingSetSize, Priority, PrivatePageCount, ProcessId, QuotaNonPagedPoolUsage, QuotaPagedPoolUsage, QuotaPeakNonPagedPoolUsage, QuotaPeakPagedPoolUsage, ReadOperationCount, ReadTransferCount, SessionId, Status, TerminationDate, ThreadCount, UserModeTime, VirtualSize, WindowsVersion, WorkingSetSize, WriteOperationCount, WriteTransferCount
+INSTANCE                  - __PATH
+IO                        - Name, ProcessId, ReadOperationCount, ReadTransferCount, WriteOperationCount, WriteTransferCount
+MEMORY                    - Handle, MaximumWorkingSetSize, MinimumWorkingSetSize, Name, PageFaults, PageFileUsage, PeakPageFileUsage, PeakVirtualSize, PeakWorkingSetSize, PrivatePageCount, QuotaNonPagedPoolUsage, QuotaPagedPoolUsage, QuotaPeakNonPagedPoolUsage, QuotaPeakPagedPoolUsage, VirtualSize, WorkingSetSize
+STATISTICS                - HandleCount, Name, KernelModeTime, MaximumWorkingSetSize, MinimumWorkingSetSize, OtherOperationCount, OtherTransferCount, PageFaults, PageFileUsage, PeakPageFileUsage, PeakVirtualSize, PeakWorkingSetSize, PrivatePageCount, ProcessId, QuotaNonPagedPoolUsage, QuotaPagedPoolUsage, QuotaPeakNonPagedPoolUsage, QuotaPeakPagedPoolUsage, ReadOperationCount, ReadTransferCount, ThreadCount, UserModeTime, VirtualSize, WorkingSetSize, WriteOperationCount, WriteTransferCount
+STATUS                    - Status, Name, ProcessId
+SYSTEM                    - __CLASS, __DERIVATION, __DYNASTY, __GENUS, __NAMESPACE, __PATH, __PROPERTY_COUNT, __RELPATH, __SERVER, __SUPERCLASS
+
+The following LIST switches are available:
+
+/TRANSLATE:<table name>      - Translate output via values from <table name>.
+/EVERY:<interval> [/REPEAT:<repeat count>] - Returns value every (X interval) seconds, If /REPEAT specified the command is executed <repeat count> times.
+/FORMAT:<format specifier>   - Keyword/XSL filename to process the XML results.
+
+NOTE: Order of /TRANSLATE and /FORMAT switches influences the appearance of output.
+Case1: If /TRANSLATE precedes /FORMAT, then translation of results will be followed by formatting.
+Case2: If /TRANSLATE succeeds /FORMAT, then translation of the formatted results will be done.
+

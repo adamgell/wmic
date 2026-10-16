@@ -1,0 +1,9 @@
+
+USER - Provides the user to be used during the session.
+USAGE:
+
+/USER:<userid>
+NOTE: User should be provided in the form <domain>\<user>.
+
+NOTE: Enclose the switch value in  double quotes, if the value contains special  characters like '-' or '/'.
+

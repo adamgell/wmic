@@ -1,0 +1,43 @@
+
+Method execution operations.
+USAGE:
+
+CALL <method name> [<actual paramlist>]
+NOTE: <actual paramlist> ::= <actual param> | <actual param>,  <actual paramlist>
+
+The following alias verb(s)/method(s) are available:
+
+Call			[ In/Out ]Params&type			Status
+====			=====================			======
+Admin                   [IN ]Options(STRING)                	(null)         
+
+			[IN ]PackageLocation(STRING)        	
+
+			[IN ]TargetLocation(STRING)         	
+
+Advertise               [IN ]AllUsers(BOOLEAN)              	(null)         
+
+			[IN ]Options(STRING)                	
+
+			[IN ]PackageLocation(STRING)        	
+
+Configure               [IN ]InstallLevel(UINT16)           	(null)         
+
+			[IN ]InstallState(UINT16)           	
+
+Install                 [IN ]AllUsers(BOOLEAN)              	(null)         
+
+			[IN ]Options(STRING)                	
+
+			[IN ]PackageLocation(STRING)        	
+
+Reinstall               [IN ]ReinstallMode(UINT16)          	(null)         
+
+Uninstall               					(null)         
+
+
+Upgrade                 [IN ]Options(STRING)                	(null)         
+
+			[IN ]PackageLocation(STRING)        	
+
+

@@ -1,0 +1,16 @@
+
+Method execution operations.
+USAGE:
+
+CALL <method name> [<actual paramlist>]
+NOTE: <actual paramlist> ::= <actual param> | <actual param>,  <actual paramlist>
+
+The following alias verb(s)/method(s) are available:
+
+Call			[ In/Out ]Params&type			Status
+====			=====================			======
+Configure               [IN ]InstallState(UINT16)           	(null)         
+
+Reinstall               [IN ]ReinstallMode(UINT16)          	(null)         
+
+

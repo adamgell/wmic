@@ -1,0 +1,6 @@
+
+Escapes to full WMI schema.
+USAGE:
+
+CLASS <class path expr> [<standardverb> [<verb switches>]]
+

@@ -1,0 +1,15 @@
+
+DISKQUOTA - Disk space usage for NTFS volumes.
+
+HINT: BNF for Alias usage.
+(<alias> [WMIObject] | <alias> [<path where>] | [<alias>] <path where>) [<verb clause>].
+
+USAGE:
+
+DISKQUOTA ASSOC [<format specifier>]
+DISKQUOTA CREATE <assign list>
+DISKQUOTA DELETE
+DISKQUOTA GET [<property list>] [<get switches>]
+DISKQUOTA LIST [<list format>] [<list switches>]
+DISKQUOTA SET [<assign list>]
+

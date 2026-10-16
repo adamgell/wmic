@@ -1,0 +1,24 @@
+
+Property list operations.
+USAGE:
+
+LIST [<list format>] [<list switches>]
+
+The following LIST formats are available:
+
+BRIEF                     - Client Accessible, ID, Imported, InstallDate, No Auto Release, No Writers, Persistent, VolumeName
+FULL                      - Client Accessible, Count, Device Object, Differential, Exposed Locally, Exposed Name, Exposed Path, Exposed Remotely, Hardware Assisted, ID, Imported, InstallDate, No Auto Release, Not Surfaced, No Writers, Originating Machine, Persistent, Plex, Provider ID, Read/Write, Service Machine, Shadow Set ID, State, Transportable, VolumeName
+INSTANCE                  - __PATH
+STATUS                    - ID, Exposed Locally, Exposed Name, Exposed Path, Exposed Remotely, Not Surfaced, State
+SYSTEM                    - __CLASS, __DERIVATION, __DYNASTY, __GENUS, __NAMESPACE, __PATH, __PROPERTY_COUNT, __RELPATH, __SERVER, __SUPERCLASS
+
+The following LIST switches are available:
+
+/TRANSLATE:<table name>      - Translate output via values from <table name>.
+/EVERY:<interval> [/REPEAT:<repeat count>] - Returns value every (X interval) seconds, If /REPEAT specified the command is executed <repeat count> times.
+/FORMAT:<format specifier>   - Keyword/XSL filename to process the XML results.
+
+NOTE: Order of /TRANSLATE and /FORMAT switches influences the appearance of output.
+Case1: If /TRANSLATE precedes /FORMAT, then translation of results will be followed by formatting.
+Case2: If /TRANSLATE succeeds /FORMAT, then translation of the formatted results will be done.
+
