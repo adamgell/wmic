@@ -1,5 +1,5 @@
 use super::*;
-use crate::backend::{AutomationValue, collect_records, convert_value};
+use crate::backend::{AutomationValue, build_query, collect_records, convert_value};
 use windows::{
     Win32::System::{Ole::*, Variant::*, Wmi::*},
     core::*,
@@ -150,21 +150,18 @@ pub fn query(
     svc: &IWbemServices,
     r: &ResolvedRequest,
 ) -> std::result::Result<ObjectSet, ManagementError> {
-    if let Some(path) = &r.instance_path {
-        return get_object(svc, path)
-            .and_then(|o| record(&o))
-            .map(|o| ObjectSet {
-                objects: vec![o],
-                schema: None,
-            })
-            .map_err(|e| failure(e, r, "instance"));
-    }
-    let query = build_query(r);
+    query_text(svc, r, &build_query(r))
+}
+pub(super) fn query_text(
+    svc: &IWbemServices,
+    r: &ResolvedRequest,
+    query: &WideText,
+) -> std::result::Result<ObjectSet, ManagementError> {
     unsafe {
         let en = svc
             .ExecQuery(
                 &BSTR::from("WQL"),
-                &bstr(&query),
+                &bstr(query),
                 WBEM_GENERIC_FLAG_TYPE(0x30),
                 None,
             )
@@ -195,28 +192,6 @@ pub fn query(
         collect_records(items)
     }
 }
-pub fn build_query(r: &ResolvedRequest) -> WideText {
-    let mut q: WideText = "SELECT ".into();
-    let properties = if r.verb == Verb::Get && !r.properties.is_empty() {
-        r.properties.clone()
-    } else {
-        vec!["*".into()]
-    };
-    for (i, p) in properties.iter().enumerate() {
-        if i > 0 {
-            q.0.push(44)
-        }
-        q.0.extend(&p.0);
-    }
-    q.0.extend(" FROM ".encode_utf16());
-    q.0.extend(&r.class_name.0);
-    if let Some(s) = &r.selector {
-        q.0.extend(" WHERE ".encode_utf16());
-        q.0.extend(&s.0);
-    }
-    q
-}
-
 /// Qualifier sets carry Automation types without a separate CIMTYPE output.
 pub(super) fn qualifier_value(v: &VARIANT) -> Result<CimValue> {
     unsafe {
@@ -241,4 +216,58 @@ pub(super) fn qualifier_value(v: &VARIANT) -> Result<CimValue> {
         };
         convert_value(automation(v, 0)?, ty | (vt as u32 & 0x2000)).map_err(|_| conversion_error())
     }
+}
+
+pub(super) fn associations(
+    svc: &IWbemServices,
+    r: &ResolvedRequest,
+) -> std::result::Result<Vec<AssociationGroup>, ManagementError> {
+    let sources = if r.class_mode {
+        let object = get_object(svc, &r.class_name).map_err(|e| failure(e, r, "class"))?;
+        ObjectSet {
+            objects: vec![record(&object).map_err(|e| failure(e, r, "convert"))?],
+            schema: None,
+        }
+    } else {
+        query(svc, r)?
+    };
+    let mut groups = vec![];
+    for source in sources.objects {
+        let path = source.path.as_ref().ok_or_else(|| {
+            failure(
+                Error::from_hresult(HRESULT(0x80041002u32 as i32)),
+                r,
+                "association source",
+            )
+        })?;
+        let mut query = crate::backend::build_association_query(
+            path,
+            &r.association.clone().unwrap_or_default(),
+        );
+        if r.class_mode {
+            query.0.extend(
+                if r.association.as_ref().is_some_and(|f| {
+                    f.assoc_class.is_some() || f.result_class.is_some() || f.result_role.is_some()
+                }) {
+                    " SchemaOnly"
+                } else {
+                    " WHERE SchemaOnly"
+                }
+                .encode_utf16(),
+            );
+        }
+        match query_text(svc, r, &query) {
+            Ok(set) => groups.push(AssociationGroup {
+                source,
+                associated: set.objects,
+            }),
+            Err(mut e) => {
+                if !groups.is_empty() {
+                    e.partial = Some(Box::new(ManagementResult::Associations(groups)));
+                }
+                return Err(e);
+            }
+        }
+    }
+    Ok(groups)
 }

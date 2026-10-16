@@ -181,7 +181,8 @@
         "Usage": null,
         "VerbType": 2
       }
-    ]
+    ],
+    "LocalizedDescription": "Access to the aliases available on the local system"
   },
   {
     "Connection": {
@@ -654,7 +655,8 @@
     "PWhere": "",
     "Qualifiers": null,
     "Target": "Select * from Win32_BaseBoard",
-    "Verbs": null
+    "Verbs": null,
+    "LocalizedDescription": "Base board (also known as a motherboard or system board) management."
   },
   {
     "Connection": {
@@ -1224,7 +1226,8 @@
     "PWhere": "",
     "Qualifiers": null,
     "Target": "Select * from Win32_BIOS",
-    "Verbs": null
+    "Verbs": null,
+    "LocalizedDescription": "Basic input/output services (BIOS) management."
   },
   {
     "Connection": {
@@ -1470,7 +1473,8 @@
     "PWhere": "",
     "Qualifiers": null,
     "Target": "Select * from Win32_BootConfiguration",
-    "Verbs": null
+    "Verbs": null,
+    "LocalizedDescription": "Boot configuration management."
   },
   {
     "Connection": {
@@ -2238,7 +2242,8 @@
     "PWhere": "Where Drive='#'",
     "Qualifiers": null,
     "Target": "Select * from Win32_CDROMDrive",
-    "Verbs": null
+    "Verbs": null,
+    "LocalizedDescription": "CD-ROM management."
   },
   {
     "Connection": {
@@ -4180,7 +4185,8 @@
         "Usage": "UnjoinDomainOrWorkgroup",
         "VerbType": null
       }
-    ]
+    ],
+    "LocalizedDescription": "Computer system management."
   },
   {
     "Connection": {
@@ -4672,7 +4678,8 @@
     "PWhere": "Where DeviceID='#'",
     "Qualifiers": null,
     "Target": "Select * from WIN32_PROCESSOR",
-    "Verbs": null
+    "Verbs": null,
+    "LocalizedDescription": "CPU management."
   },
   {
     "Connection": {
@@ -4947,7 +4954,8 @@
     "PWhere": "",
     "Qualifiers": null,
     "Target": "Select * from Win32_ComputerSystemProduct",
-    "Verbs": null
+    "Verbs": null,
+    "LocalizedDescription": "Computer system product information from SMBIOS. "
   },
   {
     "Connection": {
@@ -6445,7 +6453,8 @@
         "Usage": "GetEffectivePermission",
         "VerbType": null
       }
-    ]
+    ],
+    "LocalizedDescription": "DataFile Management.  "
   },
   {
     "Connection": {
@@ -6619,7 +6628,8 @@
     "PWhere": "WHERE Name='#'",
     "Qualifiers": null,
     "Target": "Select * from WIN32_DCOMApplication",
-    "Verbs": null
+    "Verbs": null,
+    "LocalizedDescription": "DCOM Application management."
   },
   {
     "Connection": {
@@ -6895,7 +6905,8 @@
     "PWhere": "WHERE Name='#'",
     "Qualifiers": null,
     "Target": "Select * from WIN32_DESKTOP",
-    "Verbs": null
+    "Verbs": null,
+    "LocalizedDescription": "User's Desktop management."
   },
   {
     "Connection": {
@@ -7267,7 +7278,8 @@
     "PWhere": "WHERE DEVICEID='#'",
     "Qualifiers": null,
     "Target": "Select * from WIN32_DESKTOPMONITOR",
-    "Verbs": null
+    "Verbs": null,
+    "LocalizedDescription": "Desktop Monitor management."
   },
   {
     "Connection": {
@@ -7609,7 +7621,8 @@
     "PWhere": "",
     "Qualifiers": null,
     "Target": "Select * from Win32_DeviceMemoryAddress",
-    "Verbs": null
+    "Verbs": null,
+    "LocalizedDescription": "Device memory addresses management."
   },
   {
     "Connection": {
@@ -8506,7 +8519,8 @@
     "PWhere": "WHERE Index=#",
     "Qualifiers": null,
     "Target": "Select * from Win32_DiskDrive",
-    "Verbs": null
+    "Verbs": null,
+    "LocalizedDescription": "Physical disk drive management. "
   },
   {
     "Connection": {
@@ -8794,7 +8808,8 @@
     "PWhere": null,
     "Qualifiers": null,
     "Target": "Select * from Win32_DiskQuota",
-    "Verbs": null
+    "Verbs": null,
+    "LocalizedDescription": "Disk space usage for NTFS volumes."
   },
   {
     "Connection": {
@@ -9244,7 +9259,8 @@
     "PWhere": "Where DMAChannel=#",
     "Qualifiers": null,
     "Target": "Select * from Win32_DMAChannel",
-    "Verbs": null
+    "Verbs": null,
+    "LocalizedDescription": "Direct memory access (DMA) channel management."
   },
   {
     "Connection": {
@@ -9674,7 +9690,8 @@
     "PWhere": "",
     "Qualifiers": null,
     "Target": "Select * from Win32_Environment",
-    "Verbs": null
+    "Verbs": null,
+    "LocalizedDescription": "System environment settings management."
   },
   {
     "Connection": {
@@ -11768,7 +11785,8 @@
         "Usage": "GetEffectivePermission",
         "VerbType": null
       }
-    ]
+    ],
+    "LocalizedDescription": "Filesystem directory entry management. "
   },
   {
     "Connection": {
@@ -12152,7 +12170,8 @@
         "Usage": "Rename",
         "VerbType": null
       }
-    ]
+    ],
+    "LocalizedDescription": "Group account management. "
   },
   {
     "Connection": {
@@ -12932,7 +12951,8 @@
     "PWhere": "",
     "Qualifiers": null,
     "Target": "Select * from Win32_IDEController",
-    "Verbs": null
+    "Verbs": null,
+    "LocalizedDescription": "IDE Controller management.  "
   },
   {
     "Connection": {
@@ -13370,7 +13390,8 @@
     "PWhere": "WHERE IRQNumber=#",
     "Qualifiers": null,
     "Target": "Select * from Win32_IRQResource",
-    "Verbs": null
+    "Verbs": null,
+    "LocalizedDescription": "Interrupt request line (IRQ) management. "
   },
   {
     "Connection": {
@@ -13865,7 +13886,8 @@
         "Usage": "Create",
         "VerbType": 0
       }
-    ]
+    ],
+    "LocalizedDescription": "Provides  access to the jobs scheduled using the schedule service. "
   },
   {
     "Connection": {
@@ -14093,7 +14115,8 @@
     "PWhere": "",
     "Qualifiers": null,
     "Target": "Select * from Win32_LoadOrderGroup",
-    "Verbs": null
+    "Verbs": null,
+    "LocalizedDescription": "Management of system services that define execution dependencies. "
   },
   {
     "Connection": {
@@ -14339,27 +14362,27 @@
                 "Name": "Values",
                 "QualifierValue": [
                   "Format is unknown",
-                  "5¼-Inch Floppy Disk",
-                  "3½-Inch Floppy Disk",
-                  "3½-Inch Floppy Disk",
-                  "3½-Inch Floppy Disk",
-                  "3½-Inch Floppy Disk",
-                  "5¼-Inch Floppy Disk",
-                  "5¼-Inch Floppy Disk",
-                  "5¼-Inch Floppy Disk",
-                  "5¼-Inch Floppy Disk",
-                  "5¼-Inch Floppy Disk",
+                  "5\u00bc-Inch Floppy Disk",
+                  "3\u00bd-Inch Floppy Disk",
+                  "3\u00bd-Inch Floppy Disk",
+                  "3\u00bd-Inch Floppy Disk",
+                  "3\u00bd-Inch Floppy Disk",
+                  "5\u00bc-Inch Floppy Disk",
+                  "5\u00bc-Inch Floppy Disk",
+                  "5\u00bc-Inch Floppy Disk",
+                  "5\u00bc-Inch Floppy Disk",
+                  "5\u00bc-Inch Floppy Disk",
                   "Removable media other than floppy",
                   "Fixed hard disk media",
-                  "3½-Inch Floppy Disk",
-                  "3½-Inch Floppy Disk",
-                  "5¼-Inch Floppy Disk",
-                  "5¼-Inch Floppy Disk",
-                  "3½-Inch Floppy Disk",
-                  "3½-Inch Floppy Disk",
-                  "5¼-Inch Floppy Disk",
-                  "3½-Inch Floppy Disk",
-                  "3½-Inch Floppy Disk",
+                  "3\u00bd-Inch Floppy Disk",
+                  "3\u00bd-Inch Floppy Disk",
+                  "5\u00bc-Inch Floppy Disk",
+                  "5\u00bc-Inch Floppy Disk",
+                  "3\u00bd-Inch Floppy Disk",
+                  "3\u00bd-Inch Floppy Disk",
+                  "5\u00bc-Inch Floppy Disk",
+                  "3\u00bd-Inch Floppy Disk",
+                  "3\u00bd-Inch Floppy Disk",
                   "8-Inch Floppy Disk"
                 ]
               }
@@ -15194,7 +15217,8 @@
         "Usage": "ExcludeFromAutochk",
         "VerbType": null
       }
-    ]
+    ],
+    "LocalizedDescription": "Local storage device management."
   },
   {
     "Connection": {
@@ -15462,7 +15486,8 @@
     "PWhere": "",
     "Qualifiers": null,
     "Target": "Select * from Win32_LogonSession",
-    "Verbs": null
+    "Verbs": null,
+    "LocalizedDescription": "LOGON Sessions.  "
   },
   {
     "Connection": {
@@ -15737,7 +15762,8 @@
     "PWhere": "WHERE DeviceID='#'",
     "Qualifiers": null,
     "Target": "Select * from WIN32_CACHEMEMORY",
-    "Verbs": null
+    "Verbs": null,
+    "LocalizedDescription": "Cache memory management."
   },
   {
     "Connection": {
@@ -16296,7 +16322,8 @@
     "PWhere": " Where Tag = '#'",
     "Qualifiers": null,
     "Target": "Select * from Win32_PhysicalMemory",
-    "Verbs": null
+    "Verbs": null,
+    "LocalizedDescription": "Memory chip information."
   },
   {
     "Connection": {
@@ -16800,7 +16827,8 @@
     "PWhere": "",
     "Qualifiers": null,
     "Target": "Select * from Win32_PhysicalMemoryArray",
-    "Verbs": null
+    "Verbs": null,
+    "LocalizedDescription": "Computer system's physical memory management. "
   },
   {
     "Connection": {
@@ -16980,7 +17008,8 @@
     "PWhere": "WHERE Name='#'",
     "Qualifiers": null,
     "Target": "Select * from WIN32_NetworkClient",
-    "Verbs": null
+    "Verbs": null,
+    "LocalizedDescription": "Network Client management."
   },
   {
     "Connection": {
@@ -17403,7 +17432,8 @@
     "PWhere": "WHERE Name='#'",
     "Qualifiers": null,
     "Target": "Select * from Win32_NetworkLoginProfile",
-    "Verbs": null
+    "Verbs": null,
+    "LocalizedDescription": "Network login information (of a particular user) management. "
   },
   {
     "Connection": {
@@ -18034,7 +18064,8 @@
     "PWhere": "",
     "Qualifiers": null,
     "Target": "Select * from Win32_NetworkProtocol",
-    "Verbs": null
+    "Verbs": null,
+    "LocalizedDescription": "Protocols (and their network characteristics) management."
   },
   {
     "Connection": {
@@ -18528,7 +18559,8 @@
     "PWhere": "WHERE LocalName='#'",
     "Qualifiers": null,
     "Target": "Select * from Win32_NetworkConnection",
-    "Verbs": null
+    "Verbs": null,
+    "LocalizedDescription": "Active network connection management."
   },
   {
     "Connection": {
@@ -19281,7 +19313,8 @@
     "PWhere": "WHERE DeviceID=#",
     "Qualifiers": null,
     "Target": "Select * from Win32_NetworkAdapter",
-    "Verbs": null
+    "Verbs": null,
+    "LocalizedDescription": "Network Interface Controller (NIC) management."
   },
   {
     "Connection": {
@@ -21326,7 +21359,8 @@
         "Usage": "EnableIPFilterSec",
         "VerbType": null
       }
-    ]
+    ],
+    "LocalizedDescription": "Network adapter management. "
   },
   {
     "Connection": {
@@ -21643,7 +21677,8 @@
     "PWhere": "WHERE DomainName='#'",
     "Qualifiers": null,
     "Target": "Select * from Win32_NTDomain",
-    "Verbs": null
+    "Verbs": null,
+    "LocalizedDescription": "NT Domain management.  "
   },
   {
     "Connection": {
@@ -21946,7 +21981,8 @@
     "PWhere": "WHERE EventType=#",
     "Qualifiers": null,
     "Target": "Select * from Win32_NTLogEvent",
-    "Verbs": null
+    "Verbs": null,
+    "LocalizedDescription": "Entries in the NT Event Log.  "
   },
   {
     "Connection": {
@@ -22490,7 +22526,8 @@
         "Usage": "BackupEventlog",
         "VerbType": 0
       }
-    ]
+    ],
+    "LocalizedDescription": "NT eventlog file management. "
   },
   {
     "Connection": {
@@ -22920,7 +22957,8 @@
     "PWhere": "",
     "Qualifiers": null,
     "Target": "Select * from Win32_OnBoardDevice",
-    "Verbs": null
+    "Verbs": null,
+    "LocalizedDescription": "Management of common adapter devices built into the motherboard (system board)."
   },
   {
     "Connection": {
@@ -23924,7 +23962,8 @@
         "Usage": "SetDateTime",
         "VerbType": null
       }
-    ]
+    ],
+    "LocalizedDescription": "Installed Operating System/s management. "
   },
   {
     "Connection": {
@@ -24195,7 +24234,8 @@
     "PWhere": "",
     "Qualifiers": null,
     "Target": "Select * from Win32_PageFileUsage",
-    "Verbs": null
+    "Verbs": null,
+    "LocalizedDescription": "Virtual memory file swapping management. "
   },
   {
     "Connection": {
@@ -24485,7 +24525,8 @@
     "PWhere": "",
     "Qualifiers": null,
     "Target": "Select * from Win32_PageFileSetting",
-    "Verbs": null
+    "Verbs": null,
+    "LocalizedDescription": "Page file settings management. "
   },
   {
     "Connection": {
@@ -25074,7 +25115,8 @@
     "PWhere": "WHERE Index=#",
     "Qualifiers": null,
     "Target": "Select * from Win32_DiskPartition",
-    "Verbs": null
+    "Verbs": null,
+    "LocalizedDescription": "Management of partitioned areas of a physical disk."
   },
   {
     "Connection": {
@@ -25345,7 +25387,8 @@
     "PWhere": "",
     "Qualifiers": null,
     "Target": "Select * from Win32_PortResource",
-    "Verbs": null
+    "Verbs": null,
+    "LocalizedDescription": "I/O port management."
   },
   {
     "Connection": {
@@ -25810,7 +25853,8 @@
     "PWhere": "WHERE ExternalReferenceDesignator='#'",
     "Qualifiers": null,
     "Target": "Select * from Win32_PortConnector",
-    "Verbs": null
+    "Verbs": null,
+    "LocalizedDescription": "Physical connection ports management."
   },
   {
     "Connection": {
@@ -28379,7 +28423,8 @@
         "Usage": "Reset",
         "VerbType": null
       }
-    ]
+    ],
+    "LocalizedDescription": "Printer device management. "
   },
   {
     "Connection": {
@@ -28914,7 +28959,8 @@
     "PWhere": "WHERE Name='#'",
     "Qualifiers": null,
     "Target": "Select * from Win32_PrinterConfiguration",
-    "Verbs": null
+    "Verbs": null,
+    "LocalizedDescription": "Printer device configuration management.  "
   },
   {
     "Connection": {
@@ -29287,7 +29333,8 @@
         "Usage": "Resume",
         "VerbType": null
       }
-    ]
+    ],
+    "LocalizedDescription": "Print job management. "
   },
   {
     "Connection": {
@@ -30401,7 +30448,8 @@
         "Usage": "AttachDebugger",
         "VerbType": null
       }
-    ]
+    ],
+    "LocalizedDescription": "Process management. "
   },
   {
     "Connection": {
@@ -31066,7 +31114,8 @@
         "Usage": "Uninstall",
         "VerbType": 0
       }
-    ]
+    ],
+    "LocalizedDescription": "Installation package task management. "
   },
   {
     "Connection": {
@@ -31341,7 +31390,8 @@
     "PWhere": "",
     "Qualifiers": null,
     "Target": "Select * from Win32_QuickFixEngineering",
-    "Verbs": null
+    "Verbs": null,
+    "LocalizedDescription": "Quick Fix Engineering.  "
   },
   {
     "Connection": {
@@ -31844,7 +31894,8 @@
     "PWhere": "",
     "Qualifiers": null,
     "Target": "Select * from Win32_QuotaSetting",
-    "Verbs": null
+    "Verbs": null,
+    "LocalizedDescription": "Setting information for disk quotas on a volume. "
   },
   {
     "Connection": {
@@ -32254,7 +32305,8 @@
         "Usage": "ModifyAuditPermissions",
         "VerbType": null
       }
-    ]
+    ],
+    "LocalizedDescription": "Remote Desktop connection permission management."
   },
   {
     "Connection": {
@@ -32482,7 +32534,8 @@
         "Usage": "SelectNetworkAdapterIP",
         "VerbType": null
       }
-    ]
+    ],
+    "LocalizedDescription": "Remote Desktop connection management on a specific network adapter."
   },
   {
     "Connection": {
@@ -32652,7 +32705,8 @@
         "Usage": "RestoreDefaults",
         "VerbType": null
       }
-    ]
+    ],
+    "LocalizedDescription": "Permissions to a specific Remote Desktop connection."
   },
   {
     "Connection": {
@@ -32760,7 +32814,8 @@
         "Usage": "SetAllowTSConnections",
         "VerbType": null
       }
-    ]
+    ],
+    "LocalizedDescription": "Turning Remote Desktop listener on or off remotely."
   },
   {
     "Connection": {
@@ -33347,7 +33402,8 @@
     "PWhere": "",
     "Qualifiers": null,
     "Target": "Select * from Win32_OSRecoveryConfiguration",
-    "Verbs": null
+    "Verbs": null,
+    "LocalizedDescription": "Information that will be gathered from memory when the operating system fails. "
   },
   {
     "Connection": {
@@ -33668,7 +33724,8 @@
     "PWhere": "",
     "Qualifiers": null,
     "Target": "Select * from Win32_Registry",
-    "Verbs": null
+    "Verbs": null,
+    "LocalizedDescription": "Computer system registry management."
   },
   {
     "Connection": {
@@ -34613,7 +34670,8 @@
         "Usage": "Reset",
         "VerbType": 0
       }
-    ]
+    ],
+    "LocalizedDescription": "SCSI Controller management.  "
   },
   {
     "Connection": {
@@ -34995,7 +35053,8 @@
     "PWhere": "",
     "Qualifiers": null,
     "Target": "Select * from Win32_PerfRawData_PerfNet_Server",
-    "Verbs": null
+    "Verbs": null,
+    "LocalizedDescription": "Server information management. "
   },
   {
     "Connection": {
@@ -35928,7 +35987,8 @@
         "Usage": "Delete",
         "VerbType": null
       }
-    ]
+    ],
+    "LocalizedDescription": "Service application management. "
   },
   {
     "Connection": {
@@ -36429,7 +36489,8 @@
         "Usage": "Create",
         "VerbType": null
       }
-    ]
+    ],
+    "LocalizedDescription": "Shadow copy management."
   },
   {
     "Connection": {
@@ -36724,7 +36785,8 @@
         "Usage": "Create",
         "VerbType": null
       }
-    ]
+    ],
+    "LocalizedDescription": "Shadow copy storage area management."
   },
   {
     "Connection": {
@@ -37254,7 +37316,8 @@
         "Usage": "Create",
         "VerbType": 0
       }
-    ]
+    ],
+    "LocalizedDescription": "Shared resource management. "
   },
   {
     "Connection": {
@@ -37817,7 +37880,8 @@
     "PWhere": "",
     "Qualifiers": null,
     "Target": "Select * from Win32_SoftwareElement",
-    "Verbs": null
+    "Verbs": null,
+    "LocalizedDescription": "Management of the  elements of a software product installed on a system."
   },
   {
     "Connection": {
@@ -38327,7 +38391,8 @@
         "Usage": "Configure",
         "VerbType": 0
       }
-    ]
+    ],
+    "LocalizedDescription": "Management of software product subsets of SoftwareElement. "
   },
   {
     "Connection": {
@@ -38603,7 +38668,8 @@
     "PWhere": "WHERE Name='#'",
     "Qualifiers": null,
     "Target": "Select * from WIN32_SoundDevice",
-    "Verbs": null
+    "Verbs": null,
+    "LocalizedDescription": "Sound Device management."
   },
   {
     "Connection": {
@@ -38812,7 +38878,8 @@
     "PWhere": "where Caption='#'",
     "Qualifiers": null,
     "Target": "Select * from Win32_StartupCommand",
-    "Verbs": null
+    "Verbs": null,
+    "LocalizedDescription": "Management of commands that run automatically when users log onto the computer system."
   },
   {
     "Connection": {
@@ -39153,7 +39220,8 @@
     "PWhere": "WHERE Name='#'",
     "Qualifiers": null,
     "Target": "Select * from Win32_SystemAccount",
-    "Verbs": null
+    "Verbs": null,
+    "LocalizedDescription": "System account management.  "
   },
   {
     "Connection": {
@@ -39825,7 +39893,8 @@
         "Usage": "UserControlService",
         "VerbType": null
       }
-    ]
+    ],
+    "LocalizedDescription": "Management of the system driver for a base service."
   },
   {
     "Connection": {
@@ -40502,7 +40571,8 @@
     "PWhere": "",
     "Qualifiers": null,
     "Target": "Select * from Win32_SystemEnclosure",
-    "Verbs": null
+    "Verbs": null,
+    "LocalizedDescription": "Physical system enclosure management."
   },
   {
     "Connection": {
@@ -41142,7 +41212,8 @@
     "PWhere": "",
     "Qualifiers": null,
     "Target": "Select * from Win32_SystemSlot",
-    "Verbs": null
+    "Verbs": null,
+    "LocalizedDescription": "Management of physical connection points including ports,  slots and peripherals, and proprietary connections points."
   },
   {
     "Connection": {
@@ -41804,7 +41875,8 @@
     "PWhere": "",
     "Qualifiers": null,
     "Target": "Select * from Win32_TapeDrive",
-    "Verbs": null
+    "Verbs": null,
+    "LocalizedDescription": "Tape drive management.  "
   },
   {
     "Connection": {
@@ -42407,7 +42479,8 @@
     "PWhere": "",
     "Qualifiers": null,
     "Target": "Select * from Win32_TemperatureProbe",
-    "Verbs": null
+    "Verbs": null,
+    "LocalizedDescription": "Data management of a temperature sensor (electronic thermometer)."
   },
   {
     "Connection": {
@@ -42802,7 +42875,8 @@
     "PWhere": "",
     "Qualifiers": null,
     "Target": "Select * from Win32_TimeZone",
-    "Verbs": null
+    "Verbs": null,
+    "LocalizedDescription": "Time zone data management. "
   },
   {
     "Connection": {
@@ -43502,7 +43576,8 @@
     "PWhere": "",
     "Qualifiers": null,
     "Target": "Select * from Win32_UninterruptiblePowerSupply",
-    "Verbs": null
+    "Verbs": null,
+    "LocalizedDescription": "Uninterruptible power supply (UPS) management. "
   },
   {
     "Connection": {
@@ -44152,7 +44227,8 @@
         "Usage": "Rename",
         "VerbType": null
       }
-    ]
+    ],
+    "LocalizedDescription": "User account management."
   },
   {
     "Connection": {
@@ -44749,7 +44825,8 @@
     "PWhere": "",
     "Qualifiers": null,
     "Target": "Select * from Win32_VoltageProbe",
-    "Verbs": null
+    "Verbs": null,
+    "LocalizedDescription": "Voltage sensor (electronic voltmeter) data management."
   },
   {
     "Connection": {
@@ -45348,7 +45425,7 @@
         "Parameters": [
           {
             "Default": null,
-            "Description": "Specifies the disk allocation unit size or cluster size. All file systems used by this version of Windows organize your hard disk based on cluster size, which represents the smallest amount of disk space that can be allocated to hold a file. The smaller the cluster size you use, the more efficiently your disk stores information. If no cluster size is specified during format, Windows picks defaults based on the size of the volume. These defaults have been selected to reduce the amount of space lost and to reduce the amount of fragmentation on the volume. For general use, default settings are strongly recommended.",
+            "Description": "Specifies the disk allocation unit size or cluster size. All file systems used by this version of Windows organize your hard disk based on cluster size, which represents the smallest amount of disk space that can be allocated to hold a file. The smaller the cluster size you use, the more efficiently your disk stores information. If no cluster size is specified during format, Windows\u00a0picks defaults based on the size of the volume. These defaults have been selected to reduce the amount of space lost and to reduce the amount of fragmentation on the volume. For general use, default settings are strongly recommended.",
             "Optional": null,
             "ParaId": "ClusterSize",
             "Qualifiers": [
@@ -45690,7 +45767,8 @@
         "Usage": "Dismount",
         "VerbType": null
       }
-    ]
+    ],
+    "LocalizedDescription": "Local storage volume management."
   },
   {
     "Connection": {
@@ -45822,7 +45900,8 @@
     "PWhere": " Where Element = # and Setting = #",
     "Qualifiers": null,
     "Target": "Select * from Win32_VolumeQuotaSetting",
-    "Verbs": null
+    "Verbs": null,
+    "LocalizedDescription": "Associates the disk quota setting with a specific disk volume. "
   },
   {
     "Connection": {
@@ -46139,7 +46218,8 @@
     "PWhere": " Where Account = # and Volume = #",
     "Qualifiers": null,
     "Target": "Select * from Win32_VolumeUserQuota",
-    "Verbs": null
+    "Verbs": null,
+    "LocalizedDescription": "Per user storage volume quota management."
   },
   {
     "Connection": {
@@ -47103,6 +47183,7 @@
     "PWhere": "",
     "Qualifiers": null,
     "Target": "Select * from Win32_WMISetting",
-    "Verbs": null
+    "Verbs": null,
+    "LocalizedDescription": "WMI service operational parameters management. "
   }
 ]

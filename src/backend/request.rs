@@ -31,6 +31,7 @@ pub struct ResolvedRequest {
     pub view: Option<WideText>,
     pub display: Vec<(WideText, WideText)>,
     pub format: Option<WideText>,
+    pub association: Option<AssociationFilters>,
 }
 
 /// A credential can be passed to COM, but cannot accidentally enter Debug/JSON output.
@@ -100,5 +101,18 @@ impl ConnectionOptions {
             .map(|a| WideText(a.0[11..].to_vec()))
             .unwrap_or_default();
         (user, domain)
+    }
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Eq, Serialize, Deserialize)]
+pub struct AssociationFilters {
+    pub result_class: Option<WideText>,
+    pub result_role: Option<WideText>,
+    pub assoc_class: Option<WideText>,
+}
+
+impl<'de> Deserialize<'de> for SecretWide {
+    fn deserialize<D: serde::Deserializer<'de>>(d: D) -> Result<Self, D::Error> {
+        String::deserialize(d).map(|s| Self::new(s.into()))
     }
 }

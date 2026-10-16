@@ -18,6 +18,8 @@ where
 pub struct AliasDefinition {
     pub friendly_name: String,
     pub description: Option<String>,
+    #[serde(default)]
+    pub localized_description: Option<String>,
     pub target: String,
     pub p_where: Option<String>,
     pub connection: AliasConnection,
@@ -37,7 +39,7 @@ pub struct AliasConnection {
     pub locale: Option<String>,
     pub authority: Option<String>,
     pub user: Option<String>,
-    pub password: Option<String>,
+    pub password: Option<crate::backend::SecretWide>,
 }
 #[derive(Clone, Debug, Deserialize)]
 #[serde(rename_all = "PascalCase")]
@@ -153,13 +155,7 @@ impl AliasStore {
     fn validated(definitions: Vec<AliasDefinition>, role: WideText) -> Result<Self, ResolveError> {
         let mut names = std::collections::BTreeSet::new();
         for a in &definitions {
-            if a.friendly_name.is_empty()
-                || !names.insert(a.friendly_name.to_ascii_lowercase())
-                || a.connection
-                    .password
-                    .as_ref()
-                    .is_some_and(|p| !p.is_empty())
-            {
+            if a.friendly_name.is_empty() || !names.insert(a.friendly_name.to_ascii_lowercase()) {
                 return Err(error(0x80041008, "Invalid alias metadata.", None));
             }
         }
@@ -219,15 +215,52 @@ impl AliasStore {
             class_mode: matches!(target, Target::Class(_)),
             query: None,
             selector: command.selector.clone(),
-            verb: command.verb,
+            verb: if !command.verb_explicit && command.verb == Verb::List {
+                Verb::Get
+            } else {
+                command.verb
+            },
             properties: command.properties.clone(),
             method: command.method.clone(),
             arguments: command.arguments.clone(),
-            modifiers: command.modifiers.clone(),
+            modifiers: command
+                .modifiers
+                .iter()
+                .filter(|m| {
+                    m.scope != ModifierScope::Global || !m.name.eq_ascii_ignore_case("password")
+                })
+                .cloned()
+                .collect(),
             view: command.view.clone(),
             display: vec![],
             format: None,
+            association: None,
         };
+        if !matches!(target, Target::Alias(_))
+            && command.verb == Verb::List
+            && command.verb_explicit
+        {
+            return Err(error(
+                0xABE7,
+                "LIST verb is allowed only with <alias> name.",
+                None,
+            ));
+        }
+        if command.verb == Verb::Assoc {
+            let mut filters = crate::backend::AssociationFilters::default();
+            for m in &command.modifiers {
+                if let SwitchValue::Value(v) = &m.value {
+                    if m.name.eq_ascii_ignore_case("resultclass") {
+                        filters.result_class = Some(v.clone())
+                    } else if m.name.eq_ascii_ignore_case("resultrole") {
+                        filters.result_role = Some(v.clone())
+                    } else if m.name.eq_ascii_ignore_case("assocclass") {
+                        filters.assoc_class = Some(v.clone())
+                    }
+                }
+            }
+            req.association = Some(filters);
+        }
         if let Target::Alias(name) = target {
             let a = self
                 .find(name)
@@ -237,6 +270,12 @@ impl AliasStore {
             }
             req.connection.locale = a.connection.locale.as_deref().map(Into::into);
             req.connection.user = a.connection.user.as_deref().map(Into::into);
+            req.connection.password = a.connection.password.clone();
+            if !settings.explicit_nodes
+                && let Some(server) = &a.connection.server
+            {
+                req.connection.node = server.as_str().into();
+            }
             req.connection.authority = a.connection.authority.as_deref().map(Into::into);
             let mut pos = command.positionals.clone();
             let mut method = command.method.clone();
@@ -257,21 +296,27 @@ impl AliasStore {
                     .ok_or_else(|| {
                         error(0xABEA, "'PWhere' expression for the alias undefined.", None)
                     })?;
-                let expanded = substitute(template, &pos);
-                let text = expanded.trim_ascii();
-                let prefix: Vec<u16> = "where ".encode_utf16().collect();
-                req.selector = Some(
-                    if text.0.len() >= prefix.len()
-                        && text.0[..prefix.len()]
-                            .iter()
-                            .zip(prefix)
-                            .all(|(a, b)| a.to_ascii_lowercase() == b)
-                    {
-                        WideText(text.0[6..].to_vec())
-                    } else {
-                        text
-                    },
-                );
+                if pos.len() == 1 && pos[0].0.contains(&46) && pos[0].0.contains(&61) {
+                    req.instance_path = Some(pos[0].clone());
+                    req.query = None;
+                    req.selector = None;
+                } else {
+                    let expanded = substitute(template, &pos);
+                    let text = expanded.trim_ascii();
+                    let prefix: Vec<u16> = "where ".encode_utf16().collect();
+                    req.selector = Some(
+                        if text.0.len() >= prefix.len()
+                            && text.0[..prefix.len()]
+                                .iter()
+                                .zip(prefix)
+                                .all(|(a, b)| a.to_ascii_lowercase() == b)
+                        {
+                            WideText(text.0[6..].to_vec())
+                        } else {
+                            text
+                        },
+                    );
+                }
             }
             let view = command
                 .view

@@ -173,3 +173,17 @@ fn unknown_alias_preserves_native_code() {
         0xAC67
     );
 }
+#[test]
+fn alias_connection_password_is_retained_without_debug_exposure() {
+    let store=AliasStore::from_json(r#"[{"FriendlyName":"Sample","Target":"Win32_OperatingSystem","Connection":{"NameSpace":"root\\cimv2","User":"DOMAIN\\user","Password":"alias-test-only-secret"}}]"#).unwrap();
+    assert!(!format!("{store:?}").contains("alias-test-only-secret"));
+    let p = parse_command(&wide("Sample get Caption"), EntryMode::Interactive).unwrap();
+    let ResolvedCommand::Management(r) = store.resolve(&p, &SessionSettings::default()).unwrap()
+    else {
+        panic!()
+    };
+    assert_eq!(
+        r.connection.password.unwrap().expose(),
+        &wide("alias-test-only-secret")
+    );
+}

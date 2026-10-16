@@ -1,4 +1,5 @@
 //! COM interfaces remain in the creating apartment. No interface is sent to a worker thread.
+mod aliases;
 mod com;
 mod connect;
 mod ping;
@@ -72,6 +73,14 @@ impl WindowsManagement {
     }
 }
 impl Management for WindowsManagement {
+    fn load_aliases(
+        &mut self,
+        role: &WideText,
+        selected: Option<&WideText>,
+        locale: &WideText,
+    ) -> Result<Option<Vec<crate::alias::AliasDefinition>>, crate::alias::ResolveError> {
+        aliases::load(role, selected, locale)
+    }
     fn reachable(&mut self, node: &WideText, timeout_ms: u32) -> bool {
         ping::reachable(node, timeout_ms)
     }
@@ -79,16 +88,21 @@ impl Management for WindowsManagement {
         let _privileges = privileges::PrivilegeGuard::new(r.connection.privileges)
             .map_err(|e| failure(e, r, "privileges"))?;
         let svc = connect::connect(&r.connection).map_err(|e| failure(e, r, "query"))?;
-        let schema_obj = get_object(&svc, &r.class_name).map_err(|e| failure(e, r, "class"))?;
         match r.verb {
             Verb::Get | Verb::List => {
                 if r.class_mode {
+                    let schema_obj =
+                        get_object(&svc, &r.class_name).map_err(|e| failure(e, r, "class"))?;
                     return schema::class_schema(&schema_obj)
                         .map(ManagementResult::Schema)
                         .map_err(|e| failure(e, r, "schema"));
                 }
+                if r.query.is_none() {
+                    get_object(&svc, &r.class_name).map_err(|e| failure(e, r, "class"))?;
+                }
                 query::query(&svc, r).map(ManagementResult::Objects)
             }
+            Verb::Assoc => query::associations(&svc, r).map(ManagementResult::Associations),
             _ => Err(ManagementError {
                 code: 0x8004100c,
                 target: r.connection.node.clone(),

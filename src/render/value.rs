@@ -20,7 +20,7 @@ pub fn display_value(value: &CimValue) -> WideText {
             let mut out: WideText = "{".into();
             for (i, item) in items.iter().enumerate() {
                 if i > 0 {
-                    push(&mut out, ",");
+                    push(&mut out, ", ");
                 }
                 let quoted = matches!(
                     item,

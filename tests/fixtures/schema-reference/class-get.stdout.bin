@@ -1,0 +1,580 @@
+<DIV CLASS="mofclass">
+<SPAN CLASS="mofqualifierset"> <br /></SPAN>
+<SPAN CLASS="mofkeyword">class</SPAN>Win32_OperatingSystem<BR />
+<SPAN CLASS="mofsymbol">{</SPAN><BR />
+<DD>
+<DIV CLASS="mofproperty">
+<SPAN CLASS="mofqualifierset"> </SPAN>
+<SPAN CLASS="mofkeyword">string</SPAN>
+<SPAN CLASS="mofproperty">BootDevice</SPAN>
+<SPAN CLASS="mofsymbol">;</SPAN><BR />
+</DIV>
+</DD>
+<DD>
+<DIV CLASS="mofproperty">
+<SPAN CLASS="mofqualifierset"> </SPAN>
+<SPAN CLASS="mofkeyword">string</SPAN>
+<SPAN CLASS="mofproperty">BuildNumber</SPAN>
+<SPAN CLASS="mofsymbol">;</SPAN><BR />
+</DIV>
+</DD>
+<DD>
+<DIV CLASS="mofproperty">
+<SPAN CLASS="mofqualifierset"> </SPAN>
+<SPAN CLASS="mofkeyword">string</SPAN>
+<SPAN CLASS="mofproperty">BuildType</SPAN>
+<SPAN CLASS="mofsymbol">;</SPAN><BR />
+</DIV>
+</DD>
+<DD>
+<DIV CLASS="mofproperty">
+<SPAN CLASS="mofqualifierset"> </SPAN>
+<SPAN CLASS="mofkeyword">string</SPAN>
+<SPAN CLASS="mofproperty">Caption</SPAN>
+<SPAN CLASS="mofsymbol">;</SPAN><BR />
+</DIV>
+</DD>
+<DD>
+<DIV CLASS="mofproperty">
+<SPAN CLASS="mofqualifierset"> </SPAN>
+<SPAN CLASS="mofkeyword">string</SPAN>
+<SPAN CLASS="mofproperty">CodeSet</SPAN>
+<SPAN CLASS="mofsymbol">;</SPAN><BR />
+</DIV>
+</DD>
+<DD>
+<DIV CLASS="mofproperty">
+<SPAN CLASS="mofqualifierset"> </SPAN>
+<SPAN CLASS="mofkeyword">string</SPAN>
+<SPAN CLASS="mofproperty">CountryCode</SPAN>
+<SPAN CLASS="mofsymbol">;</SPAN><BR />
+</DIV>
+</DD>
+<DD>
+<DIV CLASS="mofproperty">
+<SPAN CLASS="mofqualifierset"> </SPAN>
+<SPAN CLASS="mofkeyword">string</SPAN>
+<SPAN CLASS="mofproperty">CreationClassName</SPAN>
+<SPAN CLASS="mofsymbol">;</SPAN><BR />
+</DIV>
+</DD>
+<DD>
+<DIV CLASS="mofproperty">
+<SPAN CLASS="mofqualifierset"> </SPAN>
+<SPAN CLASS="mofkeyword">string</SPAN>
+<SPAN CLASS="mofproperty">CSCreationClassName</SPAN>
+<SPAN CLASS="mofsymbol">;</SPAN><BR />
+</DIV>
+</DD>
+<DD>
+<DIV CLASS="mofproperty">
+<SPAN CLASS="mofqualifierset"> </SPAN>
+<SPAN CLASS="mofkeyword">string</SPAN>
+<SPAN CLASS="mofproperty">CSDVersion</SPAN>
+<SPAN CLASS="mofsymbol">;</SPAN><BR />
+</DIV>
+</DD>
+<DD>
+<DIV CLASS="mofproperty">
+<SPAN CLASS="mofqualifierset"> </SPAN>
+<SPAN CLASS="mofkeyword">string</SPAN>
+<SPAN CLASS="mofproperty">CSName</SPAN>
+<SPAN CLASS="mofsymbol">;</SPAN><BR />
+</DIV>
+</DD>
+<DD>
+<DIV CLASS="mofproperty">
+<SPAN CLASS="mofqualifierset"> </SPAN>
+<SPAN CLASS="mofkeyword">sint16</SPAN>
+<SPAN CLASS="mofproperty">CurrentTimeZone</SPAN>
+<SPAN CLASS="mofsymbol">;</SPAN><BR />
+</DIV>
+</DD>
+<DD>
+<DIV CLASS="mofproperty">
+<SPAN CLASS="mofqualifierset"> </SPAN>
+<SPAN CLASS="mofkeyword">boolean</SPAN>
+<SPAN CLASS="mofproperty">DataExecutionPrevention_32BitApplications</SPAN>
+<SPAN CLASS="mofsymbol">;</SPAN><BR />
+</DIV>
+</DD>
+<DD>
+<DIV CLASS="mofproperty">
+<SPAN CLASS="mofqualifierset"> </SPAN>
+<SPAN CLASS="mofkeyword">boolean</SPAN>
+<SPAN CLASS="mofproperty">DataExecutionPrevention_Available</SPAN>
+<SPAN CLASS="mofsymbol">;</SPAN><BR />
+</DIV>
+</DD>
+<DD>
+<DIV CLASS="mofproperty">
+<SPAN CLASS="mofqualifierset"> </SPAN>
+<SPAN CLASS="mofkeyword">boolean</SPAN>
+<SPAN CLASS="mofproperty">DataExecutionPrevention_Drivers</SPAN>
+<SPAN CLASS="mofsymbol">;</SPAN><BR />
+</DIV>
+</DD>
+<DD>
+<DIV CLASS="mofproperty">
+<SPAN CLASS="mofqualifierset"> </SPAN>
+<SPAN CLASS="mofkeyword">uint8</SPAN>
+<SPAN CLASS="mofproperty">DataExecutionPrevention_SupportPolicy</SPAN>
+<SPAN CLASS="mofsymbol">;</SPAN><BR />
+</DIV>
+</DD>
+<DD>
+<DIV CLASS="mofproperty">
+<SPAN CLASS="mofqualifierset"> </SPAN>
+<SPAN CLASS="mofkeyword">boolean</SPAN>
+<SPAN CLASS="mofproperty">Debug</SPAN>
+<SPAN CLASS="mofsymbol">;</SPAN><BR />
+</DIV>
+</DD>
+<DD>
+<DIV CLASS="mofproperty">
+<SPAN CLASS="mofqualifierset"> </SPAN>
+<SPAN CLASS="mofkeyword">string</SPAN>
+<SPAN CLASS="mofproperty">Description</SPAN>
+<SPAN CLASS="mofsymbol">;</SPAN><BR />
+</DIV>
+</DD>
+<DD>
+<DIV CLASS="mofproperty">
+<SPAN CLASS="mofqualifierset"> </SPAN>
+<SPAN CLASS="mofkeyword">boolean</SPAN>
+<SPAN CLASS="mofproperty">Distributed</SPAN>
+<SPAN CLASS="mofsymbol">;</SPAN><BR />
+</DIV>
+</DD>
+<DD>
+<DIV CLASS="mofproperty">
+<SPAN CLASS="mofqualifierset"> </SPAN>
+<SPAN CLASS="mofkeyword">uint32</SPAN>
+<SPAN CLASS="mofproperty">EncryptionLevel</SPAN>
+<SPAN CLASS="mofsymbol">;</SPAN><BR />
+</DIV>
+</DD>
+<DD>
+<DIV CLASS="mofproperty">
+<SPAN CLASS="mofqualifierset"> </SPAN>
+<SPAN CLASS="mofkeyword">uint8</SPAN>
+<SPAN CLASS="mofproperty">ForegroundApplicationBoost</SPAN>
+<SPAN CLASS="mofsymbol">;</SPAN><BR />
+</DIV>
+</DD>
+<DD>
+<DIV CLASS="mofproperty">
+<SPAN CLASS="mofqualifierset"> </SPAN>
+<SPAN CLASS="mofkeyword">uint64</SPAN>
+<SPAN CLASS="mofproperty">FreePhysicalMemory</SPAN>
+<SPAN CLASS="mofsymbol">;</SPAN><BR />
+</DIV>
+</DD>
+<DD>
+<DIV CLASS="mofproperty">
+<SPAN CLASS="mofqualifierset"> </SPAN>
+<SPAN CLASS="mofkeyword">uint64</SPAN>
+<SPAN CLASS="mofproperty">FreeSpaceInPagingFiles</SPAN>
+<SPAN CLASS="mofsymbol">;</SPAN><BR />
+</DIV>
+</DD>
+<DD>
+<DIV CLASS="mofproperty">
+<SPAN CLASS="mofqualifierset"> </SPAN>
+<SPAN CLASS="mofkeyword">uint64</SPAN>
+<SPAN CLASS="mofproperty">FreeVirtualMemory</SPAN>
+<SPAN CLASS="mofsymbol">;</SPAN><BR />
+</DIV>
+</DD>
+<DD>
+<DIV CLASS="mofproperty">
+<SPAN CLASS="mofqualifierset"> </SPAN>
+<SPAN CLASS="mofkeyword">datetime</SPAN>
+<SPAN CLASS="mofproperty">InstallDate</SPAN>
+<SPAN CLASS="mofsymbol">;</SPAN><BR />
+</DIV>
+</DD>
+<DD>
+<DIV CLASS="mofproperty">
+<SPAN CLASS="mofqualifierset"> </SPAN>
+<SPAN CLASS="mofkeyword">uint32</SPAN>
+<SPAN CLASS="mofproperty">LargeSystemCache</SPAN>
+<SPAN CLASS="mofsymbol">;</SPAN><BR />
+</DIV>
+</DD>
+<DD>
+<DIV CLASS="mofproperty">
+<SPAN CLASS="mofqualifierset"> </SPAN>
+<SPAN CLASS="mofkeyword">datetime</SPAN>
+<SPAN CLASS="mofproperty">LastBootUpTime</SPAN>
+<SPAN CLASS="mofsymbol">;</SPAN><BR />
+</DIV>
+</DD>
+<DD>
+<DIV CLASS="mofproperty">
+<SPAN CLASS="mofqualifierset"> </SPAN>
+<SPAN CLASS="mofkeyword">datetime</SPAN>
+<SPAN CLASS="mofproperty">LocalDateTime</SPAN>
+<SPAN CLASS="mofsymbol">;</SPAN><BR />
+</DIV>
+</DD>
+<DD>
+<DIV CLASS="mofproperty">
+<SPAN CLASS="mofqualifierset"> </SPAN>
+<SPAN CLASS="mofkeyword">string</SPAN>
+<SPAN CLASS="mofproperty">Locale</SPAN>
+<SPAN CLASS="mofsymbol">;</SPAN><BR />
+</DIV>
+</DD>
+<DD>
+<DIV CLASS="mofproperty">
+<SPAN CLASS="mofqualifierset"> </SPAN>
+<SPAN CLASS="mofkeyword">string</SPAN>
+<SPAN CLASS="mofproperty">Manufacturer</SPAN>
+<SPAN CLASS="mofsymbol">;</SPAN><BR />
+</DIV>
+</DD>
+<DD>
+<DIV CLASS="mofproperty">
+<SPAN CLASS="mofqualifierset"> </SPAN>
+<SPAN CLASS="mofkeyword">uint32</SPAN>
+<SPAN CLASS="mofproperty">MaxNumberOfProcesses</SPAN>
+<SPAN CLASS="mofsymbol">;</SPAN><BR />
+</DIV>
+</DD>
+<DD>
+<DIV CLASS="mofproperty">
+<SPAN CLASS="mofqualifierset"> </SPAN>
+<SPAN CLASS="mofkeyword">uint64</SPAN>
+<SPAN CLASS="mofproperty">MaxProcessMemorySize</SPAN>
+<SPAN CLASS="mofsymbol">;</SPAN><BR />
+</DIV>
+</DD>
+<DD>
+<DIV CLASS="mofproperty">
+<SPAN CLASS="mofqualifierset"> </SPAN>
+<SPAN CLASS="mofkeyword">string</SPAN>
+<SPAN CLASS="mofproperty">Name</SPAN>
+<SPAN CLASS="mofsymbol">;</SPAN><BR />
+</DIV>
+</DD>
+<DD>
+<DIV CLASS="mofproperty">
+<SPAN CLASS="mofqualifierset"> </SPAN>
+<SPAN CLASS="mofkeyword">uint32</SPAN>
+<SPAN CLASS="mofproperty">NumberOfLicensedUsers</SPAN>
+<SPAN CLASS="mofsymbol">;</SPAN><BR />
+</DIV>
+</DD>
+<DD>
+<DIV CLASS="mofproperty">
+<SPAN CLASS="mofqualifierset"> </SPAN>
+<SPAN CLASS="mofkeyword">uint32</SPAN>
+<SPAN CLASS="mofproperty">NumberOfProcesses</SPAN>
+<SPAN CLASS="mofsymbol">;</SPAN><BR />
+</DIV>
+</DD>
+<DD>
+<DIV CLASS="mofproperty">
+<SPAN CLASS="mofqualifierset"> </SPAN>
+<SPAN CLASS="mofkeyword">uint32</SPAN>
+<SPAN CLASS="mofproperty">NumberOfUsers</SPAN>
+<SPAN CLASS="mofsymbol">;</SPAN><BR />
+</DIV>
+</DD>
+<DD>
+<DIV CLASS="mofproperty">
+<SPAN CLASS="mofqualifierset"> </SPAN>
+<SPAN CLASS="mofkeyword">uint32</SPAN>
+<SPAN CLASS="mofproperty">OperatingSystemSKU</SPAN>
+<SPAN CLASS="mofsymbol">;</SPAN><BR />
+</DIV>
+</DD>
+<DD>
+<DIV CLASS="mofproperty">
+<SPAN CLASS="mofqualifierset"> </SPAN>
+<SPAN CLASS="mofkeyword">string</SPAN>
+<SPAN CLASS="mofproperty">Organization</SPAN>
+<SPAN CLASS="mofsymbol">;</SPAN><BR />
+</DIV>
+</DD>
+<DD>
+<DIV CLASS="mofproperty">
+<SPAN CLASS="mofqualifierset"> </SPAN>
+<SPAN CLASS="mofkeyword">string</SPAN>
+<SPAN CLASS="mofproperty">OSArchitecture</SPAN>
+<SPAN CLASS="mofsymbol">;</SPAN><BR />
+</DIV>
+</DD>
+<DD>
+<DIV CLASS="mofproperty">
+<SPAN CLASS="mofqualifierset"> </SPAN>
+<SPAN CLASS="mofkeyword">uint32</SPAN>
+<SPAN CLASS="mofproperty">OSLanguage</SPAN>
+<SPAN CLASS="mofsymbol">;</SPAN><BR />
+</DIV>
+</DD>
+<DD>
+<DIV CLASS="mofproperty">
+<SPAN CLASS="mofqualifierset"> </SPAN>
+<SPAN CLASS="mofkeyword">uint32</SPAN>
+<SPAN CLASS="mofproperty">OSProductSuite</SPAN>
+<SPAN CLASS="mofsymbol">;</SPAN><BR />
+</DIV>
+</DD>
+<DD>
+<DIV CLASS="mofproperty">
+<SPAN CLASS="mofqualifierset"> </SPAN>
+<SPAN CLASS="mofkeyword">uint16</SPAN>
+<SPAN CLASS="mofproperty">OSType</SPAN>
+<SPAN CLASS="mofsymbol">;</SPAN><BR />
+</DIV>
+</DD>
+<DD>
+<DIV CLASS="mofproperty">
+<SPAN CLASS="mofqualifierset"> </SPAN>
+<SPAN CLASS="mofkeyword">string</SPAN>
+<SPAN CLASS="mofproperty">OtherTypeDescription</SPAN>
+<SPAN CLASS="mofsymbol">;</SPAN><BR />
+</DIV>
+</DD>
+<DD>
+<DIV CLASS="mofproperty">
+<SPAN CLASS="mofqualifierset"> </SPAN>
+<SPAN CLASS="mofkeyword">boolean</SPAN>
+<SPAN CLASS="mofproperty">PAEEnabled</SPAN>
+<SPAN CLASS="mofsymbol">;</SPAN><BR />
+</DIV>
+</DD>
+<DD>
+<DIV CLASS="mofproperty">
+<SPAN CLASS="mofqualifierset"> </SPAN>
+<SPAN CLASS="mofkeyword">string</SPAN>
+<SPAN CLASS="mofproperty">PlusProductID</SPAN>
+<SPAN CLASS="mofsymbol">;</SPAN><BR />
+</DIV>
+</DD>
+<DD>
+<DIV CLASS="mofproperty">
+<SPAN CLASS="mofqualifierset"> </SPAN>
+<SPAN CLASS="mofkeyword">string</SPAN>
+<SPAN CLASS="mofproperty">PlusVersionNumber</SPAN>
+<SPAN CLASS="mofsymbol">;</SPAN><BR />
+</DIV>
+</DD>
+<DD>
+<DIV CLASS="mofproperty">
+<SPAN CLASS="mofqualifierset"> </SPAN>
+<SPAN CLASS="mofkeyword">boolean</SPAN>
+<SPAN CLASS="mofproperty">PortableOperatingSystem</SPAN>
+<SPAN CLASS="mofsymbol">;</SPAN><BR />
+</DIV>
+</DD>
+<DD>
+<DIV CLASS="mofproperty">
+<SPAN CLASS="mofqualifierset"> </SPAN>
+<SPAN CLASS="mofkeyword">boolean</SPAN>
+<SPAN CLASS="mofproperty">Primary</SPAN>
+<SPAN CLASS="mofsymbol">;</SPAN><BR />
+</DIV>
+</DD>
+<DD>
+<DIV CLASS="mofproperty">
+<SPAN CLASS="mofqualifierset"> </SPAN>
+<SPAN CLASS="mofkeyword">uint32</SPAN>
+<SPAN CLASS="mofproperty">ProductType</SPAN>
+<SPAN CLASS="mofsymbol">;</SPAN><BR />
+</DIV>
+</DD>
+<DD>
+<DIV CLASS="mofproperty">
+<SPAN CLASS="mofqualifierset"> </SPAN>
+<SPAN CLASS="mofkeyword">string</SPAN>
+<SPAN CLASS="mofproperty">RegisteredUser</SPAN>
+<SPAN CLASS="mofsymbol">;</SPAN><BR />
+</DIV>
+</DD>
+<DD>
+<DIV CLASS="mofproperty">
+<SPAN CLASS="mofqualifierset"> </SPAN>
+<SPAN CLASS="mofkeyword">string</SPAN>
+<SPAN CLASS="mofproperty">SerialNumber</SPAN>
+<SPAN CLASS="mofsymbol">;</SPAN><BR />
+</DIV>
+</DD>
+<DD>
+<DIV CLASS="mofproperty">
+<SPAN CLASS="mofqualifierset"> </SPAN>
+<SPAN CLASS="mofkeyword">uint16</SPAN>
+<SPAN CLASS="mofproperty">ServicePackMajorVersion</SPAN>
+<SPAN CLASS="mofsymbol">;</SPAN><BR />
+</DIV>
+</DD>
+<DD>
+<DIV CLASS="mofproperty">
+<SPAN CLASS="mofqualifierset"> </SPAN>
+<SPAN CLASS="mofkeyword">uint16</SPAN>
+<SPAN CLASS="mofproperty">ServicePackMinorVersion</SPAN>
+<SPAN CLASS="mofsymbol">;</SPAN><BR />
+</DIV>
+</DD>
+<DD>
+<DIV CLASS="mofproperty">
+<SPAN CLASS="mofqualifierset"> </SPAN>
+<SPAN CLASS="mofkeyword">uint64</SPAN>
+<SPAN CLASS="mofproperty">SizeStoredInPagingFiles</SPAN>
+<SPAN CLASS="mofsymbol">;</SPAN><BR />
+</DIV>
+</DD>
+<DD>
+<DIV CLASS="mofproperty">
+<SPAN CLASS="mofqualifierset"> </SPAN>
+<SPAN CLASS="mofkeyword">string</SPAN>
+<SPAN CLASS="mofproperty">Status</SPAN>
+<SPAN CLASS="mofsymbol">;</SPAN><BR />
+</DIV>
+</DD>
+<DD>
+<DIV CLASS="mofproperty">
+<SPAN CLASS="mofqualifierset"> </SPAN>
+<SPAN CLASS="mofkeyword">uint32</SPAN>
+<SPAN CLASS="mofproperty">SuiteMask</SPAN>
+<SPAN CLASS="mofsymbol">;</SPAN><BR />
+</DIV>
+</DD>
+<DD>
+<DIV CLASS="mofproperty">
+<SPAN CLASS="mofqualifierset"> </SPAN>
+<SPAN CLASS="mofkeyword">string</SPAN>
+<SPAN CLASS="mofproperty">SystemDevice</SPAN>
+<SPAN CLASS="mofsymbol">;</SPAN><BR />
+</DIV>
+</DD>
+<DD>
+<DIV CLASS="mofproperty">
+<SPAN CLASS="mofqualifierset"> </SPAN>
+<SPAN CLASS="mofkeyword">string</SPAN>
+<SPAN CLASS="mofproperty">SystemDirectory</SPAN>
+<SPAN CLASS="mofsymbol">;</SPAN><BR />
+</DIV>
+</DD>
+<DD>
+<DIV CLASS="mofproperty">
+<SPAN CLASS="mofqualifierset"> </SPAN>
+<SPAN CLASS="mofkeyword">string</SPAN>
+<SPAN CLASS="mofproperty">SystemDrive</SPAN>
+<SPAN CLASS="mofsymbol">;</SPAN><BR />
+</DIV>
+</DD>
+<DD>
+<DIV CLASS="mofproperty">
+<SPAN CLASS="mofqualifierset"> </SPAN>
+<SPAN CLASS="mofkeyword">uint64</SPAN>
+<SPAN CLASS="mofproperty">TotalSwapSpaceSize</SPAN>
+<SPAN CLASS="mofsymbol">;</SPAN><BR />
+</DIV>
+</DD>
+<DD>
+<DIV CLASS="mofproperty">
+<SPAN CLASS="mofqualifierset"> </SPAN>
+<SPAN CLASS="mofkeyword">uint64</SPAN>
+<SPAN CLASS="mofproperty">TotalVirtualMemorySize</SPAN>
+<SPAN CLASS="mofsymbol">;</SPAN><BR />
+</DIV>
+</DD>
+<DD>
+<DIV CLASS="mofproperty">
+<SPAN CLASS="mofqualifierset"> </SPAN>
+<SPAN CLASS="mofkeyword">uint64</SPAN>
+<SPAN CLASS="mofproperty">TotalVisibleMemorySize</SPAN>
+<SPAN CLASS="mofsymbol">;</SPAN><BR />
+</DIV>
+</DD>
+<DD>
+<DIV CLASS="mofproperty">
+<SPAN CLASS="mofqualifierset"> </SPAN>
+<SPAN CLASS="mofkeyword">string</SPAN>
+<SPAN CLASS="mofproperty">Version</SPAN>
+<SPAN CLASS="mofsymbol">;</SPAN><BR />
+</DIV>
+</DD>
+<DD>
+<DIV CLASS="mofproperty">
+<SPAN CLASS="mofqualifierset"> </SPAN>
+<SPAN CLASS="mofkeyword">string</SPAN>
+<SPAN CLASS="mofproperty">WindowsDirectory</SPAN>
+<SPAN CLASS="mofsymbol">;</SPAN><BR />
+</DIV>
+</DD>
+<DD>
+<DIV CLASS="mofproperty">
+<SPAN CLASS="mofqualifierset"> </SPAN>
+<SPAN CLASS="mofkeyword">string</SPAN>
+<SPAN CLASS="mofproperty">MUILanguages</SPAN>
+<SPAN CLASS="mofsymbol">[</SPAN><SPAN CLASS="mofsymbol">]</SPAN>
+<SPAN CLASS="mofsymbol">;</SPAN><BR />
+</DIV>
+</DD>
+<DIV CLASS="mofmethod">
+<SPAN CLASS="mofqualifierset"> </SPAN>
+<SPAN CLASS="mofkeyword">uint32</SPAN>
+<SPAN CLASS="mofmethod">Reboot</SPAN>
+<SPAN CLASS="mofsymbol">(</SPAN>
+<SPAN CLASS="mofsymbol">);</SPAN>
+</DIV>
+<DIV CLASS="mofmethod">
+<SPAN CLASS="mofqualifierset"> </SPAN>
+<SPAN CLASS="mofkeyword">uint32</SPAN>
+<SPAN CLASS="mofmethod">Shutdown</SPAN>
+<SPAN CLASS="mofsymbol">(</SPAN>
+<SPAN CLASS="mofsymbol">);</SPAN>
+</DIV>
+<DIV CLASS="mofmethod">
+<SPAN CLASS="mofqualifierset"> </SPAN>
+<SPAN CLASS="mofkeyword">uint32</SPAN>
+<SPAN CLASS="mofmethod">Win32Shutdown</SPAN>
+<SPAN CLASS="mofsymbol">(</SPAN>
+<DIV CLASS="mofmethodparameter">
+<SPAN CLASS="mofqualifierset"> </SPAN>
+<SPAN CLASS="mofkeyword">sint32</SPAN>Flags<SPAN CLASS="mofsymbol">,</SPAN>
+</DIV>
+<DIV CLASS="mofmethodparameter">
+<SPAN CLASS="mofqualifierset"> </SPAN>
+<SPAN CLASS="mofkeyword">sint32</SPAN>Reserved</DIV>
+<SPAN CLASS="mofsymbol">);</SPAN>
+</DIV>
+<DIV CLASS="mofmethod">
+<SPAN CLASS="mofqualifierset"> </SPAN>
+<SPAN CLASS="mofkeyword">uint32</SPAN>
+<SPAN CLASS="mofmethod">Win32ShutdownTracker</SPAN>
+<SPAN CLASS="mofsymbol">(</SPAN>
+<DIV CLASS="mofmethodparameter">
+<SPAN CLASS="mofqualifierset"> </SPAN>
+<SPAN CLASS="mofkeyword">uint32</SPAN>Timeout<SPAN CLASS="mofsymbol">,</SPAN>
+</DIV>
+<DIV CLASS="mofmethodparameter">
+<SPAN CLASS="mofqualifierset"> </SPAN>
+<SPAN CLASS="mofkeyword">string</SPAN>Comment<SPAN CLASS="mofsymbol">,</SPAN>
+</DIV>
+<DIV CLASS="mofmethodparameter">
+<SPAN CLASS="mofqualifierset"> </SPAN>
+<SPAN CLASS="mofkeyword">uint32</SPAN>ReasonCode<SPAN CLASS="mofsymbol">,</SPAN>
+</DIV>
+<DIV CLASS="mofmethodparameter">
+<SPAN CLASS="mofqualifierset"> </SPAN>
+<SPAN CLASS="mofkeyword">sint32</SPAN>Flags</DIV>
+<SPAN CLASS="mofsymbol">);</SPAN>
+</DIV>
+<DIV CLASS="mofmethod">
+<SPAN CLASS="mofqualifierset"> </SPAN>
+<SPAN CLASS="mofkeyword">uint32</SPAN>
+<SPAN CLASS="mofmethod">SetDateTime</SPAN>
+<SPAN CLASS="mofsymbol">(</SPAN>
+<DIV CLASS="mofmethodparameter">
+<SPAN CLASS="mofqualifierset"> </SPAN>
+<SPAN CLASS="mofkeyword">datetime</SPAN>LocalDateTime</DIV>
+<SPAN CLASS="mofsymbol">);</SPAN>
+</DIV>
+<SPAN CLASS="mofsymbol">};</SPAN>
+</DIV>
+

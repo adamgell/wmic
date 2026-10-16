@@ -1,0 +1,10 @@
+{
+  "sha256": "b2d089e3ad66db33070b299a57397b4371ee9b0d831ee2c55f4d2707a8fbe75c",
+  "matched": 344,
+  "differences": [],
+  "profile": "ARM64 en-US SYSTEM; native CreateProcessW pipes",
+  "manifest": "tests/fixtures/help-cases.json",
+  "reference": "tests/fixtures/help-reference/capture.json",
+  "scope": "all 81 aliases: usage, GET, LIST, CALL; 17 switch help contexts; CLASS/PATH/CONTEXT help",
+  "implementation": "shared en-US templates and metadata; no original executable invocation at runtime"
+}

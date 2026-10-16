@@ -242,16 +242,16 @@ secrets out of serialized diagnostics. Produce `load_nodes(&WideText) -> Result<
 **Interfaces:** Add association requests with result class/role/association
 filters, direct class operations, and `HelpRequest` schema/alias/verb contexts.
 
-- [ ] Add reference cases for `PATH`, `CLASS`, `ASSOC`, filters, writable/system views and contextual property/method help. Assert exact selected schema and rendered help bytes; distinguish absent provider metadata from an empty result.
+- [x] Add reference cases for `PATH`, `CLASS`, `ASSOC`, filters, writable/system views and contextual property/method help. Assert exact selected schema and rendered help bytes; distinguish absent provider metadata from an empty result.
 
   ```rust
   assert_eq!(get_help.as_slice(), include_bytes!("../docs/research/evidence/2026-10-15/pipe-cases/os-get-help.stdout.bin"));
   assert_eq!(resolved_association_filters, expected_association_filters);
   ```
 
-- [ ] Run the matching parser/alias/rendering/backend tests and confirm new behavior fails first.
-- [ ] Implement the corresponding native calls and metadata-driven help. Validate extra discovered command names against reference behavior rather than enabling names found only in legacy metadata.
-- [ ] Run the selected corpus against the ARM64 guest. Expected: associations, class/schema behavior and help match the pinned profile. Commit as `feat: complete WMIC schema traversal and contextual help`.
+- [x] Run the matching parser/alias/rendering/backend tests and confirm new behavior fails first.
+- [x] Implement the corresponding native calls and metadata-driven help. Validate extra discovered command names against reference behavior rather than enabling names found only in legacy metadata.
+- [x] Run the selected corpus against the ARM64 guest. Expected: associations, class/schema behavior and help match the pinned profile. Commit as `feat: complete WMIC schema traversal and contextual help`.
 
 ## Task 9: schema-driven methods, writes and derived verbs — Stage 3
 

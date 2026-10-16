@@ -28,8 +28,8 @@
       "id": "global-help",
       "documented": true,
       "observed": true,
-      "implemented": false,
-      "verified": false
+      "implemented": true,
+      "verified": true
     },
     {
       "id": "context",
@@ -42,29 +42,29 @@
       "id": "os-help",
       "documented": true,
       "observed": true,
-      "implemented": false,
-      "verified": false
+      "implemented": true,
+      "verified": true
     },
     {
       "id": "os-get-help",
       "documented": true,
       "observed": true,
-      "implemented": false,
-      "verified": false
+      "implemented": true,
+      "verified": true
     },
     {
       "id": "os-list-help",
       "documented": true,
       "observed": true,
-      "implemented": false,
-      "verified": false
+      "implemented": true,
+      "verified": true
     },
     {
       "id": "process-call-help",
       "documented": true,
       "observed": true,
-      "implemented": false,
-      "verified": false
+      "implemented": true,
+      "verified": true
     },
     {
       "id": "os-get",
@@ -184,6 +184,2256 @@
       "observed": true,
       "implemented": true,
       "verified": true
+    },
+    {
+      "id": "path-instance",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "class-get",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "class-get-class",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "class-list-brief",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "class-list-full",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "class-get-help",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "class-help",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "assoc-computer",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "assoc-empty",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "os-system",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "os-writable-help",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "path-help",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "method-help",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "property-help",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "existing-role-missing-class",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "assoc-help",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "get-acronyms",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "os-writeable",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "class-value",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "path-instance-quoted",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "list-path",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "global-value-help",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "os-default",
+      "observed": true,
+      "implemented": true,
+      "verified": false
+    },
+    {
+      "id": "os-full",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "os-get-default",
+      "observed": true,
+      "implemented": true,
+      "verified": false
+    },
+    {
+      "id": "alias-object-relative",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "os-object-relative",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "alias-object-qualified",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "os-list-default",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "property-help-valid",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "path-property-help",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-alias-alias",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-get-alias",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-list-alias",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-call-alias",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-alias-baseboard",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-get-baseboard",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-list-baseboard",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-call-baseboard",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-alias-bios",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-get-bios",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-list-bios",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-call-bios",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-alias-bootconfig",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-get-bootconfig",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-list-bootconfig",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-call-bootconfig",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-alias-cdrom",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-get-cdrom",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-list-cdrom",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-call-cdrom",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-alias-computersystem",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-get-computersystem",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-list-computersystem",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-call-computersystem",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-alias-cpu",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-get-cpu",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-list-cpu",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-call-cpu",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-alias-csproduct",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-get-csproduct",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-list-csproduct",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-call-csproduct",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-alias-datafile",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-get-datafile",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-list-datafile",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-call-datafile",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-alias-dcomapp",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-get-dcomapp",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-list-dcomapp",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-call-dcomapp",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-alias-desktop",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-get-desktop",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-list-desktop",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-call-desktop",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-alias-desktopmonitor",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-get-desktopmonitor",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-list-desktopmonitor",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-call-desktopmonitor",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-alias-devicememoryaddress",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-get-devicememoryaddress",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-list-devicememoryaddress",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-call-devicememoryaddress",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-alias-diskdrive",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-get-diskdrive",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-list-diskdrive",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-call-diskdrive",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-alias-diskquota",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-get-diskquota",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-list-diskquota",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-call-diskquota",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-alias-dmachannel",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-get-dmachannel",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-list-dmachannel",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-call-dmachannel",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-alias-environment",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-get-environment",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-list-environment",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-call-environment",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-alias-fsdir",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-get-fsdir",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-list-fsdir",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-call-fsdir",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-alias-group",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-get-group",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-list-group",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-call-group",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-alias-idecontroller",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-get-idecontroller",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-list-idecontroller",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-call-idecontroller",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-alias-irq",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-get-irq",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-list-irq",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-call-irq",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-alias-job",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-get-job",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-list-job",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-call-job",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-alias-loadorder",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-get-loadorder",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-list-loadorder",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-call-loadorder",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-alias-logicaldisk",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-get-logicaldisk",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-list-logicaldisk",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-call-logicaldisk",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-alias-logon",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-get-logon",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-list-logon",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-call-logon",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-alias-memcache",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-get-memcache",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-list-memcache",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-call-memcache",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-alias-memorychip",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-get-memorychip",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-list-memorychip",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-call-memorychip",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-alias-memphysical",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-get-memphysical",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-list-memphysical",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-call-memphysical",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-alias-netclient",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-get-netclient",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-list-netclient",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-call-netclient",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-alias-netlogin",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-get-netlogin",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-list-netlogin",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-call-netlogin",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-alias-netprotocol",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-get-netprotocol",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-list-netprotocol",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-call-netprotocol",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-alias-netuse",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-get-netuse",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-list-netuse",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-call-netuse",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-alias-nic",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-get-nic",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-list-nic",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-call-nic",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-alias-nicconfig",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-get-nicconfig",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-list-nicconfig",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-call-nicconfig",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-alias-ntdomain",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-get-ntdomain",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-list-ntdomain",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-call-ntdomain",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-alias-ntevent",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-get-ntevent",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-list-ntevent",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-call-ntevent",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-alias-nteventlog",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-get-nteventlog",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-list-nteventlog",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-call-nteventlog",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-alias-onboarddevice",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-get-onboarddevice",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-list-onboarddevice",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-call-onboarddevice",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-alias-os",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-get-os",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-list-os",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-call-os",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-alias-pagefile",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-get-pagefile",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-list-pagefile",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-call-pagefile",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-alias-pagefileset",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-get-pagefileset",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-list-pagefileset",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-call-pagefileset",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-alias-partition",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-get-partition",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-list-partition",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-call-partition",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-alias-port",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-get-port",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-list-port",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-call-port",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-alias-portconnector",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-get-portconnector",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-list-portconnector",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-call-portconnector",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-alias-printer",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-get-printer",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-list-printer",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-call-printer",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-alias-printerconfig",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-get-printerconfig",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-list-printerconfig",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-call-printerconfig",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-alias-printjob",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-get-printjob",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-list-printjob",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-call-printjob",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-alias-process",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-get-process",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-list-process",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-call-process",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-alias-product",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-get-product",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-list-product",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-call-product",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-alias-qfe",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-get-qfe",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-list-qfe",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-call-qfe",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-alias-quotasetting",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-get-quotasetting",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-list-quotasetting",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-call-quotasetting",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-alias-rdaccount",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-get-rdaccount",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-list-rdaccount",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-call-rdaccount",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-alias-rdnic",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-get-rdnic",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-list-rdnic",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-call-rdnic",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-alias-rdpermissions",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-get-rdpermissions",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-list-rdpermissions",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-call-rdpermissions",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-alias-rdtoggle",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-get-rdtoggle",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-list-rdtoggle",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-call-rdtoggle",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-alias-recoveros",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-get-recoveros",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-list-recoveros",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-call-recoveros",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-alias-registry",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-get-registry",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-list-registry",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-call-registry",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-alias-scsicontroller",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-get-scsicontroller",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-list-scsicontroller",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-call-scsicontroller",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-alias-server",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-get-server",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-list-server",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-call-server",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-alias-service",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-get-service",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-list-service",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-call-service",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-alias-shadowcopy",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-get-shadowcopy",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-list-shadowcopy",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-call-shadowcopy",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-alias-shadowstorage",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-get-shadowstorage",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-list-shadowstorage",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-call-shadowstorage",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-alias-share",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-get-share",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-list-share",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-call-share",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-alias-softwareelement",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-get-softwareelement",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-list-softwareelement",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-call-softwareelement",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-alias-softwarefeature",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-get-softwarefeature",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-list-softwarefeature",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-call-softwarefeature",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-alias-sounddev",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-get-sounddev",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-list-sounddev",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-call-sounddev",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-alias-startup",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-get-startup",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-list-startup",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-call-startup",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-alias-sysaccount",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-get-sysaccount",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-list-sysaccount",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-call-sysaccount",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-alias-sysdriver",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-get-sysdriver",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-list-sysdriver",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-call-sysdriver",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-alias-systemenclosure",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-get-systemenclosure",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-list-systemenclosure",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-call-systemenclosure",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-alias-systemslot",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-get-systemslot",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-list-systemslot",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-call-systemslot",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-alias-tapedrive",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-get-tapedrive",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-list-tapedrive",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-call-tapedrive",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-alias-temperature",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-get-temperature",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-list-temperature",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-call-temperature",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-alias-timezone",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-get-timezone",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-list-timezone",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-call-timezone",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-alias-ups",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-get-ups",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-list-ups",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-call-ups",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-alias-useraccount",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-get-useraccount",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-list-useraccount",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-call-useraccount",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-alias-voltage",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-get-voltage",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-list-voltage",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-call-voltage",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-alias-volume",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-get-volume",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-list-volume",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-call-volume",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-alias-volumequotasetting",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-get-volumequotasetting",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-list-volumequotasetting",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-call-volumequotasetting",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-alias-volumeuserquota",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-get-volumeuserquota",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-list-volumeuserquota",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-call-volumeuserquota",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-alias-wmiset",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-get-wmiset",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-list-wmiset",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-call-wmiset",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-switch-namespace",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-switch-role",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-switch-node",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-switch-implevel",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-switch-authlevel",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-switch-locale",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-switch-privileges",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-switch-trace",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-switch-record",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-switch-interactive",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-switch-failfast",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-switch-user",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-switch-password",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-switch-output",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-switch-append",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-switch-aggregate",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-switch-authority",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-command-class",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-command-path",
+      "observed": true,
+      "implemented": true,
+      "verified": true
+    },
+    {
+      "id": "help-command-context",
+      "observed": true,
+      "implemented": true,
+      "verified": true
     }
   ],
   "tooling": {
@@ -199,43 +2449,43 @@
     {
       "name": "NAMESPACE",
       "observed_in_help": true,
-      "implemented": false,
+      "implemented": true,
       "verified": false
     },
     {
       "name": "ROLE",
       "observed_in_help": true,
-      "implemented": false,
+      "implemented": true,
       "verified": false
     },
     {
       "name": "NODE",
       "observed_in_help": true,
-      "implemented": false,
+      "implemented": true,
       "verified": false
     },
     {
       "name": "IMPLEVEL",
       "observed_in_help": true,
-      "implemented": false,
+      "implemented": true,
       "verified": false
     },
     {
       "name": "AUTHLEVEL",
       "observed_in_help": true,
-      "implemented": false,
+      "implemented": true,
       "verified": false
     },
     {
       "name": "LOCALE",
       "observed_in_help": true,
-      "implemented": false,
+      "implemented": true,
       "verified": false
     },
     {
       "name": "PRIVILEGES",
       "observed_in_help": true,
-      "implemented": false,
+      "implemented": true,
       "verified": false
     },
     {
@@ -259,19 +2509,19 @@
     {
       "name": "FAILFAST",
       "observed_in_help": true,
-      "implemented": false,
+      "implemented": true,
       "verified": false
     },
     {
       "name": "USER",
       "observed_in_help": true,
-      "implemented": false,
+      "implemented": true,
       "verified": false
     },
     {
       "name": "PASSWORD",
       "observed_in_help": true,
-      "implemented": false,
+      "implemented": true,
       "verified": false
     },
     {
@@ -289,13 +2539,13 @@
     {
       "name": "AGGREGATE",
       "observed_in_help": true,
-      "implemented": false,
+      "implemented": true,
       "verified": false
     },
     {
       "name": "AUTHORITY",
       "observed_in_help": true,
-      "implemented": false,
+      "implemented": true,
       "verified": false
     },
     {
@@ -310,580 +2560,661 @@
       "name": "Alias",
       "target": "Select * from Msft_CliAlias",
       "observed_in_metadata": true,
-      "implemented": false,
-      "verified": false
+      "implemented": true,
+      "verified": false,
+      "help_verified": true
     },
     {
       "name": "BaseBoard",
       "target": "Select * from Win32_BaseBoard",
       "observed_in_metadata": true,
-      "implemented": false,
-      "verified": false
+      "implemented": true,
+      "verified": false,
+      "help_verified": true
     },
     {
       "name": "BIOS",
       "target": "Select * from Win32_BIOS",
       "observed_in_metadata": true,
-      "implemented": false,
-      "verified": false
+      "implemented": true,
+      "verified": false,
+      "help_verified": true
     },
     {
       "name": "BootConfig",
       "target": "Select * from Win32_BootConfiguration",
       "observed_in_metadata": true,
-      "implemented": false,
-      "verified": false
+      "implemented": true,
+      "verified": false,
+      "help_verified": true
     },
     {
       "name": "CDROM",
       "target": "Select * from Win32_CDROMDrive",
       "observed_in_metadata": true,
-      "implemented": false,
-      "verified": false
+      "implemented": true,
+      "verified": false,
+      "help_verified": true
     },
     {
       "name": "ComputerSystem",
       "target": "Select * from Win32_ComputerSystem",
       "observed_in_metadata": true,
-      "implemented": false,
-      "verified": false
+      "implemented": true,
+      "verified": false,
+      "help_verified": true
     },
     {
       "name": "CPU",
       "target": "Select * from WIN32_PROCESSOR",
       "observed_in_metadata": true,
-      "implemented": false,
-      "verified": false
+      "implemented": true,
+      "verified": false,
+      "help_verified": true
     },
     {
       "name": "CSProduct",
       "target": "Select * from Win32_ComputerSystemProduct",
       "observed_in_metadata": true,
-      "implemented": false,
-      "verified": false
+      "implemented": true,
+      "verified": false,
+      "help_verified": true
     },
     {
       "name": "DataFile",
       "target": "Select * from CIM_DataFile",
       "observed_in_metadata": true,
-      "implemented": false,
-      "verified": false
+      "implemented": true,
+      "verified": false,
+      "help_verified": true
     },
     {
       "name": "DCOMAPP",
       "target": "Select * from WIN32_DCOMApplication",
       "observed_in_metadata": true,
-      "implemented": false,
-      "verified": false
+      "implemented": true,
+      "verified": false,
+      "help_verified": true
     },
     {
       "name": "DESKTOP",
       "target": "Select * from WIN32_DESKTOP",
       "observed_in_metadata": true,
-      "implemented": false,
-      "verified": false
+      "implemented": true,
+      "verified": false,
+      "help_verified": true
     },
     {
       "name": "DesktopMonitor",
       "target": "Select * from WIN32_DESKTOPMONITOR",
       "observed_in_metadata": true,
-      "implemented": false,
-      "verified": false
+      "implemented": true,
+      "verified": false,
+      "help_verified": true
     },
     {
       "name": "DeviceMemoryAddress",
       "target": "Select * from Win32_DeviceMemoryAddress",
       "observed_in_metadata": true,
-      "implemented": false,
-      "verified": false
+      "implemented": true,
+      "verified": false,
+      "help_verified": true
     },
     {
       "name": "DiskDrive",
       "target": "Select * from Win32_DiskDrive",
       "observed_in_metadata": true,
-      "implemented": false,
-      "verified": false
+      "implemented": true,
+      "verified": false,
+      "help_verified": true
     },
     {
       "name": "DiskQuota",
       "target": "Select * from Win32_DiskQuota",
       "observed_in_metadata": true,
-      "implemented": false,
-      "verified": false
+      "implemented": true,
+      "verified": false,
+      "help_verified": true
     },
     {
       "name": "DMAChannel",
       "target": "Select * from Win32_DMAChannel",
       "observed_in_metadata": true,
-      "implemented": false,
-      "verified": false
+      "implemented": true,
+      "verified": false,
+      "help_verified": true
     },
     {
       "name": "Environment",
       "target": "Select * from Win32_Environment",
       "observed_in_metadata": true,
-      "implemented": false,
-      "verified": false
+      "implemented": true,
+      "verified": false,
+      "help_verified": true
     },
     {
       "name": "FSDir",
       "target": "Select * from Win32_Directory",
       "observed_in_metadata": true,
-      "implemented": false,
-      "verified": false
+      "implemented": true,
+      "verified": false,
+      "help_verified": true
     },
     {
       "name": "Group",
       "target": "Select * from Win32_Group",
       "observed_in_metadata": true,
-      "implemented": false,
-      "verified": false
+      "implemented": true,
+      "verified": false,
+      "help_verified": true
     },
     {
       "name": "IDECONTROLLER",
       "target": "Select * from Win32_IDEController",
       "observed_in_metadata": true,
-      "implemented": false,
-      "verified": false
+      "implemented": true,
+      "verified": false,
+      "help_verified": true
     },
     {
       "name": "IRQ",
       "target": "Select * from Win32_IRQResource",
       "observed_in_metadata": true,
-      "implemented": false,
-      "verified": false
+      "implemented": true,
+      "verified": false,
+      "help_verified": true
     },
     {
       "name": "Job",
       "target": "Select * from Win32_ScheduledJob",
       "observed_in_metadata": true,
-      "implemented": false,
-      "verified": false
+      "implemented": true,
+      "verified": false,
+      "help_verified": true
     },
     {
       "name": "LoadOrder",
       "target": "Select * from Win32_LoadOrderGroup",
       "observed_in_metadata": true,
-      "implemented": false,
-      "verified": false
+      "implemented": true,
+      "verified": false,
+      "help_verified": true
     },
     {
       "name": "LogicalDisk",
       "target": "Select * from Win32_LogicalDisk",
       "observed_in_metadata": true,
-      "implemented": false,
-      "verified": false
+      "implemented": true,
+      "verified": false,
+      "help_verified": true
     },
     {
       "name": "LOGON",
       "target": "Select * from Win32_LogonSession",
       "observed_in_metadata": true,
-      "implemented": false,
-      "verified": false
+      "implemented": true,
+      "verified": false,
+      "help_verified": true
     },
     {
       "name": "MEMCACHE",
       "target": "Select * from WIN32_CACHEMEMORY",
       "observed_in_metadata": true,
-      "implemented": false,
-      "verified": false
+      "implemented": true,
+      "verified": false,
+      "help_verified": true
     },
     {
       "name": "MemoryChip",
       "target": "Select * from Win32_PhysicalMemory",
       "observed_in_metadata": true,
-      "implemented": false,
-      "verified": false
+      "implemented": true,
+      "verified": false,
+      "help_verified": true
     },
     {
       "name": "MemPhysical",
       "target": "Select * from Win32_PhysicalMemoryArray",
       "observed_in_metadata": true,
-      "implemented": false,
-      "verified": false
+      "implemented": true,
+      "verified": false,
+      "help_verified": true
     },
     {
       "name": "NetClient",
       "target": "Select * from WIN32_NetworkClient",
       "observed_in_metadata": true,
-      "implemented": false,
-      "verified": false
+      "implemented": true,
+      "verified": false,
+      "help_verified": true
     },
     {
       "name": "NetLogin",
       "target": "Select * from Win32_NetworkLoginProfile",
       "observed_in_metadata": true,
-      "implemented": false,
-      "verified": false
+      "implemented": true,
+      "verified": false,
+      "help_verified": true
     },
     {
       "name": "NetProtocol",
       "target": "Select * from Win32_NetworkProtocol",
       "observed_in_metadata": true,
-      "implemented": false,
-      "verified": false
+      "implemented": true,
+      "verified": false,
+      "help_verified": true
     },
     {
       "name": "NetUse",
       "target": "Select * from Win32_NetworkConnection",
       "observed_in_metadata": true,
-      "implemented": false,
-      "verified": false
+      "implemented": true,
+      "verified": false,
+      "help_verified": true
     },
     {
       "name": "NIC",
       "target": "Select * from Win32_NetworkAdapter",
       "observed_in_metadata": true,
-      "implemented": false,
-      "verified": false
+      "implemented": true,
+      "verified": false,
+      "help_verified": true
     },
     {
       "name": "NICConfig",
       "target": "Select * from Win32_NetworkAdapterConfiguration",
       "observed_in_metadata": true,
-      "implemented": false,
-      "verified": false
+      "implemented": true,
+      "verified": false,
+      "help_verified": true
     },
     {
       "name": "NTDOMAIN",
       "target": "Select * from Win32_NTDomain",
       "observed_in_metadata": true,
-      "implemented": false,
-      "verified": false
+      "implemented": true,
+      "verified": false,
+      "help_verified": true
     },
     {
       "name": "NTEvent",
       "target": "Select * from Win32_NTLogEvent",
       "observed_in_metadata": true,
-      "implemented": false,
-      "verified": false
+      "implemented": true,
+      "verified": false,
+      "help_verified": true
     },
     {
       "name": "NTEventLog",
       "target": "Select * from Win32_NTEventlogFile",
       "observed_in_metadata": true,
-      "implemented": false,
-      "verified": false
+      "implemented": true,
+      "verified": false,
+      "help_verified": true
     },
     {
       "name": "OnBoardDevice",
       "target": "Select * from Win32_OnBoardDevice",
       "observed_in_metadata": true,
-      "implemented": false,
-      "verified": false
+      "implemented": true,
+      "verified": false,
+      "help_verified": true
     },
     {
       "name": "OS",
       "target": "Select * from Win32_OperatingSystem",
       "observed_in_metadata": true,
-      "implemented": false,
-      "verified": false
+      "implemented": true,
+      "verified": false,
+      "help_verified": true
     },
     {
       "name": "PageFile",
       "target": "Select * from Win32_PageFileUsage",
       "observed_in_metadata": true,
-      "implemented": false,
-      "verified": false
+      "implemented": true,
+      "verified": false,
+      "help_verified": true
     },
     {
       "name": "PageFileSet",
       "target": "Select * from Win32_PageFileSetting",
       "observed_in_metadata": true,
-      "implemented": false,
-      "verified": false
+      "implemented": true,
+      "verified": false,
+      "help_verified": true
     },
     {
       "name": "Partition",
       "target": "Select * from Win32_DiskPartition",
       "observed_in_metadata": true,
-      "implemented": false,
-      "verified": false
+      "implemented": true,
+      "verified": false,
+      "help_verified": true
     },
     {
       "name": "Port",
       "target": "Select * from Win32_PortResource",
       "observed_in_metadata": true,
-      "implemented": false,
-      "verified": false
+      "implemented": true,
+      "verified": false,
+      "help_verified": true
     },
     {
       "name": "PortConnector",
       "target": "Select * from Win32_PortConnector",
       "observed_in_metadata": true,
-      "implemented": false,
-      "verified": false
+      "implemented": true,
+      "verified": false,
+      "help_verified": true
     },
     {
       "name": "Printer",
       "target": "Select * from Win32_Printer",
       "observed_in_metadata": true,
-      "implemented": false,
-      "verified": false
+      "implemented": true,
+      "verified": false,
+      "help_verified": true
     },
     {
       "name": "PrinterConfig",
       "target": "Select * from Win32_PrinterConfiguration",
       "observed_in_metadata": true,
-      "implemented": false,
-      "verified": false
+      "implemented": true,
+      "verified": false,
+      "help_verified": true
     },
     {
       "name": "PrintJob",
       "target": "Select * from Win32_PrintJob",
       "observed_in_metadata": true,
-      "implemented": false,
-      "verified": false
+      "implemented": true,
+      "verified": false,
+      "help_verified": true
     },
     {
       "name": "Process",
       "target": "Select * from Win32_Process",
       "observed_in_metadata": true,
-      "implemented": false,
-      "verified": false
+      "implemented": true,
+      "verified": false,
+      "help_verified": true
     },
     {
       "name": "Product",
       "target": "Select * from Win32_Product",
       "observed_in_metadata": true,
-      "implemented": false,
-      "verified": false
+      "implemented": true,
+      "verified": false,
+      "help_verified": true
     },
     {
       "name": "QFE",
       "target": "Select * from Win32_QuickFixEngineering",
       "observed_in_metadata": true,
-      "implemented": false,
-      "verified": false
+      "implemented": true,
+      "verified": false,
+      "help_verified": true
     },
     {
       "name": "QuotaSetting",
       "target": "Select * from Win32_QuotaSetting",
       "observed_in_metadata": true,
-      "implemented": false,
-      "verified": false
+      "implemented": true,
+      "verified": false,
+      "help_verified": true
     },
     {
       "name": "RDAccount",
       "target": "Select * from Win32_TSAccount",
       "observed_in_metadata": true,
-      "implemented": false,
-      "verified": false
+      "implemented": true,
+      "verified": false,
+      "help_verified": true
     },
     {
       "name": "RDNIC",
       "target": "Select * from Win32_TSNetworkAdapterSetting",
       "observed_in_metadata": true,
-      "implemented": false,
-      "verified": false
+      "implemented": true,
+      "verified": false,
+      "help_verified": true
     },
     {
       "name": "RDPermissions",
       "target": "Select * from Win32_TSPermissionsSetting",
       "observed_in_metadata": true,
-      "implemented": false,
-      "verified": false
+      "implemented": true,
+      "verified": false,
+      "help_verified": true
     },
     {
       "name": "RDToggle",
       "target": "Select * from Win32_TerminalServiceSetting",
       "observed_in_metadata": true,
-      "implemented": false,
-      "verified": false
+      "implemented": true,
+      "verified": false,
+      "help_verified": true
     },
     {
       "name": "RecoverOS",
       "target": "Select * from Win32_OSRecoveryConfiguration",
       "observed_in_metadata": true,
-      "implemented": false,
-      "verified": false
+      "implemented": true,
+      "verified": false,
+      "help_verified": true
     },
     {
       "name": "Registry",
       "target": "Select * from Win32_Registry",
       "observed_in_metadata": true,
-      "implemented": false,
-      "verified": false
+      "implemented": true,
+      "verified": false,
+      "help_verified": true
     },
     {
       "name": "SCSICONTROLLER",
       "target": "Select * from Win32_SCSIController",
       "observed_in_metadata": true,
-      "implemented": false,
-      "verified": false
+      "implemented": true,
+      "verified": false,
+      "help_verified": true
     },
     {
       "name": "Server",
       "target": "Select * from Win32_PerfRawData_PerfNet_Server",
       "observed_in_metadata": true,
-      "implemented": false,
-      "verified": false
+      "implemented": true,
+      "verified": false,
+      "help_verified": true
     },
     {
       "name": "Service",
       "target": "Select * from Win32_Service",
       "observed_in_metadata": true,
-      "implemented": false,
-      "verified": false
+      "implemented": true,
+      "verified": false,
+      "help_verified": true
     },
     {
       "name": "ShadowCopy",
       "target": "Select * from Win32_ShadowCopy",
       "observed_in_metadata": true,
-      "implemented": false,
-      "verified": false
+      "implemented": true,
+      "verified": false,
+      "help_verified": true
     },
     {
       "name": "ShadowStorage",
       "target": "Select * from Win32_ShadowStorage",
       "observed_in_metadata": true,
-      "implemented": false,
-      "verified": false
+      "implemented": true,
+      "verified": false,
+      "help_verified": true
     },
     {
       "name": "Share",
       "target": "Select * from Win32_Share",
       "observed_in_metadata": true,
-      "implemented": false,
-      "verified": false
+      "implemented": true,
+      "verified": false,
+      "help_verified": true
     },
     {
       "name": "SoftwareElement",
       "target": "Select * from Win32_SoftwareElement",
       "observed_in_metadata": true,
-      "implemented": false,
-      "verified": false
+      "implemented": true,
+      "verified": false,
+      "help_verified": true
     },
     {
       "name": "SoftwareFeature",
       "target": "Select * from Win32_SoftwareFeature",
       "observed_in_metadata": true,
-      "implemented": false,
-      "verified": false
+      "implemented": true,
+      "verified": false,
+      "help_verified": true
     },
     {
       "name": "SoundDev",
       "target": "Select * from WIN32_SoundDevice",
       "observed_in_metadata": true,
-      "implemented": false,
-      "verified": false
+      "implemented": true,
+      "verified": false,
+      "help_verified": true
     },
     {
       "name": "Startup",
       "target": "Select * from Win32_StartupCommand",
       "observed_in_metadata": true,
-      "implemented": false,
-      "verified": false
+      "implemented": true,
+      "verified": false,
+      "help_verified": true
     },
     {
       "name": "SysAccount",
       "target": "Select * from Win32_SystemAccount",
       "observed_in_metadata": true,
-      "implemented": false,
-      "verified": false
+      "implemented": true,
+      "verified": false,
+      "help_verified": true
     },
     {
       "name": "SysDriver",
       "target": "Select * from Win32_SystemDriver",
       "observed_in_metadata": true,
-      "implemented": false,
-      "verified": false
+      "implemented": true,
+      "verified": false,
+      "help_verified": true
     },
     {
       "name": "SystemEnclosure",
       "target": "Select * from Win32_SystemEnclosure",
       "observed_in_metadata": true,
-      "implemented": false,
-      "verified": false
+      "implemented": true,
+      "verified": false,
+      "help_verified": true
     },
     {
       "name": "SystemSlot",
       "target": "Select * from Win32_SystemSlot",
       "observed_in_metadata": true,
-      "implemented": false,
-      "verified": false
+      "implemented": true,
+      "verified": false,
+      "help_verified": true
     },
     {
       "name": "TapeDrive",
       "target": "Select * from Win32_TapeDrive",
       "observed_in_metadata": true,
-      "implemented": false,
-      "verified": false
+      "implemented": true,
+      "verified": false,
+      "help_verified": true
     },
     {
       "name": "Temperature",
       "target": "Select * from Win32_TemperatureProbe",
       "observed_in_metadata": true,
-      "implemented": false,
-      "verified": false
+      "implemented": true,
+      "verified": false,
+      "help_verified": true
     },
     {
       "name": "TimeZone",
       "target": "Select * from Win32_TimeZone",
       "observed_in_metadata": true,
-      "implemented": false,
-      "verified": false
+      "implemented": true,
+      "verified": false,
+      "help_verified": true
     },
     {
       "name": "UPS",
       "target": "Select * from Win32_UninterruptiblePowerSupply",
       "observed_in_metadata": true,
-      "implemented": false,
-      "verified": false
+      "implemented": true,
+      "verified": false,
+      "help_verified": true
     },
     {
       "name": "UserAccount",
       "target": "Select * from Win32_UserAccount",
       "observed_in_metadata": true,
-      "implemented": false,
-      "verified": false
+      "implemented": true,
+      "verified": false,
+      "help_verified": true
     },
     {
       "name": "Voltage",
       "target": "Select * from Win32_VoltageProbe",
       "observed_in_metadata": true,
-      "implemented": false,
-      "verified": false
+      "implemented": true,
+      "verified": false,
+      "help_verified": true
     },
     {
       "name": "Volume",
       "target": "Select * from Win32_Volume",
       "observed_in_metadata": true,
-      "implemented": false,
-      "verified": false
+      "implemented": true,
+      "verified": false,
+      "help_verified": true
     },
     {
       "name": "VolumeQuotaSetting",
       "target": "Select * from Win32_VolumeQuotaSetting",
       "observed_in_metadata": true,
-      "implemented": false,
-      "verified": false
+      "implemented": true,
+      "verified": false,
+      "help_verified": true
     },
     {
       "name": "VolumeUserQuota",
       "target": "Select * from Win32_VolumeUserQuota",
       "observed_in_metadata": true,
-      "implemented": false,
-      "verified": false
+      "implemented": true,
+      "verified": false,
+      "help_verified": true
     },
     {
       "name": "WMISet",
       "target": "Select * from Win32_WMISetting",
       "observed_in_metadata": true,
-      "implemented": false,
-      "verified": false
+      "implemented": true,
+      "verified": false,
+      "help_verified": true
     }
   ],
   "components": {
     "parser": {
       "implemented": true,
       "portable_tests": 20,
-      "native_runtime_verified": false
+      "native_runtime_verified": true
     },
     "alias_resolver": {
       "implemented": true,
       "portable_tests": 9,
-      "native_runtime_verified": false
+      "native_runtime_verified": true
     },
     "native_backend": {
       "implemented": true,
@@ -899,10 +3230,10 @@
     },
     "executable": {
       "implemented": true,
-      "native_basic_cases_passed": 14,
+      "native_basic_cases_passed": 19,
       "native_shell_cases_passed": 3,
       "profile": "ARM64 en-US SYSTEM",
-      "remaining_corpus_differences": 9
+      "remaining_corpus_differences": 4
     },
     "connections": {
       "implemented": true,
@@ -912,6 +3243,13 @@
       "second_endpoint_verified": false,
       "legacy_trace_parity": "pending Task 10",
       "context_parity": "pending session control"
+    },
+    "schema_and_help": {
+      "implemented": true,
+      "native_help_cases_passed": 344,
+      "native_stable_schema_cases_passed": 29,
+      "volatile_data_probes": 2,
+      "profile": "ARM64 en-US SYSTEM"
     }
   }
 }

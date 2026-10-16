@@ -161,3 +161,90 @@ fn value_mode_preserves_blank_lines() {
         include_bytes!("fixtures/reference/os-get-value.stdout.bin")
     );
 }
+#[test]
+fn empty_association_matches_source_row_and_diagnostic() {
+    let q = request("os assoc /resultclass:WmicResearchMissingClass");
+    let r = ManagementResult::Associations(vec![AssociationGroup {
+        source: Record {
+            class: wide("Win32_OperatingSystem"),
+            path: Some(wide(
+                r"\\DESKTOP-N4H9E7R\ROOT\CIMV2:Win32_OperatingSystem=@",
+            )),
+            ..Default::default()
+        },
+        associated: vec![],
+    }]);
+    let out = render(RenderRequest {
+        request: &q,
+        result: Ok(&r),
+        node: &wide("DESKTOP-N4H9E7R"),
+    })
+    .unwrap();
+    assert_eq!(
+        bytes(&out.stdout),
+        include_bytes!("fixtures/schema-reference/assoc-empty.stdout.bin")
+    );
+    assert_eq!(
+        bytes(&out.stderr),
+        include_bytes!("fixtures/schema-reference/assoc-empty.stderr.bin")
+    );
+}
+#[test]
+fn multiple_array_values_use_native_separator() {
+    assert_eq!(
+        wmic_compat::render::display_value(&CimValue::Array(vec![
+            CimValue::String(wide("one")),
+            CimValue::String(wide("two"))
+        ])),
+        wide("{\"one\", \"two\"}")
+    );
+}
+#[test]
+fn class_schema_mof_preserves_type_and_property_name() {
+    let q = request("class Example get");
+    let r = ManagementResult::Schema(ClassSchema {
+        name: wide("Example"),
+        properties: vec![PropertySchema {
+            name: wide("Answer"),
+            cim_type: 19,
+            qualifiers: vec![],
+        }],
+        ..Default::default()
+    });
+    let o = render(RenderRequest {
+        request: &q,
+        result: Ok(&r),
+        node: &wide("TEST"),
+    })
+    .unwrap();
+    assert_eq!(bytes(&o.stdout),b"<DIV CLASS=\"mofclass\">\r\r\n<SPAN CLASS=\"mofqualifierset\"> <br /></SPAN>\r\r\n<SPAN CLASS=\"mofkeyword\">class</SPAN>Example<BR />\r\r\n<SPAN CLASS=\"mofsymbol\">{</SPAN><BR />\r\r\n<DD>\r\r\n<DIV CLASS=\"mofproperty\">\r\r\n<SPAN CLASS=\"mofqualifierset\"> </SPAN>\r\r\n<SPAN CLASS=\"mofkeyword\">uint32</SPAN>\r\r\n<SPAN CLASS=\"mofproperty\">Answer</SPAN>\r\r\n<SPAN CLASS=\"mofsymbol\">;</SPAN><BR />\r\r\n</DIV>\r\r\n</DD>\r\r\n<SPAN CLASS=\"mofsymbol\">};</SPAN>\r\r\n</DIV>\r\r\n\r\r\n");
+}
+#[test]
+fn class_mof_places_array_declarations_after_scalar_declarations() {
+    let q = request("class Example get");
+    let r = ManagementResult::Schema(ClassSchema {
+        name: wide("Example"),
+        properties: vec![
+            PropertySchema {
+                name: wide("Aarray"),
+                cim_type: 0x2008,
+                qualifiers: vec![],
+            },
+            PropertySchema {
+                name: wide("Zscalar"),
+                cim_type: 8,
+                qualifiers: vec![],
+            },
+        ],
+        ..Default::default()
+    });
+    let out = render(RenderRequest {
+        request: &q,
+        result: Ok(&r),
+        node: &wide("TEST"),
+    })
+    .unwrap()
+    .stdout
+    .to_string_lossy();
+    assert!(out.find(">Zscalar</SPAN>").unwrap() < out.find(">Aarray</SPAN>").unwrap());
+}

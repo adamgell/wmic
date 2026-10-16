@@ -20,5 +20,12 @@ function Convert-AliasValue($v) {
     return $v
 }
 $data = @(foreach ($a in (Get-WmiObject -Namespace root\cli -Class MSFT_CliAlias | Sort-Object FriendlyName)) { Convert-AliasValue $a })
+$localized = @(Get-WmiObject -Namespace root\cli\ms_409 -Class MSFT_LocalizablePropertyValue -Filter "PropertyName='Description'" | Where-Object { $_.RelPath -match '^MSFT_CliAlias.FriendlyName="([^"]+)"$' })
+foreach ($alias in $data) {
+    $relpath = 'MSFT_CliAlias.FriendlyName="' + $alias.FriendlyName + '"'
+    $match = $localized | Where-Object { $_.RelPath -eq $relpath } | Select-Object -First 1
+    $description = if ($match) { $match.Text[0] } else { $null }
+    $alias | Add-Member -NotePropertyName LocalizedDescription -NotePropertyValue $description
+}
 $json = ConvertTo-Json -InputObject $data -Depth 100 -Compress
 [Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes($json))

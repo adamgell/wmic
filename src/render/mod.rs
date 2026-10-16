@@ -32,23 +32,7 @@ pub(crate) fn append(out: &mut WideText, text: &WideText) {
 }
 pub(crate) const NL: &str = "\r\r\n";
 pub(crate) fn columns(request: &ResolvedRequest, objects: &[Record]) -> Vec<(WideText, WideText)> {
-    let mut cols = if request.verb == Verb::Get && !request.properties.is_empty() {
-        request
-            .properties
-            .iter()
-            .map(|name| {
-                let canonical = objects
-                    .iter()
-                    .flat_map(|r| &r.properties)
-                    .find(|p| p.name.eq_ascii_ignore_case(&name.to_string_lossy()))
-                    .map(|p| p.name.clone())
-                    .unwrap_or_else(|| name.clone());
-                (canonical.clone(), canonical)
-            })
-            .collect()
-    } else if !request.display.is_empty() {
-        request.display.clone()
-    } else {
+    let all = || {
         objects
             .first()
             .map(|r| {
@@ -60,7 +44,38 @@ pub(crate) fn columns(request: &ResolvedRequest, objects: &[Record]) -> Vec<(Wid
             })
             .unwrap_or_default()
     };
-    cols.sort_by_key(|(name, _)| name.to_string_lossy().to_ascii_lowercase());
+    let mut cols = if request.verb == Verb::Get {
+        if request.properties.is_empty() {
+            all()
+        } else {
+            request
+                .properties
+                .iter()
+                .map(|name| {
+                    let canonical = objects
+                        .iter()
+                        .flat_map(|r| &r.properties)
+                        .find(|p| p.name.eq_ascii_ignore_case(&name.to_string_lossy()))
+                        .map(|p| p.name.clone())
+                        .unwrap_or_else(|| name.clone());
+                    (canonical.clone(), canonical)
+                })
+                .collect()
+        }
+    } else if !request.display.is_empty() {
+        request.display.clone()
+    } else {
+        all()
+    };
+    cols.sort_by_key(|(name, _)| {
+        (
+            system_property_order()
+                .iter()
+                .position(|n| name.eq_ascii_ignore_case(n))
+                .unwrap_or(10),
+            name.to_string_lossy().to_ascii_lowercase(),
+        )
+    });
     cols
 }
 pub(crate) fn lookup<'a>(r: &'a Record, name: &WideText) -> Option<&'a CimValue> {
@@ -73,8 +88,38 @@ pub fn render(input: RenderRequest<'_>) -> Result<RenderedOutput, RenderError> {
     let req = input.request;
     let result = match input.result {
         Ok(r) => r,
-        Err(e) => return Ok(diagnostic::management(e, input.node)),
+        Err(e) => {
+            let mut output = diagnostic::management(e, input.node);
+            if !output.stdout.0.is_empty()
+                && req.verb == Verb::List
+                && req.view.is_some()
+                && req
+                    .format
+                    .as_ref()
+                    .is_some_and(|f| f.eq_ascii_ignore_case("list"))
+            {
+                push(&mut output.stdout, NL);
+            }
+            return Ok(output);
+        }
     };
+    if let ManagementResult::Schema(schema) = result {
+        let value = req
+            .modifiers
+            .iter()
+            .any(|m| m.name.eq_ascii_ignore_case("value"));
+        return Ok(RenderedOutput {
+            stdout: if value {
+                "\r\r\n\r\r\n\r\r\n".into()
+            } else {
+                mof::class(schema)
+            },
+            ..Default::default()
+        });
+    }
+    if let ManagementResult::Associations(groups) = result {
+        return Ok(association::render(groups));
+    }
     let ManagementResult::Objects(set) = result else {
         return Err(RenderError("Not supported".into()));
     };
@@ -134,5 +179,50 @@ pub fn render_parse_error(e: &ParseError) -> RenderedOutput {
     )
 }
 pub fn render_resolve_error(e: &crate::alias::ResolveError) -> RenderedOutput {
+    if e.code & 0x80000000 != 0 {
+        return diagnostic::management(
+            &ManagementError {
+                code: e.code,
+                target: WideText::default(),
+                message: e.message.clone(),
+                operation: "role".into(),
+                extended: vec![],
+                partial: None,
+            },
+            &WideText::default(),
+        );
+    }
     diagnostic::text(&e.message, e.token.as_ref())
+}
+pub mod help;
+pub mod mof;
+pub(crate) fn system_property_names() -> Vec<&'static str> {
+    vec![
+        "__CLASS",
+        "__DERIVATION",
+        "__DYNASTY",
+        "__GENUS",
+        "__NAMESPACE",
+        "__PATH",
+        "__PROPERTY_COUNT",
+        "__RELPATH",
+        "__SERVER",
+        "__SUPERCLASS",
+    ]
+}
+
+mod association;
+pub(crate) fn system_property_order() -> [&'static str; 10] {
+    [
+        "__PATH",
+        "__NAMESPACE",
+        "__SERVER",
+        "__DERIVATION",
+        "__PROPERTY_COUNT",
+        "__RELPATH",
+        "__DYNASTY",
+        "__SUPERCLASS",
+        "__CLASS",
+        "__GENUS",
+    ]
 }

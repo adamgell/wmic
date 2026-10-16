@@ -1,0 +1,11 @@
+Call			[ In/Out ]Params&type			Status
+====			=====================			======
+Create                  [IN ]CommandLine(STRING)            	(null)         
+
+			[IN ]CurrentDirectory(STRING)       	
+
+			[IN ]ProcessStartupInformation(OBJECT)	
+
+			[OUT]ProcessId(UINT32)              	
+
+

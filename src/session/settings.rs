@@ -64,7 +64,7 @@ impl SessionSettings {
                 SwitchValue::Value(v) => Some(v.clone()),
                 SwitchValue::Reset => None,
                 SwitchValue::Missing => {
-                    if m.name.eq_ascii_ignore_case("?") {
+                    if m.name.eq_ascii_ignore_case("?") || command.help {
                         continue;
                     }
                     return Err(setting_error(0xAC5D, "Invalid Global Switch."));

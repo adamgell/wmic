@@ -134,15 +134,94 @@ impl Session {
             Ok(s) => s,
             Err(e) => return emit(sink, render::render_parse_error(&e), e.code),
         };
+        let selected = match &parsed.target {
+            Some(Target::Alias(name)) => Some(name.clone()),
+            _ => None,
+        };
+        if selected.is_some()
+            || (parsed.help
+                && parsed.target.is_none()
+                && parsed.verb != Verb::Context
+                && parsed
+                    .modifiers
+                    .iter()
+                    .all(|m| m.name.eq_ascii_ignore_case("?") || m.value != SwitchValue::Missing))
+        {
+            let mut loader = BackendRoleLoader {
+                backend,
+                selected,
+                locale: settings.locale.clone(),
+            };
+            if let Err(error) = self.aliases.load_role(&settings, &mut loader) {
+                return emit(sink, render::render_resolve_error(&error), error.code);
+            }
+        }
         if parsed.help {
-            return emit(
-                sink,
-                RenderedOutput {
-                    stderr: "Not supported\r\r\n".into(),
-                    ..Default::default()
-                },
-                0x8004100c,
-            );
+            let schema = if matches!(parsed.target, Some(Target::Path(_)))
+                && parsed.verb == Verb::Get
+                && parsed.verb_explicit
+            {
+                let mut req = match self.aliases.resolve(&parsed, &settings) {
+                    Ok(ResolvedCommand::Management(r)) => r,
+                    Err(error) => {
+                        return emit(sink, render::render_resolve_error(&error), error.code);
+                    }
+                    _ => {
+                        return CommandOutcome {
+                            exit_status: 0x8004100c,
+                            ..Default::default()
+                        };
+                    }
+                };
+                req.class_mode = true;
+                configure_connection(&mut req, &settings);
+                match backend.execute(&req) {
+                    Ok(ManagementResult::Schema(s)) => Some(s),
+                    Err(error) => {
+                        let status = error.code;
+                        let node = if req.connection.node.eq_ascii_ignore_case(".") {
+                            self.local_node.clone()
+                        } else {
+                            req.connection.node.clone()
+                        };
+                        let output = render::render(render::RenderRequest {
+                            request: &req,
+                            result: Err(&error),
+                            node: &node,
+                        })
+                        .unwrap_or_default();
+                        return emit(sink, output, status);
+                    }
+                    _ => {
+                        return CommandOutcome {
+                            exit_status: 0x8004100c,
+                            ..Default::default()
+                        };
+                    }
+                }
+            } else {
+                None
+            };
+            if let Some(Target::Alias(name)) = &parsed.target
+                && self.aliases.find(name).is_none()
+                && let Err(error) = self.aliases.resolve(&parsed, &settings)
+            {
+                return emit(sink, render::render_resolve_error(&error), error.code);
+            }
+            return match render::help::render_help(render::help::HelpRequest {
+                command: &parsed,
+                aliases: &self.aliases,
+                schema: schema.as_ref(),
+            }) {
+                Ok(output) => emit(sink, output, 0),
+                Err(error) => {
+                    emit_render_error(sink, error);
+                    CommandOutcome {
+                        exit_status: 0xACB2,
+                        ..Default::default()
+                    }
+                }
+            };
         }
         if parsed.verb == Verb::Exit {
             return CommandOutcome {
@@ -194,21 +273,17 @@ impl Session {
                 }
             }
         }
-        request.connection.authentication = settings.authentication;
-        request.connection.impersonation = settings.impersonation;
-        request.connection.privileges = settings.privileges;
-        request.connection.locale = Some(settings.locale.clone());
-        if settings.user.is_some() {
-            request.connection.user = settings.user.clone();
-            request.connection.password = settings.password.clone();
-        }
-        if settings.authority.is_some() {
-            request.connection.authority = settings.authority.clone();
-        }
+        configure_connection(&mut request, &settings);
         let mut outcomes = vec![];
         let mut status = 0;
         let mut combined = vec![];
-        for target in &settings.nodes {
+        let mut had_objects = false;
+        let nodes = if settings.explicit_nodes {
+            settings.nodes.clone()
+        } else {
+            vec![request.connection.node.clone()]
+        };
+        for target in &nodes {
             request.connection.node = target.clone();
             let node = if target.eq_ascii_ignore_case(".") {
                 self.local_node.clone()
@@ -241,6 +316,7 @@ impl Session {
                 } else {
                     backend.execute(&request)
                 };
+            had_objects |= matches!(result, Ok(ManagementResult::Objects(_)));
             let code = result.as_ref().err().map_or(0, |e| e.code);
             outcomes.push(NodeOutcome {
                 node: node.clone(),
@@ -259,7 +335,23 @@ impl Session {
                 && let Some(partial) = &error.partial
                 && let ManagementResult::Objects(set) = partial.as_ref()
             {
-                combined.extend(set.objects.clone());
+                if settings.aggregate {
+                    combined.extend(set.objects.clone());
+                } else {
+                    match render::render(render::RenderRequest {
+                        request: &request,
+                        result: Ok(partial.as_ref()),
+                        node: &node,
+                    }) {
+                        Ok(output) => {
+                            let outcome = emit(sink, output, code);
+                            if outcome.exit_status != code {
+                                status = outcome.exit_status;
+                            }
+                        }
+                        Err(error) => status = emit_render_error(sink, error),
+                    }
+                }
             }
             match render::render(render::RenderRequest {
                 request: &request,
@@ -277,7 +369,7 @@ impl Session {
                 }
             }
         }
-        if settings.aggregate && (!combined.is_empty() || status == 0) {
+        if settings.aggregate && (had_objects || !combined.is_empty()) {
             let result = ManagementResult::Objects(ObjectSet {
                 objects: combined,
                 schema: None,
@@ -325,5 +417,34 @@ pub(super) fn emit(
             status
         },
         ..Default::default()
+    }
+}
+
+struct BackendRoleLoader<'a> {
+    backend: &'a mut dyn Management,
+    selected: Option<WideText>,
+    locale: WideText,
+}
+impl crate::alias::RoleLoader for BackendRoleLoader<'_> {
+    fn load(
+        &mut self,
+        role: &WideText,
+    ) -> Result<Option<Vec<crate::alias::AliasDefinition>>, ResolveError> {
+        self.backend
+            .load_aliases(role, self.selected.as_ref(), &self.locale)
+    }
+}
+
+fn configure_connection(request: &mut crate::backend::ResolvedRequest, settings: &SessionSettings) {
+    request.connection.authentication = settings.authentication;
+    request.connection.impersonation = settings.impersonation;
+    request.connection.privileges = settings.privileges;
+    request.connection.locale = Some(settings.locale.clone());
+    if settings.user.is_some() {
+        request.connection.user = settings.user.clone();
+        request.connection.password = settings.password.clone();
+    }
+    if settings.authority.is_some() {
+        request.connection.authority = settings.authority.clone();
     }
 }

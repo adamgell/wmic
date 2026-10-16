@@ -1,0 +1,11 @@
+
+Escapes to full WMI schema.
+USAGE:
+
+CLASS <class path expression> ASSOC [<format specifier>]
+CLASS <class path expression> CALL <method name> [<actual param list>]
+CLASS <class path expression> CREATE <assign list>
+CLASS <class path expression> DELETE
+CLASS <class path expression> GET [<get switches>]
+CLASS <class path expression> SET [<assign list>]
+

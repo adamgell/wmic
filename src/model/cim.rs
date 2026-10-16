@@ -103,8 +103,15 @@ pub struct OperationResult {
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 pub enum ManagementResult {
+    Associations(Vec<AssociationGroup>),
     Objects(ObjectSet),
     Schema(ClassSchema),
     Methods(Vec<MethodResult>),
     Operation(OperationResult),
+}
+
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
+pub struct AssociationGroup {
+    pub source: Record,
+    pub associated: Vec<Record>,
 }

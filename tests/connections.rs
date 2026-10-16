@@ -232,3 +232,42 @@ fn help_does_not_start_a_repetition_loop() {
     );
     assert!(b.visited.is_empty());
 }
+
+#[test]
+fn non_aggregate_partial_enumeration_preserves_rows_and_failure() {
+    struct Partial;
+    impl Management for Partial {
+        fn execute(&mut self, r: &ResolvedRequest) -> Result<ManagementResult, ManagementError> {
+            Err(ManagementError {
+                code: 0x80041001,
+                target: r.class_name.clone(),
+                message: wide("Generic failure"),
+                operation: wide("enumerate"),
+                extended: vec![],
+                partial: Some(Box::new(ManagementResult::Objects(ObjectSet {
+                    objects: vec![Record {
+                        properties: vec![Property {
+                            name: wide("Caption"),
+                            value: CimValue::String(wide("Before failure")),
+                            cim_type: 8,
+                            system: false,
+                            qualifiers: vec![],
+                        }],
+                        ..Default::default()
+                    }],
+                    schema: None,
+                }))),
+            })
+        }
+    }
+    let mut sink = Sink::default();
+    let out = Session::new(wide("LOCAL")).unwrap().execute(
+        &wide("/aggregate:off os get Caption"),
+        EntryMode::Interactive,
+        &mut Partial,
+        &mut sink,
+    );
+    assert_eq!(out.exit_status, 0x80041001);
+    assert!(sink.stdout.to_string_lossy().contains("Before failure"));
+    assert!(sink.stderr.to_string_lossy().contains("Generic failure"));
+}

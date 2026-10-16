@@ -123,6 +123,13 @@ pub fn parse_command(raw: &WideText, mode: EntryMode) -> Result<ParsedCommand, P
             } else if units[spans[i].start] == b'/' as u16 {
                 break;
             } else {
+                if units[spans[i].start] == 92 {
+                    return Err(ParseError::new(
+                        0xAC5C,
+                        "Unexpected switch at this level.",
+                        None,
+                    ));
+                }
                 command.positionals.push(word);
                 i += 1;
             }
@@ -140,6 +147,9 @@ pub fn parse_command(raw: &WideText, mode: EntryMode) -> Result<ParsedCommand, P
     match command.verb {
         Verb::Get => {
             command.properties = lex::split_commas(body, false);
+            if matches!(command.target, Some(Target::Class(_))) && !command.properties.is_empty() {
+                return Err(ParseError::new(0xACBC, "Invalid GET Expression.", None));
+            }
             for property in &command.properties {
                 if property.0.is_empty() || lex::tokens(&property.0)?.len() != 1 {
                     return Err(ParseError::new(0xACBC, "Invalid GET Expression.", None));
