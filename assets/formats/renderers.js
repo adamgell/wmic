@@ -120,6 +120,7 @@ var heading='<tr style="background-color:#a0a0ff;font:10pt Tahoma;font-weight:bo
 function rowStyle(position) {return '<tr style="background-color:#'+(position%2?'f0f0f0':'e0f0f0')+';font:10pt Tahoma;">\r\n';}
 function htmlValue(p) {
     if(p.nodeName=="PROPERTY.REFERENCE")return html(reference(p,false,null));
+    if(p.nodeName=="PROPERTY.ARRAY")return "\r\n\t"+html(value(p,"list",""))+"\r\n";
     return html(value(p,"list",""));
 }
 function htable(root,sortby,datatype) {
@@ -128,7 +129,8 @@ function htable(root,sortby,datatype) {
     if(heads)for(var c=0;c<heads.length;c++)out+='<td>'+html(attr(heads.item(c),"NAME"))+'</td>\r\n';
     out+='</tr>\r\n';
     for(var g=0;g<groups.length;g++) {
-        out+=rowStyle(g+2);var group=groups.item(g),nodes=select(group,"CIM/INSTANCE"),rows=[];
+        var group=groups.item(g),nodes=select(group,"CIM/INSTANCE"),rows=[];
+        var groupStyle=rowStyle(g+2);out+=nodes.length?groupStyle:groupStyle.slice(0,-2);
         for(var r=0;r<nodes.length;r++)rows.push(nodes.item(r));
         if(sortby)rows.sort(function(a,b){var pa=properties(a),pb=properties(b),va="",vb="";for(var i=0;i<pa.length;i++)if(attr(pa.item(i),"NAME")==sortby)va=text(pa.item(i));for(var i=0;i<pb.length;i++)if(attr(pb.item(i),"NAME")==sortby)vb=text(pb.item(i));if(datatype=="number")return Number(va)-Number(vb);return va<vb?-1:va>vb?1:0;});
         for(var r=0;r<rows.length;r++) {
@@ -143,7 +145,7 @@ function hform(root) {
     var groups=select(documentOf(root),"/COMMAND/RESULTS"),out='<html>\r\n';
     for(var g=0;g<groups.length;g++) {
         var group=groups.item(g),rows=select(group,"CIM/INSTANCE");
-        out+='<H3>Node: '+html(attr(group,"NODE"))+' - '+rows.length+' Instances of '+(rows.length?html(attr(rows.item(0),"CLASSNAME")):"")+'</H3>\r\n<table border="1">\r\n';
+        out+='<H3>Node: '+html(attr(group,"NODE"))+' - '+rows.length+' Instances of '+(rows.length?html(attr(rows.item(0),"CLASSNAME")):"")+'</H3>\r\n<table border="1">'+(rows.length?'\r\n':'');
         for(var r=0;r<rows.length;r++) {
             out+=heading+'<td colspan="2">INSTANCE'+dot+'</td></tr>\r\n<tr style="background-color:#c0c0c0;font:8pt Tahoma;">\r\n<td>Property Name</td><td>Value</td>\r\n</tr>\r\n';
             var props=properties(rows.item(r));for(var c=0;c<props.length;c++){var p=props.item(c);out+=rowStyle(c+1)+'<td>'+html(attr(p,"NAME"))+'</td>\r\n<td>'+htmlValue(p)+dot+'</td>\r\n</tr>\r\n';}

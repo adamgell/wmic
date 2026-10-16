@@ -1,0 +1,85 @@
+<DIV STYLE="font-family:Courier; font-size:10pt; margin-bottom:2em">
+<DIV STYLE="margin-left:1em">
+<SPAN STYLE="color:gray">&lt;COMMAND<SPAN STYLE="color:navy">SEQUENCENUM="<SPAN STYLE="color:black">1</SPAN>"</SPAN>
+<SPAN STYLE="color:navy">ISSUEDFROM="<SPAN STYLE="color:black">DESKTOP-N4H9E7R</SPAN>"</SPAN>
+<SPAN STYLE="color:navy">STARTTIME="<SPAN STYLE="color:black">10-16-2026T16:02:43</SPAN>"</SPAN>
+<SPAN STYLE="color:navy">EVERYCOUNT="<SPAN STYLE="color:black">0</SPAN>"</SPAN>&gt;</SPAN><DIV STYLE="margin-left:1em">
+<SPAN STYLE="color:gray">&lt;REQUEST&gt;</SPAN><DIV STYLE="margin-left:1em">
+<SPAN STYLE="color:gray">&lt;COMMANDLINE&gt;</SPAN> os get Caption /format:xml<SPAN STYLE="color:gray">&lt;/COMMANDLINE&gt;</SPAN>
+</DIV>
+<DIV STYLE="margin-left:1em">
+<SPAN STYLE="color:gray">&lt;COMMANDLINECOMPONENTS&gt;</SPAN><DIV STYLE="margin-left:1em">
+<SPAN STYLE="color:gray">&lt;NODELIST&gt;</SPAN><DIV STYLE="margin-left:1em">
+<SPAN STYLE="color:gray">&lt;NODE&gt;</SPAN>DESKTOP-N4H9E7R<SPAN STYLE="color:gray">&lt;/NODE&gt;</SPAN>
+</DIV>
+<SPAN STYLE="color:gray">&lt;/NODELIST&gt;</SPAN>
+</DIV>
+<SPAN STYLE="color:gray">&lt;/COMMANDLINECOMPONENTS&gt;</SPAN>
+</DIV>
+<DIV STYLE="margin-left:1em">
+<SPAN STYLE="color:gray">&lt;CONTEXT&gt;</SPAN><DIV STYLE="margin-left:1em">
+<SPAN STYLE="color:gray">&lt;NAMESPACE&gt;</SPAN>root\cimv2<SPAN STYLE="color:gray">&lt;/NAMESPACE&gt;</SPAN>
+</DIV>
+<DIV STYLE="margin-left:1em">
+<SPAN STYLE="color:gray">&lt;ROLE&gt;</SPAN>root\cli<SPAN STYLE="color:gray">&lt;/ROLE&gt;</SPAN>
+</DIV>
+<DIV STYLE="margin-left:1em">
+<SPAN STYLE="color:gray">&lt;IMPLEVEL&gt;</SPAN>IMPERSONATE<SPAN STYLE="color:gray">&lt;/IMPLEVEL&gt;</SPAN>
+</DIV>
+<DIV STYLE="margin-left:1em">
+<SPAN STYLE="color:gray">&lt;AUTHLEVEL&gt;</SPAN>PKTPRIVACY<SPAN STYLE="color:gray">&lt;/AUTHLEVEL&gt;</SPAN>
+</DIV>
+<DIV STYLE="margin-left:1em">
+<SPAN STYLE="color:gray">&lt;LOCALE&gt;</SPAN>ms_409<SPAN STYLE="color:gray">&lt;/LOCALE&gt;</SPAN>
+</DIV>
+<DIV STYLE="margin-left:1em">
+<SPAN STYLE="color:gray">&lt;PRIVILEGES&gt;</SPAN>ENABLE<SPAN STYLE="color:gray">&lt;/PRIVILEGES&gt;</SPAN>
+</DIV>
+<DIV STYLE="margin-left:1em">
+<SPAN STYLE="color:gray">&lt;TRACE&gt;</SPAN>OFF<SPAN STYLE="color:gray">&lt;/TRACE&gt;</SPAN>
+</DIV>
+<DIV STYLE="margin-left:1em">
+<SPAN STYLE="color:gray">&lt;RECORD&gt;</SPAN>N/A<SPAN STYLE="color:gray">&lt;/RECORD&gt;</SPAN>
+</DIV>
+<DIV STYLE="margin-left:1em">
+<SPAN STYLE="color:gray">&lt;INTERACTIVE&gt;</SPAN>OFF<SPAN STYLE="color:gray">&lt;/INTERACTIVE&gt;</SPAN>
+</DIV>
+<DIV STYLE="margin-left:1em">
+<SPAN STYLE="color:gray">&lt;FAILFAST&gt;</SPAN>OFF<SPAN STYLE="color:gray">&lt;/FAILFAST&gt;</SPAN>
+</DIV>
+<DIV STYLE="margin-left:1em">
+<SPAN STYLE="color:gray">&lt;OUTPUT&gt;</SPAN>STDOUT<SPAN STYLE="color:gray">&lt;/OUTPUT&gt;</SPAN>
+</DIV>
+<DIV STYLE="margin-left:1em">
+<SPAN STYLE="color:gray">&lt;APPEND&gt;</SPAN>STDOUT<SPAN STYLE="color:gray">&lt;/APPEND&gt;</SPAN>
+</DIV>
+<DIV STYLE="margin-left:1em">
+<SPAN STYLE="color:gray">&lt;USER&gt;</SPAN>N/A<SPAN STYLE="color:gray">&lt;/USER&gt;</SPAN>
+</DIV>
+<DIV STYLE="margin-left:1em">
+<SPAN STYLE="color:gray">&lt;AGGREGATE&gt;</SPAN>ON<SPAN STYLE="color:gray">&lt;/AGGREGATE&gt;</SPAN>
+</DIV>
+<SPAN STYLE="color:gray">&lt;/CONTEXT&gt;</SPAN>
+</DIV>
+<SPAN STYLE="color:gray">&lt;/REQUEST&gt;</SPAN>
+</DIV>
+<DIV STYLE="margin-left:1em">
+<SPAN STYLE="color:gray">&lt;RESULTS<SPAN STYLE="color:navy">NODE="<SPAN STYLE="color:black">DESKTOP-N4H9E7R</SPAN>"</SPAN>&gt;</SPAN><DIV STYLE="margin-left:1em">
+<SPAN STYLE="color:gray">&lt;CIM&gt;</SPAN><DIV STYLE="margin-left:1em">
+<SPAN STYLE="color:gray">&lt;INSTANCE<SPAN STYLE="color:navy">CLASSNAME="<SPAN STYLE="color:black">Win32_OperatingSystem</SPAN>"</SPAN>&gt;</SPAN><DIV STYLE="margin-left:1em">
+<SPAN STYLE="color:gray">&lt;PROPERTY<SPAN STYLE="color:navy">NAME="<SPAN STYLE="color:black">Caption</SPAN>"</SPAN>
+<SPAN STYLE="color:navy">TYPE="<SPAN STYLE="color:black">string</SPAN>"</SPAN>&gt;</SPAN><DIV STYLE="margin-left:1em">
+<SPAN STYLE="color:gray">&lt;VALUE&gt;</SPAN>Microsoft Windows 11 Pro<SPAN STYLE="color:gray">&lt;/VALUE&gt;</SPAN>
+</DIV>
+<SPAN STYLE="color:gray">&lt;/PROPERTY&gt;</SPAN>
+</DIV>
+<SPAN STYLE="color:gray">&lt;/INSTANCE&gt;</SPAN>
+</DIV>
+<SPAN STYLE="color:gray">&lt;/CIM&gt;</SPAN>
+</DIV>
+<SPAN STYLE="color:gray">&lt;/RESULTS&gt;</SPAN>
+</DIV>
+<SPAN STYLE="color:gray">&lt;/COMMAND&gt;</SPAN>
+</DIV>
+</DIV>
+

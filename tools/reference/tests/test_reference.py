@@ -120,6 +120,11 @@ class ReferenceTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             parallels.validate_manifest(manifest)
 
+    def test_passwords_in_interactive_stdin_are_not_persisted(self):
+        for encoding in ('ascii','utf-16le'):
+            manifest={'cases':[{'id':'stdin-secret','arguments':'','operation':'read_only','stdin_base64':base64.b64encode('/password:secret\r\nquit\r\n'.encode(encoding)).decode()}]}
+            with self.subTest(encoding=encoding),self.assertRaises(ValueError):parallels.validate_manifest(manifest)
+
     def test_controlled_writes_are_not_part_of_default_capture(self):
         manifest = {"cases": [{"id": "write", "arguments": "process call create example", "operation": "controlled_write"}]}
         with self.assertRaises(ValueError):
@@ -176,3 +181,29 @@ class TransportTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class GuestSerializationTests(unittest.TestCase):
+    def test_same_guest_executions_never_overlap(self):
+        from concurrent.futures import ThreadPoolExecutor
+        import threading
+        import time
+        from types import SimpleNamespace
+        from unittest.mock import patch
+        import parallels
+        barrier=threading.Barrier(2)
+        guard=threading.Lock()
+        active=0;maximum=0
+        def execute(*args,**kwargs):
+            nonlocal active,maximum
+            with guard:active+=1;maximum=max(maximum,active)
+            time.sleep(0.04)
+            with guard:active-=1
+            return SimpleNamespace(returncode=0,stdout=b'complete',stderr=b'')
+        def request():
+            barrier.wait()
+            return parallels.run_guest_script('test-serialization-guest','read-only probe',30)
+        with patch.object(parallels.subprocess,'run',side_effect=execute),ThreadPoolExecutor(max_workers=2) as pool:
+            futures=[pool.submit(request) for _ in range(2)]
+            self.assertEqual([f.result() for f in futures],[b'complete',b'complete'])
+        self.assertEqual(maximum,1,'Parallels Tools must receive only one execution per guest at a time')

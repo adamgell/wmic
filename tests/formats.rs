@@ -353,3 +353,85 @@ fn embedded_cim_objects_use_the_sdk_object_property_tags() {
         )
     );
 }
+
+#[cfg(windows)]
+#[test]
+fn native_html_arrays_and_empty_results_match_the_microsoft_captures() {
+    use windows::Win32::System::Com::{COINIT_MULTITHREADED, CoInitializeEx, CoUninitialize};
+    unsafe {
+        CoInitializeEx(None, COINIT_MULTITHREADED).ok().unwrap();
+    }
+    struct Com;
+    impl Drop for Com {
+        fn drop(&mut self) {
+            unsafe {
+                CoUninitialize();
+            }
+        }
+    }
+    let _com = Com;
+    for (format, array_fixture, empty_fixture) in [
+        ("htable", "query-format-066", "query-format-366"),
+        ("hform", "query-format-067", "query-format-367"),
+    ] {
+        let mut req = request(&format!("os get MUILanguages /format:{format}"));
+        req.render_context = Some(RenderContext::default());
+        req.format_spec = Some(FormatSpec {
+            before: vec![],
+            after: vec![],
+            transforms: vec![TransformSpec {
+                name: wide(format),
+                parameters: vec![],
+            }],
+        });
+        let data = ManagementResult::Objects(ObjectSet {
+            objects: vec![Record {
+                class: wide("Win32_OperatingSystem"),
+                properties: vec![Property {
+                    name: wide("MUILanguages"),
+                    value: CimValue::Array(vec![CimValue::String(wide("en-US"))]),
+                    cim_type: 0x2008,
+                    system: false,
+                    qualifiers: vec![],
+                }],
+                ..Default::default()
+            }],
+            schema: None,
+        });
+        for (result, fixture) in [
+            (data, array_fixture),
+            (
+                ManagementResult::Objects(ObjectSet::default()),
+                empty_fixture,
+            ),
+        ] {
+            let output = render(RenderRequest {
+                request: &req,
+                result: Ok(&result),
+                node: &wide("DESKTOP-N4H9E7R"),
+            })
+            .unwrap();
+            let want = match fixture {
+                "query-format-066" => {
+                    include_bytes!("fixtures/compatibility-reference/query-format-066.stdout.bin")
+                        .as_slice()
+                }
+                "query-format-067" => {
+                    include_bytes!("fixtures/compatibility-reference/query-format-067.stdout.bin")
+                        .as_slice()
+                }
+                "query-format-366" => {
+                    include_bytes!("fixtures/compatibility-reference/query-format-366.stdout.bin")
+                        .as_slice()
+                }
+                _ => include_bytes!("fixtures/compatibility-reference/query-format-367.stdout.bin")
+                    .as_slice(),
+            };
+            assert_eq!(
+                encode_output(&output.stdout, &DestinationProfile::pipe(1252)).unwrap(),
+                want,
+                "{fixture}"
+            );
+        }
+    }
+}

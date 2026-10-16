@@ -1,0 +1,6577 @@
+{
+  "schema_version": 1,
+  "reference_sha256": "2EF794C4940AFEA56C6D6D3B9BC9E66965BC7333E79C5DCB2DEF3C0E36F0834C",
+  "timeout_seconds": 1800,
+  "cases": [
+    {
+      "id": "query-format-000",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "os get Caption",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-001",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "os get Caption /value",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-002",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "os get Caption /format:csv",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-003",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "os get Caption /format:mof",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-004",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "os get Caption /format:rawxml",
+      "operation": "read_only",
+      "timeout_ms": 5000,
+      "normalizations": [
+        {
+          "stream": "stdout",
+          "kind": "wmic-command-starttime"
+        }
+      ]
+    },
+    {
+      "id": "query-format-005",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "os get Caption /format:xml",
+      "operation": "read_only",
+      "timeout_ms": 5000,
+      "normalizations": [
+        {
+          "stream": "stdout",
+          "kind": "wmic-html-command-starttime"
+        }
+      ]
+    },
+    {
+      "id": "query-format-006",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "os get Caption /format:htable",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-007",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "os get Caption /format:hform",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-008",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "os get Caption /format:texttable",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-009",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "os get Caption /format:texttablewsys",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-010",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "os get Caption /format:wmiclivalueformat",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-011",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "os get Caption /format:table",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-012",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "os get Version",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-013",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "os get Version /value",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-014",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "os get Version /format:csv",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-015",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "os get Version /format:mof",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-016",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "os get Version /format:rawxml",
+      "operation": "read_only",
+      "timeout_ms": 5000,
+      "normalizations": [
+        {
+          "stream": "stdout",
+          "kind": "wmic-command-starttime"
+        }
+      ]
+    },
+    {
+      "id": "query-format-017",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "os get Version /format:xml",
+      "operation": "read_only",
+      "timeout_ms": 5000,
+      "normalizations": [
+        {
+          "stream": "stdout",
+          "kind": "wmic-html-command-starttime"
+        }
+      ]
+    },
+    {
+      "id": "query-format-018",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "os get Version /format:htable",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-019",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "os get Version /format:hform",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-020",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "os get Version /format:texttable",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-021",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "os get Version /format:texttablewsys",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-022",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "os get Version /format:wmiclivalueformat",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-023",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "os get Version /format:table",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-024",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "os get BuildNumber",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-025",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "os get BuildNumber /value",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-026",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "os get BuildNumber /format:csv",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-027",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "os get BuildNumber /format:mof",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-028",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "os get BuildNumber /format:rawxml",
+      "operation": "read_only",
+      "timeout_ms": 5000,
+      "normalizations": [
+        {
+          "stream": "stdout",
+          "kind": "wmic-command-starttime"
+        }
+      ]
+    },
+    {
+      "id": "query-format-029",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "os get BuildNumber /format:xml",
+      "operation": "read_only",
+      "timeout_ms": 5000,
+      "normalizations": [
+        {
+          "stream": "stdout",
+          "kind": "wmic-html-command-starttime"
+        }
+      ]
+    },
+    {
+      "id": "query-format-030",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "os get BuildNumber /format:htable",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-031",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "os get BuildNumber /format:hform",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-032",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "os get BuildNumber /format:texttable",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-033",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "os get BuildNumber /format:texttablewsys",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-034",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "os get BuildNumber /format:wmiclivalueformat",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-035",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "os get BuildNumber /format:table",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-036",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "os get OSArchitecture",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-037",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "os get OSArchitecture /value",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-038",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "os get OSArchitecture /format:csv",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-039",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "os get OSArchitecture /format:mof",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-040",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "os get OSArchitecture /format:rawxml",
+      "operation": "read_only",
+      "timeout_ms": 5000,
+      "normalizations": [
+        {
+          "stream": "stdout",
+          "kind": "wmic-command-starttime"
+        }
+      ]
+    },
+    {
+      "id": "query-format-041",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "os get OSArchitecture /format:xml",
+      "operation": "read_only",
+      "timeout_ms": 5000,
+      "normalizations": [
+        {
+          "stream": "stdout",
+          "kind": "wmic-html-command-starttime"
+        }
+      ]
+    },
+    {
+      "id": "query-format-042",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "os get OSArchitecture /format:htable",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-043",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "os get OSArchitecture /format:hform",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-044",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "os get OSArchitecture /format:texttable",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-045",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "os get OSArchitecture /format:texttablewsys",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-046",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "os get OSArchitecture /format:wmiclivalueformat",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-047",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "os get OSArchitecture /format:table",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-048",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "os get Primary",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-049",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "os get Primary /value",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-050",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "os get Primary /format:csv",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-051",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "os get Primary /format:mof",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-052",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "os get Primary /format:rawxml",
+      "operation": "read_only",
+      "timeout_ms": 5000,
+      "normalizations": [
+        {
+          "stream": "stdout",
+          "kind": "wmic-command-starttime"
+        }
+      ]
+    },
+    {
+      "id": "query-format-053",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "os get Primary /format:xml",
+      "operation": "read_only",
+      "timeout_ms": 5000,
+      "normalizations": [
+        {
+          "stream": "stdout",
+          "kind": "wmic-html-command-starttime"
+        }
+      ]
+    },
+    {
+      "id": "query-format-054",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "os get Primary /format:htable",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-055",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "os get Primary /format:hform",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-056",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "os get Primary /format:texttable",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-057",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "os get Primary /format:texttablewsys",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-058",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "os get Primary /format:wmiclivalueformat",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-059",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "os get Primary /format:table",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-060",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "os get MUILanguages",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-061",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "os get MUILanguages /value",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-062",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "os get MUILanguages /format:csv",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-063",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "os get MUILanguages /format:mof",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-064",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "os get MUILanguages /format:rawxml",
+      "operation": "read_only",
+      "timeout_ms": 5000,
+      "normalizations": [
+        {
+          "stream": "stdout",
+          "kind": "wmic-command-starttime"
+        }
+      ]
+    },
+    {
+      "id": "query-format-065",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "os get MUILanguages /format:xml",
+      "operation": "read_only",
+      "timeout_ms": 5000,
+      "normalizations": [
+        {
+          "stream": "stdout",
+          "kind": "wmic-html-command-starttime"
+        }
+      ]
+    },
+    {
+      "id": "query-format-066",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "os get MUILanguages /format:htable",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-067",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "os get MUILanguages /format:hform",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-068",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "os get MUILanguages /format:texttable",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-069",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "os get MUILanguages /format:texttablewsys",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-070",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "os get MUILanguages /format:wmiclivalueformat",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-071",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "os get MUILanguages /format:table",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-072",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "os get OtherTypeDescription",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-073",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "os get OtherTypeDescription /value",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-074",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "os get OtherTypeDescription /format:csv",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-075",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "os get OtherTypeDescription /format:mof",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-076",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "os get OtherTypeDescription /format:rawxml",
+      "operation": "read_only",
+      "timeout_ms": 5000,
+      "normalizations": [
+        {
+          "stream": "stdout",
+          "kind": "wmic-command-starttime"
+        }
+      ]
+    },
+    {
+      "id": "query-format-077",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "os get OtherTypeDescription /format:xml",
+      "operation": "read_only",
+      "timeout_ms": 5000,
+      "normalizations": [
+        {
+          "stream": "stdout",
+          "kind": "wmic-html-command-starttime"
+        }
+      ]
+    },
+    {
+      "id": "query-format-078",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "os get OtherTypeDescription /format:htable",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-079",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "os get OtherTypeDescription /format:hform",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-080",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "os get OtherTypeDescription /format:texttable",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-081",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "os get OtherTypeDescription /format:texttablewsys",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-082",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "os get OtherTypeDescription /format:wmiclivalueformat",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-083",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "os get OtherTypeDescription /format:table",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-084",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "os get Caption,Version",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-085",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "os get Caption,Version /value",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-086",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "os get Caption,Version /format:csv",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-087",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "os get Caption,Version /format:mof",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-088",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "os get Caption,Version /format:rawxml",
+      "operation": "read_only",
+      "timeout_ms": 5000,
+      "normalizations": [
+        {
+          "stream": "stdout",
+          "kind": "wmic-command-starttime"
+        }
+      ]
+    },
+    {
+      "id": "query-format-089",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "os get Caption,Version /format:xml",
+      "operation": "read_only",
+      "timeout_ms": 5000,
+      "normalizations": [
+        {
+          "stream": "stdout",
+          "kind": "wmic-html-command-starttime"
+        }
+      ]
+    },
+    {
+      "id": "query-format-090",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "os get Caption,Version /format:htable",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-091",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "os get Caption,Version /format:hform",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-092",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "os get Caption,Version /format:texttable",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-093",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "os get Caption,Version /format:texttablewsys",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-094",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "os get Caption,Version /format:wmiclivalueformat",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-095",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "os get Caption,Version /format:table",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-096",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "os get Version,Caption",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-097",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "os get Version,Caption /value",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-098",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "os get Version,Caption /format:csv",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-099",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "os get Version,Caption /format:mof",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-100",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "os get Version,Caption /format:rawxml",
+      "operation": "read_only",
+      "timeout_ms": 5000,
+      "normalizations": [
+        {
+          "stream": "stdout",
+          "kind": "wmic-command-starttime"
+        }
+      ]
+    },
+    {
+      "id": "query-format-101",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "os get Version,Caption /format:xml",
+      "operation": "read_only",
+      "timeout_ms": 5000,
+      "normalizations": [
+        {
+          "stream": "stdout",
+          "kind": "wmic-html-command-starttime"
+        }
+      ]
+    },
+    {
+      "id": "query-format-102",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "os get Version,Caption /format:htable",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-103",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "os get Version,Caption /format:hform",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-104",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "os get Version,Caption /format:texttable",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-105",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "os get Version,Caption /format:texttablewsys",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-106",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "os get Version,Caption /format:wmiclivalueformat",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-107",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "os get Version,Caption /format:table",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-108",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "os get Caption,Caption",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-109",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "os get Caption,Caption /value",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-110",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "os get Caption,Caption /format:csv",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-111",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "os get Caption,Caption /format:mof",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-112",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "os get Caption,Caption /format:rawxml",
+      "operation": "read_only",
+      "timeout_ms": 5000,
+      "normalizations": [
+        {
+          "stream": "stdout",
+          "kind": "wmic-command-starttime"
+        }
+      ]
+    },
+    {
+      "id": "query-format-113",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "os get Caption,Caption /format:xml",
+      "operation": "read_only",
+      "timeout_ms": 5000,
+      "normalizations": [
+        {
+          "stream": "stdout",
+          "kind": "wmic-html-command-starttime"
+        }
+      ]
+    },
+    {
+      "id": "query-format-114",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "os get Caption,Caption /format:htable",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-115",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "os get Caption,Caption /format:hform",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-116",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "os get Caption,Caption /format:texttable",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-117",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "os get Caption,Caption /format:texttablewsys",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-118",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "os get Caption,Caption /format:wmiclivalueformat",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-119",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "os get Caption,Caption /format:table",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-120",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "OS get Caption",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-121",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "OS get Caption /value",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-122",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "OS get Caption /format:csv",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-123",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "OS get Caption /format:mof",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-124",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "OS get Caption /format:rawxml",
+      "operation": "read_only",
+      "timeout_ms": 5000,
+      "normalizations": [
+        {
+          "stream": "stdout",
+          "kind": "wmic-command-starttime"
+        }
+      ]
+    },
+    {
+      "id": "query-format-125",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "OS get Caption /format:xml",
+      "operation": "read_only",
+      "timeout_ms": 5000,
+      "normalizations": [
+        {
+          "stream": "stdout",
+          "kind": "wmic-html-command-starttime"
+        }
+      ]
+    },
+    {
+      "id": "query-format-126",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "OS get Caption /format:htable",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-127",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "OS get Caption /format:hform",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-128",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "OS get Caption /format:texttable",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-129",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "OS get Caption /format:texttablewsys",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-130",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "OS get Caption /format:wmiclivalueformat",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-131",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "OS get Caption /format:table",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-132",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "OS get Version",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-133",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "OS get Version /value",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-134",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "OS get Version /format:csv",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-135",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "OS get Version /format:mof",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-136",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "OS get Version /format:rawxml",
+      "operation": "read_only",
+      "timeout_ms": 5000,
+      "normalizations": [
+        {
+          "stream": "stdout",
+          "kind": "wmic-command-starttime"
+        }
+      ]
+    },
+    {
+      "id": "query-format-137",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "OS get Version /format:xml",
+      "operation": "read_only",
+      "timeout_ms": 5000,
+      "normalizations": [
+        {
+          "stream": "stdout",
+          "kind": "wmic-html-command-starttime"
+        }
+      ]
+    },
+    {
+      "id": "query-format-138",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "OS get Version /format:htable",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-139",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "OS get Version /format:hform",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-140",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "OS get Version /format:texttable",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-141",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "OS get Version /format:texttablewsys",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-142",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "OS get Version /format:wmiclivalueformat",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-143",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "OS get Version /format:table",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-144",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "OS get BuildNumber",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-145",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "OS get BuildNumber /value",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-146",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "OS get BuildNumber /format:csv",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-147",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "OS get BuildNumber /format:mof",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-148",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "OS get BuildNumber /format:rawxml",
+      "operation": "read_only",
+      "timeout_ms": 5000,
+      "normalizations": [
+        {
+          "stream": "stdout",
+          "kind": "wmic-command-starttime"
+        }
+      ]
+    },
+    {
+      "id": "query-format-149",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "OS get BuildNumber /format:xml",
+      "operation": "read_only",
+      "timeout_ms": 5000,
+      "normalizations": [
+        {
+          "stream": "stdout",
+          "kind": "wmic-html-command-starttime"
+        }
+      ]
+    },
+    {
+      "id": "query-format-150",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "OS get BuildNumber /format:htable",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-151",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "OS get BuildNumber /format:hform",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-152",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "OS get BuildNumber /format:texttable",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-153",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "OS get BuildNumber /format:texttablewsys",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-154",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "OS get BuildNumber /format:wmiclivalueformat",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-155",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "OS get BuildNumber /format:table",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-156",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "OS get OSArchitecture",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-157",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "OS get OSArchitecture /value",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-158",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "OS get OSArchitecture /format:csv",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-159",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "OS get OSArchitecture /format:mof",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-160",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "OS get OSArchitecture /format:rawxml",
+      "operation": "read_only",
+      "timeout_ms": 5000,
+      "normalizations": [
+        {
+          "stream": "stdout",
+          "kind": "wmic-command-starttime"
+        }
+      ]
+    },
+    {
+      "id": "query-format-161",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "OS get OSArchitecture /format:xml",
+      "operation": "read_only",
+      "timeout_ms": 5000,
+      "normalizations": [
+        {
+          "stream": "stdout",
+          "kind": "wmic-html-command-starttime"
+        }
+      ]
+    },
+    {
+      "id": "query-format-162",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "OS get OSArchitecture /format:htable",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-163",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "OS get OSArchitecture /format:hform",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-164",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "OS get OSArchitecture /format:texttable",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-165",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "OS get OSArchitecture /format:texttablewsys",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-166",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "OS get OSArchitecture /format:wmiclivalueformat",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-167",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "OS get OSArchitecture /format:table",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-168",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "OS get Primary",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-169",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "OS get Primary /value",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-170",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "OS get Primary /format:csv",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-171",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "OS get Primary /format:mof",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-172",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "OS get Primary /format:rawxml",
+      "operation": "read_only",
+      "timeout_ms": 5000,
+      "normalizations": [
+        {
+          "stream": "stdout",
+          "kind": "wmic-command-starttime"
+        }
+      ]
+    },
+    {
+      "id": "query-format-173",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "OS get Primary /format:xml",
+      "operation": "read_only",
+      "timeout_ms": 5000,
+      "normalizations": [
+        {
+          "stream": "stdout",
+          "kind": "wmic-html-command-starttime"
+        }
+      ]
+    },
+    {
+      "id": "query-format-174",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "OS get Primary /format:htable",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-175",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "OS get Primary /format:hform",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-176",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "OS get Primary /format:texttable",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-177",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "OS get Primary /format:texttablewsys",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-178",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "OS get Primary /format:wmiclivalueformat",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-179",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "OS get Primary /format:table",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-180",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "OS get MUILanguages",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-181",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "OS get MUILanguages /value",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-182",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "OS get MUILanguages /format:csv",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-183",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "OS get MUILanguages /format:mof",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-184",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "OS get MUILanguages /format:rawxml",
+      "operation": "read_only",
+      "timeout_ms": 5000,
+      "normalizations": [
+        {
+          "stream": "stdout",
+          "kind": "wmic-command-starttime"
+        }
+      ]
+    },
+    {
+      "id": "query-format-185",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "OS get MUILanguages /format:xml",
+      "operation": "read_only",
+      "timeout_ms": 5000,
+      "normalizations": [
+        {
+          "stream": "stdout",
+          "kind": "wmic-html-command-starttime"
+        }
+      ]
+    },
+    {
+      "id": "query-format-186",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "OS get MUILanguages /format:htable",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-187",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "OS get MUILanguages /format:hform",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-188",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "OS get MUILanguages /format:texttable",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-189",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "OS get MUILanguages /format:texttablewsys",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-190",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "OS get MUILanguages /format:wmiclivalueformat",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-191",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "OS get MUILanguages /format:table",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-192",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "OS get OtherTypeDescription",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-193",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "OS get OtherTypeDescription /value",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-194",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "OS get OtherTypeDescription /format:csv",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-195",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "OS get OtherTypeDescription /format:mof",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-196",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "OS get OtherTypeDescription /format:rawxml",
+      "operation": "read_only",
+      "timeout_ms": 5000,
+      "normalizations": [
+        {
+          "stream": "stdout",
+          "kind": "wmic-command-starttime"
+        }
+      ]
+    },
+    {
+      "id": "query-format-197",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "OS get OtherTypeDescription /format:xml",
+      "operation": "read_only",
+      "timeout_ms": 5000,
+      "normalizations": [
+        {
+          "stream": "stdout",
+          "kind": "wmic-html-command-starttime"
+        }
+      ]
+    },
+    {
+      "id": "query-format-198",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "OS get OtherTypeDescription /format:htable",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-199",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "OS get OtherTypeDescription /format:hform",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-200",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "OS get OtherTypeDescription /format:texttable",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-201",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "OS get OtherTypeDescription /format:texttablewsys",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-202",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "OS get OtherTypeDescription /format:wmiclivalueformat",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-203",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "OS get OtherTypeDescription /format:table",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-204",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "OS get Caption,Version",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-205",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "OS get Caption,Version /value",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-206",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "OS get Caption,Version /format:csv",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-207",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "OS get Caption,Version /format:mof",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-208",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "OS get Caption,Version /format:rawxml",
+      "operation": "read_only",
+      "timeout_ms": 5000,
+      "normalizations": [
+        {
+          "stream": "stdout",
+          "kind": "wmic-command-starttime"
+        }
+      ]
+    },
+    {
+      "id": "query-format-209",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "OS get Caption,Version /format:xml",
+      "operation": "read_only",
+      "timeout_ms": 5000,
+      "normalizations": [
+        {
+          "stream": "stdout",
+          "kind": "wmic-html-command-starttime"
+        }
+      ]
+    },
+    {
+      "id": "query-format-210",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "OS get Caption,Version /format:htable",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-211",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "OS get Caption,Version /format:hform",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-212",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "OS get Caption,Version /format:texttable",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-213",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "OS get Caption,Version /format:texttablewsys",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-214",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "OS get Caption,Version /format:wmiclivalueformat",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-215",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "OS get Caption,Version /format:table",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-216",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "OS get Version,Caption",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-217",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "OS get Version,Caption /value",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-218",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "OS get Version,Caption /format:csv",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-219",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "OS get Version,Caption /format:mof",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-220",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "OS get Version,Caption /format:rawxml",
+      "operation": "read_only",
+      "timeout_ms": 5000,
+      "normalizations": [
+        {
+          "stream": "stdout",
+          "kind": "wmic-command-starttime"
+        }
+      ]
+    },
+    {
+      "id": "query-format-221",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "OS get Version,Caption /format:xml",
+      "operation": "read_only",
+      "timeout_ms": 5000,
+      "normalizations": [
+        {
+          "stream": "stdout",
+          "kind": "wmic-html-command-starttime"
+        }
+      ]
+    },
+    {
+      "id": "query-format-222",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "OS get Version,Caption /format:htable",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-223",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "OS get Version,Caption /format:hform",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-224",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "OS get Version,Caption /format:texttable",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-225",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "OS get Version,Caption /format:texttablewsys",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-226",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "OS get Version,Caption /format:wmiclivalueformat",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-227",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "OS get Version,Caption /format:table",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-228",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "OS get Caption,Caption",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-229",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "OS get Caption,Caption /value",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-230",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "OS get Caption,Caption /format:csv",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-231",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "OS get Caption,Caption /format:mof",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-232",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "OS get Caption,Caption /format:rawxml",
+      "operation": "read_only",
+      "timeout_ms": 5000,
+      "normalizations": [
+        {
+          "stream": "stdout",
+          "kind": "wmic-command-starttime"
+        }
+      ]
+    },
+    {
+      "id": "query-format-233",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "OS get Caption,Caption /format:xml",
+      "operation": "read_only",
+      "timeout_ms": 5000,
+      "normalizations": [
+        {
+          "stream": "stdout",
+          "kind": "wmic-html-command-starttime"
+        }
+      ]
+    },
+    {
+      "id": "query-format-234",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "OS get Caption,Caption /format:htable",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-235",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "OS get Caption,Caption /format:hform",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-236",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "OS get Caption,Caption /format:texttable",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-237",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "OS get Caption,Caption /format:texttablewsys",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-238",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "OS get Caption,Caption /format:wmiclivalueformat",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-239",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "OS get Caption,Caption /format:table",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-240",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem get Caption",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-241",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem get Caption /value",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-242",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem get Caption /format:csv",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-243",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem get Caption /format:mof",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-244",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem get Caption /format:rawxml",
+      "operation": "read_only",
+      "timeout_ms": 5000,
+      "normalizations": [
+        {
+          "stream": "stdout",
+          "kind": "wmic-command-starttime"
+        }
+      ]
+    },
+    {
+      "id": "query-format-245",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem get Caption /format:xml",
+      "operation": "read_only",
+      "timeout_ms": 5000,
+      "normalizations": [
+        {
+          "stream": "stdout",
+          "kind": "wmic-html-command-starttime"
+        }
+      ]
+    },
+    {
+      "id": "query-format-246",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem get Caption /format:htable",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-247",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem get Caption /format:hform",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-248",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem get Caption /format:texttable",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-249",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem get Caption /format:texttablewsys",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-250",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem get Caption /format:wmiclivalueformat",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-251",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem get Caption /format:table",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-252",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem get Version",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-253",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem get Version /value",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-254",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem get Version /format:csv",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-255",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem get Version /format:mof",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-256",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem get Version /format:rawxml",
+      "operation": "read_only",
+      "timeout_ms": 5000,
+      "normalizations": [
+        {
+          "stream": "stdout",
+          "kind": "wmic-command-starttime"
+        }
+      ]
+    },
+    {
+      "id": "query-format-257",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem get Version /format:xml",
+      "operation": "read_only",
+      "timeout_ms": 5000,
+      "normalizations": [
+        {
+          "stream": "stdout",
+          "kind": "wmic-html-command-starttime"
+        }
+      ]
+    },
+    {
+      "id": "query-format-258",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem get Version /format:htable",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-259",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem get Version /format:hform",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-260",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem get Version /format:texttable",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-261",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem get Version /format:texttablewsys",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-262",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem get Version /format:wmiclivalueformat",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-263",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem get Version /format:table",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-264",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem get BuildNumber",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-265",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem get BuildNumber /value",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-266",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem get BuildNumber /format:csv",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-267",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem get BuildNumber /format:mof",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-268",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem get BuildNumber /format:rawxml",
+      "operation": "read_only",
+      "timeout_ms": 5000,
+      "normalizations": [
+        {
+          "stream": "stdout",
+          "kind": "wmic-command-starttime"
+        }
+      ]
+    },
+    {
+      "id": "query-format-269",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem get BuildNumber /format:xml",
+      "operation": "read_only",
+      "timeout_ms": 5000,
+      "normalizations": [
+        {
+          "stream": "stdout",
+          "kind": "wmic-html-command-starttime"
+        }
+      ]
+    },
+    {
+      "id": "query-format-270",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem get BuildNumber /format:htable",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-271",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem get BuildNumber /format:hform",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-272",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem get BuildNumber /format:texttable",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-273",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem get BuildNumber /format:texttablewsys",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-274",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem get BuildNumber /format:wmiclivalueformat",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-275",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem get BuildNumber /format:table",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-276",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem get OSArchitecture",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-277",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem get OSArchitecture /value",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-278",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem get OSArchitecture /format:csv",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-279",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem get OSArchitecture /format:mof",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-280",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem get OSArchitecture /format:rawxml",
+      "operation": "read_only",
+      "timeout_ms": 5000,
+      "normalizations": [
+        {
+          "stream": "stdout",
+          "kind": "wmic-command-starttime"
+        }
+      ]
+    },
+    {
+      "id": "query-format-281",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem get OSArchitecture /format:xml",
+      "operation": "read_only",
+      "timeout_ms": 5000,
+      "normalizations": [
+        {
+          "stream": "stdout",
+          "kind": "wmic-html-command-starttime"
+        }
+      ]
+    },
+    {
+      "id": "query-format-282",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem get OSArchitecture /format:htable",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-283",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem get OSArchitecture /format:hform",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-284",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem get OSArchitecture /format:texttable",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-285",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem get OSArchitecture /format:texttablewsys",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-286",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem get OSArchitecture /format:wmiclivalueformat",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-287",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem get OSArchitecture /format:table",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-288",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem get Primary",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-289",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem get Primary /value",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-290",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem get Primary /format:csv",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-291",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem get Primary /format:mof",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-292",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem get Primary /format:rawxml",
+      "operation": "read_only",
+      "timeout_ms": 5000,
+      "normalizations": [
+        {
+          "stream": "stdout",
+          "kind": "wmic-command-starttime"
+        }
+      ]
+    },
+    {
+      "id": "query-format-293",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem get Primary /format:xml",
+      "operation": "read_only",
+      "timeout_ms": 5000,
+      "normalizations": [
+        {
+          "stream": "stdout",
+          "kind": "wmic-html-command-starttime"
+        }
+      ]
+    },
+    {
+      "id": "query-format-294",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem get Primary /format:htable",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-295",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem get Primary /format:hform",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-296",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem get Primary /format:texttable",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-297",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem get Primary /format:texttablewsys",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-298",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem get Primary /format:wmiclivalueformat",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-299",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem get Primary /format:table",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-300",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem get MUILanguages",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-301",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem get MUILanguages /value",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-302",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem get MUILanguages /format:csv",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-303",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem get MUILanguages /format:mof",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-304",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem get MUILanguages /format:rawxml",
+      "operation": "read_only",
+      "timeout_ms": 5000,
+      "normalizations": [
+        {
+          "stream": "stdout",
+          "kind": "wmic-command-starttime"
+        }
+      ]
+    },
+    {
+      "id": "query-format-305",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem get MUILanguages /format:xml",
+      "operation": "read_only",
+      "timeout_ms": 5000,
+      "normalizations": [
+        {
+          "stream": "stdout",
+          "kind": "wmic-html-command-starttime"
+        }
+      ]
+    },
+    {
+      "id": "query-format-306",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem get MUILanguages /format:htable",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-307",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem get MUILanguages /format:hform",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-308",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem get MUILanguages /format:texttable",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-309",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem get MUILanguages /format:texttablewsys",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-310",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem get MUILanguages /format:wmiclivalueformat",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-311",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem get MUILanguages /format:table",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-312",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem get OtherTypeDescription",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-313",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem get OtherTypeDescription /value",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-314",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem get OtherTypeDescription /format:csv",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-315",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem get OtherTypeDescription /format:mof",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-316",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem get OtherTypeDescription /format:rawxml",
+      "operation": "read_only",
+      "timeout_ms": 5000,
+      "normalizations": [
+        {
+          "stream": "stdout",
+          "kind": "wmic-command-starttime"
+        }
+      ]
+    },
+    {
+      "id": "query-format-317",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem get OtherTypeDescription /format:xml",
+      "operation": "read_only",
+      "timeout_ms": 5000,
+      "normalizations": [
+        {
+          "stream": "stdout",
+          "kind": "wmic-html-command-starttime"
+        }
+      ]
+    },
+    {
+      "id": "query-format-318",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem get OtherTypeDescription /format:htable",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-319",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem get OtherTypeDescription /format:hform",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-320",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem get OtherTypeDescription /format:texttable",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-321",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem get OtherTypeDescription /format:texttablewsys",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-322",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem get OtherTypeDescription /format:wmiclivalueformat",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-323",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem get OtherTypeDescription /format:table",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-324",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem get Caption,Version",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-325",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem get Caption,Version /value",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-326",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem get Caption,Version /format:csv",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-327",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem get Caption,Version /format:mof",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-328",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem get Caption,Version /format:rawxml",
+      "operation": "read_only",
+      "timeout_ms": 5000,
+      "normalizations": [
+        {
+          "stream": "stdout",
+          "kind": "wmic-command-starttime"
+        }
+      ]
+    },
+    {
+      "id": "query-format-329",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem get Caption,Version /format:xml",
+      "operation": "read_only",
+      "timeout_ms": 5000,
+      "normalizations": [
+        {
+          "stream": "stdout",
+          "kind": "wmic-html-command-starttime"
+        }
+      ]
+    },
+    {
+      "id": "query-format-330",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem get Caption,Version /format:htable",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-331",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem get Caption,Version /format:hform",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-332",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem get Caption,Version /format:texttable",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-333",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem get Caption,Version /format:texttablewsys",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-334",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem get Caption,Version /format:wmiclivalueformat",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-335",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem get Caption,Version /format:table",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-336",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem get Version,Caption",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-337",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem get Version,Caption /value",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-338",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem get Version,Caption /format:csv",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-339",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem get Version,Caption /format:mof",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-340",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem get Version,Caption /format:rawxml",
+      "operation": "read_only",
+      "timeout_ms": 5000,
+      "normalizations": [
+        {
+          "stream": "stdout",
+          "kind": "wmic-command-starttime"
+        }
+      ]
+    },
+    {
+      "id": "query-format-341",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem get Version,Caption /format:xml",
+      "operation": "read_only",
+      "timeout_ms": 5000,
+      "normalizations": [
+        {
+          "stream": "stdout",
+          "kind": "wmic-html-command-starttime"
+        }
+      ]
+    },
+    {
+      "id": "query-format-342",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem get Version,Caption /format:htable",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-343",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem get Version,Caption /format:hform",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-344",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem get Version,Caption /format:texttable",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-345",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem get Version,Caption /format:texttablewsys",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-346",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem get Version,Caption /format:wmiclivalueformat",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-347",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem get Version,Caption /format:table",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-348",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem get Caption,Caption",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-349",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem get Caption,Caption /value",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-350",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem get Caption,Caption /format:csv",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-351",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem get Caption,Caption /format:mof",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-352",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem get Caption,Caption /format:rawxml",
+      "operation": "read_only",
+      "timeout_ms": 5000,
+      "normalizations": [
+        {
+          "stream": "stdout",
+          "kind": "wmic-command-starttime"
+        }
+      ]
+    },
+    {
+      "id": "query-format-353",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem get Caption,Caption /format:xml",
+      "operation": "read_only",
+      "timeout_ms": 5000,
+      "normalizations": [
+        {
+          "stream": "stdout",
+          "kind": "wmic-html-command-starttime"
+        }
+      ]
+    },
+    {
+      "id": "query-format-354",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem get Caption,Caption /format:htable",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-355",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem get Caption,Caption /format:hform",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-356",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem get Caption,Caption /format:texttable",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-357",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem get Caption,Caption /format:texttablewsys",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-358",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem get Caption,Caption /format:wmiclivalueformat",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-359",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem get Caption,Caption /format:table",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-360",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem=@ get Caption",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-361",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem=@ get Caption /value",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-362",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem=@ get Caption /format:csv",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-363",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem=@ get Caption /format:mof",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-364",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem=@ get Caption /format:rawxml",
+      "operation": "read_only",
+      "timeout_ms": 5000,
+      "normalizations": [
+        {
+          "stream": "stdout",
+          "kind": "wmic-command-starttime"
+        }
+      ]
+    },
+    {
+      "id": "query-format-365",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem=@ get Caption /format:xml",
+      "operation": "read_only",
+      "timeout_ms": 5000,
+      "normalizations": [
+        {
+          "stream": "stdout",
+          "kind": "wmic-html-command-starttime"
+        }
+      ]
+    },
+    {
+      "id": "query-format-366",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem=@ get Caption /format:htable",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-367",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem=@ get Caption /format:hform",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-368",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem=@ get Caption /format:texttable",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-369",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem=@ get Caption /format:texttablewsys",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-370",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem=@ get Caption /format:wmiclivalueformat",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-371",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem=@ get Caption /format:table",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-372",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem=@ get Version",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-373",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem=@ get Version /value",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-374",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem=@ get Version /format:csv",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-375",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem=@ get Version /format:mof",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-376",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem=@ get Version /format:rawxml",
+      "operation": "read_only",
+      "timeout_ms": 5000,
+      "normalizations": [
+        {
+          "stream": "stdout",
+          "kind": "wmic-command-starttime"
+        }
+      ]
+    },
+    {
+      "id": "query-format-377",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem=@ get Version /format:xml",
+      "operation": "read_only",
+      "timeout_ms": 5000,
+      "normalizations": [
+        {
+          "stream": "stdout",
+          "kind": "wmic-html-command-starttime"
+        }
+      ]
+    },
+    {
+      "id": "query-format-378",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem=@ get Version /format:htable",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-379",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem=@ get Version /format:hform",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-380",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem=@ get Version /format:texttable",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-381",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem=@ get Version /format:texttablewsys",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-382",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem=@ get Version /format:wmiclivalueformat",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-383",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem=@ get Version /format:table",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-384",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem=@ get BuildNumber",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-385",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem=@ get BuildNumber /value",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-386",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem=@ get BuildNumber /format:csv",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-387",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem=@ get BuildNumber /format:mof",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-388",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem=@ get BuildNumber /format:rawxml",
+      "operation": "read_only",
+      "timeout_ms": 5000,
+      "normalizations": [
+        {
+          "stream": "stdout",
+          "kind": "wmic-command-starttime"
+        }
+      ]
+    },
+    {
+      "id": "query-format-389",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem=@ get BuildNumber /format:xml",
+      "operation": "read_only",
+      "timeout_ms": 5000,
+      "normalizations": [
+        {
+          "stream": "stdout",
+          "kind": "wmic-html-command-starttime"
+        }
+      ]
+    },
+    {
+      "id": "query-format-390",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem=@ get BuildNumber /format:htable",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-391",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem=@ get BuildNumber /format:hform",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-392",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem=@ get BuildNumber /format:texttable",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-393",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem=@ get BuildNumber /format:texttablewsys",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-394",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem=@ get BuildNumber /format:wmiclivalueformat",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-395",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem=@ get BuildNumber /format:table",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-396",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem=@ get OSArchitecture",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-397",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem=@ get OSArchitecture /value",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-398",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem=@ get OSArchitecture /format:csv",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-399",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem=@ get OSArchitecture /format:mof",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-400",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem=@ get OSArchitecture /format:rawxml",
+      "operation": "read_only",
+      "timeout_ms": 5000,
+      "normalizations": [
+        {
+          "stream": "stdout",
+          "kind": "wmic-command-starttime"
+        }
+      ]
+    },
+    {
+      "id": "query-format-401",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem=@ get OSArchitecture /format:xml",
+      "operation": "read_only",
+      "timeout_ms": 5000,
+      "normalizations": [
+        {
+          "stream": "stdout",
+          "kind": "wmic-html-command-starttime"
+        }
+      ]
+    },
+    {
+      "id": "query-format-402",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem=@ get OSArchitecture /format:htable",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-403",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem=@ get OSArchitecture /format:hform",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-404",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem=@ get OSArchitecture /format:texttable",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-405",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem=@ get OSArchitecture /format:texttablewsys",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-406",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem=@ get OSArchitecture /format:wmiclivalueformat",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-407",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem=@ get OSArchitecture /format:table",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-408",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem=@ get Primary",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-409",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem=@ get Primary /value",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-410",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem=@ get Primary /format:csv",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-411",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem=@ get Primary /format:mof",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-412",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem=@ get Primary /format:rawxml",
+      "operation": "read_only",
+      "timeout_ms": 5000,
+      "normalizations": [
+        {
+          "stream": "stdout",
+          "kind": "wmic-command-starttime"
+        }
+      ]
+    },
+    {
+      "id": "query-format-413",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem=@ get Primary /format:xml",
+      "operation": "read_only",
+      "timeout_ms": 5000,
+      "normalizations": [
+        {
+          "stream": "stdout",
+          "kind": "wmic-html-command-starttime"
+        }
+      ]
+    },
+    {
+      "id": "query-format-414",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem=@ get Primary /format:htable",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-415",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem=@ get Primary /format:hform",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-416",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem=@ get Primary /format:texttable",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-417",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem=@ get Primary /format:texttablewsys",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-418",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem=@ get Primary /format:wmiclivalueformat",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-419",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem=@ get Primary /format:table",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-420",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem=@ get MUILanguages",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-421",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem=@ get MUILanguages /value",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-422",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem=@ get MUILanguages /format:csv",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-423",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem=@ get MUILanguages /format:mof",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-424",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem=@ get MUILanguages /format:rawxml",
+      "operation": "read_only",
+      "timeout_ms": 5000,
+      "normalizations": [
+        {
+          "stream": "stdout",
+          "kind": "wmic-command-starttime"
+        }
+      ]
+    },
+    {
+      "id": "query-format-425",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem=@ get MUILanguages /format:xml",
+      "operation": "read_only",
+      "timeout_ms": 5000,
+      "normalizations": [
+        {
+          "stream": "stdout",
+          "kind": "wmic-html-command-starttime"
+        }
+      ]
+    },
+    {
+      "id": "query-format-426",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem=@ get MUILanguages /format:htable",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-427",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem=@ get MUILanguages /format:hform",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-428",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem=@ get MUILanguages /format:texttable",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-429",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem=@ get MUILanguages /format:texttablewsys",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-430",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem=@ get MUILanguages /format:wmiclivalueformat",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-431",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem=@ get MUILanguages /format:table",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-432",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem=@ get OtherTypeDescription",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-433",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem=@ get OtherTypeDescription /value",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-434",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem=@ get OtherTypeDescription /format:csv",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-435",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem=@ get OtherTypeDescription /format:mof",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-436",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem=@ get OtherTypeDescription /format:rawxml",
+      "operation": "read_only",
+      "timeout_ms": 5000,
+      "normalizations": [
+        {
+          "stream": "stdout",
+          "kind": "wmic-command-starttime"
+        }
+      ]
+    },
+    {
+      "id": "query-format-437",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem=@ get OtherTypeDescription /format:xml",
+      "operation": "read_only",
+      "timeout_ms": 5000,
+      "normalizations": [
+        {
+          "stream": "stdout",
+          "kind": "wmic-html-command-starttime"
+        }
+      ]
+    },
+    {
+      "id": "query-format-438",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem=@ get OtherTypeDescription /format:htable",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-439",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem=@ get OtherTypeDescription /format:hform",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-440",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem=@ get OtherTypeDescription /format:texttable",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-441",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem=@ get OtherTypeDescription /format:texttablewsys",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-442",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem=@ get OtherTypeDescription /format:wmiclivalueformat",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-443",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem=@ get OtherTypeDescription /format:table",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-444",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem=@ get Caption,Version",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-445",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem=@ get Caption,Version /value",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-446",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem=@ get Caption,Version /format:csv",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-447",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem=@ get Caption,Version /format:mof",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-448",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem=@ get Caption,Version /format:rawxml",
+      "operation": "read_only",
+      "timeout_ms": 5000,
+      "normalizations": [
+        {
+          "stream": "stdout",
+          "kind": "wmic-command-starttime"
+        }
+      ]
+    },
+    {
+      "id": "query-format-449",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem=@ get Caption,Version /format:xml",
+      "operation": "read_only",
+      "timeout_ms": 5000,
+      "normalizations": [
+        {
+          "stream": "stdout",
+          "kind": "wmic-html-command-starttime"
+        }
+      ]
+    },
+    {
+      "id": "query-format-450",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem=@ get Caption,Version /format:htable",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-451",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem=@ get Caption,Version /format:hform",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-452",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem=@ get Caption,Version /format:texttable",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-453",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem=@ get Caption,Version /format:texttablewsys",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-454",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem=@ get Caption,Version /format:wmiclivalueformat",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-455",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem=@ get Caption,Version /format:table",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-456",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem=@ get Version,Caption",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-457",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem=@ get Version,Caption /value",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-458",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem=@ get Version,Caption /format:csv",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-459",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem=@ get Version,Caption /format:mof",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-460",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem=@ get Version,Caption /format:rawxml",
+      "operation": "read_only",
+      "timeout_ms": 5000,
+      "normalizations": [
+        {
+          "stream": "stdout",
+          "kind": "wmic-command-starttime"
+        }
+      ]
+    },
+    {
+      "id": "query-format-461",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem=@ get Version,Caption /format:xml",
+      "operation": "read_only",
+      "timeout_ms": 5000,
+      "normalizations": [
+        {
+          "stream": "stdout",
+          "kind": "wmic-html-command-starttime"
+        }
+      ]
+    },
+    {
+      "id": "query-format-462",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem=@ get Version,Caption /format:htable",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-463",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem=@ get Version,Caption /format:hform",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-464",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem=@ get Version,Caption /format:texttable",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-465",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem=@ get Version,Caption /format:texttablewsys",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-466",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem=@ get Version,Caption /format:wmiclivalueformat",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-467",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem=@ get Version,Caption /format:table",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-468",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem=@ get Caption,Caption",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-469",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem=@ get Caption,Caption /value",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-470",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem=@ get Caption,Caption /format:csv",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-471",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem=@ get Caption,Caption /format:mof",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-472",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem=@ get Caption,Caption /format:rawxml",
+      "operation": "read_only",
+      "timeout_ms": 5000,
+      "normalizations": [
+        {
+          "stream": "stdout",
+          "kind": "wmic-command-starttime"
+        }
+      ]
+    },
+    {
+      "id": "query-format-473",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem=@ get Caption,Caption /format:xml",
+      "operation": "read_only",
+      "timeout_ms": 5000,
+      "normalizations": [
+        {
+          "stream": "stdout",
+          "kind": "wmic-html-command-starttime"
+        }
+      ]
+    },
+    {
+      "id": "query-format-474",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem=@ get Caption,Caption /format:htable",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-475",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem=@ get Caption,Caption /format:hform",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-476",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem=@ get Caption,Caption /format:texttable",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-477",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem=@ get Caption,Caption /format:texttablewsys",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-478",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem=@ get Caption,Caption /format:wmiclivalueformat",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "query-format-479",
+      "category": "query-format",
+      "purpose": "query format",
+      "arguments": "path Win32_OperatingSystem=@ get Caption,Caption /format:table",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "where-filter-000",
+      "category": "where-filter",
+      "purpose": "where filter",
+      "arguments": "os where \"Version like '10.%'\" get Caption",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "where-filter-001",
+      "category": "where-filter",
+      "purpose": "where filter",
+      "arguments": "os where \"Version like '10.%'\" get Caption /value",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "where-filter-002",
+      "category": "where-filter",
+      "purpose": "where filter",
+      "arguments": "os where \"Version like '10.%'\" get Caption /format:csv",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "where-filter-003",
+      "category": "where-filter",
+      "purpose": "where filter",
+      "arguments": "os where \"Version like '10.%'\" get Caption /format:mof",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "where-filter-004",
+      "category": "where-filter",
+      "purpose": "where filter",
+      "arguments": "os where \"Version like '10.%'\" get Caption /format:rawxml",
+      "operation": "read_only",
+      "timeout_ms": 5000,
+      "normalizations": [
+        {
+          "stream": "stdout",
+          "kind": "wmic-command-starttime"
+        }
+      ]
+    },
+    {
+      "id": "where-filter-005",
+      "category": "where-filter",
+      "purpose": "where filter",
+      "arguments": "os where \"Version like '10.%'\" get Caption,Version",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "where-filter-006",
+      "category": "where-filter",
+      "purpose": "where filter",
+      "arguments": "os where \"Version like '10.%'\" get Caption,Version /value",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "where-filter-007",
+      "category": "where-filter",
+      "purpose": "where filter",
+      "arguments": "os where \"Version like '10.%'\" get Caption,Version /format:csv",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "where-filter-008",
+      "category": "where-filter",
+      "purpose": "where filter",
+      "arguments": "os where \"Version like '10.%'\" get Caption,Version /format:mof",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "where-filter-009",
+      "category": "where-filter",
+      "purpose": "where filter",
+      "arguments": "os where \"Version like '10.%'\" get Caption,Version /format:rawxml",
+      "operation": "read_only",
+      "timeout_ms": 5000,
+      "normalizations": [
+        {
+          "stream": "stdout",
+          "kind": "wmic-command-starttime"
+        }
+      ]
+    },
+    {
+      "id": "where-filter-010",
+      "category": "where-filter",
+      "purpose": "where filter",
+      "arguments": "os where \"Version IS NOT NULL\" get Caption",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "where-filter-011",
+      "category": "where-filter",
+      "purpose": "where filter",
+      "arguments": "os where \"Version IS NOT NULL\" get Caption /value",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "where-filter-012",
+      "category": "where-filter",
+      "purpose": "where filter",
+      "arguments": "os where \"Version IS NOT NULL\" get Caption /format:csv",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "where-filter-013",
+      "category": "where-filter",
+      "purpose": "where filter",
+      "arguments": "os where \"Version IS NOT NULL\" get Caption /format:mof",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "where-filter-014",
+      "category": "where-filter",
+      "purpose": "where filter",
+      "arguments": "os where \"Version IS NOT NULL\" get Caption /format:rawxml",
+      "operation": "read_only",
+      "timeout_ms": 5000,
+      "normalizations": [
+        {
+          "stream": "stdout",
+          "kind": "wmic-command-starttime"
+        }
+      ]
+    },
+    {
+      "id": "where-filter-015",
+      "category": "where-filter",
+      "purpose": "where filter",
+      "arguments": "os where \"Version IS NOT NULL\" get Caption,Version",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "where-filter-016",
+      "category": "where-filter",
+      "purpose": "where filter",
+      "arguments": "os where \"Version IS NOT NULL\" get Caption,Version /value",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "where-filter-017",
+      "category": "where-filter",
+      "purpose": "where filter",
+      "arguments": "os where \"Version IS NOT NULL\" get Caption,Version /format:csv",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "where-filter-018",
+      "category": "where-filter",
+      "purpose": "where filter",
+      "arguments": "os where \"Version IS NOT NULL\" get Caption,Version /format:mof",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "where-filter-019",
+      "category": "where-filter",
+      "purpose": "where filter",
+      "arguments": "os where \"Version IS NOT NULL\" get Caption,Version /format:rawxml",
+      "operation": "read_only",
+      "timeout_ms": 5000,
+      "normalizations": [
+        {
+          "stream": "stdout",
+          "kind": "wmic-command-starttime"
+        }
+      ]
+    },
+    {
+      "id": "where-filter-020",
+      "category": "where-filter",
+      "purpose": "where filter",
+      "arguments": "os where \"Caption IS NULL\" get Caption",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "where-filter-021",
+      "category": "where-filter",
+      "purpose": "where filter",
+      "arguments": "os where \"Caption IS NULL\" get Caption /value",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "where-filter-022",
+      "category": "where-filter",
+      "purpose": "where filter",
+      "arguments": "os where \"Caption IS NULL\" get Caption /format:csv",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "where-filter-023",
+      "category": "where-filter",
+      "purpose": "where filter",
+      "arguments": "os where \"Caption IS NULL\" get Caption /format:mof",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "where-filter-024",
+      "category": "where-filter",
+      "purpose": "where filter",
+      "arguments": "os where \"Caption IS NULL\" get Caption /format:rawxml",
+      "operation": "read_only",
+      "timeout_ms": 5000,
+      "normalizations": [
+        {
+          "stream": "stdout",
+          "kind": "wmic-command-starttime"
+        }
+      ]
+    },
+    {
+      "id": "where-filter-025",
+      "category": "where-filter",
+      "purpose": "where filter",
+      "arguments": "os where \"Caption IS NULL\" get Caption,Version",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "where-filter-026",
+      "category": "where-filter",
+      "purpose": "where filter",
+      "arguments": "os where \"Caption IS NULL\" get Caption,Version /value",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "where-filter-027",
+      "category": "where-filter",
+      "purpose": "where filter",
+      "arguments": "os where \"Caption IS NULL\" get Caption,Version /format:csv",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "where-filter-028",
+      "category": "where-filter",
+      "purpose": "where filter",
+      "arguments": "os where \"Caption IS NULL\" get Caption,Version /format:mof",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "where-filter-029",
+      "category": "where-filter",
+      "purpose": "where filter",
+      "arguments": "os where \"Caption IS NULL\" get Caption,Version /format:rawxml",
+      "operation": "read_only",
+      "timeout_ms": 5000,
+      "normalizations": [
+        {
+          "stream": "stdout",
+          "kind": "wmic-command-starttime"
+        }
+      ]
+    },
+    {
+      "id": "where-filter-030",
+      "category": "where-filter",
+      "purpose": "where filter",
+      "arguments": "os where \"Primary=TRUE\" get Caption",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "where-filter-031",
+      "category": "where-filter",
+      "purpose": "where filter",
+      "arguments": "os where \"Primary=TRUE\" get Caption /value",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "where-filter-032",
+      "category": "where-filter",
+      "purpose": "where filter",
+      "arguments": "os where \"Primary=TRUE\" get Caption /format:csv",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "where-filter-033",
+      "category": "where-filter",
+      "purpose": "where filter",
+      "arguments": "os where \"Primary=TRUE\" get Caption /format:mof",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "where-filter-034",
+      "category": "where-filter",
+      "purpose": "where filter",
+      "arguments": "os where \"Primary=TRUE\" get Caption /format:rawxml",
+      "operation": "read_only",
+      "timeout_ms": 5000,
+      "normalizations": [
+        {
+          "stream": "stdout",
+          "kind": "wmic-command-starttime"
+        }
+      ]
+    },
+    {
+      "id": "where-filter-035",
+      "category": "where-filter",
+      "purpose": "where filter",
+      "arguments": "os where \"Primary=TRUE\" get Caption,Version",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "where-filter-036",
+      "category": "where-filter",
+      "purpose": "where filter",
+      "arguments": "os where \"Primary=TRUE\" get Caption,Version /value",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "where-filter-037",
+      "category": "where-filter",
+      "purpose": "where filter",
+      "arguments": "os where \"Primary=TRUE\" get Caption,Version /format:csv",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "where-filter-038",
+      "category": "where-filter",
+      "purpose": "where filter",
+      "arguments": "os where \"Primary=TRUE\" get Caption,Version /format:mof",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "where-filter-039",
+      "category": "where-filter",
+      "purpose": "where filter",
+      "arguments": "os where \"Primary=TRUE\" get Caption,Version /format:rawxml",
+      "operation": "read_only",
+      "timeout_ms": 5000,
+      "normalizations": [
+        {
+          "stream": "stdout",
+          "kind": "wmic-command-starttime"
+        }
+      ]
+    },
+    {
+      "id": "where-filter-040",
+      "category": "where-filter",
+      "purpose": "where filter",
+      "arguments": "os where \"Primary=FALSE\" get Caption",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "where-filter-041",
+      "category": "where-filter",
+      "purpose": "where filter",
+      "arguments": "os where \"Primary=FALSE\" get Caption /value",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "where-filter-042",
+      "category": "where-filter",
+      "purpose": "where filter",
+      "arguments": "os where \"Primary=FALSE\" get Caption /format:csv",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "where-filter-043",
+      "category": "where-filter",
+      "purpose": "where filter",
+      "arguments": "os where \"Primary=FALSE\" get Caption /format:mof",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "where-filter-044",
+      "category": "where-filter",
+      "purpose": "where filter",
+      "arguments": "os where \"Primary=FALSE\" get Caption /format:rawxml",
+      "operation": "read_only",
+      "timeout_ms": 5000,
+      "normalizations": [
+        {
+          "stream": "stdout",
+          "kind": "wmic-command-starttime"
+        }
+      ]
+    },
+    {
+      "id": "where-filter-045",
+      "category": "where-filter",
+      "purpose": "where filter",
+      "arguments": "os where \"Primary=FALSE\" get Caption,Version",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "where-filter-046",
+      "category": "where-filter",
+      "purpose": "where filter",
+      "arguments": "os where \"Primary=FALSE\" get Caption,Version /value",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "where-filter-047",
+      "category": "where-filter",
+      "purpose": "where filter",
+      "arguments": "os where \"Primary=FALSE\" get Caption,Version /format:csv",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "where-filter-048",
+      "category": "where-filter",
+      "purpose": "where filter",
+      "arguments": "os where \"Primary=FALSE\" get Caption,Version /format:mof",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "where-filter-049",
+      "category": "where-filter",
+      "purpose": "where filter",
+      "arguments": "os where \"Primary=FALSE\" get Caption,Version /format:rawxml",
+      "operation": "read_only",
+      "timeout_ms": 5000,
+      "normalizations": [
+        {
+          "stream": "stdout",
+          "kind": "wmic-command-starttime"
+        }
+      ]
+    },
+    {
+      "id": "where-filter-050",
+      "category": "where-filter",
+      "purpose": "where filter",
+      "arguments": "os where \"Version >= '0'\" get Caption",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "where-filter-051",
+      "category": "where-filter",
+      "purpose": "where filter",
+      "arguments": "os where \"Version >= '0'\" get Caption /value",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "where-filter-052",
+      "category": "where-filter",
+      "purpose": "where filter",
+      "arguments": "os where \"Version >= '0'\" get Caption /format:csv",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "where-filter-053",
+      "category": "where-filter",
+      "purpose": "where filter",
+      "arguments": "os where \"Version >= '0'\" get Caption /format:mof",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "where-filter-054",
+      "category": "where-filter",
+      "purpose": "where filter",
+      "arguments": "os where \"Version >= '0'\" get Caption /format:rawxml",
+      "operation": "read_only",
+      "timeout_ms": 5000,
+      "normalizations": [
+        {
+          "stream": "stdout",
+          "kind": "wmic-command-starttime"
+        }
+      ]
+    },
+    {
+      "id": "where-filter-055",
+      "category": "where-filter",
+      "purpose": "where filter",
+      "arguments": "os where \"Version >= '0'\" get Caption,Version",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "where-filter-056",
+      "category": "where-filter",
+      "purpose": "where filter",
+      "arguments": "os where \"Version >= '0'\" get Caption,Version /value",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "where-filter-057",
+      "category": "where-filter",
+      "purpose": "where filter",
+      "arguments": "os where \"Version >= '0'\" get Caption,Version /format:csv",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "where-filter-058",
+      "category": "where-filter",
+      "purpose": "where filter",
+      "arguments": "os where \"Version >= '0'\" get Caption,Version /format:mof",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "where-filter-059",
+      "category": "where-filter",
+      "purpose": "where filter",
+      "arguments": "os where \"Version >= '0'\" get Caption,Version /format:rawxml",
+      "operation": "read_only",
+      "timeout_ms": 5000,
+      "normalizations": [
+        {
+          "stream": "stdout",
+          "kind": "wmic-command-starttime"
+        }
+      ]
+    },
+    {
+      "id": "where-filter-060",
+      "category": "where-filter",
+      "purpose": "where filter",
+      "arguments": "os where \"Version <> 'never'\" get Caption",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "where-filter-061",
+      "category": "where-filter",
+      "purpose": "where filter",
+      "arguments": "os where \"Version <> 'never'\" get Caption /value",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "where-filter-062",
+      "category": "where-filter",
+      "purpose": "where filter",
+      "arguments": "os where \"Version <> 'never'\" get Caption /format:csv",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "where-filter-063",
+      "category": "where-filter",
+      "purpose": "where filter",
+      "arguments": "os where \"Version <> 'never'\" get Caption /format:mof",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "where-filter-064",
+      "category": "where-filter",
+      "purpose": "where filter",
+      "arguments": "os where \"Version <> 'never'\" get Caption /format:rawxml",
+      "operation": "read_only",
+      "timeout_ms": 5000,
+      "normalizations": [
+        {
+          "stream": "stdout",
+          "kind": "wmic-command-starttime"
+        }
+      ]
+    },
+    {
+      "id": "where-filter-065",
+      "category": "where-filter",
+      "purpose": "where filter",
+      "arguments": "os where \"Version <> 'never'\" get Caption,Version",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "where-filter-066",
+      "category": "where-filter",
+      "purpose": "where filter",
+      "arguments": "os where \"Version <> 'never'\" get Caption,Version /value",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "where-filter-067",
+      "category": "where-filter",
+      "purpose": "where filter",
+      "arguments": "os where \"Version <> 'never'\" get Caption,Version /format:csv",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "where-filter-068",
+      "category": "where-filter",
+      "purpose": "where filter",
+      "arguments": "os where \"Version <> 'never'\" get Caption,Version /format:mof",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "where-filter-069",
+      "category": "where-filter",
+      "purpose": "where filter",
+      "arguments": "os where \"Version <> 'never'\" get Caption,Version /format:rawxml",
+      "operation": "read_only",
+      "timeout_ms": 5000,
+      "normalizations": [
+        {
+          "stream": "stdout",
+          "kind": "wmic-command-starttime"
+        }
+      ]
+    },
+    {
+      "id": "where-filter-070",
+      "category": "where-filter",
+      "purpose": "where filter",
+      "arguments": "os where \"Version='wmic_compat_no_match'\" get Caption",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "where-filter-071",
+      "category": "where-filter",
+      "purpose": "where filter",
+      "arguments": "os where \"Version='wmic_compat_no_match'\" get Caption /value",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "where-filter-072",
+      "category": "where-filter",
+      "purpose": "where filter",
+      "arguments": "os where \"Version='wmic_compat_no_match'\" get Caption /format:csv",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "where-filter-073",
+      "category": "where-filter",
+      "purpose": "where filter",
+      "arguments": "os where \"Version='wmic_compat_no_match'\" get Caption /format:mof",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "where-filter-074",
+      "category": "where-filter",
+      "purpose": "where filter",
+      "arguments": "os where \"Version='wmic_compat_no_match'\" get Caption /format:rawxml",
+      "operation": "read_only",
+      "timeout_ms": 5000,
+      "normalizations": [
+        {
+          "stream": "stdout",
+          "kind": "wmic-command-starttime"
+        }
+      ]
+    },
+    {
+      "id": "where-filter-075",
+      "category": "where-filter",
+      "purpose": "where filter",
+      "arguments": "os where \"Version='wmic_compat_no_match'\" get Caption,Version",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "where-filter-076",
+      "category": "where-filter",
+      "purpose": "where filter",
+      "arguments": "os where \"Version='wmic_compat_no_match'\" get Caption,Version /value",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "where-filter-077",
+      "category": "where-filter",
+      "purpose": "where filter",
+      "arguments": "os where \"Version='wmic_compat_no_match'\" get Caption,Version /format:csv",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "where-filter-078",
+      "category": "where-filter",
+      "purpose": "where filter",
+      "arguments": "os where \"Version='wmic_compat_no_match'\" get Caption,Version /format:mof",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "where-filter-079",
+      "category": "where-filter",
+      "purpose": "where filter",
+      "arguments": "os where \"Version='wmic_compat_no_match'\" get Caption,Version /format:rawxml",
+      "operation": "read_only",
+      "timeout_ms": 5000,
+      "normalizations": [
+        {
+          "stream": "stdout",
+          "kind": "wmic-command-starttime"
+        }
+      ]
+    },
+    {
+      "id": "where-filter-080",
+      "category": "where-filter",
+      "purpose": "where filter",
+      "arguments": "os where \"Version LIKE 'wmic_compat_no_match%'\" get Caption",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "where-filter-081",
+      "category": "where-filter",
+      "purpose": "where filter",
+      "arguments": "os where \"Version LIKE 'wmic_compat_no_match%'\" get Caption /value",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "where-filter-082",
+      "category": "where-filter",
+      "purpose": "where filter",
+      "arguments": "os where \"Version LIKE 'wmic_compat_no_match%'\" get Caption /format:csv",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "where-filter-083",
+      "category": "where-filter",
+      "purpose": "where filter",
+      "arguments": "os where \"Version LIKE 'wmic_compat_no_match%'\" get Caption /format:mof",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "where-filter-084",
+      "category": "where-filter",
+      "purpose": "where filter",
+      "arguments": "os where \"Version LIKE 'wmic_compat_no_match%'\" get Caption /format:rawxml",
+      "operation": "read_only",
+      "timeout_ms": 5000,
+      "normalizations": [
+        {
+          "stream": "stdout",
+          "kind": "wmic-command-starttime"
+        }
+      ]
+    },
+    {
+      "id": "where-filter-085",
+      "category": "where-filter",
+      "purpose": "where filter",
+      "arguments": "os where \"Version LIKE 'wmic_compat_no_match%'\" get Caption,Version",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "where-filter-086",
+      "category": "where-filter",
+      "purpose": "where filter",
+      "arguments": "os where \"Version LIKE 'wmic_compat_no_match%'\" get Caption,Version /value",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "where-filter-087",
+      "category": "where-filter",
+      "purpose": "where filter",
+      "arguments": "os where \"Version LIKE 'wmic_compat_no_match%'\" get Caption,Version /format:csv",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "where-filter-088",
+      "category": "where-filter",
+      "purpose": "where filter",
+      "arguments": "os where \"Version LIKE 'wmic_compat_no_match%'\" get Caption,Version /format:mof",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "where-filter-089",
+      "category": "where-filter",
+      "purpose": "where filter",
+      "arguments": "os where \"Version LIKE 'wmic_compat_no_match%'\" get Caption,Version /format:rawxml",
+      "operation": "read_only",
+      "timeout_ms": 5000,
+      "normalizations": [
+        {
+          "stream": "stdout",
+          "kind": "wmic-command-starttime"
+        }
+      ]
+    },
+    {
+      "id": "where-filter-090",
+      "category": "where-filter",
+      "purpose": "where filter",
+      "arguments": "os where \"NOT (Version='wmic_compat_no_match')\" get Caption",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "where-filter-091",
+      "category": "where-filter",
+      "purpose": "where filter",
+      "arguments": "os where \"NOT (Version='wmic_compat_no_match')\" get Caption /value",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "where-filter-092",
+      "category": "where-filter",
+      "purpose": "where filter",
+      "arguments": "os where \"NOT (Version='wmic_compat_no_match')\" get Caption /format:csv",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "where-filter-093",
+      "category": "where-filter",
+      "purpose": "where filter",
+      "arguments": "os where \"NOT (Version='wmic_compat_no_match')\" get Caption /format:mof",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "where-filter-094",
+      "category": "where-filter",
+      "purpose": "where filter",
+      "arguments": "os where \"NOT (Version='wmic_compat_no_match')\" get Caption /format:rawxml",
+      "operation": "read_only",
+      "timeout_ms": 5000,
+      "normalizations": [
+        {
+          "stream": "stdout",
+          "kind": "wmic-command-starttime"
+        }
+      ]
+    },
+    {
+      "id": "where-filter-095",
+      "category": "where-filter",
+      "purpose": "where filter",
+      "arguments": "os where \"NOT (Version='wmic_compat_no_match')\" get Caption,Version",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "where-filter-096",
+      "category": "where-filter",
+      "purpose": "where filter",
+      "arguments": "os where \"NOT (Version='wmic_compat_no_match')\" get Caption,Version /value",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "where-filter-097",
+      "category": "where-filter",
+      "purpose": "where filter",
+      "arguments": "os where \"NOT (Version='wmic_compat_no_match')\" get Caption,Version /format:csv",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "where-filter-098",
+      "category": "where-filter",
+      "purpose": "where filter",
+      "arguments": "os where \"NOT (Version='wmic_compat_no_match')\" get Caption,Version /format:mof",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "where-filter-099",
+      "category": "where-filter",
+      "purpose": "where filter",
+      "arguments": "os where \"NOT (Version='wmic_compat_no_match')\" get Caption,Version /format:rawxml",
+      "operation": "read_only",
+      "timeout_ms": 5000,
+      "normalizations": [
+        {
+          "stream": "stdout",
+          "kind": "wmic-command-starttime"
+        }
+      ]
+    },
+    {
+      "id": "where-filter-100",
+      "category": "where-filter",
+      "purpose": "where filter",
+      "arguments": "os where \"Version IS NOT NULL AND Primary=TRUE\" get Caption",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "where-filter-101",
+      "category": "where-filter",
+      "purpose": "where filter",
+      "arguments": "os where \"Version IS NOT NULL AND Primary=TRUE\" get Caption /value",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "where-filter-102",
+      "category": "where-filter",
+      "purpose": "where filter",
+      "arguments": "os where \"Version IS NOT NULL AND Primary=TRUE\" get Caption /format:csv",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "where-filter-103",
+      "category": "where-filter",
+      "purpose": "where filter",
+      "arguments": "os where \"Version IS NOT NULL AND Primary=TRUE\" get Caption /format:mof",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "where-filter-104",
+      "category": "where-filter",
+      "purpose": "where filter",
+      "arguments": "os where \"Version IS NOT NULL AND Primary=TRUE\" get Caption /format:rawxml",
+      "operation": "read_only",
+      "timeout_ms": 5000,
+      "normalizations": [
+        {
+          "stream": "stdout",
+          "kind": "wmic-command-starttime"
+        }
+      ]
+    },
+    {
+      "id": "where-filter-105",
+      "category": "where-filter",
+      "purpose": "where filter",
+      "arguments": "os where \"Version IS NOT NULL AND Primary=TRUE\" get Caption,Version",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "where-filter-106",
+      "category": "where-filter",
+      "purpose": "where filter",
+      "arguments": "os where \"Version IS NOT NULL AND Primary=TRUE\" get Caption,Version /value",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "where-filter-107",
+      "category": "where-filter",
+      "purpose": "where filter",
+      "arguments": "os where \"Version IS NOT NULL AND Primary=TRUE\" get Caption,Version /format:csv",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "where-filter-108",
+      "category": "where-filter",
+      "purpose": "where filter",
+      "arguments": "os where \"Version IS NOT NULL AND Primary=TRUE\" get Caption,Version /format:mof",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "where-filter-109",
+      "category": "where-filter",
+      "purpose": "where filter",
+      "arguments": "os where \"Version IS NOT NULL AND Primary=TRUE\" get Caption,Version /format:rawxml",
+      "operation": "read_only",
+      "timeout_ms": 5000,
+      "normalizations": [
+        {
+          "stream": "stdout",
+          "kind": "wmic-command-starttime"
+        }
+      ]
+    },
+    {
+      "id": "where-filter-110",
+      "category": "where-filter",
+      "purpose": "where filter",
+      "arguments": "os where \"Caption LIKE '%Windows%'\" get Caption",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "where-filter-111",
+      "category": "where-filter",
+      "purpose": "where filter",
+      "arguments": "os where \"Caption LIKE '%Windows%'\" get Caption /value",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "where-filter-112",
+      "category": "where-filter",
+      "purpose": "where filter",
+      "arguments": "os where \"Caption LIKE '%Windows%'\" get Caption /format:csv",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "where-filter-113",
+      "category": "where-filter",
+      "purpose": "where filter",
+      "arguments": "os where \"Caption LIKE '%Windows%'\" get Caption /format:mof",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "where-filter-114",
+      "category": "where-filter",
+      "purpose": "where filter",
+      "arguments": "os where \"Caption LIKE '%Windows%'\" get Caption /format:rawxml",
+      "operation": "read_only",
+      "timeout_ms": 5000,
+      "normalizations": [
+        {
+          "stream": "stdout",
+          "kind": "wmic-command-starttime"
+        }
+      ]
+    },
+    {
+      "id": "where-filter-115",
+      "category": "where-filter",
+      "purpose": "where filter",
+      "arguments": "os where \"Caption LIKE '%Windows%'\" get Caption,Version",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "where-filter-116",
+      "category": "where-filter",
+      "purpose": "where filter",
+      "arguments": "os where \"Caption LIKE '%Windows%'\" get Caption,Version /value",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "where-filter-117",
+      "category": "where-filter",
+      "purpose": "where filter",
+      "arguments": "os where \"Caption LIKE '%Windows%'\" get Caption,Version /format:csv",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "where-filter-118",
+      "category": "where-filter",
+      "purpose": "where filter",
+      "arguments": "os where \"Caption LIKE '%Windows%'\" get Caption,Version /format:mof",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "where-filter-119",
+      "category": "where-filter",
+      "purpose": "where filter",
+      "arguments": "os where \"Caption LIKE '%Windows%'\" get Caption,Version /format:rawxml",
+      "operation": "read_only",
+      "timeout_ms": 5000,
+      "normalizations": [
+        {
+          "stream": "stdout",
+          "kind": "wmic-command-starttime"
+        }
+      ]
+    },
+    {
+      "id": "whitespace-000",
+      "category": "whitespace",
+      "purpose": "whitespace",
+      "arguments": "os get Caption,Version",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "whitespace-001",
+      "category": "whitespace",
+      "purpose": "whitespace",
+      "arguments": "  os get Caption,Version  ",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "whitespace-002",
+      "category": "whitespace",
+      "purpose": "whitespace",
+      "arguments": "\tos get Caption,Version\t",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "whitespace-003",
+      "category": "whitespace",
+      "purpose": "whitespace",
+      "arguments": "os  get  Caption,Version",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "whitespace-004",
+      "category": "whitespace",
+      "purpose": "whitespace",
+      "arguments": "  os  get  Caption,Version  ",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "whitespace-005",
+      "category": "whitespace",
+      "purpose": "whitespace",
+      "arguments": "\tos  get  Caption,Version\t",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "whitespace-006",
+      "category": "whitespace",
+      "purpose": "whitespace",
+      "arguments": "os\tget\tCaption,Version",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "whitespace-007",
+      "category": "whitespace",
+      "purpose": "whitespace",
+      "arguments": "  os\tget\tCaption,Version  ",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "whitespace-008",
+      "category": "whitespace",
+      "purpose": "whitespace",
+      "arguments": "\tos\tget\tCaption,Version\t",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "whitespace-009",
+      "category": "whitespace",
+      "purpose": "whitespace",
+      "arguments": "os \t get \t Caption,Version",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "whitespace-010",
+      "category": "whitespace",
+      "purpose": "whitespace",
+      "arguments": "  os \t get \t Caption,Version  ",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "whitespace-011",
+      "category": "whitespace",
+      "purpose": "whitespace",
+      "arguments": "\tos \t get \t Caption,Version\t",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "whitespace-012",
+      "category": "whitespace",
+      "purpose": "whitespace",
+      "arguments": "OS GET Caption,Version",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "whitespace-013",
+      "category": "whitespace",
+      "purpose": "whitespace",
+      "arguments": "  OS GET Caption,Version  ",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "whitespace-014",
+      "category": "whitespace",
+      "purpose": "whitespace",
+      "arguments": "\tOS GET Caption,Version\t",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "whitespace-015",
+      "category": "whitespace",
+      "purpose": "whitespace",
+      "arguments": "OS  GET  Caption,Version",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "whitespace-016",
+      "category": "whitespace",
+      "purpose": "whitespace",
+      "arguments": "  OS  GET  Caption,Version  ",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "whitespace-017",
+      "category": "whitespace",
+      "purpose": "whitespace",
+      "arguments": "\tOS  GET  Caption,Version\t",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "whitespace-018",
+      "category": "whitespace",
+      "purpose": "whitespace",
+      "arguments": "OS\tGET\tCaption,Version",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "whitespace-019",
+      "category": "whitespace",
+      "purpose": "whitespace",
+      "arguments": "  OS\tGET\tCaption,Version  ",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "whitespace-020",
+      "category": "whitespace",
+      "purpose": "whitespace",
+      "arguments": "\tOS\tGET\tCaption,Version\t",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "whitespace-021",
+      "category": "whitespace",
+      "purpose": "whitespace",
+      "arguments": "OS \t GET \t Caption,Version",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "whitespace-022",
+      "category": "whitespace",
+      "purpose": "whitespace",
+      "arguments": "  OS \t GET \t Caption,Version  ",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "whitespace-023",
+      "category": "whitespace",
+      "purpose": "whitespace",
+      "arguments": "\tOS \t GET \t Caption,Version\t",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "whitespace-024",
+      "category": "whitespace",
+      "purpose": "whitespace",
+      "arguments": "Os gEt Caption,Version",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "whitespace-025",
+      "category": "whitespace",
+      "purpose": "whitespace",
+      "arguments": "  Os gEt Caption,Version  ",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "whitespace-026",
+      "category": "whitespace",
+      "purpose": "whitespace",
+      "arguments": "\tOs gEt Caption,Version\t",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "whitespace-027",
+      "category": "whitespace",
+      "purpose": "whitespace",
+      "arguments": "Os  gEt  Caption,Version",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "whitespace-028",
+      "category": "whitespace",
+      "purpose": "whitespace",
+      "arguments": "  Os  gEt  Caption,Version  ",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "whitespace-029",
+      "category": "whitespace",
+      "purpose": "whitespace",
+      "arguments": "\tOs  gEt  Caption,Version\t",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "whitespace-030",
+      "category": "whitespace",
+      "purpose": "whitespace",
+      "arguments": "Os\tgEt\tCaption,Version",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "whitespace-031",
+      "category": "whitespace",
+      "purpose": "whitespace",
+      "arguments": "  Os\tgEt\tCaption,Version  ",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "whitespace-032",
+      "category": "whitespace",
+      "purpose": "whitespace",
+      "arguments": "\tOs\tgEt\tCaption,Version\t",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "whitespace-033",
+      "category": "whitespace",
+      "purpose": "whitespace",
+      "arguments": "Os \t gEt \t Caption,Version",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "whitespace-034",
+      "category": "whitespace",
+      "purpose": "whitespace",
+      "arguments": "  Os \t gEt \t Caption,Version  ",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "whitespace-035",
+      "category": "whitespace",
+      "purpose": "whitespace",
+      "arguments": "\tOs \t gEt \t Caption,Version\t",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "whitespace-036",
+      "category": "whitespace",
+      "purpose": "whitespace",
+      "arguments": "path Win32_OperatingSystem get Caption,Version",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "whitespace-037",
+      "category": "whitespace",
+      "purpose": "whitespace",
+      "arguments": "  path Win32_OperatingSystem get Caption,Version  ",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "whitespace-038",
+      "category": "whitespace",
+      "purpose": "whitespace",
+      "arguments": "\tpath Win32_OperatingSystem get Caption,Version\t",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "whitespace-039",
+      "category": "whitespace",
+      "purpose": "whitespace",
+      "arguments": "path  Win32_OperatingSystem  get  Caption,Version",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "whitespace-040",
+      "category": "whitespace",
+      "purpose": "whitespace",
+      "arguments": "  path  Win32_OperatingSystem  get  Caption,Version  ",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "whitespace-041",
+      "category": "whitespace",
+      "purpose": "whitespace",
+      "arguments": "\tpath  Win32_OperatingSystem  get  Caption,Version\t",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "whitespace-042",
+      "category": "whitespace",
+      "purpose": "whitespace",
+      "arguments": "path\tWin32_OperatingSystem\tget\tCaption,Version",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "whitespace-043",
+      "category": "whitespace",
+      "purpose": "whitespace",
+      "arguments": "  path\tWin32_OperatingSystem\tget\tCaption,Version  ",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "whitespace-044",
+      "category": "whitespace",
+      "purpose": "whitespace",
+      "arguments": "\tpath\tWin32_OperatingSystem\tget\tCaption,Version\t",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "whitespace-045",
+      "category": "whitespace",
+      "purpose": "whitespace",
+      "arguments": "path \t Win32_OperatingSystem \t get \t Caption,Version",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "whitespace-046",
+      "category": "whitespace",
+      "purpose": "whitespace",
+      "arguments": "  path \t Win32_OperatingSystem \t get \t Caption,Version  ",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "whitespace-047",
+      "category": "whitespace",
+      "purpose": "whitespace",
+      "arguments": "\tpath \t Win32_OperatingSystem \t get \t Caption,Version\t",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "whitespace-048",
+      "category": "whitespace",
+      "purpose": "whitespace",
+      "arguments": "os get Version,Caption",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "whitespace-049",
+      "category": "whitespace",
+      "purpose": "whitespace",
+      "arguments": "  os get Version,Caption  ",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "whitespace-050",
+      "category": "whitespace",
+      "purpose": "whitespace",
+      "arguments": "\tos get Version,Caption\t",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "whitespace-051",
+      "category": "whitespace",
+      "purpose": "whitespace",
+      "arguments": "os  get  Version,Caption",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "whitespace-052",
+      "category": "whitespace",
+      "purpose": "whitespace",
+      "arguments": "  os  get  Version,Caption  ",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "whitespace-053",
+      "category": "whitespace",
+      "purpose": "whitespace",
+      "arguments": "\tos  get  Version,Caption\t",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "whitespace-054",
+      "category": "whitespace",
+      "purpose": "whitespace",
+      "arguments": "os\tget\tVersion,Caption",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "whitespace-055",
+      "category": "whitespace",
+      "purpose": "whitespace",
+      "arguments": "  os\tget\tVersion,Caption  ",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "whitespace-056",
+      "category": "whitespace",
+      "purpose": "whitespace",
+      "arguments": "\tos\tget\tVersion,Caption\t",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "whitespace-057",
+      "category": "whitespace",
+      "purpose": "whitespace",
+      "arguments": "os \t get \t Version,Caption",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "whitespace-058",
+      "category": "whitespace",
+      "purpose": "whitespace",
+      "arguments": "  os \t get \t Version,Caption  ",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "whitespace-059",
+      "category": "whitespace",
+      "purpose": "whitespace",
+      "arguments": "\tos \t get \t Version,Caption\t",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "whitespace-060",
+      "category": "whitespace",
+      "purpose": "whitespace",
+      "arguments": "os get Caption, Version",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "whitespace-061",
+      "category": "whitespace",
+      "purpose": "whitespace",
+      "arguments": "  os get Caption, Version  ",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "whitespace-062",
+      "category": "whitespace",
+      "purpose": "whitespace",
+      "arguments": "\tos get Caption, Version\t",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "whitespace-063",
+      "category": "whitespace",
+      "purpose": "whitespace",
+      "arguments": "os  get  Caption,  Version",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "whitespace-064",
+      "category": "whitespace",
+      "purpose": "whitespace",
+      "arguments": "  os  get  Caption,  Version  ",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "whitespace-065",
+      "category": "whitespace",
+      "purpose": "whitespace",
+      "arguments": "\tos  get  Caption,  Version\t",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "whitespace-066",
+      "category": "whitespace",
+      "purpose": "whitespace",
+      "arguments": "os\tget\tCaption,\tVersion",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "whitespace-067",
+      "category": "whitespace",
+      "purpose": "whitespace",
+      "arguments": "  os\tget\tCaption,\tVersion  ",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "whitespace-068",
+      "category": "whitespace",
+      "purpose": "whitespace",
+      "arguments": "\tos\tget\tCaption,\tVersion\t",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "whitespace-069",
+      "category": "whitespace",
+      "purpose": "whitespace",
+      "arguments": "os \t get \t Caption, \t Version",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "whitespace-070",
+      "category": "whitespace",
+      "purpose": "whitespace",
+      "arguments": "  os \t get \t Caption, \t Version  ",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "whitespace-071",
+      "category": "whitespace",
+      "purpose": "whitespace",
+      "arguments": "\tos \t get \t Caption, \t Version\t",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "error-grammar-000",
+      "category": "error-grammar",
+      "purpose": "error grammar",
+      "arguments": "os get WmicCompatMissingProperty",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "error-grammar-001",
+      "category": "error-grammar",
+      "purpose": "error grammar",
+      "arguments": "path WmicCompatMissingClass get Name",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "error-grammar-002",
+      "category": "error-grammar",
+      "purpose": "error grammar",
+      "arguments": "wmic_compat_no_alias get Name",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "error-grammar-003",
+      "category": "error-grammar",
+      "purpose": "error grammar",
+      "arguments": "/wmic_compat_invalid:1 os get Caption",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "error-grammar-004",
+      "category": "error-grammar",
+      "purpose": "error grammar",
+      "arguments": "os get Caption Version",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "error-grammar-005",
+      "category": "error-grammar",
+      "purpose": "error grammar",
+      "arguments": "os get Caption /v",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "error-grammar-006",
+      "category": "error-grammar",
+      "purpose": "error grammar",
+      "arguments": "os get Caption /invalid",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "error-grammar-007",
+      "category": "error-grammar",
+      "purpose": "error grammar",
+      "arguments": "os where",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "error-grammar-008",
+      "category": "error-grammar",
+      "purpose": "error grammar",
+      "arguments": "os where \"Version=\" get Caption",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "error-grammar-009",
+      "category": "error-grammar",
+      "purpose": "error grammar",
+      "arguments": "os where \"(Version=\" get Caption",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "error-grammar-010",
+      "category": "error-grammar",
+      "purpose": "error grammar",
+      "arguments": "os get \"Caption",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "error-grammar-011",
+      "category": "error-grammar",
+      "purpose": "error grammar",
+      "arguments": "os get Caption,",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "error-grammar-012",
+      "category": "error-grammar",
+      "purpose": "error grammar",
+      "arguments": "os get ,Caption",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "error-grammar-013",
+      "category": "error-grammar",
+      "purpose": "error grammar",
+      "arguments": "os get Caption,,Version",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "error-grammar-014",
+      "category": "error-grammar",
+      "purpose": "error grammar",
+      "arguments": "os get Caption /format:wmic_compat_missing",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "error-grammar-015",
+      "category": "error-grammar",
+      "purpose": "error grammar",
+      "arguments": "os get Caption /translate:wmic_compat_missing",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "error-grammar-016",
+      "category": "error-grammar",
+      "purpose": "error grammar",
+      "arguments": "os get Caption /every:-1",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "error-grammar-017",
+      "category": "error-grammar",
+      "purpose": "error grammar",
+      "arguments": "os get Caption /repeat:-1",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "error-grammar-018",
+      "category": "error-grammar",
+      "purpose": "error grammar",
+      "arguments": "os /namespace:root\\cimv2 get Caption",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "error-grammar-019",
+      "category": "error-grammar",
+      "purpose": "error grammar",
+      "arguments": "/authlevel:bogus context",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "error-grammar-020",
+      "category": "error-grammar",
+      "purpose": "error grammar",
+      "arguments": "/implevel:bogus context",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "error-grammar-021",
+      "category": "error-grammar",
+      "purpose": "error grammar",
+      "arguments": "/privileges:bogus context",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "error-grammar-022",
+      "category": "error-grammar",
+      "purpose": "error grammar",
+      "arguments": "/aggregate:bogus context",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "error-grammar-023",
+      "category": "error-grammar",
+      "purpose": "error grammar",
+      "arguments": "/interactive:bogus context",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "error-grammar-024",
+      "category": "error-grammar",
+      "purpose": "error grammar",
+      "arguments": "/failfast:bogus context",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "error-grammar-025",
+      "category": "error-grammar",
+      "purpose": "error grammar",
+      "arguments": "os where \"Version IS NOT NULL OR\" get Caption",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "error-grammar-026",
+      "category": "error-grammar",
+      "purpose": "error grammar",
+      "arguments": "os where \"Version=123\" get Caption",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "error-grammar-027",
+      "category": "error-grammar",
+      "purpose": "error grammar",
+      "arguments": "os where \"Version='snowman \u2603'\" get Caption",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "error-grammar-028",
+      "category": "error-grammar",
+      "purpose": "error grammar",
+      "arguments": "os where \"Version='\u65e5\u672c\u8a9e'\" get Caption",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "error-grammar-029",
+      "category": "error-grammar",
+      "purpose": "error grammar",
+      "arguments": "os get Caption /format:csv /translate:NoComma",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "connection-local-000",
+      "category": "connection-local",
+      "purpose": "connection local",
+      "arguments": "/aggregate:on os get Caption,Version",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "connection-local-001",
+      "category": "connection-local",
+      "purpose": "connection local",
+      "arguments": "/aggregate:on os get Caption,Version /value",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "connection-local-002",
+      "category": "connection-local",
+      "purpose": "connection local",
+      "arguments": "/aggregate:on os get Caption,Version /format:csv",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "connection-local-003",
+      "category": "connection-local",
+      "purpose": "connection local",
+      "arguments": "/aggregate:off os get Caption,Version",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "connection-local-004",
+      "category": "connection-local",
+      "purpose": "connection local",
+      "arguments": "/aggregate:off os get Caption,Version /value",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "connection-local-005",
+      "category": "connection-local",
+      "purpose": "connection local",
+      "arguments": "/aggregate:off os get Caption,Version /format:csv",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "connection-local-006",
+      "category": "connection-local",
+      "purpose": "connection local",
+      "arguments": "/node:. os get Caption,Version",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "connection-local-007",
+      "category": "connection-local",
+      "purpose": "connection local",
+      "arguments": "/node:. os get Caption,Version /value",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "connection-local-008",
+      "category": "connection-local",
+      "purpose": "connection local",
+      "arguments": "/node:. os get Caption,Version /format:csv",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "connection-local-009",
+      "category": "connection-local",
+      "purpose": "connection local",
+      "arguments": "/node:localhost os get Caption,Version",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "connection-local-010",
+      "category": "connection-local",
+      "purpose": "connection local",
+      "arguments": "/node:localhost os get Caption,Version /value",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "connection-local-011",
+      "category": "connection-local",
+      "purpose": "connection local",
+      "arguments": "/node:localhost os get Caption,Version /format:csv",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "connection-local-012",
+      "category": "connection-local",
+      "purpose": "connection local",
+      "arguments": "/privileges:enable os get Caption,Version",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "connection-local-013",
+      "category": "connection-local",
+      "purpose": "connection local",
+      "arguments": "/privileges:enable os get Caption,Version /value",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "connection-local-014",
+      "category": "connection-local",
+      "purpose": "connection local",
+      "arguments": "/privileges:enable os get Caption,Version /format:csv",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "connection-local-015",
+      "category": "connection-local",
+      "purpose": "connection local",
+      "arguments": "/privileges:disable os get Caption,Version",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "connection-local-016",
+      "category": "connection-local",
+      "purpose": "connection local",
+      "arguments": "/privileges:disable os get Caption,Version /value",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "connection-local-017",
+      "category": "connection-local",
+      "purpose": "connection local",
+      "arguments": "/privileges:disable os get Caption,Version /format:csv",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "connection-local-018",
+      "category": "connection-local",
+      "purpose": "connection local",
+      "arguments": "/authlevel:default os get Caption,Version",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "connection-local-019",
+      "category": "connection-local",
+      "purpose": "connection local",
+      "arguments": "/authlevel:default os get Caption,Version /value",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "connection-local-020",
+      "category": "connection-local",
+      "purpose": "connection local",
+      "arguments": "/authlevel:default os get Caption,Version /format:csv",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "connection-local-021",
+      "category": "connection-local",
+      "purpose": "connection local",
+      "arguments": "/authlevel:pktprivacy os get Caption,Version",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "connection-local-022",
+      "category": "connection-local",
+      "purpose": "connection local",
+      "arguments": "/authlevel:pktprivacy os get Caption,Version /value",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "connection-local-023",
+      "category": "connection-local",
+      "purpose": "connection local",
+      "arguments": "/authlevel:pktprivacy os get Caption,Version /format:csv",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "connection-local-024",
+      "category": "connection-local",
+      "purpose": "connection local",
+      "arguments": "/implevel:impersonate os get Caption,Version",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "connection-local-025",
+      "category": "connection-local",
+      "purpose": "connection local",
+      "arguments": "/implevel:impersonate os get Caption,Version /value",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "connection-local-026",
+      "category": "connection-local",
+      "purpose": "connection local",
+      "arguments": "/implevel:impersonate os get Caption,Version /format:csv",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "connection-local-027",
+      "category": "connection-local",
+      "purpose": "connection local",
+      "arguments": "/implevel:identify os get Caption,Version",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "connection-local-028",
+      "category": "connection-local",
+      "purpose": "connection local",
+      "arguments": "/implevel:identify os get Caption,Version /value",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "connection-local-029",
+      "category": "connection-local",
+      "purpose": "connection local",
+      "arguments": "/implevel:identify os get Caption,Version /format:csv",
+      "operation": "read_only",
+      "timeout_ms": 5000
+    },
+    {
+      "id": "interactive-flow-000",
+      "category": "interactive-flow",
+      "purpose": "interactive flow",
+      "arguments": "",
+      "operation": "read_only",
+      "timeout_ms": 5000,
+      "stdin_base64": "b3MgZ2V0IENhcHRpb24NCnF1aXQNCg=="
+    },
+    {
+      "id": "interactive-flow-001",
+      "category": "interactive-flow",
+      "purpose": "interactive flow",
+      "arguments": "",
+      "operation": "read_only",
+      "timeout_ms": 5000,
+      "stdin_base64": "b3MgZ2V0IFZlcnNpb24gL3ZhbHVlDQpvcyBnZXQgQ2FwdGlvbiAvZm9ybWF0OmNzdg0KZXhpdA0K"
+    },
+    {
+      "id": "interactive-flow-002",
+      "category": "interactive-flow",
+      "purpose": "interactive flow",
+      "arguments": "",
+      "operation": "read_only",
+      "timeout_ms": 5000,
+      "stdin_base64": "b3MgZ2V0IE1pc3NpbmdQcm9wZXJ0eQ0Kb3MgZ2V0IENhcHRpb24NCnF1aXQNCg=="
+    },
+    {
+      "id": "interactive-flow-003",
+      "category": "interactive-flow",
+      "purpose": "interactive flow",
+      "arguments": "",
+      "operation": "read_only",
+      "timeout_ms": 5000,
+      "stdin_base64": "DQoNCm9zIGdldCBDYXB0aW9uDQpxdWl0DQo="
+    },
+    {
+      "id": "interactive-flow-004",
+      "category": "interactive-flow",
+      "purpose": "interactive flow",
+      "arguments": "",
+      "operation": "read_only",
+      "timeout_ms": 5000,
+      "stdin_base64": "Y29udGV4dA0KcXVpdA0K"
+    },
+    {
+      "id": "interactive-flow-005",
+      "category": "interactive-flow",
+      "purpose": "interactive flow",
+      "arguments": "",
+      "operation": "read_only",
+      "timeout_ms": 5000,
+      "stdin_base64": "L2FnZ3JlZ2F0ZTpvZmYNCmNvbnRleHQNCm9zIGdldCBDYXB0aW9uDQpxdWl0DQo="
+    },
+    {
+      "id": "interactive-flow-006",
+      "category": "interactive-flow",
+      "purpose": "interactive flow",
+      "arguments": "",
+      "operation": "read_only",
+      "timeout_ms": 5000,
+      "stdin_base64": "L25vZGU6Lg0Kb3MgZ2V0IENhcHRpb24NCi9ub2RlOiIiDQpjb250ZXh0DQpxdWl0DQo="
+    },
+    {
+      "id": "interactive-flow-007",
+      "category": "interactive-flow",
+      "purpose": "interactive flow",
+      "arguments": "",
+      "operation": "read_only",
+      "timeout_ms": 5000,
+      "stdin_base64": "L25hbWVzcGFjZTpcXHJvb3RcY2ltdjINCnBhdGggV2luMzJfT3BlcmF0aW5nU3lzdGVtIGdldCBWZXJzaW9uDQpxdWl0DQo="
+    },
+    {
+      "id": "interactive-flow-008",
+      "category": "interactive-flow",
+      "purpose": "interactive flow",
+      "arguments": "",
+      "operation": "read_only",
+      "timeout_ms": 5000,
+      "stdin_base64": "b3MgLz8NCm9zIGdldCAvPw0KcXVpdA0K"
+    },
+    {
+      "id": "interactive-flow-009",
+      "category": "interactive-flow",
+      "purpose": "interactive flow",
+      "arguments": "",
+      "operation": "read_only",
+      "timeout_ms": 5000,
+      "stdin_base64": "d21pY19jb21wYXRfbWlzc2luZw0KY29udGV4dA0KcXVpdA0K"
+    }
+  ]
+}

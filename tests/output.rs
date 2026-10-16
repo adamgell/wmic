@@ -204,6 +204,7 @@ fn malformed_password_never_reaches_stderr_or_the_complete_record() {
         "/password:\"DO_NOT_LOG_TEST_SECRET",
         "/password: \"DO_NOT_LOG_TEST_SECRET",
         "/PASSWORD:\"DO_NOT_LOG_TEST_SECRET",
+        "/password: get \"DO_NOT_LOG_TEST_SECRET",
     ] {
         let dir = directory();
         let record = dir.join("record.xml");

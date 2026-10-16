@@ -312,3 +312,81 @@ fn cancellation_with_no_completed_mutations_does_not_invent_an_empty_selection()
     assert!(out.stdout.0.is_empty());
     assert!(out.stderr.0.is_empty());
 }
+
+#[test]
+fn empty_query_uses_its_selected_format_instead_of_always_emitting_table_blanks() {
+    for (mode, want) in [
+        ("", "\r\r\n\r\r\n"),
+        (" /value", "\r\r\n\r\r\n\r\r\n"),
+        (" /format:csv", "\r\r\nNode,\r\r\n"),
+        (" /format:mof", "\r\r\n"),
+    ] {
+        let req = request(&format!("os where Caption='missing' get Caption{mode}"));
+        let data = ManagementResult::Objects(ObjectSet::default());
+        let output = render(RenderRequest {
+            request: &req,
+            result: Ok(&data),
+            node: &wide("TEST"),
+        })
+        .unwrap();
+        assert_eq!(output.stdout, wide(want), "{mode}");
+        assert_eq!(output.stderr, wide("No Instance(s) Available.\r\r\n"));
+    }
+}
+
+#[test]
+fn failed_queries_keep_format_specific_empty_stdout_and_the_original_hresult_diagnostic() {
+    for (mode, want) in [
+        (" /value", "\r\r\n\r\r\n\r\r\n"),
+        (" /format:csv", "\r\r\nNode,\r\r\n"),
+        (" /format:mof", "\r\r\n"),
+    ] {
+        let req = request(&format!("os get Caption{mode}"));
+        let error = ManagementError {
+            code: 0x80041017,
+            target: wide("TEST"),
+            operation: wide("query"),
+            message: wide("Invalid query"),
+            extended: vec![],
+            partial: None,
+        };
+        let output = render(RenderRequest {
+            request: &req,
+            result: Err(&error),
+            node: &wide("TEST"),
+        })
+        .unwrap();
+        assert_eq!(output.stdout, wide(want), "{mode}");
+        assert_eq!(
+            output.stderr,
+            wide("Node - TEST\r\r\nERROR:\r\r\nDescription = Invalid query\r\r\n")
+        );
+    }
+}
+
+#[test]
+fn failed_full_view_has_exactly_the_reference_blank_lines() {
+    let req = request("os list full");
+    let error = ManagementError {
+        code: 0x80041017,
+        target: wide("DESKTOP-N4H9E7R"),
+        operation: wide("query"),
+        message: wide("Invalid query"),
+        extended: vec![],
+        partial: None,
+    };
+    let output = render(RenderRequest {
+        request: &req,
+        result: Err(&error),
+        node: &wide("DESKTOP-N4H9E7R"),
+    })
+    .unwrap();
+    assert_eq!(
+        bytes(&output.stdout),
+        include_bytes!("fixtures/schema-reference/os-full.stdout.bin")
+    );
+    assert_eq!(
+        bytes(&output.stderr),
+        include_bytes!("fixtures/schema-reference/os-full.stderr.bin")
+    );
+}

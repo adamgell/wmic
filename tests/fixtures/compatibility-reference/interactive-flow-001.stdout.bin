@@ -1,0 +1,10 @@
+wmic:root\cli>
+
+Version=10.0.26200
+
+
+
+wmic:root\cli>
+Node,Caption
+DESKTOP-N4H9E7R,Microsoft Windows 11 Pro
+wmic:root\cli>

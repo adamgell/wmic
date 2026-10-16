@@ -1,0 +1,24 @@
+{
+  "source_snapshot_sha256": "35eb1f1bb80a722ebff21f5a65336b709ea51f9366578b4ad211fc9f558a8708",
+  "portable_rust_passed": 168,
+  "native_windows_library_passed": 18,
+  "native_windows_backend_passed": 3,
+  "native_windows_format_passed": 1,
+  "reference_python_passed": 45,
+  "release_python_passed": 11,
+  "certificate_identity_cases_passed": 8,
+  "fmt": "pass",
+  "portable_clippy": "pass",
+  "all_three_msvc_clippy": "pass",
+  "all_three_release_builds": "pass",
+  "actionlint": "pass",
+  "powershell_harness_syntax": "pass",
+  "independent_review": "No remaining Critical or Important findings after fixes and rereview.",
+  "full_corpus_gate_exit_status": 1,
+  "full_corpus_remaining_differences": [
+    "schema/os-default: changing OS data",
+    "schema/os-get-default: changing OS data",
+    "connection/trace: implementation-specific diagnostics"
+  ],
+  "stable_matrix_gate_exit_status": 0
+}

@@ -34,6 +34,9 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: python tools/release/release.py verify-available --tag "$RELEASE_TAG"
+      - run: rustup update stable --no-self-update
+      - run: rustup default stable
+      - run: rustup component add rustfmt clippy
       - run: cargo fmt --check
       - run: cargo clippy --locked --all-targets -- -D warnings
       - run: cargo test --locked
@@ -55,6 +58,9 @@ jobs:
       - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
         with:
           python-version: '3.12'
+      - run: rustup update stable --no-self-update
+      - run: rustup default stable
+      - run: rustup component add clippy
       - run: rustup target add ${{ matrix.target }}
       - run: cargo clippy --locked --target ${{ matrix.target }} --all-targets -- -D warnings
       - run: cargo build --locked --release --target ${{ matrix.target }}
