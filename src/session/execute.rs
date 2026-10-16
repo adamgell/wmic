@@ -75,6 +75,8 @@ impl RepeatScheduler for ThreadScheduler {
         interrupted()
     }
     fn wait(&mut self, seconds: u32) -> bool {
+        #[cfg(unix)]
+        let _watch = crate::platform::unix::console::KeyWatch::enter();
         let end = std::time::Instant::now() + std::time::Duration::from_secs(seconds.into());
         loop {
             if interrupted() || console_key_pressed() {
@@ -991,7 +993,11 @@ fn interrupted() -> bool {
     {
         crate::platform::windows::console::interrupted()
     }
-    #[cfg(not(windows))]
+    #[cfg(unix)]
+    {
+        crate::platform::unix::console::interrupted()
+    }
+    #[cfg(not(any(windows, unix)))]
     {
         false
     }
@@ -1002,7 +1008,11 @@ fn console_key_pressed() -> bool {
     {
         crate::platform::windows::console::key_pressed()
     }
-    #[cfg(not(windows))]
+    #[cfg(unix)]
+    {
+        crate::platform::unix::console::key_pressed()
+    }
+    #[cfg(not(any(windows, unix)))]
     {
         false
     }

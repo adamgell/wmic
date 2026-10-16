@@ -92,7 +92,25 @@ fn timestamp() -> WideText {
     )
     .into()
 }
-#[cfg(not(windows))]
+#[cfg(unix)]
+fn timestamp() -> WideText {
+    let now = unsafe { libc::time(std::ptr::null_mut()) };
+    let mut tm = unsafe { std::mem::zeroed::<libc::tm>() };
+    if unsafe { libc::localtime_r(&now, &mut tm) }.is_null() {
+        return WideText::default();
+    }
+    format!(
+        "{:02}-{:02}-{:04}T{:02}:{:02}:{:02}",
+        tm.tm_mon + 1,
+        tm.tm_mday,
+        i64::from(tm.tm_year) + 1900,
+        tm.tm_hour,
+        tm.tm_min,
+        tm.tm_sec
+    )
+    .into()
+}
+#[cfg(not(any(windows, unix)))]
 fn timestamp() -> WideText {
     WideText::default()
 }
