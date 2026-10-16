@@ -1,0 +1,37 @@
+{
+  "source_commit": "8117295f3b8e562cb97caa847604c9e4b39d5c45",
+  "run_id": "38917773797",
+  "run_attempt": "2",
+  "vm": "{ec3bc428-7a31-4f17-8424-7ce78923f7f3}",
+  "scope": "Read-only Get-AuthenticodeSignature and publisher/timestamp policy on downloaded ZIP executable bytes. No CLI operations executed.",
+  "executables": [
+    {
+      "target": "aarch64-pc-windows-msvc",
+      "sha256": "cf8421a3dcdaf66a73f3a57a730d03f2a4704fa86b9d2a7a24c93aff971ce1c5",
+      "status": "Valid",
+      "type": "Authenticode",
+      "signer": "CN=Adam Gell, O=Adam Gell, L=Elizabethtown, S=pa, C=US",
+      "timestamp": "CN=Microsoft Public RSA Time Stamping Authority, OU=nShield TSS ESN:A500-05E0-D947, OU=Microsoft America Operations, O=Microsoft Corporation, L=Redmond, S=Washington, C=US"
+    },
+    {
+      "target": "x86_64-pc-windows-msvc",
+      "sha256": "94274a0b2f0462e3374c864fb4a52ce47fdc0df9daf196a4fdc0c8589b7d35ac",
+      "status": "Valid",
+      "type": "Authenticode",
+      "signer": "CN=Adam Gell, O=Adam Gell, L=Elizabethtown, S=pa, C=US",
+      "timestamp": "CN=Microsoft Public RSA Time Stamping Authority, OU=nShield TSS ESN:7D00-05E0-D947, OU=Microsoft America Operations, O=Microsoft Corporation, L=Redmond, S=Washington, C=US"
+    },
+    {
+      "target": "i686-pc-windows-msvc",
+      "sha256": "af470d7643d49721a0dc07d74115fffc9b9518b666b1e314a6fe4188ee4d335d",
+      "status": "Valid",
+      "type": "Authenticode",
+      "signer": "CN=Adam Gell, O=Adam Gell, L=Elizabethtown, S=pa, C=US",
+      "timestamp": "CN=Microsoft Public RSA Time Stamping Authority, OU=nShield TSS ESN:7A00-05E0-D947, OU=Microsoft America Operations, O=Microsoft Corporation, L=Redmond, S=Washington, C=US"
+    }
+  ],
+  "workflow_url": "https://github.com/adamgell/wmic/actions/runs/38917773797/attempts/2",
+  "draft_url": "https://github.com/adamgell/wmic/releases/tag/untagged-6525acbcf73e055bd35a",
+  "tag": "v0.1.0-dev",
+  "checked_at": "2026-10-16"
+}

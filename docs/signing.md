@@ -11,8 +11,10 @@ The Azure tenant is Default Directory, `69cd6393-d1ce-4cf2-8f2b-45c39003aa34`. T
 | Field | Value |
 | --- | --- |
 | Issuer | `https://token.actions.githubusercontent.com` |
-| Subject | `repo:adamgell/wmic:environment:codesigning` |
+| Subject | `repo:adamgell@27519/wmic@1422255455:environment:codesigning` |
 | Audience | `api://AzureADTokenExchange` |
+
+This repository uses GitHub's immutable subject format, which includes owner ID `27519` and repository ID `1422255455`. The exact prefix was read from `gh api repos/adamgell/wmic/actions/oidc/customization/sub` and confirmed by the first workflow's Azure login diagnostics. A name-only subject does not match this repository's tokens. The original name-only trust was replaced after the first attempt failed closed at Azure authentication. Future setup should read the live `sub_claim_prefix` before creating a federated credential. See [GitHub's immutable subject announcement](https://github.blog/changelog/2026-04-23-immutable-subject-claims-for-github-actions-oidc-tokens/) and [OIDC API reference](https://docs.github.com/en/rest/actions/oidc).
 
 The identity has **Artifact Signing Certificate Profile Signer** at the exact certificate profile resource scope: subscription `7c7ca912-d5ea-4a1f-8cad-f33afb9d99f4`, resource group `CodeSigning`, account `adamgell4`, profile `adamgell-github`. This active PublicTrust profile was confirmed against the certificate history and the signature receipt from CMTrace Open release 1.6.2. The identity does not need Contributor, Owner, certificate profile administration, or access to another application's secrets.
 
@@ -56,5 +58,21 @@ Get-FileHash .\wmic.exe -Algorithm SHA256
 Expect `Valid`, `Authenticode`, publisher `Adam Gell`, and a Microsoft timestamp. Compare the executable hash to the package manifest and receipt, and the archive hash to its sidecar. Artifact Signing rotates short lived leaf certificates, so a fixed leaf thumbprint is not used as a permanent publisher identity.
 
 The compatibility report describes a separately measured local unsigned baseline. Signing proves origin and integrity; it does not extend the measured OS/provider coverage or resolve the historical Defender detection. Keep those limits in the release notes.
+
+## First verified draft
+
+The [signed workflow, attempt 2](https://github.com/adamgell/wmic/actions/runs/38917773797/attempts/2) succeeded for source `8117295f3b8e562cb97caa847604c9e4b39d5c45` and created the [draft prerelease `v0.1.0-dev`](https://github.com/adamgell/wmic/releases/tag/untagged-6525acbcf73e055bd35a). [CI on that source](https://github.com/adamgell/wmic/actions/runs/38917717172) passed all four jobs. The first release attempt stopped at the name-only OIDC subject mismatch described above; the second authenticated successfully using the corrected immutable subject.
+
+All three executables passed Windows Authenticode and SDK SignTool verification before packaging. Each architecture's unsigned, wrong-publisher and tampered-section negative checks rejected their inputs. The draft has exactly ten assets: three ZIPs, three ZIP checksum sidecars, three native signature receipts, and release context. All downloaded asset digests were compared to GitHub's asset metadata; the complete downloaded bundle passed provenance, inventory, PE and hash checks.
+
+Independent read-only Authenticode checks on the selected Parallels guest then verified the actual executable bytes extracted from those downloaded draft ZIPs. All three returned `Valid` and `Authenticode` with the expected publisher and Microsoft timestamp identity/EKU. This check did not execute CLI operations. The [native evidence](research/evidence/2026-10-16-signing/downloaded-release-verification.json) records these signed executable hashes:
+
+| Architecture | Signed executable SHA256 |
+| --- | --- |
+| ARM64 | `cf8421a3dcdaf66a73f3a57a730d03f2a4704fa86b9d2a7a24c93aff971ce1c5` |
+| x64 | `94274a0b2f0462e3374c864fb4a52ce47fdc0df9daf196a4fdc0c8589b7d35ac` |
+| x86 | `af470d7643d49721a0dc07d74115fffc9b9518b666b1e314a6fe4188ee4d335d` |
+
+The release remains a draft prerelease. Publishing it is a separate action.
 
 References: [Microsoft OIDC instructions](https://github.com/Azure/artifact-signing-action/blob/main/docs/OIDC.md), [Azure GitHub OIDC integration](https://learn.microsoft.com/en-us/azure/developer/github/connect-from-azure-openid-connect), [Artifact Signing action](https://github.com/Azure/artifact-signing-action).
