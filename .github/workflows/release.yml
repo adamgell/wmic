@@ -1,0 +1,187 @@
+name: Signed development release
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Exact Cargo.toml version, prefixed with v'
+        required: true
+        default: v0.1.0-dev
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: signed-release
+  cancel-in-progress: false
+
+env:
+  RELEASE_TAG: ${{ inputs.tag }}
+
+jobs:
+  validate:
+    if: github.repository == 'adamgell/wmic' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
+        with:
+          python-version: '3.12'
+      - run: python tools/release/release.py preflight --tag "$RELEASE_TAG"
+      - run: cargo fmt --check
+      - run: cargo clippy --locked --all-targets -- -D warnings
+      - run: cargo test --locked
+      - run: python -m unittest discover -s tools/reference/tests
+      - run: python -m unittest discover -s tools/release/tests
+      - shell: pwsh
+        run: ./tools/release/tests/signature-policy.Tests.ps1
+  build:
+    needs: validate
+    runs-on: windows-2025
+    strategy:
+      fail-fast: false
+      matrix:
+        target: [aarch64-pc-windows-msvc, x86_64-pc-windows-msvc, i686-pc-windows-msvc]
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
+        with:
+          python-version: '3.12'
+      - run: rustup target add ${{ matrix.target }}
+      - run: cargo clippy --locked --target ${{ matrix.target }} --all-targets -- -D warnings
+      - run: cargo build --locked --release --target ${{ matrix.target }}
+      - if: matrix.target == 'x86_64-pc-windows-msvc'
+        run: cargo test --locked
+      - name: Reject unsigned executable at the signature gate
+        shell: pwsh
+        run: ./tools/release/tests/test-signature-gate.ps1 -Binary 'target/${{ matrix.target }}/release/wmic.exe' -Target '${{ matrix.target }}' -Mode Unsigned
+      - name: Stage architecture and source bound input
+        shell: pwsh
+        run: python tools/release/release.py stage --tag $env:RELEASE_TAG --target '${{ matrix.target }}' --binary 'target/${{ matrix.target }}/release/wmic.exe' --out artifacts/unsigned
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+        with:
+          name: unsigned-${{ matrix.target }}
+          path: artifacts/unsigned/
+          if-no-files-found: error
+          retention-days: 7
+  sign:
+    needs: build
+    runs-on: windows-2025
+    environment: codesigning
+    permissions:
+      contents: read
+      id-token: write
+    env:
+      EXPECTED_PUBLISHER: ${{ vars.SIGNING_PUBLISHER_NAME }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
+        with:
+          python-version: '3.12'
+      - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7
+        with:
+          pattern: unsigned-*
+          path: artifacts/unsigned
+          merge-multiple: true
+      - name: Verify all inputs before Azure authentication
+        shell: pwsh
+        run: |
+          python tools/release/release.py verify-inputs --tag $env:RELEASE_TAG --directory artifacts/unsigned
+          if ($LASTEXITCODE -ne 0) { throw 'Unsigned input verification failed' }
+          if ([string]::IsNullOrWhiteSpace($env:EXPECTED_PUBLISHER)) { throw 'SIGNING_PUBLISHER_NAME is required' }
+      - name: Azure OIDC login
+        uses: azure/login@a641126d1b8aa4d1fa005f4f92df94a3a4c4c906 # v3
+        with:
+          client-id: ${{ vars.AZURE_CLIENT_ID }}
+          tenant-id: ${{ vars.AZURE_TENANT_ID }}
+          subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
+      - name: Sign exactly the staged executables
+        uses: azure/artifact-signing-action@c7ab2a863ab5f9a846ddb8265964877ef296ee82 # v2.0.0
+        with:
+          endpoint: ${{ vars.SIGNING_ENDPOINT }}
+          signing-account-name: ${{ vars.SIGNING_ACCOUNT_NAME }}
+          certificate-profile-name: ${{ vars.SIGNING_PROFILE_NAME }}
+          files-folder: ${{ github.workspace }}/artifacts/unsigned
+          files-folder-filter: exe
+          files-folder-recurse: true
+          file-digest: SHA256
+          timestamp-rfc3161: http://timestamp.acs.microsoft.com
+          timestamp-digest: SHA256
+          description: WMIC Compatibility CLI
+          description-url: https://github.com/adamgell/wmic
+          cache-dependencies: false
+          exclude-environment-credential: true
+          exclude-workload-identity-credential: true
+          exclude-managed-identity-credential: true
+          exclude-shared-token-cache-credential: true
+          exclude-visual-studio-credential: true
+          exclude-visual-studio-code-credential: true
+          exclude-azure-cli-credential: false
+          exclude-azure-powershell-credential: true
+          exclude-azure-developer-cli-credential: true
+          exclude-interactive-browser-credential: true
+      - name: Verify signatures and package the signed bytes
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $context = python tools/release/release.py preflight --tag $env:RELEASE_TAG | ConvertFrom-Json
+          if ($LASTEXITCODE -ne 0) { throw 'Release context verification failed' }
+          New-Item -ItemType Directory artifacts/packages | Out-Null
+          foreach ($target in @('aarch64-pc-windows-msvc','x86_64-pc-windows-msvc','i686-pc-windows-msvc')) {
+            $binary = "artifacts/unsigned/$target/wmic.exe"
+            $receipt = "artifacts/packages/$target.signature.json"
+            ./tools/release/verify-signature.ps1 -Binary $binary -Target $target -SourceCommit $env:GITHUB_SHA -ExpectedPublisher $env:EXPECTED_PUBLISHER -ReceiptPath $receipt
+            ./tools/release/tests/test-signature-gate.ps1 -Binary $binary -Target $target -Mode Signed -ExpectedPublisher $env:EXPECTED_PUBLISHER
+            python tools/release/package.py --target $target --binary $binary --out artifacts/packages --signature-receipt $receipt --source-commit $env:GITHUB_SHA --version $context.version
+            if ($LASTEXITCODE -ne 0) { throw "Packaging failed for $target" }
+          }
+          $context | ConvertTo-Json | Set-Content -Encoding utf8 artifacts/packages/release-context.json
+          python tools/release/release.py verify-bundle --tag $env:RELEASE_TAG --directory artifacts/packages --publisher $env:EXPECTED_PUBLISHER
+          if ($LASTEXITCODE -ne 0) { throw 'Signed bundle verification failed' }
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+        with:
+          name: signed-release
+          path: artifacts/packages/
+          if-no-files-found: error
+          retention-days: 30
+  draft:
+    needs: sign
+    runs-on: ubuntu-24.04
+    environment: codesigning
+    permissions:
+      contents: write
+    env:
+      EXPECTED_PUBLISHER: ${{ vars.SIGNING_PUBLISHER_NAME }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
+        with:
+          python-version: '3.12'
+      - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7
+        with:
+          name: signed-release
+          path: artifacts/packages
+      - name: Verify complete bundle before publication
+        run: python tools/release/release.py verify-bundle --tag "$RELEASE_TAG" --directory artifacts/packages --publisher "$EXPECTED_PUBLISHER"
+      - name: Create draft prerelease without replacing existing assets or tags
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          if gh release view "$RELEASE_TAG" >/dev/null 2>&1; then
+            echo 'A release already exists for this version; refusing to replace it.' >&2
+            exit 1
+          fi
+          if git ls-remote --exit-code --tags "https://github.com/$GH_REPO.git" "refs/tags/$RELEASE_TAG" >/dev/null 2>&1; then
+            echo 'A tag already exists for this version; refusing to reuse it.' >&2
+            exit 1
+          fi
+          gh release create "$RELEASE_TAG" artifacts/packages/* --target "$GITHUB_SHA" --draft --prerelease --title "WMIC $RELEASE_TAG (development)" --notes-file docs/release-notes.md

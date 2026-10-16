@@ -1,6 +1,6 @@
 # Compatibility status
 
-Development build `0.1.0-dev`, 2026-10-16; executable source commit `ac390d4`. All 13 planned implementation tasks are delivered. **Full classic WMIC compatibility is not claimed.** This is a measured development replacement with explicit differences and incomplete platform/provider acceptance.
+Development build `0.1.0-dev`, 2026-10-16; measured application baseline source commit `ac390d4`. All 13 planned implementation tasks are delivered. **Full classic WMIC compatibility is not claimed.** This is a measured development replacement with explicit differences and incomplete platform/provider acceptance. The corpus results below apply to the local unsigned baseline. GitHub release builds use a separate build environment and acquire different hashes after signing; their manifests and signature receipts identify their exact bytes, source commit, and workflow run. Signing does not establish additional runtime compatibility.
 
 ## Reference profile and architecture matrix
 
@@ -64,7 +64,7 @@ Committed source evidence under `docs/research/evidence/2026-10-16` contains per
 
 Normalization is opt-in and narrow: root COMMAND STARTTIME in raw XML; its exact root HTML metadata representation; direct RECORD children STARTTIME attributes located by Expat without reserializing; and the exact recorded owned PID in controlled Create/path/selector fields. Nested properties, CDATA, whitespace, encodings, ordering, all other numbers and status remain strict. Volatile OS values are not normalized. The separate `docs/research/implementation-decisions.md` preserves every ruling and its cost; `docs/research/final-review.md` records review dispositions.
 
-The final executable hashes are:
+The locally measured unsigned baseline executable hashes are:
 
 | Architecture | Target | SHA256 |
 | --- | --- | --- |
@@ -78,6 +78,6 @@ Additional authenticated remote endpoints, IPv6 fail-fast, non-en-US Windows, Wi
 
 Custom-role localization fallback, arbitrary derived-command parameter substitution/routing, embedded-object CLI argument syntax, and unusual formatting sizes/values need further targeted native probes. These implemented paths are not certified for every legacy form. Script-enabled custom XSL is a caller-selected legacy capability and executes with the caller's rights.
 
-An earlier unsigned candidate SHA256 `4a349fa5611eb48daf6018846ccbfaef9f7495b17648908b083b24da63ed766c` was quarantined as `Trojan:Win32/Bearfoos.A!ml` (ThreatID 2147731250, successful protection action). Protection settings were left enabled and unchanged. The detection remains **unresolved**; later corpus execution does not clear it or establish a false positive. Its recorded details are in `docs/research/evidence/2026-10-15/defender-detection.json`. The delivered development executables are unsigned.
+An earlier unsigned candidate SHA256 `4a349fa5611eb48daf6018846ccbfaef9f7495b17648908b083b24da63ed766c` was quarantined as `Trojan:Win32/Bearfoos.A!ml` (ThreatID 2147731250, successful protection action). Protection settings were left enabled and unchanged. The detection remains **unresolved**; later corpus execution or code signing does not clear it or establish a false positive. Its recorded details are in `docs/research/evidence/2026-10-15/defender-detection.json`. The measured baseline executables are unsigned. For a GitHub release, inspect its manifest, signature receipt, and Windows Authenticode status to establish signing status.
 
-Packages contain only this project's executable, README, this report, manifest and checksums. They contain no original Microsoft executable, copied Microsoft stylesheet, credential or reference capture. Packaging is local; no publication or installation is implied.
+Packages contain only this project's executable, README, this report, manifest and checksums. They contain no original Microsoft executable, copied Microsoft stylesheet, credential or reference capture. The manual GitHub workflow additionally publishes signature receipts, archive checksums and release context as separate draft assets. Local packaging does not publish or install anything.

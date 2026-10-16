@@ -4,6 +4,8 @@ A native Rust Windows CLI named `wmic.exe`, built to reproduce classic WMIC comm
 
 This is a development compatibility build. The [compatibility report](docs/compatibility.md) separates verified behavior, known differences, and unverified platforms. Full classic compatibility is not yet claimed.
 
+Source and release drafts are hosted at [adamgell/wmic](https://github.com/adamgell/wmic). The [signing workflow](https://github.com/adamgell/wmic/blob/main/docs/signing.md) builds ARM64, x64, and x86, signs through Azure Artifact Signing using OIDC, verifies signatures on Windows, and creates a draft prerelease. A successful run is required before a package can be described as signed.
+
 ## Use
 
 Extract the package for your architecture into a directory you own. From PowerShell:
@@ -85,10 +87,11 @@ cargo fmt --check
 cargo clippy --all-targets -- -D warnings
 cargo test
 python3 -m unittest discover -s tools/reference/tests
-python3 -m unittest discover -s tools/release/tests
+python3.12 -m unittest discover -s tools/release/tests
+pwsh -File tools/release/tests/signature-policy.Tests.ps1
 ```
 
-The reviewed build passes 158 portable Rust tests and 21 native Windows tests. The [compatibility report](docs/compatibility.md) pins the delivered executable hashes, corpus results, and remaining acceptance limits.
+The reviewed application baseline passes 158 portable Rust tests and 21 native Windows tests. The [compatibility report](docs/compatibility.md) pins the measured baseline executable hashes, corpus results, and remaining acceptance limits. Release automation requires Python 3.11 or later; CI uses Python 3.12.
 
 For the selected Parallels guest, run the read-only corpus against a release build:
 
