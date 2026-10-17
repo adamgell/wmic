@@ -1,0 +1,5 @@
+CONTEXT
+os get Caption,Version /value
+cpu get Name,NumberOfCores,NumberOfLogicalProcessors
+logicaldisk where "DeviceID='/'" get DeviceID,Size,FreeSpace
+QUIT

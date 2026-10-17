@@ -46,7 +46,7 @@ The macOS build is `wmic`. It uses the same command parser, help, aliases, and o
 ```sh
 wmic os get Caption,Version
 wmic os where "Caption like '%macOS%'" get Caption /format:csv
-wmic process where "Name='sleep'" call terminate
+wmic process where "ProcessId=$$" call GetOwner
 ```
 
 The shell removes quotes before `wmic` starts. `wmic` puts quotes around an argument that has white space. To pass quotes to WMIC, put the whole argument in single quotes: `wmic '/node:"a,b"' os get Caption`.
@@ -56,6 +56,8 @@ A POSIX exit code has 8 bits and a WMIC status has 32 bits. Status 0 stays 0. A 
 Standard output and standard error are UTF-8 with LF line endings. Without root, some values of other users' processes are empty. Service start and stop in the system domain, and reboot and shutdown, need root.
 
 macOS service control (`StartService`, `StopService`, and `ChangeStartMode`) is experimental. Its command construction has unit tests, but a real test-owned LaunchAgent lifecycle has not been verified. Treat it as unverified until start, stop, KeepAlive, enable/disable, subsequent inventory and cleanup all have live acceptance coverage.
+
+Start with the [macOS getting-started guide](docs/macos/getting-started.md), then use the [command cookbook](docs/macos/cookbook.md) and [scripting guide](docs/macos/scripting.md). The [runnable examples](examples/macos/README.md) include inventory collection, a JSON summary, a process lifecycle limited to its own child, and a redirected interactive session.
 
 ## Behavior
 

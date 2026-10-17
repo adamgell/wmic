@@ -72,3 +72,16 @@ jobs:
       - run: cargo clippy --locked --all-targets -- -D warnings
       - run: cargo build --locked --release
       - run: cargo test --locked
+      - name: Run macOS documentation examples
+        env:
+          WMIC_BIN: ${{ github.workspace }}/target/release/wmic
+        run: |
+          example_dir=$(mktemp -d "${RUNNER_TEMP}/wmic-examples.XXXXXX")
+          trap 'rm -rf "$example_dir"' EXIT
+          sh examples/macos/inventory.sh "$example_dir"
+          python3 examples/macos/os-summary.py
+          python3 examples/macos/process-lifecycle.py
+          "$WMIC_BIN" < examples/macos/session.txt > "$example_dir/session.txt" 2> "$example_dir/session.stderr.txt"
+          test ! -s "$example_dir/session.stderr.txt"
+          "$WMIC_BIN" os get Caption,Version '/format:"examples/macos/os-summary.xsl"' > "$example_dir/summary.txt"
+          python3 -c 'import pathlib,sys; text=pathlib.Path(sys.argv[1]).read_text(); assert "Caption=macOS " in text and "Version=" in text' "$example_dir/summary.txt"
