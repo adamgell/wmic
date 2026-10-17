@@ -259,7 +259,15 @@ impl WsmanManagement {
         match request.verb {
             Verb::Get | Verb::List if request.class_mode => self.schema(&target, request),
             Verb::Get | Verb::List => {
-                let mut records = self.select(&target, request)?;
+                let mut records = match self.select(&target, request) {
+                    Ok(records) => records,
+                    Err(mut error) => {
+                        if let Some(ManagementResult::Objects(set)) = error.partial.as_deref_mut() {
+                            keep_columns(&mut set.objects, &projection(request));
+                        }
+                        return Err(error);
+                    }
+                };
                 keep_columns(&mut records, &projection(request));
                 Ok(ManagementResult::Objects(ObjectSet {
                     objects: records,

@@ -49,11 +49,13 @@ wmic os where "Caption like '%macOS%'" get Caption /format:csv
 wmic process where "ProcessId=$$" call GetOwner
 ```
 
-A `/node` that is not the local machine, or any `/user`, sends the request to the WinRM service on that node (WS-Management over HTTP, port 5985). The macOS build cannot speak DCOM, so the target needs WinRM enabled (`Enable-PSRemoting` or `winrm quickconfig`). Authentication is NTLMv2 with message encryption. Basic, Kerberos, CredSSP, and HTTPS are not implemented. Give the account as `/user:DOMAIN\name`, or as `/user:name /authority:NTLMDOMAIN:domain`. Without `/password:`, `wmic` reads the password from standard input.
+A `/node` that is not the local machine sends the request to the WinRM service on that node (WS-Management over HTTP, port 5985). A local node with `/user` is refused, as on Windows, unless `WMIC_WSMAN_PORT` names a listener. The macOS build cannot speak DCOM, so the target needs WinRM enabled (`Enable-PSRemoting` or `winrm quickconfig`). Authentication is NTLMv2 with message encryption. Basic, Kerberos, CredSSP, and HTTPS are not implemented. Give the account as `/user:DOMAIN\name`, or as `/user:name /authority:NTLMDOMAIN:domain`. Without `/password:`, `wmic` reads the password from standard input.
 
 ```sh
-wmic /node:server01 /user:CONTOSO\admin os get Caption
+wmic /node:server01 '/user:CONTOSO\admin' os get Caption
 ```
+
+Quote the account argument so the shell keeps the backslash.
 
 The environment variable `WMIC_WSMAN_PORT` replaces port 5985. The [remote nodes section](https://github.com/adamgell/wmic/blob/main/docs/macos.md#remote-nodes) of the macOS guide lists the requirements, errors, and limits. The Windows build is unchanged and uses DCOM.
 

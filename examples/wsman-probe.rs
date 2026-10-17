@@ -132,6 +132,10 @@ mod probe {
         println!("computer name: {:?}", transport.server_name());
         println!("HTTP {}", reply.status);
         println!("{}", reply.body);
-        Ok(())
+        if (200..300).contains(&reply.status) {
+            Ok(())
+        } else {
+            Err(format!("the service answered HTTP {}", reply.status))
+        }
     }
 }

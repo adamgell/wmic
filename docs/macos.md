@@ -27,7 +27,7 @@ The macOS build runs the same parser, help, alias set, formats, and session logi
 
 The local backend serves 30 classes in the `root\cimv2` namespace. Twenty-six classes have a provider. Four classes exist but return no instances.
 
-A request for a node that is not the local machine, or with `/USER`, goes to the WinRM service on that node over WS-Management. [Remote nodes](#remote-nodes) lists the requirements and the limits.
+A request for a node that is not the local machine goes to the WinRM service on that node over WS-Management. A request for the local machine with `/USER` is refused unless `WMIC_WSMAN_PORT` is set. [Remote nodes](#remote-nodes) lists the requirements and the limits.
 
 The macOS build does not support these operations:
 
@@ -128,8 +128,10 @@ A custom `.xsl` file runs through the system `libxslt`. The engine applies these
 A request for another node goes to the WinRM service on that node. Classic WMIC uses DCOM for remote WMI. The macOS build cannot speak DCOM. Remote WMI from macOS needs WinRM on the target. The Windows build is unchanged and still uses DCOM.
 
 ```sh
-wmic /node:server01 /user:CONTOSO\admin os get Caption
+wmic /node:server01 '/user:CONTOSO\admin' os get Caption
 ```
+
+The shell removes an unquoted backslash, so quote the account argument.
 
 ### When a request is remote
 
@@ -160,7 +162,7 @@ wmic /node:server01 /user:CONTOSO\admin os get Caption
 | `WMIC_WSMAN_PORT` | An environment variable. Its value replaces port 5985 for all nodes. Use it for a non-standard listener or an SSH tunnel. A value that is not a port number from 1 to 65535 reports `Invalid parameter` (0x80041008). |
 
 ```sh
-printf '%s\n' "$PASSWORD" | wmic /node:server01 /user:CONTOSO\admin os get Caption
+printf '%s\n' "$PASSWORD" | wmic /node:server01 '/user:CONTOSO\admin' os get Caption
 ```
 
 ### What works
@@ -218,7 +220,7 @@ For a class in the schema, a method that the class does not have returns `<name>
 
 ### Several nodes
 
-`/NODE:a,b` runs the command for each node in turn. The build chooses the backend for each node. A local name stays on the local backend unless the command has `/USER`. With `/USER`, every node goes to WinRM, including the local names. Each node prints its own result. A failure on one node does not stop the next node. The exit status is the status of the last node that failed.
+`/NODE:a,b` runs the command for each node in turn. The build chooses the backend for each node. A local name stays on the local backend. With `/USER`, every remote node goes to WinRM, and a local name is refused unless `WMIC_WSMAN_PORT` is set. Each node prints its own result. A failure on one node does not stop the next node. The exit status is the status of the last node that failed.
 
 Requests to the same host, port, and account share one authenticated connection in one `wmic` process. A request that cannot change state repeats once on a new connection when a reused connection fails. A method call never repeats.
 
@@ -398,8 +400,7 @@ The commands below ran on 2026-10-16 from the Mac mini against two Windows hosts
 | Windows 11 | `process call create "cmd.exe /c exit 0"` | `Method execution successful.` The out parameters hold a process id and `ReturnValue = 0`. Exit 0. |
 | Windows 11 | `process where "Name='lsass.exe'" call getowner` | `Method execution successful.` `Domain` and `User` hold the owner. `ReturnValue = 0`. Exit 0. |
 | Windows 11 | `path Win32_LogicalDiskToPartition get __RELPATH /format:list` | The association keys are quoted object paths of the partition and the disk. Exit 0. |
-| Windows 11 | `/namespace:\root
-osuchns path Win32_OperatingSystem get Caption` | `Invalid namespace`, exit 14. |
+| Windows 11 | `/namespace:\\root\nosuchns path Win32_OperatingSystem get Caption` | `Invalid namespace`, exit 14. |
 | Windows Server | `os get Caption,Version,CSName` | One row. Exit 0. |
 | Windows Server | `service where "Name='CcmExec'" get Name,DisplayName,State,StartMode,ProcessId /format:csv` | One row. Exit 0. |
 | Windows Server | `printer get Name` | One printer row. Exit 0. |
