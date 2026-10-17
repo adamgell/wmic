@@ -1,5 +1,5 @@
 {
-  "base": "wsman-backend fd5ce45 (pull request 5) rebased on main 0bb50c5",
+  "base": "wsman-backend be9965a (pull request 5)",
   "captured_utc": "2026-10-17",
   "scope": "WS-Management over HTTPS (port 5986) with certificate validation and NTLM channel binding, macOS build",
   "listener": {
@@ -20,14 +20,14 @@
     {"cbt": "Relaxed", "env": "WMIC_WSMAN_SCHEME=http", "command": "os get Caption", "result": "one row", "exit": 0},
     {"cbt": "Strict", "env": "WMIC_WSMAN_SCHEME=https WMIC_WSMAN_CA_FILE=client01.pem", "command": "os get Caption,CSName", "result": "one row", "exit": 0},
     {"cbt": "Strict", "env": "WMIC_WSMAN_SCHEME=http", "command": "os get Caption", "result": "one row", "exit": 0},
-    {"cbt": "Strict", "env": "WMIC_WSMAN_SCHEME=https WMIC_WSMAN_CA_FILE=client01.pem, separate build with one byte of the channel binding flipped", "command": "os get Caption", "result": "Access denied", "exit": 5},
+    {"cbt": "Strict", "env": "WMIC_WSMAN_SCHEME=https WMIC_WSMAN_CA_FILE=client01.pem, separate build with one byte of the channel binding flipped", "command": "os get Caption", "result": "Access is denied.", "exit": 5},
     {"cbt": "Strict", "env": "WMIC_WSMAN_SCHEME=https WMIC_WSMAN_CA_FILE=client01.pem, the same separate build without the flip", "command": "os get Caption", "result": "one row", "exit": 0}
   ],
   "cbt_restored": "Relaxed",
   "gates": {
-    "macos": {"platform": "Mac mini, Apple M4, macOS 26.6.2, rustc 1.98.1", "fmt_check": "ok", "clippy_all_targets_deny_warnings": "ok", "cargo_test_locked": {"passed": 480, "failed": 0}},
-    "windows": {"fmt_check": "ok", "clippy_all_targets_deny_warnings": "ok", "cargo_test_locked": {"passed": 208, "failed": 0, "ignored": 33}, "dependency_tree": "identical to the base commit, 24 crates"},
-    "linux": {"platform": "Ubuntu in WSL2, rustc 1.98.1", "fmt_check": "ok", "clippy_all_targets_deny_warnings": "ok", "cargo_test_locked": {"passed": 350, "failed": 0}}
+    "macos": {"platform": "Mac mini, Apple M4, macOS 26.6.2, rustc 1.98.1", "fmt_check": "ok", "clippy_all_targets_deny_warnings": "ok", "cargo_test_locked": {"passed": 517, "failed": 0}},
+    "windows": {"fmt_check": "ok", "clippy_all_targets_deny_warnings": "ok", "cargo_test_locked": {"passed": 231, "failed": 0, "ignored": 34}, "dependency_tree": "identical to the base commit, 24 crates"},
+    "linux": {"platform": "Ubuntu in WSL2, rustc 1.98.1", "note": "measured on the earlier base fd5ce45 rebased on main 0bb50c5", "fmt_check": "ok", "clippy_all_targets_deny_warnings": "ok", "cargo_test_locked": {"passed": 350, "failed": 0}}
   },
   "dependency_footprint_net_new_crates": {
     "method": "cargo tree --edges normal per target, minus the crates in the base lockfile",
