@@ -225,6 +225,12 @@ def compare_payload(name,payload,count):
                 arguments=base64.b64decode(result['arguments_utf16_base64'],validate=True)
                 if len(arguments)%2:raise ValueError('invalid UTF16 arguments')
                 for stream in ('stdout_base64','stderr_base64'):base64.b64decode(result[stream],validate=True)
+                if name == 'scripts':
+                    stdout = base64.b64decode(result['stdout_base64'], validate=True)
+                    if case['id'] == 'for-f.cmd' and not any(line.startswith(b'VERSION=') and line[8:].strip() for line in stdout.splitlines()):
+                        raise ValueError('FOR /F fixture did not produce a nonempty VERSION= line')
+                    if case['id'] == 'conditional-success.cmd' and stdout.strip() != b'SUCCESS':
+                        raise ValueError('conditional success fixture did not produce SUCCESS')
                 if name in ('files','unicode','session-files','redirection'):
                     if not isinstance(case['files'],dict) or set(case['files'])!=set(EXPECTED_FILES[name][case['id']]):raise ValueError('missing or unexpected file inventory')
                     for value in case['files'].values():base64.b64decode(value,validate=True)
@@ -265,6 +271,64 @@ def ps_text(value):
     return "'" + str(value).replace("'", "''") + "'"
 
 
+def aggregate_reports(target, binary, out, source_reports, suites=None):
+    """Combine validated suites only from fully completed, current source runs.
+
+    Validate source completion and each contributing suite before writing
+    anything. Preserve exact source report digests and evidence bytes. The first
+    supplied source for a selected suite wins; unused suites are not counted.
+    """
+    selected = suites or [definition[0] for definition in DEFINITIONS]
+    definitions = {name: (script, count) for name, script, _, count in DEFINITIONS}
+    if len(set(selected)) != len(selected) or any(name not in definitions for name in selected):
+        raise ValueError('invalid or duplicate selected suite')
+    if out.exists():
+        raise ValueError('use a fresh output directory')
+    root = Path(__file__).resolve().parents[2]
+    sha = hashlib.sha256(binary.read_bytes()).hexdigest()
+    records = {}
+    for source in source_reports:
+        source_bytes = source.read_bytes()
+        report = json.loads(source_bytes)
+        if report.get('completed') is not True or report.get('kind') == 'validated-suite-aggregation':
+            raise ValueError('aggregation requires a completed source report, not a partial or aggregated run')
+        if report['artifact'].get('sha256') != sha or report['artifact'].get('target') != target:
+            raise ValueError('source report covers a different candidate or target')
+        requested = report.get('requested_suites')
+        if not isinstance(requested, list) or not requested or any(name not in definitions for name in requested) or len(set(requested)) != len(requested) or set(report['tests']) != set(requested):
+            raise ValueError('source report has an incomplete or invalid suite inventory')
+        for name in requested:
+            if name not in selected or name in records:
+                continue
+            script, count = definitions[name]
+            entry = report['tests'][name]
+            source_hash = hashlib.sha256((root / 'tools/windows' / script).read_bytes()).hexdigest()
+            reference = 'x86' if name == 'scripts' and target == 'i686-pc-windows-msvc' else 'arm64'
+            if type(entry['total']) is not int or entry['total'] != count or entry['differences'] != [] or entry.get('script_sha256') != source_hash or entry.get('reference_architecture') != reference:
+                raise ValueError('source report has failed, stale or invalid suite evidence: ' + name)
+            evidence_bytes = (source.parent / (name + '.json')).read_bytes()
+            if entry.get('evidence_sha256') != hashlib.sha256(evidence_bytes).hexdigest():
+                raise ValueError('source evidence digest mismatch: ' + name)
+            payload = json.loads(evidence_bytes)
+            if payload.get('sha256', '').lower() != sha or compare_payload(name, payload, count):
+                raise ValueError('source evidence failed strict comparison or fixture cleanup: ' + name)
+            if name in selected and name not in records:
+                record = dict(entry, source_report=str(source),
+                              source_report_sha256=hashlib.sha256(source_bytes).hexdigest(),
+                              source_run_completed=True, fixture_cleanup_verified=True)
+                records[name] = (record, evidence_bytes)
+    if set(records) != set(selected):
+        raise ValueError('missing completed source reports for requested suites')
+    result = {'kind': 'validated-suite-aggregation', 'completed': True,
+              'artifact': {'sha256': sha, 'target': target},
+              'requested_suites': selected, 'tests': {name: records[name][0] for name in selected}}
+    out.mkdir(parents=True)
+    for name, (_, evidence_bytes) in records.items():
+        (out / (name + '.json')).write_bytes(evidence_bytes)
+    (out / 'report.json').write_text(json.dumps(result, indent=2) + '\n')
+    return 0
+
+
 def run(vm,target,binary,out,suites=None):
     selected=suites or [d[0] for d in DEFINITIONS]
     if len(set(selected))!=len(selected) or any(name not in {d[0] for d in DEFINITIONS} for name in selected):raise ValueError('invalid or duplicate selected suite')
@@ -278,12 +342,13 @@ def run(vm,target,binary,out,suites=None):
     setup="$ErrorActionPreference='Stop'\n$null=New-Item -ItemType Directory -Path "+ps_text(guest_root)+"\n"
     support=[('tools/reference/capture.ps1','capture.ps1'),('tools/windows/console-probe.cs','console-probe.cs')]
     support.extend(('tools/windows/'+script,script) for script in dict.fromkeys(d[1] for d in definitions))
-    for relative,name in support:
-        encoded=base64.b64encode((root/relative).read_bytes()).decode()
+    sources = {name: (root / relative).read_bytes() for relative, name in support}
+    for name, source_bytes in sources.items():
+        encoded=base64.b64encode(source_bytes).decode()
         setup+="[IO.File]::WriteAllBytes("+ps_text(guest_root+'\\'+name)+",[Convert]::FromBase64String('"+encoded+"'))\n"
     run_guest_script(vm,setup+'\n',120)
     for name,script,extra,count in definitions:
-        source=(root/'tools/windows'/script).read_text()
+        source_bytes = sources[script]
         args=" -Candidate "+ps_text(path)+" -CandidateSha256 "+ps_text(sha)
         if name=='console':args+=" -SourcePath "+ps_text(guest_root+r'\console-probe.cs')
         else:args+=" -CaptureScriptPath "+ps_text(guest_root+r'\capture.ps1')
@@ -291,7 +356,7 @@ def run(vm,target,binary,out,suites=None):
             ref,refhash=REFERENCES['x86'];args+=" -Reference "+ps_text(ref)+" -ReferenceSha256 "+ps_text(refhash)
         evidence=out/(name+'.json')
         guest_evidence=guest_root+'\\'+name+'.json'
-        source_hash=hashlib.sha256(source.encode()).hexdigest()
+        source_hash=hashlib.sha256(source_bytes).hexdigest()
         guest_script=guest_root+'\\'+script
         durable="& {\n$ErrorActionPreference='Stop'\ntry {\nif ((Get-FileHash -LiteralPath "+ps_text(guest_script)+" -Algorithm SHA256).Hash -ine "+ps_text(source_hash)+") { throw 'Harness source hash mismatch' }\n$encodedReport = & ([ScriptBlock]::Create([IO.File]::ReadAllText("+ps_text(guest_script)+")))"+args+extra+"\nif ([string]::IsNullOrWhiteSpace([string]$encodedReport)) { throw 'Empty harness report' }\n[IO.File]::WriteAllBytes("+ps_text(guest_evidence)+",[Convert]::FromBase64String([string]$encodedReport))\n[Console]::WriteLine([string]$encodedReport)\n} catch { [Console]::Error.WriteLine($_.Exception.ToString()); exit 2 }\n}\n\n"
         try:
@@ -305,7 +370,7 @@ def run(vm,target,binary,out,suites=None):
         payload=json.loads(evidence.read_bytes())
         if payload.get('sha256','').lower()!=sha:raise ValueError('controlled evidence covers a different candidate')
         changes=compare_payload(name,payload,count)
-        report['tests'][name]={'total':count,'differences':changes,'reference_architecture':'x86' if name=='scripts' and target=='i686-pc-windows-msvc' else 'arm64','script_sha256':hashlib.sha256(source.encode()).hexdigest(),'evidence_sha256':hashlib.sha256(evidence.read_bytes()).hexdigest()}
+        report['tests'][name]={'total':count,'differences':changes,'reference_architecture':'x86' if name=='scripts' and target=='i686-pc-windows-msvc' else 'arm64','script_sha256':source_hash,'evidence_sha256':hashlib.sha256(evidence.read_bytes()).hexdigest()}
         (out/'report.json').write_text(json.dumps(report,indent=2)+'\n')
         print(target,name,count,changes,flush=True)
     cleanup="$ErrorActionPreference='Stop'\nif ([IO.Directory]::Exists("+ps_text(guest_root)+")) { Remove-Item -LiteralPath "+ps_text(guest_root)+" -Recurse }\nif ([IO.Directory]::Exists("+ps_text(guest_root)+")) { throw 'Support cleanup incomplete' }\n[Console]::WriteLine('Support cleanup verified')\n\n"
@@ -316,13 +381,19 @@ def run(vm,target,binary,out,suites=None):
 
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--vm',required=True)
+    mode = parser.add_mutually_exclusive_group(required=True)
+    mode.add_argument('--vm')
+    mode.add_argument('--aggregate-report', action='append', type=Path,
+                      help='combine completed source reports offline; repeat for each source')
     parser.add_argument('--target',required=True,choices=['aarch64-pc-windows-msvc','x86_64-pc-windows-msvc','i686-pc-windows-msvc'])
     parser.add_argument('--binary',required=True,type=Path)
     parser.add_argument('--out',required=True,type=Path)
     parser.add_argument('--suite',action='append',choices=[d[0] for d in DEFINITIONS])
     args=parser.parse_args()
-    try:return run(args.vm,args.target,args.binary,args.out,args.suite)
+    try:
+        if args.aggregate_report:
+            return aggregate_reports(args.target, args.binary, args.out, args.aggregate_report, args.suite)
+        return run(args.vm,args.target,args.binary,args.out,args.suite)
     except (OSError,ValueError,KeyError,TypeError,RuntimeError,subprocess.TimeoutExpired) as error:
         print('invalid or incomplete controlled evidence: '+str(error),file=sys.stderr)
         return 2

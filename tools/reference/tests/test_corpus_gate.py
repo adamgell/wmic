@@ -55,9 +55,6 @@ class CorpusGateTests(unittest.TestCase):
             with self.subTest(passed=passed,differences=differences),self.assertRaises(ValueError):
                 run_corpus.report_status({'schema_version':1,'completed':True,'requested_suites':['reference'],'suites':{'reference':{'total':1,'passed':passed,'differences':differences}}})
 
-if __name__=='__main__':unittest.main()
-
-
 class InterruptedReportTests(unittest.TestCase):
     def test_partial_report_never_passes_a_complete_gate(self):
         report={'schema_version':1,'requested_suites':['reference','compatibility'],
@@ -66,3 +63,7 @@ class InterruptedReportTests(unittest.TestCase):
             report['completed']=completed
             with self.subTest(completed=completed),self.assertRaises(ValueError):
                 run_corpus.report_status(report)
+
+
+if __name__ == '__main__':
+    unittest.main()

@@ -39,6 +39,9 @@ try {
    if((Get-FileHash -LiteralPath $p -Algorithm SHA256).Hash -cne $hashes[$file]){throw 'Unchanged script contents were modified'}
    if($file.EndsWith('.cmd')){$result=[WmicReferenceCapture]::Run($env:ComSpec,('/d /s /c ""'+$p+'""'),20000)}
    else{$result=[WmicReferenceCapture]::RunWithInput('C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe','-NoProfile -NonInteractive -Command -',20000,[IO.File]::ReadAllBytes($p))}
+   $stdout=[Text.Encoding]::ASCII.GetString([Convert]::FromBase64String($result.stdout_base64))
+   if($file -ceq 'for-f.cmd' -and $stdout -cnotmatch '(?m)^VERSION=\S[^\r\n]*'){throw 'FOR /F fixture did not produce a nonempty VERSION= line'}
+   if($file -ceq 'conditional-success.cmd' -and $stdout.Trim() -cne 'SUCCESS'){throw 'Conditional success fixture did not produce SUCCESS'}
    $result.id=$file;$cases+=@{role=$exe.role;id=$file;result=$result}
   }
  }

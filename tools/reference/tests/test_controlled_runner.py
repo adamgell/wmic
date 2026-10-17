@@ -20,6 +20,9 @@ class ControlledRunnerTests(unittest.TestCase):
                 else:
                     case['result'] = {'id': case_id, 'state': 'completed', 'exit_status': (0x80041017 if name=='scripts' and case_id in ('error.cmd','error.ps1') else 0),
                         'arguments_utf16_base64': 'QQA=', 'stdout_base64': 'QQ==', 'stderr_base64': ''}
+                    if name == 'scripts' and case_id in ('for-f.cmd', 'conditional-success.cmd'):
+                        stdout = b'VERSION=10.0.26200\r\r\n' if case_id == 'for-f.cmd' else b'SUCCESS \r\n'
+                        case['result']['stdout_base64'] = base64.b64encode(stdout).decode()
                     if name in ('files', 'unicode', 'session-files'):
                         case['files'] = {filename: 'QQ==' for filename in EXPECTED_FILES[name][case_id]}
                 cases.append(case)
@@ -121,3 +124,48 @@ class ScriptExecutionTests(unittest.TestCase):
             if case['id']=='query.ps1':
                 case['result'].update(exit_status=1,stdout_base64='',stderr_base64='c2NyaXB0cyBkaXNhYmxlZA==')
         self.assertTrue(compare_payload('scripts',data,17))
+
+    def test_matching_zero_exit_without_expected_success_output_is_rejected(self):
+        for case_id, stdout in [('for-f.cmd', b''), ('for-f.cmd', b'VERSION=\r\n'),
+                                ('for-f.cmd', b'NOT_VERSION=10.0\r\n'),
+                                ('conditional-success.cmd', b'FAILURE\r\n'),
+                                ('conditional-success.cmd', b'')]:
+            data = ControlledRunnerTests().payload('scripts')
+            for case in data['cases']:
+                if case['id'] == case_id:
+                    case['result']['stdout_base64'] = base64.b64encode(stdout).decode()
+            with self.subTest(case_id=case_id, stdout=stdout):
+                self.assertTrue(compare_payload('scripts', data, 17))
+
+
+class HarnessBytesTests(unittest.TestCase):
+    def test_crlf_harness_hash_matches_the_exact_staged_bytes(self):
+        import contextlib
+        import hashlib
+        import io
+        import json
+        import tempfile
+        from unittest.mock import patch
+        import run_controlled
+
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / 'tools/windows').mkdir(parents=True)
+            (root / 'tools/reference').mkdir()
+            raw = '# UTF-8 harness: é\r\nparam()\r\n'.encode('utf-8')
+            (root / 'tools/windows/console-capture.ps1').write_bytes(raw)
+            (root / 'tools/windows/console-probe.cs').write_bytes(b'probe')
+            (root / 'tools/reference/capture.ps1').write_bytes(b'capture')
+            payload = ControlledRunnerTests().payload('console')
+            payload['sha256'] = 'a' * 64
+            encoded = base64.b64encode(json.dumps(payload).encode())
+            with patch.object(run_controlled, '__file__', str(root / 'tools/reference/run_controlled.py')), \
+                 patch.object(run_controlled, 'stage_artifact', return_value=('C:\\candidate.exe', 'a' * 64)), \
+                 patch.object(run_controlled, 'run_guest_script', side_effect=[b'', encoded, b'']) as guest, \
+                 contextlib.redirect_stdout(io.StringIO()):
+                self.assertEqual(run_controlled.run('vm', 'aarch64-pc-windows-msvc', root / 'candidate.exe', root / 'out', ['console']), 0)
+            digest = hashlib.sha256(raw).hexdigest()
+            report = json.loads((root / 'out/report.json').read_text())
+            self.assertEqual(report['tests']['console']['script_sha256'], digest)
+            self.assertIn(base64.b64encode(raw).decode(), guest.call_args_list[0].args[1])
+            self.assertIn(digest, guest.call_args_list[1].args[1])

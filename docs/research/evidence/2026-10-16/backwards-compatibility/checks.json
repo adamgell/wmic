@@ -4,7 +4,7 @@
   "native_windows_library_passed": 18,
   "native_windows_backend_passed": 3,
   "native_windows_format_passed": 1,
-  "reference_python_passed": 45,
+  "reference_python_passed": 52,
   "release_python_passed": 11,
   "certificate_identity_cases_passed": 8,
   "fmt": "pass",
