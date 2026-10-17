@@ -14,7 +14,7 @@ python3.12 -m unittest discover -s tools/release/tests
 
 The Windows job additionally builds and checks all three MSVC targets and executes tests on its x64 runner. The Windows-only HTML regression test renders fixed typed data through MSXML and compares it with original WMIC captures; it does not query the runner's OS data. CI installs stable Rust, with the minimum version enforced by `Cargo.toml`.
 
-The Python suite verifies the inventory and integrity of all 1,562 committed oracle cases. It also regenerates the 742-case matrix exactly and tests that the comparison gate rejects missing/duplicate/substituted cases, incompatible profiles, changed arguments, corrupted streams, invalid status types, timeouts, incomplete reports, missing console evidence, failed cleanup, and omitted owned files. Password-bearing command arguments and interactive stdin are rejected before a capture is persisted.
+The Python suite verifies the inventory and integrity of all 1,848 committed oracle cases. It also regenerates the 742-case matrix and 286-case switch-value suite exactly and tests that the comparison gate rejects missing/duplicate/substituted cases, incompatible profiles, changed arguments, corrupted streams, invalid status types, timeouts, incomplete reports, missing console evidence, failed cleanup, and omitted owned files. Password-bearing command arguments and interactive stdin are rejected before a capture is persisted.
 
 ## Functional matrix
 
@@ -30,7 +30,7 @@ The Python suite verifies the inventory and integrity of all 1,562 committed ora
 | Interactive flows | 10 | Multiple queries, errors and recovery, context, persistent settings, EOF/quit |
 | **Total** | **742** | Raw streams, UTF-16 arguments, completion state, full DWORD status |
 
-The original sixteen suites contain another 820 cases. The committed raw `.bin` streams and capture manifests are the oracle; checksums protect their exact bytes. To regenerate the command matrix without recapturing output:
+The original sixteen suites contain another 820 cases. The additional `switch-values` suite contains 286 read-only CONTEXT cases for legacy numeric conversion, Unicode character classes and locale assignments; see the [REA research notes](research/rea-switch-values.md). Its Windows test launches the actual CLI, and its portable controller test fails if a management provider is called. The committed raw `.bin` streams and capture manifests are the oracle; checksums protect their exact bytes. To regenerate the command matrix without recapturing output:
 
 ```sh
 python3.12 tools/reference/matrix.py --out tests/fixtures/compatibility-cases.json
