@@ -283,7 +283,7 @@ fn two_failing_nodes_leave_one_line_in_an_output_file() {
     let mut sink = RoutedOutput::new(Sink::default());
     Session::new(wide("LOCALPC")).unwrap().execute(
         &wide(&format!(
-            "/output:{} /node:NODE2,NODE3 /failfast:on os get Caption",
+            "/output:\"{}\" /node:NODE2,NODE3 /failfast:on os get Caption",
             file.display()
         )),
         EntryMode::Interactive,
@@ -511,7 +511,7 @@ fn record_of(line: &str, mut backend: Fake) -> (Run, String) {
     let file = dir.join("record.xml");
     let mut sink = RoutedOutput::new(Sink::default());
     let outcome = Session::new(wide("LOCALPC")).unwrap().execute(
-        &wide(&format!(" /record:{} {line}", file.display())),
+        &wide(&format!(" /record:\"{}\" {line}", file.display())),
         EntryMode::Interactive,
         &mut backend,
         &mut sink,

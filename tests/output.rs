@@ -205,6 +205,12 @@ fn malformed_password_never_reaches_stderr_or_the_complete_record() {
         "/password: \"DO_NOT_LOG_TEST_SECRET",
         "/PASSWORD:\"DO_NOT_LOG_TEST_SECRET",
         "/password: get \"DO_NOT_LOG_TEST_SECRET",
+        "/password：DO_NOT_LOG_TEST_SECRET context",
+        "/password_typo:DO_NOT_LOG_TEST_SECRET context",
+        "/pa\u{00ad}ssword：DO_NOT_LOG_TEST_SECRET context",
+        "/pa\u{00ad}ssword_typo:DO_NOT_LOG_TEST_SECRET context",
+        r#"/node:"a,b" /password:DO_NOT_LOG_TEST_SECRET context"#,
+        r#"/password:first /node:"a,b" /password:DO_NOT_LOG_TEST_SECRET context"#,
     ] {
         let dir = directory();
         let record = dir.join("record.xml");
@@ -217,7 +223,12 @@ fn malformed_password_never_reaches_stderr_or_the_complete_record() {
             &mut Provider,
             &mut sink,
         );
-        assert_eq!(out.exit_status, 0xABFD);
+        let expected = if command.contains('：') || command.contains("_typo") {
+            0xAC5D
+        } else {
+            0xABFD
+        };
+        assert_eq!(out.exit_status, expected);
         let output: Vec<_> = sink.inner.0.iter().flat_map(|(_, s)| s.0.clone()).collect();
         assert!(
             !String::from_utf16_lossy(&output).contains("DO_NOT_LOG_TEST_SECRET"),

@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-16",
+  "scope": "286 read-only switch-value CONTEXT cases; not a full-corpus rerun",
+  "baseline_source_commit": "2ff590dff5332e0818c70980474aca88a8fe0869",
+  "product_patch_sha256": "825f3f34690ddebc02dc5ef8ecab615e9bacea45b4c991d55e013ff6311d3d87",
+  "manifest_sha256": "f6661f50dd4ea300f64bc0def8a71c950186531f27c1014dfc6be0d6ab9103b3",
+  "reference_capture_sha256": "38abdd8dc9567dbde8b8d415f6a6d545dfcaff1bae4c978292eee1ec2cbc1569",
+  "targets": {
+    "aarch64-pc-windows-msvc": {
+      "candidate_sha256": "0a06a543cd981e3574ec22eb3872b78765205d76c49e41efb85188cd2c536266",
+      "reference_architecture": "arm64",
+      "cross_architecture": false,
+      "matched": 286,
+      "total": 286,
+      "report_sha256": "b22356e5482e23586ef94e38114c213fa80461d6be74e920f1b8a2bb33f2a1fc",
+      "raw_capture_sha256": "a8e08af3dbc2e931503213fd3b7a3ec8b90676aa93f4e94b641f00d81edb3fae"
+    },
+    "x86_64-pc-windows-msvc": {
+      "candidate_sha256": "4fd262bee00962361daf3c1ab88134cfe524eb26a23c1ad06955054ad78f4faa",
+      "reference_architecture": "arm64",
+      "cross_architecture": true,
+      "matched": 286,
+      "total": 286,
+      "report_sha256": "4c647c83797e61a79d3159c580e4e643d63284f21307f05364b72a91389c2251",
+      "raw_capture_sha256": "555ec63fd329ba216bd454894e6514ccbf8d9415ef6ea54aa222537116029792"
+    },
+    "i686-pc-windows-msvc": {
+      "candidate_sha256": "0c26d9847dd81c6e4c767de562289556eb77365d42c751b21e3a941e84ea7d53",
+      "reference_architecture": "x86",
+      "cross_architecture": false,
+      "matched": 286,
+      "total": 286,
+      "report_sha256": "2cf62c5c6adc741d41457dd75ac6edd8b57373f48c8800553706348cfbb1a8b2",
+      "raw_capture_sha256": "675ba682512b8f7ff0be8ce82c692410d3b49e331177e387029c471de7eaa651"
+    }
+  },
+  "native_test": {
+    "test_sha256": "e6da176a18c2f7f88ff38a1fd9b8f1bcf16b3679c53580d0bba7f2db166207e2",
+    "cli_sha256": "0a06a543cd981e3574ec22eb3872b78765205d76c49e41efb85188cd2c536266",
+    "test_path": "C:\\ProgramData\\WmicCompat\\artifacts\\E6DA176A18C2F7F88FF38A1FD9B8F1BCF16B3679C53580D0BBA7F2DB166207E2\\switch-values-tests.exe",
+    "cli_path": "C:\\ProgramData\\WmicCompat\\artifacts\\0A06A543CD981E3574EC22EB3872B78765205D76C49E41EFB85188CD2C536266\\wmic.exe"
+  },
+  "native_test_output": "\nrunning 2 tests\ntest controller_matches_every_captured_switch_value ... ok\ntest windows_cli_matches_every_captured_switch_value ... ok\n\ntest result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 13.81s\n\n",
+  "checks": {
+    "macos_rust_tests": 357,
+    "python_reference_tests": 53,
+    "independent_review": "No actionable findings; fixture/CRT integrity independently verified"
+  }
+}

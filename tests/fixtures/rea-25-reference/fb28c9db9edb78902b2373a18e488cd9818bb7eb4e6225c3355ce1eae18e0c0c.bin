@@ -1,0 +1,7 @@
+
+AGGREGATE - Determines the mode of displaying results.
+USAGE:
+
+/AGGREGATE:<option>.
+NOTE: Allowed value(s) for <option> is either ON or OFF.
+

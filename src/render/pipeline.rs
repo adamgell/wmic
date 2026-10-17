@@ -9,23 +9,18 @@ pub fn compile_format(
         .iter()
         .enumerate()
         .rev()
-        .find(|(_, m)| m.name.eq_ignore_case("format"));
-    let mut spec = if let Some((_, m)) = explicit {
+        .find(|(_, m)| m.name.eq_cli("format"));
+    let mut spec = if let Some((_, m)) =
+        explicit.filter(|(_, m)| !matches!(m.value, SwitchValue::Missing))
+    {
         let SwitchValue::Value(value) = &m.value else {
-            return Err(RenderError::status(0xACB4, "Invalid GET switch."));
+            return Err(RenderError::new("Invalid XSL format (or) file name."));
         };
         crate::parse::parse_format_spec(m.raw_value.as_ref().unwrap_or(value))
             .map_err(|e| RenderError::status(e.code, e.message))?
     } else {
-        let list = request
-            .modifiers
-            .iter()
-            .any(|m| m.name.eq_ignore_case("value"))
-            || request.view.is_some()
-                && request
-                    .format
-                    .as_ref()
-                    .is_some_and(|f| f.eq_ignore_case("list"));
+        let list = request.modifiers.iter().any(|m| m.name.eq_cli("value"))
+            || request.view.is_some() && request.format.as_ref().is_some_and(|f| f.eq_cli("list"));
         FormatSpec {
             transforms: vec![TransformSpec {
                 name: if request.class_mode {
@@ -46,13 +41,10 @@ pub fn compile_format(
         .modifiers
         .iter()
         .enumerate()
-        .filter(|(_, m)| m.name.eq_ignore_case("translate"))
+        .filter(|(_, m)| m.name.eq_cli("translate"))
     {
         let SwitchValue::Value(name) = &m.value else {
-            return Err(RenderError::status(
-                0xABED,
-                "Translate table does not exists in Alias Namespace.",
-            ));
+            return Err(RenderError::status(0xABEC, "Invalid TRANSLATE switch."));
         };
         let entries = tables
             .iter()
@@ -119,7 +111,8 @@ pub fn transform(xml: &WideText, spec: &FormatSpec) -> Result<RenderedOutput, Re
         .transforms
         .iter()
         .map(|step| {
-            if let Some(source) = builtin_source(&step.name) {
+            if let Some(source) = builtin_kind(&step.name).and_then(|_| builtin_source(&step.name))
+            {
                 crate::platform::windows::xslt::prepare_source(&source, &step.parameters)
             } else {
                 crate::platform::windows::xslt::prepare(step)

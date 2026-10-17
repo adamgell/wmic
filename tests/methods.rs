@@ -4,6 +4,40 @@ use wmic_compat::{
     backend::methods::{bind_method, convert_input},
     model::*,
 };
+
+#[test]
+#[cfg(windows)]
+fn fullwidth_wmi_method_is_rejected_by_the_provider() {
+    use std::process::Command;
+    for args in [
+        vec![
+            "process",
+            "where",
+            "ProcessId=0",
+            "call",
+            "ＧｅｔＯｗｎｅｒ",
+        ],
+        vec![
+            "path",
+            "Win32_Process",
+            "where",
+            "ProcessId=0",
+            "call",
+            "ＧｅｔＯｗｎｅｒ",
+        ],
+    ] {
+        let out = Command::new(env!("CARGO_BIN_EXE_wmic"))
+            .args(&args)
+            .output()
+            .unwrap();
+        assert_eq!(
+            out.status.code().map(|s| s as u32),
+            Some(0x80041002),
+            "{args:?}: {out:?}"
+        );
+        assert!(out.stdout.is_empty(), "{args:?}: {out:?}");
+    }
+}
 fn parameter(name: &str, ty: u32, id: u32) -> ParameterSchema {
     ParameterSchema {
         cim_type_name: None,

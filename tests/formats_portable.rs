@@ -207,19 +207,15 @@ fn every_value_alias_matches_its_captured_output() {
         ),
     ] {
         for name in names {
-            for variant in [
-                name.to_string(),
-                format!("{name}.xsl"),
-                name.to_uppercase(),
-                format!("{}.XSL", name.to_uppercase()),
-            ] {
+            // REA pass 19/followups 13-14 distinguish bare aliases from .xsl filenames.
+            for variant in [name.to_string(), name.to_uppercase()] {
                 expect(FORMAT_RAWXML, &variant, golden);
             }
         }
     }
     expect(
         RAWXML,
-        "wmiclimofformat.xsl",
+        "wmiclimofformat",
         include_str!("fixtures/reference/os-get-mof.stdout.bin"),
     );
     expect(

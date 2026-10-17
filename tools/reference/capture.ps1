@@ -40,6 +40,20 @@ public sealed class WmicCaptureResult {
 }
 
 public static class WmicReferenceCapture {
+    [DllImport("kernel32.dll", CharSet=CharSet.Unicode)]
+    static extern int CompareStringW(uint locale, uint flags, string left, int leftLength, string right, int rightLength);
+    public static bool ContainsCredentials(string text) {
+        for (int i=0; i<text.Length; i++) {
+            if (text[i]!='/' && text[i]!='-') continue;
+            int start=i+1, end=start;
+            while (end<text.Length && !Char.IsWhiteSpace(text[end]) && text[end]!=':') end++;
+            int colon=end;
+            while (colon<text.Length && Char.IsWhiteSpace(text[colon])) colon++;
+            if (end>start && colon<text.Length && text[colon]==':' &&
+                CompareStringW(0x400,0x20001,text.Substring(start,end-start),end-start,"PASSWORD",8)==2) return true;
+        }
+        return false;
+    }
     [StructLayout(LayoutKind.Sequential)] struct SecurityAttributes {
         public int Length; public IntPtr Descriptor; public int Inherit;
     }
@@ -132,7 +146,7 @@ public static class WmicReferenceCapture {
         if ($case.operation -ne 'read_only') { throw 'This capture mode accepts reviewed read-only cases only.' }
         $arguments = $case.arguments
         if ($case.arguments_utf16_base64) { $arguments = [WmicReferenceCapture]::DecodeWide($case.arguments_utf16_base64) }
-        if ($arguments -match '(?i)/password\s*:') { throw 'Credential arguments cannot be recorded.' }
+        if ([WmicReferenceCapture]::ContainsCredentials($arguments)) { throw 'Credential arguments cannot be recorded.' }
         $timeout = 20000
         if ($case.timeout_ms) { $timeout = [int]$case.timeout_ms }
         $inputBytes=[byte[]]@()

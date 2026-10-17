@@ -12,29 +12,50 @@ pub enum BuiltinKind {
     List,
 }
 
-/// Case-insensitive stylesheet name, with or without the `.xsl` suffix.
+/// Built-in CLI aliases use WMIC's case- and width-insensitive comparison.
+/// Names with an extension are stylesheet filenames, resolved by the XSL engine.
 pub fn builtin_kind(name: &WideText) -> Option<BuiltinKind> {
-    let name = name.to_string_lossy().to_ascii_lowercase();
-    let name = name.strip_suffix(".xsl").unwrap_or(&name);
-    Some(match name {
-        "mof" | "wmiclimofformat" => BuiltinKind::Mof,
-        "htable" | "htable-sortby" => BuiltinKind::Htable,
-        "xml" => BuiltinKind::Xml,
-        "hform" => BuiltinKind::Hform,
-        "rawxml" => BuiltinKind::Rawxml,
-        "csv" => BuiltinKind::Csv,
-        "table"
-        | "texttable"
-        | "texttablewsys"
-        | "wmiclitableformat"
-        | "wmiclitableformatnosys" => BuiltinKind::Table,
-        "value" | "list" | "textvaluelist" | "wmiclivalueformat" => BuiltinKind::List,
-        _ => return None,
+    [
+        (BuiltinKind::Mof, &["mof", "wmiclimofformat"][..]),
+        (BuiltinKind::Htable, &["htable", "htable-sortby"][..]),
+        (BuiltinKind::Xml, &["xml"][..]),
+        (BuiltinKind::Hform, &["hform"][..]),
+        (BuiltinKind::Rawxml, &["rawxml"][..]),
+        (BuiltinKind::Csv, &["csv"][..]),
+        (
+            BuiltinKind::Table,
+            &[
+                "table",
+                "texttable",
+                "texttablewsys",
+                "wmiclitableformat",
+                "wmiclitableformatnosys",
+            ][..],
+        ),
+        (
+            BuiltinKind::List,
+            &["value", "list", "textvaluelist", "wmiclivalueformat"][..],
+        ),
+    ]
+    .into_iter()
+    .find_map(|(kind, aliases)| {
+        aliases
+            .iter()
+            .any(|alias| name.eq_cli(alias))
+            .then_some(kind)
     })
 }
 
 pub fn builtin_source(name: &WideText) -> Option<WideText> {
-    let (function, parameters) = match builtin_kind(name)? {
+    // Resource consumers use literal filenames; CLI resolution checks builtin_kind first.
+    let kind = builtin_kind(name).or_else(|| {
+        let suffix = name.0.len().checked_sub(4)?;
+        WideText(name.0[suffix..].to_vec())
+            .eq_cli(".xsl")
+            .then(|| builtin_kind(&WideText(name.0[..suffix].to_vec())))
+            .flatten()
+    })?;
+    let (function, parameters) = match kind {
         BuiltinKind::Mof => ("mof(.)", ""),
         BuiltinKind::Htable => (
             "htable(.,string($sortby),string($datatype))",
@@ -56,22 +77,16 @@ pub fn builtin_source(name: &WideText) -> Option<WideText> {
 }
 
 pub fn logical_format_name(name: &WideText) -> WideText {
-    let lower = name.to_string_lossy().to_ascii_lowercase();
-    let bare = lower.strip_suffix(".xsl").unwrap_or(&lower);
-    let resource = match bare {
-        "table"
-        | "texttable"
-        | "texttablewsys"
-        | "wmiclitableformat"
-        | "wmiclitableformatnosys" => "texttable.xsl",
-        "value" | "list" | "textvaluelist" | "wmiclivalueformat" => "textvaluelist.xsl",
-        "rawxml" => "rawxml.xsl",
-        "csv" => "csv.xsl",
-        "mof" | "wmiclimofformat" => "mof.xsl",
-        "xml" => "xml.xsl",
-        "hform" => "hform.xsl",
-        "htable" | "htable-sortby" => "htable.xsl",
-        _ => return name.clone(),
+    let resource = match builtin_kind(name) {
+        Some(BuiltinKind::Table) => "texttable.xsl",
+        Some(BuiltinKind::List) => "textvaluelist.xsl",
+        Some(BuiltinKind::Rawxml) => "rawxml.xsl",
+        Some(BuiltinKind::Csv) => "csv.xsl",
+        Some(BuiltinKind::Mof) => "mof.xsl",
+        Some(BuiltinKind::Xml) => "xml.xsl",
+        Some(BuiltinKind::Hform) => "hform.xsl",
+        Some(BuiltinKind::Htable) => "htable.xsl",
+        None => return name.clone(),
     };
     #[cfg(windows)]
     let directory = std::env::var("SystemRoot")

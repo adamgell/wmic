@@ -14,7 +14,7 @@ python3.12 -m unittest discover -s tools/release/tests
 
 The Windows job additionally builds and checks all three MSVC targets and executes tests on its x64 runner. The Windows-only HTML regression test renders fixed typed data through MSXML and compares it with original WMIC captures; it does not query the runner's OS data. CI installs stable Rust, with the minimum version enforced by `Cargo.toml`.
 
-The Python suite verifies the inventory and integrity of all 1,562 committed oracle cases. It also regenerates the 742-case matrix exactly and tests that the comparison gate rejects missing/duplicate/substituted cases, incompatible profiles, changed arguments, corrupted streams, invalid status types, timeouts, incomplete reports, missing console evidence, failed cleanup, and omitted owned files. Password-bearing command arguments and interactive stdin are rejected before a capture is persisted.
+The Python suite verifies the inventory and integrity of all 2,085 committed oracle cases. It also regenerates the 742-case matrix and 286-case switch-value suite exactly and tests that the comparison gate rejects missing/duplicate/substituted cases, incompatible profiles, changed arguments, corrupted streams, invalid status types, timeouts, incomplete reports, missing console evidence, failed cleanup, and omitted owned files. Password-bearing command arguments and interactive stdin are rejected before a capture is persisted.
 
 ## Functional matrix
 
@@ -30,7 +30,7 @@ The Python suite verifies the inventory and integrity of all 1,562 committed ora
 | Interactive flows | 10 | Multiple queries, errors and recovery, context, persistent settings, EOF/quit |
 | **Total** | **742** | Raw streams, UTF-16 arguments, completion state, full DWORD status |
 
-The original sixteen suites contain another 820 cases. The committed raw `.bin` streams and capture manifests are the oracle; checksums protect their exact bytes. To regenerate the command matrix without recapturing output:
+The original sixteen suites contain another 820 cases. The additional `switch-values` suite contains 286 read-only CONTEXT cases for legacy numeric conversion, Unicode character classes and locale assignments; see the [REA research notes](research/rea-switch-values.md). Its Windows test launches the actual CLI, and its portable controller test fails if a management provider is called. The `rea-25` suite adds 237 read-only probes from [25 additional REA passes](research/rea-25-passes.md). Ninety-nine provider-free control cases run against the captured stdout, stderr and full status in portable tests and through the actual CLI in ordinary Windows CI. Pipe readers run concurrently with the child, and timeout handling terminates and reaps it. The remaining query, XML, method-help and interactive probes require a selected reference environment. The committed raw `.bin` streams and capture manifests are the oracle; checksums protect their exact bytes. To regenerate the command matrix without recapturing output:
 
 ```sh
 python3.12 tools/reference/matrix.py --out tests/fixtures/compatibility-cases.json
@@ -49,7 +49,7 @@ python3.12 tools/reference/run_corpus.py \
 
 Repeat with `x86_64-pc-windows-msvc` and `i686-pc-windows-msvc`, using a new output directory each time. Each run captures a fresh original by default. The x86 candidate uses the installed x86 original. On the measured ARM64 environment, the x64 candidate uses the ARM64 original, and the report explicitly labels this cross-architecture comparison.
 
-For the additional stable matrix alone, add `--suite compatibility`. For an explicitly selected compatible prior capture, use `--reference-dir DIR`, whose children are suite names containing `capture.json` and raw streams. The runner checks the original executable hash, exact case/argument inventory, declared normalization rules, and matching machine/account/locale/code-page/launcher profiles. Cached captures remain unsuitable for volatile OS fields even when their profiles match.
+For the additional stable matrix alone, add `--suite compatibility`. The focused REA suite is `--suite rea-25`. For an explicitly selected compatible prior capture, use `--reference-dir DIR`, whose children are suite names containing `capture.json` and raw streams. The runner checks the original executable hash, exact case/argument inventory, declared normalization rules, and matching machine/account/locale/code-page/launcher profiles. Cached captures remain unsuitable for volatile OS fields even when their profiles match.
 
 Exit codes are strict: **0** means all selected cases matched; **1** means completed evidence contains differences; **2** means invalid/incomplete evidence or an execution failure. `--check-report FILE` uses the same gate and requires every requested suite plus the final completion marker. A partial report cannot pass. There is no general known-difference allowlist.
 

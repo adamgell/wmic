@@ -1,5 +1,13 @@
 # Compatibility status
 
+## Twenty-five additional REA passes, 2026-10-17
+
+The [25-pass REA investigation](research/rea-25-passes.md) adds 237 read-only regression cases and retains 99 control-oracle comparisons that also launch the real CLI in Windows CI. Its [validation summary](research/evidence/2026-10-17/rea-25/summary.json) identifies the final builds, per-target focused reports, 2,085-case ARM64 corpus report, source patch and local checks. The focused suite matches all 237 cases on each supported build. The full ARM64 strict gate remains 1 for the two volatile OS-data queries and implementation-specific TRACE output. Earlier measurements below retain their own build identities and scope.
+
+## REA switch-value regression validation, 2026-10-16
+
+The [REA investigation](research/rea-switch-values.md) recovered and corroborated legacy numeric `/FAILFAST` parsing and case-preserving `/LOCALE` assignment. A new 286-case read-only suite passes **286/286 on each of ARM64, x64 and x86** with strict status 0. It covers numeric prefixes, signed wrapping, legacy Unicode digit/whitespace classes, invalid values, and repeated locale assignments. The [reports](research/evidence/2026-10-16/rea-switch-values/summary.json) retain exact candidate identities and architecture qualifications. Portable controller tests and a Windows test that launches the actual CLI compare committed stdout, stderr and full process status. These focused results do not replace or broaden the earlier full-corpus measurements below.
+
 ## Expanded regression validation, 2026-10-16
 
 The compatibility changes in this revision were built for all three MSVC targets and measured on the reference Windows ARM64 machine. The [testing guide](testing.md) describes the matrix and strict gates; [committed evidence](research/evidence/2026-10-16/backwards-compatibility/) identifies exact executable bytes, a source snapshot, comparison reports, and checks. These are local unsigned test builds, separate from the previously published signed development release. Full classic WMIC compatibility is not claimed.
