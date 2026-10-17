@@ -3,9 +3,18 @@ import json,sys,unittest
 from pathlib import Path
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]))
 from matrix import generate
+from switch_values import generate as switch_values
 from run_corpus import SUITES,FOLDERS,compare_suite
 
 class FixtureInventoryTests(unittest.TestCase):
+    def test_switch_value_matrix_is_reproducible(self):
+        fixtures=Path(__file__).resolve().parents[3]/'tests/fixtures'
+        payload=switch_values()
+        self.assertEqual(payload,json.loads((fixtures/'switch-values-cases.json').read_text()))
+        cases=payload['cases']
+        self.assertGreaterEqual(len(cases),280)
+        self.assertEqual(len(cases),len({c['id'] for c in cases}))
+        self.assertTrue(all(c['operation']=='read_only' and c['arguments'].endswith(' context') for c in cases))
     def test_every_committed_reference_stream_matches_its_manifest_and_checksum(self):
         fixtures=Path(__file__).resolve().parents[3]/'tests/fixtures'
         for suite in SUITES:

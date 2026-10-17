@@ -161,6 +161,85 @@ fn numeric_failfast_keeps_the_requested_timeout() {
 }
 
 #[test]
+fn numeric_failfast_matches_captured_windows_crt_conversion() {
+    let fixture: serde_json::Value =
+        serde_json::from_str(include_str!("fixtures/legacy-wtol.json")).unwrap();
+    for case in fixture["values"].as_array().unwrap() {
+        let input = case["input"].as_str().unwrap();
+        if input.eq_ignore_ascii_case("on") || input.eq_ignore_ascii_case("off") {
+            continue;
+        }
+        let expected = case["value"].as_i64().unwrap();
+        let parsed = parse_command(
+            &wide(&format!("/failfast:\"{input}\" context")),
+            EntryMode::Interactive,
+        )
+        .unwrap();
+        let actual = SessionSettings::default().for_command(&parsed);
+        if expected > 0 {
+            let actual = actual.unwrap_or_else(|e| panic!("{input:?}: {e:?}"));
+            assert!(actual.failfast, "{input:?}");
+            assert_eq!(actual.failfast_timeout_ms, expected as u32, "{input:?}");
+        } else {
+            assert_eq!(actual.unwrap_err().code, 0xAC68, "{input:?}");
+        }
+    }
+}
+
+#[test]
+fn numeric_failfast_accepts_captured_crt_digit_and_space_classes() {
+    let fixture: serde_json::Value =
+        serde_json::from_str(include_str!("fixtures/legacy-wtol.json")).unwrap();
+    for zero in fixture["digit_zero_units"].as_array().unwrap() {
+        let zero = zero.as_u64().unwrap() as u32;
+        for digit in 0..10 {
+            let input = format!("{}1", char::from_u32(zero + digit).unwrap());
+            let actual = settings(&format!("/failfast:\"{input}\" context"));
+            assert_eq!(actual.failfast_timeout_ms, digit * 10 + 1, "{input:?}");
+        }
+    }
+    for unit in fixture["space_units"].as_array().unwrap() {
+        let input = format!(
+            "{}125",
+            char::from_u32(unit.as_u64().unwrap() as u32).unwrap()
+        );
+        assert_eq!(
+            settings(&format!("/failfast:\"{input}\" context")).failfast_timeout_ms,
+            125,
+            "{input:?}"
+        );
+    }
+}
+
+#[test]
+fn locale_keeps_the_spelling_of_an_unchanged_value() {
+    let initial = settings("/locale:MS_409 context");
+    assert_eq!(initial.locale, wide("ms_409"));
+    let changed = initial
+        .for_command(
+            &parse_command(&wide("/locale:MS_411 context"), EntryMode::Interactive).unwrap(),
+        )
+        .unwrap();
+    assert_eq!(changed.locale, wide("MS_411"));
+    let same = changed
+        .for_command(
+            &parse_command(&wide("/locale:ms_411 context"), EntryMode::Interactive).unwrap(),
+        )
+        .unwrap();
+    assert_eq!(same.locale, wide("MS_411"));
+    let default = same
+        .for_command(
+            &parse_command(&wide("/locale:MS_409 context"), EntryMode::Interactive).unwrap(),
+        )
+        .unwrap();
+    assert_eq!(default.locale, wide("MS_409"));
+    let reset = default
+        .for_command(&parse_command(&wide("/locale:\"\" context"), EntryMode::Interactive).unwrap())
+        .unwrap();
+    assert_eq!(reset.locale, wide("MS_409"));
+}
+
+#[test]
 fn node_file_reference_can_quote_its_path() {
     let p = std::env::temp_dir().join(format!("wmic nodes {}.txt", std::process::id()));
     std::fs::write(&p, b"node-a\r\n").unwrap();

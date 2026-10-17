@@ -148,7 +148,13 @@ impl SessionSettings {
                     )
                     .ok_or_else(|| setting_error(0xAC48, "Invalid Impersonation Level."))?;
                 }
-                "locale" => s.locale = value.unwrap_or_else(|| defaults.locale.clone()),
+                "locale" => {
+                    let next = value.unwrap_or_else(|| defaults.locale.clone());
+                    // WMIC's setter leaves the stored spelling intact for an equal locale.
+                    if !s.locale.eq_ordinal_ignore_case(&next) {
+                        s.locale = next;
+                    }
+                }
                 "privileges" => {
                     if value.is_none() {
                         return Err(setting_error(
@@ -171,11 +177,7 @@ impl SessionSettings {
                             "Invalid FailFast Option Value (ON|OFF expected).",
                         ));
                     }
-                    if let Some(ms) = value
-                        .as_ref()
-                        .and_then(|v| v.to_string_lossy().parse::<u32>().ok())
-                        .filter(|ms| *ms > 0)
-                    {
+                    if let Some(ms) = value.as_ref().and_then(failfast_timeout) {
                         s.failfast = true;
                         s.failfast_timeout_ms = ms;
                     } else {
@@ -247,6 +249,50 @@ fn level(v: Option<&WideText>, names: &[&str], base: u32, default: u32) -> Optio
             .position(|n| v.eq_ignore_case(n))
             .map(|i| i as u32 + base),
     }
+}
+
+// The original calls legacy msvcrt!_wtol, then checks the signed 32-bit result.
+// Its digit/space classes and wrapping arithmetic differ from Rust's parsers and
+// modern UCRT conversion. See docs/research/rea-switch-values.md for the oracle.
+fn failfast_timeout(value: &WideText) -> Option<u32> {
+    let mut units = value
+        .0
+        .iter()
+        .copied()
+        .skip_while(|u| {
+            matches!(
+                u,
+                0x09..=0x0d | 0x20 | 0xa0 | 0x1680 | 0x180e | 0x2000..=0x200a
+                    | 0x2028 | 0x2029 | 0x202f | 0x205f | 0x3000
+            )
+        })
+        .peekable();
+    let negative = match units.peek() {
+        Some(0x2b) => {
+            units.next();
+            false
+        }
+        Some(0x2d) => {
+            units.next();
+            true
+        }
+        _ => false,
+    };
+    let mut number = 0_u32;
+    for unit in units {
+        let digit = [
+            0x0030, 0x0660, 0x06f0, 0x0966, 0x09e6, 0x0a66, 0x0ae6, 0x0b66, 0x0c66, 0x0ce6, 0x0d66,
+            0x0e50, 0x0ed0, 0x0f20, 0x1040, 0x17e0, 0x1810, 0xff10,
+        ]
+        .into_iter()
+        .find_map(|zero| unit.checked_sub(zero).filter(|d| *d < 10));
+        let Some(digit) = digit else { break };
+        number = number.wrapping_mul(10).wrapping_add(u32::from(digit));
+    }
+    if negative {
+        number = number.wrapping_neg();
+    }
+    ((number as i32) > 0).then_some(number)
 }
 fn toggle(v: Option<&WideText>, on: &str, off: &str, default: bool) -> Option<bool> {
     match v {
