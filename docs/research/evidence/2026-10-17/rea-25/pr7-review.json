@@ -271,5 +271,9 @@
     "candidate_status": "0xADE5",
     "candidate_sha256": "1c486c968c0d0c67cb8591bfda6e4de0bf349ce27ae069f766519f197020d210",
     "counted_as_pass": false
-  }
+  },
+  "reference_tools_patch_sha256": "8cd3231d5acae1ca6fe2a21b02f87233bd14fabb3504358eb43048bfc4e8fda0",
+  "reference_tools_patch_command": "git diff 800f9ef8d778ca98e6a9f74dd4213824fd4d11c1 --binary -- tools/reference",
+  "regression_tests_patch_sha256": "0afe2ce15c9763bcc70e1a7cfb7242dec7517762af8db28811235745a3982b27",
+  "regression_tests_patch_command": "git diff 800f9ef8d778ca98e6a9f74dd4213824fd4d11c1 --binary -- tests"
 }
