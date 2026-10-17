@@ -1,6 +1,6 @@
 {
   "base_commit": "c593f71d9c8d91d8cb48ddab8023768851eed75e",
-  "captured_utc": "2026-10-17T00:15:22.479060+00:00",
+  "captured_utc": "2026-10-17T00:16:48.649110+00:00",
   "platform": "Darwin",
   "architecture": "arm64",
   "native_rust_tests_passed": 327,
@@ -15,5 +15,7 @@
   "windows_ci_parity_gate": "Explicitly runs all 12 formats_msxml_parity tests with --ignored, target x64 only. Hosted results are reported by GitHub.",
   "service_control_status": "experimental; real LaunchAgent lifecycle not exercised",
   "shutdown_bug": "Still unresolved; no power action performed. See PR1 issuecomment-6227099904.",
-  "rust_test_log_sha256": "089e43ceeac1d9e61fcf12a4a98d60bd0b921487d6861a9b8adcd2768b9df8c4"
+  "rust_test_log_sha256": "4571e8d426515b54317fbae2f2abb202a673828594e6e867c874be09a86ad88d",
+  "tested_code_commit": "0dded8ca269be8203c4875e1d095e1c711ad2c04",
+  "local_rust_test_log": "artifacts/macos-review-0dded8c.log"
 }
