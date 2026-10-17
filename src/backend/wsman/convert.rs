@@ -24,7 +24,9 @@ fn fraction_micros(fraction: &str) -> Option<u32> {
     padded.parse().ok()
 }
 
-/// Signed minutes from `+hh:mm`, `-hh:mm`, `Z` or an absent offset.
+/// Signed minutes from `+hh:mm`, `-hh:mm`, `Z` or an absent offset. The fields are two digits
+/// each and the offset is at most 14:00, as `xs:dateTime` allows; a longer field from the
+/// reply would overflow the arithmetic and the three-digit CIM offset.
 fn offset_minutes(text: &str) -> Option<i32> {
     if text.is_empty() || text == "Z" {
         return Some(0);
@@ -35,7 +37,12 @@ fn offset_minutes(text: &str) -> Option<i32> {
         _ => return None,
     };
     let (hours, minutes) = text[1..].split_once(':')?;
-    Some(sign * (digits(hours)? as i32 * 60 + digits(minutes)? as i32))
+    if hours.len() != 2 || minutes.len() != 2 {
+        return None;
+    }
+    let (hours, minutes) = (digits(hours)? as i32, digits(minutes)? as i32);
+    let total = hours * 60 + minutes;
+    (minutes <= 59 && total <= 14 * 60).then_some(sign * total)
 }
 
 fn offset_suffix(offset: i32) -> String {
@@ -271,6 +278,24 @@ pub fn value_text(value: &CimValue) -> Option<String> {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn offsets_are_two_digit_fields_within_14_hours() {
+        assert_eq!(offset_minutes("+14:00"), Some(840));
+        assert_eq!(offset_minutes("-09:59"), Some(-599));
+        assert_eq!(offset_minutes("Z"), Some(0));
+        for bad in [
+            "+14:01",
+            "+05:60",
+            "-99999999:00",
+            "+5:30",
+            "+005:30",
+            "+05:3",
+            "05:30",
+        ] {
+            assert_eq!(offset_minutes(bad), None, "{bad:?}");
+        }
+    }
 
     #[test]
     fn datetime_keeps_wall_clock_and_offset() {

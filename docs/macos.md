@@ -148,7 +148,7 @@ The shell removes an unquoted backslash, so quote the account argument.
 - The password does not cross the network. NTLMv2 sends a response that the build computes from it.
 - Not implemented: Basic, Kerberos, CredSSP, certificate authentication, and HTTPS (port 5986). A target that allows only these methods is not supported.
 - Security of the logon: the NTLMv2 exchange travels in HTTP headers on a TCP connection without TLS. This is the same exposure as any Windows client that uses Negotiate over the default HTTP listener, including PowerShell remoting over port 5985. A party on the network path can record the NTLMv2 response and test password guesses against it offline, so the account needs a strong password. The build negotiates signing, sealing and 128-bit keys, protects the negotiation with the message integrity code, and refuses a server that drops sealing, so a recorded exchange cannot be replayed to WinRM and a party on the path cannot read or alter the SOAP messages. HTTPS with certificate validation and channel binding, and Kerberos, are not implemented. Use the build on networks you trust, or through a tunnel such as SSH.
-- The connect timeout is 5 seconds. The read and write timeout is 90 seconds, longer than the 60 second operation timeout the request declares. A request that the server answers with a timeout fault is sent again until it completes or Ctrl+C ends it.
+- The connect timeout is 5 seconds. The read and write timeout is 90 seconds, longer than the 60 second operation timeout the request declares. A `Pull` of an enumeration that the server answers with a timeout fault is sent again with the same enumeration context until it completes or Ctrl+C ends it. A timeout fault on any other request ends the command with the status of the fault.
 
 ### Credentials and connection settings
 
@@ -365,12 +365,12 @@ The test files below contain these `#[test]` functions in this revision.
 | `src/backend/macos/sys/power_tests.rs` | 8 | macOS | Exact ordinary versus forced operation selection, zero action calls when privilege is denied, command status/error mapping, and no forced fallback |
 | `tests/wsman_protocol.rs` | 51 | Unix (3 on macOS only) | Enumerate, pull, release, get, invoke, faults, typing, object paths, nested reference keys, routing, port validation, stale connections, timeouts |
 | `tests/wsman_transport.rs` | 27 | Unix | NTLM vectors from MS-NLMP 4.2.4, loopback server with a real handshake, sealing, framing variants, chunked HTTP, unsealed-reply refusal, wrong password, closed connections |
-| `src/backend/wsman/**` (unit tests) | 31 | Unix | Value conversion, fault precedence, parsing limits, path quoting, record building, envelopes, timeouts, the port variable |
+| `src/backend/wsman/**` (unit tests) | 32 | Unix | Value conversion, fault precedence, parsing limits, path quoting, record building, envelopes, timeouts, the port variable |
 | `src/platform/unix/console.rs` (unit tests) | 4 | Unix | Signal handler, inherited dispositions, terminal restore |
 | `src/alias/predicate.rs` (unit tests) | 6 | All platforms | WHERE literal coercion and comparison types |
-| Total | 291 | | |
+| Total | 292 | | |
 
-The five `tests/macos_*.rs` files hold 107 of the 291 tests listed here. The remote-node suites run on every Unix platform. Unix and Windows-specific suites have explicit platform gates. At the earlier commit b2755a9, `cargo test --locked` reported 311 passed and 0 failed on the Mac mini, and 189 passed, 0 failed, 33 ignored on Windows.
+The five `tests/macos_*.rs` files hold 107 of the 292 tests listed here. The remote-node suites run on every Unix platform. Unix and Windows-specific suites have explicit platform gates. At the earlier commit b2755a9, `cargo test --locked` reported 311 passed and 0 failed on the Mac mini, and 189 passed, 0 failed, 33 ignored on Windows.
 
 The earlier follow-up passed 327 tests on Apple Silicon, including 12 executable tests and four fixed-snapshot mapping tests. [Review evidence](research/evidence/2026-10-16/macos-pr-review.json) records that baseline. The shutdown fix passes 340 tests: it adds 14 injected tests and replaces the prior native privilege/invalid-flag test, so all power behavior is tested through fakes, independently of the test runner's real user ID. [Shutdown fix evidence](research/evidence/2026-10-16/macos-shutdown-fix.json) records the fresh checks and remaining acceptance limits.
 
