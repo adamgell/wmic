@@ -165,8 +165,10 @@ fn error_for(failure: Failure, target: &Target, scope: Scope) -> ManagementError
     }
 }
 
-/// Connections are shared by node and account. The password enters the key as a keyed hash, so a
-/// changed password never reuses a connection opened with another one.
+/// Connections are shared by node, scheme, trust anchors and account. The password enters the
+/// key as a keyed hash, so a changed password never reuses a connection opened with another one.
+/// The scheme and the CA file are in the key so that a plain connection never serves an endpoint
+/// that asks for TLS.
 fn connection_key(endpoint: &Endpoint, salt: &[u8; 16]) -> String {
     let mut password: Vec<u8> = endpoint
         .password
@@ -177,8 +179,16 @@ fn connection_key(endpoint: &Endpoint, salt: &[u8; 16]) -> String {
         .collect();
     let mut proof = ntlm::hmac_md5(salt, &[&password]);
     ntlm::wipe(&mut password);
+    let ca_file = endpoint
+        .tls
+        .as_ref()
+        .and_then(|tls| tls.ca_file.as_ref())
+        .map(|path| path.to_string_lossy().into_owned())
+        .unwrap_or_default();
     let key = format!(
-        "{}\0{}\0{}\0{}\0{}",
+        "{}\0{}\0{}\0{}\0{}\0{}\0{}",
+        endpoint.scheme().as_str(),
+        ca_file,
         endpoint.host.to_ascii_lowercase(),
         endpoint.port,
         endpoint.domain.to_ascii_lowercase(),

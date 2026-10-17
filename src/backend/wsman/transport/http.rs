@@ -49,8 +49,11 @@ impl Stream {
         }
     }
 
-    /// True when TLS holds decrypted bytes nobody asked for, or the peer ended the session.
-    fn has_pending_plaintext(&mut self) -> bool {
+    /// True when TLS holds decrypted bytes nobody asked for, the peer ended the session, or the
+    /// TLS state is in error. A non-application record still in the socket, such as a session
+    /// ticket, is not seen here; the socket check that follows then reports the connection as
+    /// not idle, which costs a reconnect but never reuses a stale connection.
+    fn is_unusable(&mut self) -> bool {
         match self {
             Self::Plain(_) => false,
             Self::Tls(tls) => match tls.conn.process_new_packets() {
@@ -160,7 +163,7 @@ impl HttpConnection {
         if self.closed || !self.reader.buffer().is_empty() {
             return false;
         }
-        if self.reader.get_mut().has_pending_plaintext() {
+        if self.reader.get_mut().is_unusable() {
             return false;
         }
         let stream = self.reader.get_ref().socket();

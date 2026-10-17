@@ -77,7 +77,8 @@ pub fn connect(socket: TcpStream, host: &str, settings: &Tls) -> Result<Secured,
 }
 
 /// The TLS error inside an I/O error, when there is one. A verdict of the platform trust
-/// store is printed with its own text.
+/// store is printed with its own text. A socket timeout during the handshake comes back as
+/// `WouldBlock` or `TimedOut`, depending on the platform.
 fn describe(error: &std::io::Error) -> String {
     match error
         .get_ref()
@@ -87,17 +88,21 @@ fn describe(error: &std::io::Error) -> String {
             format!("invalid peer certificate: {other}")
         }
         Some(tls) => tls.to_string(),
+        None if matches!(
+            error.kind(),
+            std::io::ErrorKind::WouldBlock | std::io::ErrorKind::TimedOut
+        ) =>
+        {
+            format!("no answer in {} seconds", super::http::IO_TIMEOUT.as_secs())
+        }
         None => error.to_string(),
     }
 }
-
-// --- Channel binding ---------------------------------------------------------------------------
 
 const PREFIX: &[u8] = b"tls-server-end-point:";
 
 const OID_SHA1_RSA: &[u8] = &[0x2A, 0x86, 0x48, 0x86, 0xF7, 0x0D, 0x01, 0x01, 0x05];
 const OID_MD5_RSA: &[u8] = &[0x2A, 0x86, 0x48, 0x86, 0xF7, 0x0D, 0x01, 0x01, 0x04];
-const OID_MD2_RSA: &[u8] = &[0x2A, 0x86, 0x48, 0x86, 0xF7, 0x0D, 0x01, 0x01, 0x02];
 const OID_RSA_PSS: &[u8] = &[0x2A, 0x86, 0x48, 0x86, 0xF7, 0x0D, 0x01, 0x01, 0x0A];
 const OID_SHA256_RSA: &[u8] = &[0x2A, 0x86, 0x48, 0x86, 0xF7, 0x0D, 0x01, 0x01, 0x0B];
 const OID_SHA384_RSA: &[u8] = &[0x2A, 0x86, 0x48, 0x86, 0xF7, 0x0D, 0x01, 0x01, 0x0C];
@@ -198,7 +203,7 @@ pub fn binding_hash(certificate: &[u8]) -> Result<Hash, String> {
         (OID_SHA256_RSA | OID_ECDSA_SHA256, _) => Hash::Sha256,
         (OID_SHA384_RSA | OID_ECDSA_SHA384, _) => Hash::Sha384,
         (OID_SHA512_RSA | OID_ECDSA_SHA512, _) => Hash::Sha512,
-        (OID_SHA1_RSA | OID_MD5_RSA | OID_MD2_RSA | OID_ECDSA_SHA1, _) => Hash::Sha256,
+        (OID_SHA1_RSA | OID_MD5_RSA | OID_ECDSA_SHA1, _) => Hash::Sha256,
         (OID_RSA_PSS, Some(OID_SHA1 | OID_SHA256)) => Hash::Sha256,
         (OID_RSA_PSS, Some(OID_SHA384)) => Hash::Sha384,
         (OID_RSA_PSS, Some(OID_SHA512)) => Hash::Sha512,

@@ -39,7 +39,7 @@ pub fn escape(text: &str) -> String {
     out
 }
 
-/// `http://host:port/wsman`, with brackets around an IPv6 literal.
+/// `scheme://host:port/wsman`, with brackets around an IPv6 literal.
 pub fn endpoint_url(scheme: Scheme, host: &str, port: u16) -> String {
     let scheme = scheme.as_str();
     if host.contains(':') && !host.starts_with('[') {

@@ -117,6 +117,9 @@ pub enum InvalidSetting {
     Port(String),
     /// `WMIC_WSMAN_SCHEME` holds something other than `http` or `https`.
     Scheme(String),
+    /// `WMIC_WSMAN_CA_FILE` is set while the scheme is `http`, which would send the logon in
+    /// plain text while the caller expects TLS.
+    CaFileWithoutTls(String),
 }
 
 impl std::fmt::Display for InvalidSetting {
@@ -124,6 +127,10 @@ impl std::fmt::Display for InvalidSetting {
         match self {
             Self::Port(value) => write!(f, "{PORT_VARIABLE} is not a port number: {value}"),
             Self::Scheme(value) => write!(f, "{SCHEME_VARIABLE} is not http or https: {value}"),
+            Self::CaFileWithoutTls(value) => write!(
+                f,
+                "{CA_FILE_VARIABLE} is set to {value} but {SCHEME_VARIABLE} is not https"
+            ),
         }
     }
 }
@@ -133,7 +140,7 @@ impl std::fmt::Display for InvalidSetting {
 pub struct Listener {
     pub scheme: Scheme,
     pub port: u16,
-    /// Extra trust anchors for HTTPS; ignored for HTTP.
+    /// Extra trust anchors for HTTPS; `listener()` refuses it with HTTP.
     pub ca_file: Option<PathBuf>,
 }
 
@@ -186,16 +193,31 @@ fn setting<T>(
 /// The listener settings from the environment: `WMIC_WSMAN_SCHEME` (default `http`),
 /// `WMIC_WSMAN_PORT` (default 5985 for `http`, 5986 for `https`) and `WMIC_WSMAN_CA_FILE`.
 pub fn listener() -> Result<Listener, InvalidSetting> {
-    let scheme =
-        setting(SCHEME_VARIABLE, parse_scheme, InvalidSetting::Scheme)?.unwrap_or(Scheme::Http);
-    let port = setting(PORT_VARIABLE, parse_port, InvalidSetting::Port)?
-        .unwrap_or_else(|| scheme.default_port());
+    let scheme = setting(SCHEME_VARIABLE, parse_scheme, InvalidSetting::Scheme)?;
+    let port = setting(PORT_VARIABLE, parse_port, InvalidSetting::Port)?;
     let ca_file = std::env::var_os(CA_FILE_VARIABLE)
         .filter(|value| !value.is_empty())
         .map(PathBuf::from);
+    listener_of(scheme, port, ca_file)
+}
+
+/// Combines the parsed settings; `None` is a variable that is not set.
+fn listener_of(
+    scheme: Option<Scheme>,
+    port: Option<u16>,
+    ca_file: Option<PathBuf>,
+) -> Result<Listener, InvalidSetting> {
+    let scheme = scheme.unwrap_or(Scheme::Http);
+    if let Some(path) = &ca_file
+        && scheme != Scheme::Https
+    {
+        return Err(InvalidSetting::CaFileWithoutTls(
+            path.to_string_lossy().into_owned(),
+        ));
+    }
     Ok(Listener {
         scheme,
-        port,
+        port: port.unwrap_or_else(|| scheme.default_port()),
         ca_file,
     })
 }
@@ -222,7 +244,8 @@ pub mod schema;
 
 #[cfg(test)]
 mod tests {
-    use super::{Scheme, parse_port, parse_scheme};
+    use super::{InvalidSetting, Listener, Scheme, Tls, listener_of, parse_port, parse_scheme};
+    use std::path::PathBuf;
 
     #[test]
     fn port_values_outside_1_to_65535_are_rejected() {
@@ -243,5 +266,34 @@ mod tests {
         }
         assert_eq!(Scheme::Http.default_port(), 5985);
         assert_eq!(Scheme::Https.default_port(), 5986);
+    }
+
+    #[test]
+    fn the_port_follows_the_scheme_and_a_ca_file_needs_https() {
+        let plain = listener_of(None, None, None).unwrap();
+        assert_eq!(
+            (plain.scheme, plain.port, plain.tls()),
+            (Scheme::Http, 5985, None)
+        );
+        let secure = listener_of(Some(Scheme::Https), None, None).unwrap();
+        assert_eq!(secure.port, 5986);
+        assert_eq!(secure.tls(), Some(Tls { ca_file: None }));
+        let tunnel = listener_of(Some(Scheme::Https), Some(25986), Some("ca.pem".into())).unwrap();
+        assert_eq!(
+            tunnel,
+            Listener {
+                scheme: Scheme::Https,
+                port: 25986,
+                ca_file: Some(PathBuf::from("ca.pem")),
+            }
+        );
+        assert_eq!(
+            listener_of(None, None, Some("ca.pem".into())),
+            Err(InvalidSetting::CaFileWithoutTls("ca.pem".into()))
+        );
+        assert_eq!(
+            listener_of(Some(Scheme::Http), Some(5986), Some("ca.pem".into())),
+            Err(InvalidSetting::CaFileWithoutTls("ca.pem".into()))
+        );
     }
 }

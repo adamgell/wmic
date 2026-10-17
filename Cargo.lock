@@ -919,7 +919,6 @@ dependencies = [
  "ring",
  "roxmltree",
  "rustls",
- "rustls-pki-types",
  "rustls-platform-verifier",
  "serde",
  "serde_json",

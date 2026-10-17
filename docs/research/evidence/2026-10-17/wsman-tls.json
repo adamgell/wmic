@@ -27,7 +27,7 @@
   "gates": {
     "macos": {"fmt_check": "ok", "clippy_all_targets_deny_warnings": "ok", "cargo_test_locked": {"passed": 474, "failed": 0}},
     "windows": {"fmt_check": "ok", "clippy_all_targets_deny_warnings": "ok", "cargo_test_locked": {"passed": 203, "failed": 0, "ignored": 33}, "dependency_tree": "identical to the base commit, 24 crates"},
-    "linux": {"note": "see the pull request for the Ubuntu run of tests/wsman_transport.rs"}
+    "linux": {"platform": "Ubuntu in WSL2, rustc 1.98.1", "fmt_check": "ok", "clippy_all_targets_deny_warnings": "ok", "cargo_test_locked": {"passed": 344, "failed": 0}}
   },
   "dependency_footprint_net_new_crates": {
     "method": "cargo tree --edges normal per target, minus the crates in the base lockfile",

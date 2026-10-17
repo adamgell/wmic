@@ -26,8 +26,9 @@ impl From<ntlm::NtlmError> for TransportError {
 /// or fails makes every later `post` return `TransportError::Io`. An HTTP 401 reply after the
 /// handshake is returned once with an empty body and ends the connection the same way.
 ///
-/// Over TLS, the NTLM exchange is bound to the server certificate with the
-/// `tls-server-end-point` channel binding, so the logon cannot be relayed to another server.
+/// Over TLS, the NTLM exchange carries the `tls-server-end-point` channel binding of the server
+/// certificate, so a server that checks channel bindings refuses the logon when it arrives over
+/// another TLS connection.
 pub struct NtlmHttpTransport {
     connection: HttpConnection,
     host: String,

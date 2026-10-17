@@ -765,13 +765,17 @@ fn spawn_tls(
                 .complete_io(&mut stream.sock)
                 .map_err(|e| e.to_string())?;
         }
-        Ok(serve(
-            stream,
+        let log = serve(
+            &mut stream,
             Behavior {
                 channel_binding,
                 ..behavior
             },
-        ))
+        );
+        // The session ends with close_notify, as a service that closes an idle connection does.
+        stream.conn.send_close_notify();
+        let _ = stream.conn.complete_io(&mut stream.sock);
+        Ok(log)
     });
     (port, handle)
 }
@@ -849,6 +853,26 @@ fn tls_loopback_refuses_a_certificate_issued_to_another_name() {
         .expect("refused");
     assert!(matches!(error, TransportError::Tls(_)), "{error}");
     assert!(server.join().unwrap().is_err());
+}
+
+#[test]
+fn tls_loopback_connection_closed_by_the_server_is_not_reusable() {
+    let (port, server) = spawn_tls(
+        "loopback-rsa-sha256",
+        Behavior {
+            close_after: Some(1),
+            ..Behavior::default()
+        },
+    );
+    let endpoint = tls_endpoint(port, Some("loopback-rsa-sha256.pem"));
+    let mut transport = NtlmHttpTransport::connect(&endpoint).unwrap();
+    assert_eq!(transport.post("<one/>").unwrap().status, 200);
+    assert!(server.join().unwrap().unwrap().authenticated);
+    assert!(!transport.is_reusable());
+    assert!(matches!(
+        transport.post("<two/>"),
+        Err(TransportError::Io(_))
+    ));
 }
 
 #[test]
