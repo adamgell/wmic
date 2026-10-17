@@ -93,7 +93,7 @@ pub(crate) fn replace(text: &WideText, from: &WideText, to: &WideText) -> WideTe
     }
     out
 }
-fn translate(text: &WideText, tables: &[TranslationTable]) -> WideText {
+pub(crate) fn translate(text: &WideText, tables: &[TranslationTable]) -> WideText {
     let mut out = text.clone();
     for table in tables {
         for (from, to) in &table.entries {
@@ -113,8 +113,8 @@ pub fn finish_text(text: &WideText) -> WideText {
     }
     out
 }
+#[cfg(windows)]
 pub fn transform(xml: &WideText, spec: &FormatSpec) -> Result<RenderedOutput, RenderError> {
-    #[cfg(windows)]
     let processors = spec
         .transforms
         .iter()
@@ -126,15 +126,7 @@ pub fn transform(xml: &WideText, spec: &FormatSpec) -> Result<RenderedOutput, Re
             }
         })
         .collect::<Result<Vec<_>, _>>()?;
-    #[cfg(windows)]
     let mut text = crate::platform::windows::xslt::translate_values(xml, &spec.before)?;
-    #[cfg(not(windows))]
-    let mut text = xml.clone();
-    #[cfg(not(windows))]
-    if !spec.transforms.is_empty() {
-        return Err(RenderError::new("Invalid XSL format (or) file name."));
-    }
-    #[cfg(windows)]
     for processor in processors {
         text = processor.apply(&text)?;
     }
@@ -143,4 +135,20 @@ pub fn transform(xml: &WideText, spec: &FormatSpec) -> Result<RenderedOutput, Re
         stdout: finish_text(&text),
         ..Default::default()
     })
+}
+
+#[cfg(not(windows))]
+pub fn transform(xml: &WideText, spec: &FormatSpec) -> Result<RenderedOutput, RenderError> {
+    super::native::transform_with(xml, spec, &external_stylesheet)
+}
+
+#[cfg(target_os = "macos")]
+fn external_stylesheet(step: &TransformSpec) -> Result<super::native::Applier, RenderError> {
+    let prepared = crate::platform::macos::xslt::prepare(step)?;
+    Ok(Box::new(move |text| prepared.apply(text)))
+}
+
+#[cfg(not(any(windows, target_os = "macos")))]
+fn external_stylesheet(_: &TransformSpec) -> Result<super::native::Applier, RenderError> {
+    Err(RenderError::new("Invalid XSL format (or) file name."))
 }

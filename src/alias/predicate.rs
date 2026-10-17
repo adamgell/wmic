@@ -1,10 +1,11 @@
-//! Bounded scalar WQL predicates for the bundled metadata provider.
+//! Bounded scalar WQL predicates evaluated in memory against records.
 use crate::model::{CimValue, Record, WideText};
 #[derive(Clone, Debug)]
 enum Token {
     Word(WideText),
     Text(WideText),
     Number(i128),
+    Real(f64),
     Operator(String),
     Left,
     Right,
@@ -13,6 +14,7 @@ enum Token {
 enum Literal {
     Text(WideText),
     Number(i128),
+    Real(f64),
     Bool(bool),
     Null,
 }
@@ -94,8 +96,11 @@ fn lex(text: &WideText) -> Result<Vec<Token>, ()> {
                     return Err(());
                 }
                 let value = WideText(text.0[start..at].to_vec());
-                if let Ok(n) = value.to_string_lossy().parse::<i128>() {
+                let word = value.to_string_lossy();
+                if let Ok(n) = word.parse::<i128>() {
                     tokens.push(Token::Number(n))
+                } else if let Some(r) = decimal(&word) {
+                    tokens.push(Token::Real(r))
                 } else {
                     tokens.push(Token::Word(value))
                 }
@@ -103,6 +108,32 @@ fn lex(text: &WideText) -> Result<Vec<Token>, ()> {
         }
     }
     Ok(tokens)
+}
+/// A finite decimal or exponent literal; words such as `inf` and `nan` stay words.
+fn decimal(word: &str) -> Option<f64> {
+    (word
+        .bytes()
+        .all(|b| b.is_ascii_digit() || matches!(b, b'.' | b'+' | b'-' | b'e' | b'E'))
+        && word.bytes().any(|b| b.is_ascii_digit()))
+    .then(|| word.parse::<f64>().ok())
+    .flatten()
+    .filter(|r| r.is_finite())
+}
+/// A quoted literal compared with a numeric or boolean property is read as that kind of value.
+fn coerce(text: &WideText) -> Option<Literal> {
+    let text = text.to_string_lossy();
+    let text = text.trim();
+    if let Ok(n) = text.parse::<i128>() {
+        Some(Literal::Number(n))
+    } else if let Some(r) = decimal(text) {
+        Some(Literal::Real(r))
+    } else if text.eq_ignore_ascii_case("true") {
+        Some(Literal::Bool(true))
+    } else if text.eq_ignore_ascii_case("false") {
+        Some(Literal::Bool(false))
+    } else {
+        None
+    }
 }
 struct Parser {
     tokens: Vec<Token>,
@@ -191,6 +222,7 @@ impl Parser {
         let value = match self.tokens.get(self.at).cloned() {
             Some(Token::Text(s)) => Literal::Text(s),
             Some(Token::Number(n)) => Literal::Number(n),
+            Some(Token::Real(r)) => Literal::Real(r),
             Some(Token::Word(w)) if w.eq_ignore_case("null") => Literal::Null,
             Some(Token::Word(w)) if w.eq_ignore_case("true") => Literal::Bool(true),
             Some(Token::Word(w)) if w.eq_ignore_case("false") => Literal::Bool(false),
@@ -246,15 +278,36 @@ impl Expr {
                 matches!(field(record, name)?, CimValue::Empty | CimValue::Null) != *not
             }
             Self::Like(name, pattern, not) => match field(record, name)? {
-                CimValue::String(value) => like(value, pattern)? != *not,
+                CimValue::String(value)
+                | CimValue::DateTime(value)
+                | CimValue::Reference(value) => like(value, pattern)? != *not,
                 CimValue::Null | CimValue::Empty => false,
                 _ => return Err(()),
             },
             Self::Compare(name, op, right) => {
                 let left = field(record, name)?;
+                let coerced;
+                let right = match (left, right) {
+                    (
+                        CimValue::Null
+                        | CimValue::Empty
+                        | CimValue::String(_)
+                        | CimValue::DateTime(_)
+                        | CimValue::Reference(_),
+                        _,
+                    ) => right,
+                    (_, Literal::Text(text)) => {
+                        coerced = coerce(text).ok_or(())?;
+                        &coerced
+                    }
+                    _ => right,
+                };
                 let order = match (left, right) {
                     (CimValue::Null | CimValue::Empty, _) | (_, Literal::Null) => return Ok(false),
-                    (CimValue::String(a), Literal::Text(b)) => {
+                    (
+                        CimValue::String(a) | CimValue::DateTime(a) | CimValue::Reference(a),
+                        Literal::Text(b),
+                    ) => {
                         if a.eq_ordinal_ignore_case(b) {
                             std::cmp::Ordering::Equal
                         } else {
@@ -264,8 +317,27 @@ impl Expr {
                         }
                     }
                     (CimValue::Boolean(a), Literal::Bool(b)) => a.cmp(b),
-                    (CimValue::Sint32(a), Literal::Number(b)) => (*a as i128).cmp(b),
-                    (CimValue::Uint32(a), Literal::Number(b)) => (*a as i128).cmp(b),
+                    (
+                        CimValue::Real32(_) | CimValue::Real64(_),
+                        Literal::Number(_) | Literal::Real(_),
+                    ) => match real(left).zip(approximate(right)) {
+                        Some((a, b)) => match a.partial_cmp(&b) {
+                            Some(order) => order,
+                            None => return Ok(false),
+                        },
+                        None => return Err(()),
+                    },
+                    (left, Literal::Real(b)) => match integer(left) {
+                        Some(a) => match (a as f64).partial_cmp(b) {
+                            Some(order) => order,
+                            None => return Ok(false),
+                        },
+                        None => return Err(()),
+                    },
+                    (left, Literal::Number(b)) => match integer(left) {
+                        Some(a) => a.cmp(b),
+                        None => return Err(()),
+                    },
                     _ => return Err(()),
                 };
                 use std::cmp::Ordering::*;
@@ -281,6 +353,33 @@ impl Expr {
             }
         })
     }
+}
+fn real(value: &CimValue) -> Option<f64> {
+    match value {
+        CimValue::Real32(bits) => Some(f32::from_bits(*bits) as f64),
+        CimValue::Real64(bits) => Some(f64::from_bits(*bits)),
+        _ => None,
+    }
+}
+fn approximate(literal: &Literal) -> Option<f64> {
+    match literal {
+        Literal::Number(n) => Some(*n as f64),
+        Literal::Real(r) => Some(*r),
+        _ => None,
+    }
+}
+fn integer(value: &CimValue) -> Option<i128> {
+    Some(match value {
+        CimValue::Sint8(v) => *v as i128,
+        CimValue::Uint8(v) => *v as i128,
+        CimValue::Sint16(v) => *v as i128,
+        CimValue::Uint16(v) | CimValue::Char16(v) => *v as i128,
+        CimValue::Sint32(v) => *v as i128,
+        CimValue::Uint32(v) => *v as i128,
+        CimValue::Sint64(v) => *v as i128,
+        CimValue::Uint64(v) => *v as i128,
+        _ => return None,
+    })
 }
 #[derive(Clone)]
 enum Piece {
@@ -362,4 +461,137 @@ fn like(text: &WideText, pattern: &WideText) -> Result<bool, ()> {
         previous = next;
     }
     Ok(previous[text.0.len()])
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::model::Property;
+    fn record(values: Vec<(&str, CimValue)>) -> Record {
+        Record {
+            properties: values
+                .into_iter()
+                .map(|(name, value)| Property {
+                    name: name.into(),
+                    value,
+                    cim_type: 0,
+                    system: false,
+                    qualifiers: vec![],
+                })
+                .collect(),
+            ..Default::default()
+        }
+    }
+    fn check(expression: &str, record: &Record) -> Result<bool, ()> {
+        Predicate::parse(&expression.into())?.matches(record)
+    }
+    #[test]
+    fn every_integer_width_compares_with_integer_literals() {
+        let r = record(vec![
+            ("A", CimValue::Sint8(-3)),
+            ("B", CimValue::Uint8(200)),
+            ("C", CimValue::Sint16(-300)),
+            ("D", CimValue::Uint16(65535)),
+            ("E", CimValue::Sint32(-5)),
+            ("F", CimValue::Uint32(4_000_000_000)),
+            ("G", CimValue::Sint64(-9_000_000_000)),
+            ("H", CimValue::Uint64(u64::MAX)),
+            ("I", CimValue::Char16(65)),
+        ]);
+        for expression in [
+            "A = -3",
+            "B > 199",
+            "C < -299",
+            "D = 65535",
+            "E <= -5",
+            "F >= 4000000000",
+            "G < 0",
+            "H = 18446744073709551615",
+            "I = 65",
+            "NOT A = 3 AND B <> 0",
+        ] {
+            assert_eq!(check(expression, &r), Ok(true), "{expression}");
+        }
+        for expression in ["A = 3", "B < 200", "H < 1", "I > 65"] {
+            assert_eq!(check(expression, &r), Ok(false), "{expression}");
+        }
+    }
+    #[test]
+    fn real_values_compare_with_integer_literals() {
+        let r = record(vec![
+            ("S", CimValue::Real32(1.5f32.to_bits())),
+            ("D", CimValue::Real64(2.0f64.to_bits())),
+            ("N", CimValue::Real64(f64::NAN.to_bits())),
+        ]);
+        assert_eq!(check("S > 1", &r), Ok(true));
+        assert_eq!(check("S >= 2", &r), Ok(false));
+        assert_eq!(check("D = 2", &r), Ok(true));
+        assert_eq!(check("D <> 2", &r), Ok(false));
+        assert_eq!(check("N = 2", &r), Ok(false));
+        assert_eq!(check("N <> 2", &r), Ok(false));
+    }
+    #[test]
+    fn date_time_and_reference_compare_as_text() {
+        let r = record(vec![
+            ("T", CimValue::DateTime("20260918204038.959360-240".into())),
+            ("P", CimValue::Reference("HOST:Win32_X.Id=1".into())),
+        ]);
+        assert_eq!(check("T = '20260918204038.959360-240'", &r), Ok(true));
+        assert_eq!(check("T > '20260101000000.000000-240'", &r), Ok(true));
+        assert_eq!(check("T LIKE '202609%'", &r), Ok(true));
+        assert_eq!(check("P LIKE '%win32_x%'", &r), Ok(true));
+    }
+    #[test]
+    fn mismatched_types_and_null_keep_their_results() {
+        let r = record(vec![
+            ("N", CimValue::Null),
+            ("I", CimValue::Uint16(1)),
+            ("S", CimValue::String("x".into())),
+        ]);
+        assert_eq!(check("N = 1", &r), Ok(false));
+        assert_eq!(check("I = 'x'", &r), Err(()));
+        assert_eq!(check("S = 1", &r), Err(()));
+        assert_eq!(check("I LIKE '1'", &r), Err(()));
+        assert_eq!(check("Missing = 1", &r), Err(()));
+    }
+    #[test]
+    fn quoted_literals_coerce_to_numeric_and_boolean_properties() {
+        let r = record(vec![
+            ("OSType", CimValue::Uint16(2)),
+            ("Load", CimValue::Uint16(7)),
+            ("Ratio", CimValue::Real64(2.5f64.to_bits())),
+            ("Primary", CimValue::Boolean(true)),
+            ("Name", CimValue::String("x".into())),
+        ]);
+        assert_eq!(check("OSType='2'", &r), Ok(true));
+        assert_eq!(check("OSType='3'", &r), Ok(false));
+        assert_eq!(check("OSType > '1'", &r), Ok(true));
+        assert_eq!(check("Load < '7.5'", &r), Ok(true));
+        assert_eq!(check("Ratio = '2.5'", &r), Ok(true));
+        assert_eq!(check("Primary='TRUE'", &r), Ok(true));
+        assert_eq!(check("Primary='false'", &r), Ok(false));
+        assert_eq!(check("Name = 'X'", &r), Ok(true));
+        assert_eq!(check("OSType = 'two'", &r), Err(()));
+        assert_eq!(check("OSType = ''", &r), Err(()));
+        assert_eq!(check("Primary = '2'", &r), Err(()));
+        assert_eq!(check("Load = 'TRUE'", &r), Err(()));
+    }
+    #[test]
+    fn decimal_literals_compare_with_integer_and_real_values() {
+        let r = record(vec![
+            ("LoadPercentage", CimValue::Uint16(2)),
+            ("Ratio", CimValue::Real32(1.5f32.to_bits())),
+            ("Name", CimValue::String("x".into())),
+        ]);
+        assert_eq!(check("LoadPercentage > 1.5", &r), Ok(true));
+        assert_eq!(check("LoadPercentage < 1.5", &r), Ok(false));
+        assert_eq!(check("LoadPercentage = 2.0", &r), Ok(true));
+        assert_eq!(check("LoadPercentage > -0.5", &r), Ok(true));
+        assert_eq!(check("Ratio = 1.5", &r), Ok(true));
+        assert_eq!(check("Ratio >= 1.6", &r), Ok(false));
+        assert_eq!(check("Ratio < 1e1", &r), Ok(true));
+        assert_eq!(check("Name = 1.5", &r), Err(()));
+        assert_eq!(check("Name = inf", &r), Err(()));
+        assert_eq!(check("Name = nan", &r), Err(()));
+    }
 }

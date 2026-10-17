@@ -1,5 +1,5 @@
 //! Alias metadata is data, never startup provider enumeration or executable code.
-mod predicate;
+pub(crate) mod predicate;
 mod virtual_role;
 use crate::{
     backend::{ConnectionOptions, ResolvedRequest},
@@ -418,7 +418,12 @@ impl AliasStore {
                     .take_while(|u| *u != b'.' as u16 && *u != b'=' as u16)
                     .collect(),
             );
-            if path.0.contains(&(b'=' as u16)) {
+            // macOS validates the complete qualified target before class lookup.
+            // Preserve it even when the target has no instance-key suffix.
+            let qualified_macos = cfg!(target_os = "macos")
+                && path.0.contains(&(b'\\' as u16))
+                && path.0.contains(&(b':' as u16));
+            if path.0.contains(&(b'=' as u16)) || qualified_macos {
                 req.instance_path = Some(path.clone());
             }
         }

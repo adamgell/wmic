@@ -57,7 +57,7 @@ fn code_page() -> u32 {
     }
     #[cfg(not(windows))]
     {
-        1252
+        65001
     }
 }
 pub(crate) fn file_text(text: &WideText, strip_final: bool) -> WideText {

@@ -75,6 +75,8 @@ impl RepeatScheduler for ThreadScheduler {
         interrupted()
     }
     fn wait(&mut self, seconds: u32) -> bool {
+        #[cfg(unix)]
+        let _watch = crate::platform::unix::console::KeyWatch::enter();
         let end = std::time::Instant::now() + std::time::Duration::from_secs(seconds.into());
         loop {
             if interrupted() || console_key_pressed() {
@@ -548,7 +550,11 @@ impl Session {
                 locale: settings.locale.clone(),
             };
             if let Err(error) = self.aliases.load_role(&settings, &mut loader) {
-                return emit(sink, render::render_resolve_error(&error), error.code);
+                return emit(
+                    sink,
+                    render::render_resolve_error_for(&error, raw),
+                    error.code,
+                );
             }
         }
         if parsed.help {
@@ -561,7 +567,11 @@ impl Session {
                 let mut req = match self.aliases.resolve(&parsed, &settings) {
                     Ok(ResolvedCommand::Management(r)) => r,
                     Err(error) => {
-                        return emit(sink, render::render_resolve_error(&error), error.code);
+                        return emit(
+                            sink,
+                            render::render_resolve_error_for(&error, raw),
+                            error.code,
+                        );
                     }
                     _ => {
                         return CommandOutcome {
@@ -607,7 +617,11 @@ impl Session {
                 && self.aliases.find(name).is_none()
                 && let Err(error) = self.aliases.resolve(&parsed, &settings)
             {
-                return emit(sink, render::render_resolve_error(&error), error.code);
+                return emit(
+                    sink,
+                    render::render_resolve_error_for(&error, raw),
+                    error.code,
+                );
             }
             return match render::help::render_help(render::help::HelpRequest {
                 command: &parsed,
@@ -639,7 +653,7 @@ impl Session {
         }
         let resolved = match self.aliases.resolve(&parsed, &settings) {
             Ok(r) => r,
-            Err(e) => return emit(sink, render::render_resolve_error(&e), e.code),
+            Err(e) => return emit(sink, render::render_resolve_error_for(&e, raw), e.code),
         };
         let resolved = match resolved {
             ResolvedCommand::Derived(command) => {
@@ -991,7 +1005,11 @@ fn interrupted() -> bool {
     {
         crate::platform::windows::console::interrupted()
     }
-    #[cfg(not(windows))]
+    #[cfg(unix)]
+    {
+        crate::platform::unix::console::interrupted()
+    }
+    #[cfg(not(any(windows, unix)))]
     {
         false
     }
@@ -1002,7 +1020,11 @@ fn console_key_pressed() -> bool {
     {
         crate::platform::windows::console::key_pressed()
     }
-    #[cfg(not(windows))]
+    #[cfg(unix)]
+    {
+        crate::platform::unix::console::key_pressed()
+    }
+    #[cfg(not(any(windows, unix)))]
     {
         false
     }

@@ -1,0 +1,106 @@
+{
+  "base_commit": "011f1c9fd7a81d690e1468cb54bc4698af07b5c9",
+  "captured_utc": "2026-10-17T00:59:53.984855+00:00",
+  "platform": "Darwin",
+  "architecture": "arm64",
+  "scope": "PR1 macOS shutdown fix; injected tests only for every power operation and privilege path",
+  "root_cause": "flag_action discarded bit4 and every request called the low-level reboot(2) API, including ordinary Reboot and Shutdown.",
+  "behavior": {
+    "ordinary_reboot": "/sbin/shutdown -r now; no shell",
+    "ordinary_shutdown": "/sbin/shutdown -h now; no shell",
+    "ordinary_flags": [
+      1,
+      2,
+      8
+    ],
+    "force_flags": [
+      5,
+      6,
+      12
+    ],
+    "forced_restart": "reboot(RB_AUTOBOOT=0), only when bit4 is present",
+    "forced_halt": "reboot(RB_HALT=8), only when bit4 is present",
+    "kernel_sync": "RB_NOSYNC is never set",
+    "invalid_flags": "87 before privilege checks or action calls",
+    "denied_privilege": "5, with zero action calls",
+    "outcomes": "0 for command success or adapter acceptance; EPERM/EACCES return5; other OS errors, nonzero exits and signals return8",
+    "fallback": "No ordinary failure falls back to a forced kernel operation",
+    "output": "ReturnValue is CIM uint32 with no out parameters, unchanged"
+  },
+  "tdd": [
+    {
+      "command": "cargo test --locked --lib force_flag_is_not_discarded",
+      "red": "Failed: ordinary flags1 and force flags5 both yielded Some(Halt)",
+      "green": "Passed after retaining the force bit in the power Request"
+    },
+    {
+      "command": "cargo test --locked --lib backend::macos::sys::power::tests",
+      "red": "3passed/5failed: ordinary requests called Force(0/8), command outcome expectations failed, and EACCES returned8 instead of5",
+      "green": "8passed/0failed after ordinary shutdown routing and permission/error mapping"
+    }
+  ],
+  "verification": {
+    "release_build": {
+      "command": "cargo build --locked --release",
+      "result": "pass"
+    },
+    "focused_power_tests": {
+      "command": "cargo test --locked --lib power",
+      "passed": 14,
+      "failed": 0
+    },
+    "full_rust_tests": {
+      "command": "cargo test --locked",
+      "passed": 340,
+      "failed": 0,
+      "ignored": 0,
+      "log": "artifacts/macos-shutdown-fix-rust-tests.log",
+      "log_sha256": "3a8b65922faa46303d23f43530af11620b7f183aa297b9f7a679ba4c39f82bed"
+    },
+    "fmt": {
+      "command": "cargo fmt --check",
+      "result": "pass"
+    },
+    "clippy": {
+      "command": "cargo clippy --locked --all-targets -- -D warnings",
+      "result": "pass"
+    },
+    "reference_python": {
+      "command": "python3.12 -m unittest discover -s tools/reference/tests",
+      "passed": 24,
+      "failed": 0
+    },
+    "release_python": {
+      "command": "python3.12 -m unittest discover -s tools/release/tests",
+      "passed": 11,
+      "failed": 0
+    }
+  },
+  "test_safety": "All14 power tests inject fake privilege and actions, independent of actual UID; the prior UID-conditional native power test was removed. No shutdown, reboot(2), halt, sudo, launchd mutation, or VM operation was performed.",
+  "acceptance_limits": [
+    "No native ordinary or forced power action has been exercised.",
+    "ReturnValue0 records acceptance rather than completed shutdown/restart; shutdown may terminate the CLI before it returns a result.",
+    "No Finder/Apple-menu interaction, unsaved-document prompting, or application cancellation is claimed.",
+    "Hosted CI and PR review readiness are tracked separately by the parent task."
+  ],
+  "official_local_manuals": [
+    {
+      "name": "reboot(2)",
+      "path": "/Library/Developer/CommandLineTools/SDKs/MacOSX26.4.sdk/usr/share/man/man2/reboot.2",
+      "sha256": "e18b777b05560828882328a7fab45584491755fe31f5dd9a495d0c4cb643276c",
+      "relevant_contract": "Programs other than reboot(8) should use shutdown(8) or a higher-level API for a clean shutdown. Success does not return; EPERM denotes missing super-user privilege. Without RB_NOSYNC the kernel syncs disks."
+    },
+    {
+      "name": "shutdown(8)",
+      "path": "/usr/share/man/man8/shutdown.8",
+      "sha256": "8387752c79d13efa0238041a607693dcf7c764b05e19dc0b295a888f9e0b8d7b",
+      "relevant_contract": "-r restarts, -h halts and powers off; now requests immediate action. Without -o shutdown sends the corresponding signal to launchd. Running processes receive SIGTERM followed by SIGKILL after an indeterminate interval to flush data and exit; no GUI unsaved-document prompt contract is documented."
+    }
+  ],
+  "tested_source_sha256": {
+    "src/backend/macos/sys/power.rs": "45315ec4c24bdc43ba3bdaee7dbb3725c67955d7a45dbd08bfbe03d0c481e4a2",
+    "src/backend/macos/sys/power_tests.rs": "e6531038d52833ac8f0c5c1225849c38fc000330a38c2050c414929f1532ab4a",
+    "src/backend/macos/providers/operating_system.rs": "c8c26fdbe846ade53a652b9c5f617c79b38ebbfa34f95b638185dfc42432f281",
+    "tests/macos_processes.rs": "d0d60958df44a28d9d0a121ed5b0f7354f298e70fd673c973cdefb43b7d72d66"
+  }
+}

@@ -218,7 +218,6 @@ pub fn render(input: RenderRequest<'_>) -> Result<RenderedOutput, RenderError> {
             return Ok(output);
         }
     };
-    #[cfg(windows)]
     if let (Some(context), Some(spec)) = (&req.render_context, &req.format_spec) {
         let schema_default = matches!(result, ManagementResult::Schema(_))
             && !req
@@ -235,6 +234,13 @@ pub fn render(input: RenderRequest<'_>) -> Result<RenderedOutput, RenderError> {
                 .iter()
                 .any(|m| m.name.eq_ignore_case("format") || m.name.eq_ignore_case("translate"));
         if !schema_default && !empty && !association_default {
+            let narrowed;
+            let result = if let ManagementResult::Objects(set) = result {
+                narrowed = ManagementResult::Objects(restrict::selected(req, set));
+                &narrowed
+            } else {
+                result
+            };
             return transform(&to_command_xml(result, context, input.node)?, spec);
         }
     }
@@ -331,6 +337,13 @@ pub fn render_parse_error(e: &ParseError) -> RenderedOutput {
     )
 }
 pub fn render_resolve_error(e: &crate::alias::ResolveError) -> RenderedOutput {
+    render_resolve_error_for(e, &WideText::default())
+}
+/// Withholds the error token when the command line carries a password switch.
+pub fn render_resolve_error_for(
+    e: &crate::alias::ResolveError,
+    command_line: &WideText,
+) -> RenderedOutput {
     if e.code & 0x80000000 != 0 {
         return diagnostic::management(
             &ManagementError {
@@ -344,7 +357,11 @@ pub fn render_resolve_error(e: &crate::alias::ResolveError) -> RenderedOutput {
             &WideText::default(),
         );
     }
-    diagnostic::text(&e.message, e.token.as_ref())
+    let secret = command_line
+        .to_string_lossy()
+        .to_ascii_lowercase()
+        .contains("/password");
+    diagnostic::text(&e.message, e.token.as_ref().filter(|_| !secret))
 }
 pub mod help;
 pub mod mof;
@@ -364,6 +381,7 @@ pub(crate) fn system_property_names() -> Vec<&'static str> {
 }
 
 mod association;
+mod restrict;
 pub(crate) fn system_property_order() -> [&'static str; 10] {
     [
         "__PATH",
@@ -383,7 +401,9 @@ mod xml;
 pub use xml::{to_command_xml, to_wmi_xml};
 
 mod builtin;
-pub use builtin::{builtin_source, logical_format_name};
+pub use builtin::{BuiltinKind, builtin_kind, builtin_source, logical_format_name};
+
+pub mod native;
 
 mod pipeline;
 pub use pipeline::*;

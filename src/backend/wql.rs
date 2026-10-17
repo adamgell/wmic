@@ -4,7 +4,7 @@ use crate::model::{Verb, WideText};
 fn push(out: &mut WideText, s: &str) {
     out.0.extend(s.encode_utf16())
 }
-fn keyword(text: &[u16], word: &str) -> Option<usize> {
+pub(crate) fn keyword(text: &[u16], word: &str) -> Option<usize> {
     let word: Vec<_> = word.encode_utf16().collect();
     let mut quote = None;
     let mut i = 0;
