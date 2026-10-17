@@ -8,6 +8,8 @@ pub use nodes::*;
 mod presentation;
 
 mod output;
+#[cfg(windows)]
+pub(crate) use output::file_text;
 pub use output::*;
 
 mod interactive;

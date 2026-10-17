@@ -709,7 +709,7 @@ impl Session {
                 break;
             }
             request.connection.node = target.clone();
-            let node = if target.eq_ignore_case(".") {
+            let node = if target.eq_ignore_case(".") || target.eq_ignore_case("localhost") {
                 self.local_node.clone()
             } else {
                 target.clone()

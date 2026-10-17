@@ -315,3 +315,38 @@ fn diagnostic_recording_does_not_leak_credentials_when_parsing_fails() {
             .contains("SENSITIVE")
     );
 }
+
+#[test]
+fn missing_where_operand_has_its_native_invalid_query_status() {
+    let error = parse_command(&wide("os where"), EntryMode::Interactive).unwrap_err();
+    assert_eq!(error.code, 0xACAA);
+    assert_eq!(error.message, wide("Invalid Query."));
+}
+
+#[test]
+fn trailing_get_comma_has_native_invalid_expression_status() {
+    let error = parse_command(&wide("os get Caption,"), EntryMode::Interactive).unwrap_err();
+    assert_eq!(error.code, 0xACAC);
+    assert_eq!(error.message, wide("Invalid Expression."));
+}
+
+#[test]
+fn unclosed_quote_in_get_property_reaches_the_provider_as_native_invalid_wql() {
+    let parsed = parse_command(&wide("os get \"Caption"), EntryMode::Interactive).unwrap();
+    assert_eq!(parsed.properties, vec![wide("\"Caption")]);
+}
+
+#[test]
+fn unfinished_quotes_are_only_forwarded_in_a_get_property_expression() {
+    for raw in [
+        "process call Create get \"unfinished",
+        "/password: get \"unfinished",
+        "os get /format:\"unfinished",
+        "os where \"unfinished",
+    ] {
+        assert!(
+            parse_command(&wide(raw), EntryMode::Interactive).is_err(),
+            "{raw}"
+        );
+    }
+}

@@ -298,3 +298,29 @@ fn empty_security_and_boolean_values_have_native_errors() {
         );
     }
 }
+
+#[test]
+fn localhost_uses_the_computer_name_for_result_labels_while_connecting_to_localhost() {
+    #[derive(Default)]
+    struct ContextSink(Vec<WideText>);
+    impl OutputSink for ContextSink {
+        fn write(&mut self, _: OutputStream, _: &WideText) -> Result<(), OutputError> {
+            Ok(())
+        }
+        fn context(&mut self, _: &RenderContext, node: &WideText) -> Result<(), OutputError> {
+            self.0.push(node.clone());
+            Ok(())
+        }
+    }
+    let mut backend = Ordered::default();
+    let mut sink = ContextSink::default();
+    let result = Session::new(wide("LOCAL")).unwrap().execute(
+        &wide("/node:localhost os get Caption /format:csv"),
+        EntryMode::Interactive,
+        &mut backend,
+        &mut sink,
+    );
+    assert_eq!(result.exit_status, 0);
+    assert_eq!(backend.visited, vec![wide("localhost")]);
+    assert_eq!(sink.0.last(), Some(&wide("LOCAL")));
+}

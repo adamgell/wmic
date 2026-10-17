@@ -1,0 +1,14 @@
+<DIV CLASS="mofinstance">
+<SPAN CLASS="mofqualifierset"> <br /></SPAN>
+<SPAN CLASS="mofkeyword">instance of</SPAN> Win32_OperatingSystem <SPAN CLASS="mofsymbol">{</SPAN><BR /> <DL> <DD>
+<DIV CLASS="mofproperty">
+<SPAN CLASS="mofqualifierset"> </SPAN>
+<SPAN CLASS="mofkeyword">string</SPAN>
+<SPAN CLASS="mofproperty">OSArchitecture</SPAN>
+<SPAN CLASS="mofsymbol">=</SPAN><SPAN CLASS="mofstring">"ARM 64-bit Processor"</SPAN><SPAN CLASS="mofsymbol">;</SPAN><BR />
+</DIV>
+</DD>
+</DL>
+<SPAN CLASS="mofsymbol">};</SPAN>
+</DIV>
+

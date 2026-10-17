@@ -60,7 +60,7 @@ fn code_page() -> u32 {
         65001
     }
 }
-fn file_text(text: &WideText, strip_final: bool) -> WideText {
+pub(crate) fn file_text(text: &WideText, strip_final: bool) -> WideText {
     let units = if strip_final && text.0.ends_with(&[13, 13, 10]) {
         &text.0[..text.0.len() - 3]
     } else {
@@ -138,6 +138,7 @@ impl<T: OutputSink> OutputSink for RoutedOutput<T> {
         self.inner.clear_wait_prompt()
     }
     fn reset_command(&mut self, s: &SessionSettings) -> Result<(), OutputError> {
+        self.inner.reset_command(s)?;
         self.output = None;
         self.append = None;
         self.append_name = None;
@@ -166,6 +167,7 @@ impl<T: OutputSink> OutputSink for RoutedOutput<T> {
         self.inner.prompt(text)
     }
     fn command(&mut self, command: &ParsedCommand) -> Result<(), OutputError> {
+        self.inner.command(command)?;
         self.record_enabled = !matches!(command.verb, Verb::Interactive | Verb::Exit)
             && !command
                 .modifiers

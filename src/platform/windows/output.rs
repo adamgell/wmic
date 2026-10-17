@@ -3,9 +3,35 @@ use crate::{
     render::{DestinationProfile, OutputError, encode_output},
     session::{OutputSink, OutputStream},
 };
-use windows::Win32::{Globalization::GetOEMCP, Storage::FileSystem::WriteFile, System::Console::*};
-pub struct NativeOutput;
+use windows::Win32::{
+    Globalization::GetOEMCP,
+    Storage::FileSystem::{FILE_TYPE_DISK, GetFileSizeEx, GetFileType, WriteFile},
+    System::Console::*,
+};
+#[derive(Default)]
+pub struct NativeOutput {
+    formatted: bool,
+}
 impl OutputSink for NativeOutput {
+    fn prompt(&mut self, text: &WideText) -> Result<(), OutputError> {
+        let formatted = self.formatted;
+        self.formatted = false;
+        let result = self.write(OutputStream::Stdout, text);
+        self.formatted = formatted;
+        result
+    }
+    fn reset_command(&mut self, _: &crate::session::SessionSettings) -> Result<(), OutputError> {
+        self.formatted = false;
+        Ok(())
+    }
+    fn command(&mut self, command: &crate::model::ParsedCommand) -> Result<(), OutputError> {
+        self.formatted = !command.help
+            && matches!(
+                command.verb,
+                crate::model::Verb::Get | crate::model::Verb::List | crate::model::Verb::Assoc
+            );
+        Ok(())
+    }
     fn consume_query_key(&mut self) -> Result<(), OutputError> {
         let _ = super::console::key_pressed();
         Ok(())
@@ -48,7 +74,17 @@ impl OutputSink for NativeOutput {
             }
             return Ok(());
         }
-        let bytes = encode_output(text, &DestinationProfile::pipe(output_code_page()))?;
+        let disk = stream == OutputStream::Stdout
+            && self.formatted
+            && unsafe { GetFileType(handle) } == FILE_TYPE_DISK;
+        let bytes = if disk {
+            let body = crate::session::file_text(text, true);
+            let mut size = 0;
+            unsafe { GetFileSizeEx(handle, &mut size) }.map_err(|e| OutputError(e.to_string()))?;
+            encode_output(&body, &DestinationProfile::utf16_file(size == 0))?
+        } else {
+            encode_output(text, &DestinationProfile::pipe(output_code_page()))?
+        };
         let mut at = 0;
         while at < bytes.len() {
             let mut written = 0;

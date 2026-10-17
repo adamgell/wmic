@@ -65,7 +65,7 @@ The parser retains Windows UTF-16 and WMIC's quoting rules. The program preserve
 
 Built-in table, value, CSV, MOF, raw XML, XML view, and HTML formats are available, including local XSL parameters, transformation chains, and translation tables. Classic CSV behavior includes unquoted commas and markup escaping. It is not a general RFC CSV writer.
 
-`/OUTPUT`, `/APPEND`, and `/RECORD` use their measured legacy encodings and scope. In the reference profile, redirected stdout uses the console/OEM code page, new output files use UTF-16LE, and records use UTF-8. Routing entered alone persists in the shell; routing placed on a command applies to that command. Other session settings can persist with an inline command.
+`/OUTPUT`, `/APPEND`, and `/RECORD` use their measured legacy encodings and scope. In the reference profile, native pipes use the console/OEM code page; formatted queries redirected to a disk file and new `/OUTPUT` files use UTF-16LE. Records use UTF-8. Help and diagnostic output keep their measured byte paths. Routing entered alone persists in the shell; routing placed on a command applies to that command. Other session settings can persist with an inline command.
 
 The bundled metadata contains 81 aliases and 426 views. Live role metadata is used when available. The default role can fall back to the bundled data. Bundled alias introspection is read-only and supports scalar WQL predicates; full missing-namespace profile acceptance remains unverified. Custom roles are not silently replaced by the default role.
 
@@ -81,7 +81,7 @@ An earlier unsigned development build was quarantined by Windows Defender as `Tr
 
 ## Build
 
-The repository pins Rust 1.98.1. On Windows, build the appropriate MSVC target:
+Use Rust 1.98.1 or later, as declared by `rust-version` in `Cargo.toml`. On Windows, build the appropriate MSVC target:
 
 ```text
 cargo build --release --target aarch64-pc-windows-msvc
@@ -119,7 +119,9 @@ python3.12 -m unittest discover -s tools/release/tests
 pwsh -File tools/release/tests/signature-policy.Tests.ps1
 ```
 
-The reviewed Windows application baseline passes 158 portable Rust tests and 21 native Windows tests. On macOS, `cargo test` also runs the macOS suites. The [macOS guide](https://github.com/adamgell/wmic/blob/main/docs/macos.md) lists them. The [compatibility report](docs/compatibility.md) pins the measured baseline executable hashes, corpus results, and remaining acceptance limits. Release automation requires Python 3.11 or later; CI uses Python 3.12.
+The [testing guide](docs/testing.md) describes the reproducible 1,562-case oracle corpus, strict comparison gates, and 121 controlled cases per architecture. The [compatibility report](docs/compatibility.md) pins the measured baseline executable hashes, corpus results, and remaining acceptance limits. Release automation requires Python 3.11 or later; CI uses Python 3.12.
+
+On macOS, `cargo test --locked` also runs the macOS suites. The [macOS guide](docs/macos.md) lists their scope, evidence, and remaining acceptance limits.
 
 Reference capture and Windows integration tests require the appropriate fixtures and an explicitly selected test environment. See the [reference tooling](https://github.com/adamgell/wmic/tree/main/tools/reference) and [controlled Windows harnesses](https://github.com/adamgell/wmic/tree/main/tools/windows) for their setup and scope. The CLI itself does not require Python or PowerShell for ordinary WMI operations.
 

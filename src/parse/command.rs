@@ -62,7 +62,7 @@ pub fn parse_command(raw: &WideText, mode: EntryMode) -> Result<ParsedCommand, P
 }
 fn parse_command_inner(raw: &WideText, mode: EntryMode) -> Result<ParsedCommand, ParseError> {
     let units = command_units(raw, mode)?;
-    let spans = lex::tokens(units)?;
+    let spans = lex::relaxed_quote_tokens(units)?;
     let mut command = ParsedCommand::empty(raw.clone());
     let mut i = 0;
     let mut redactions = vec![];
@@ -93,6 +93,9 @@ fn parse_command_inner(raw: &WideText, mode: EntryMode) -> Result<ParsedCommand,
         i += 1;
     }
     let mut presented = units.to_vec();
+    for span in &spans[..i] {
+        lex::tokens(&units[span.clone()])?;
+    }
     for span in redactions.into_iter().rev() {
         presented.splice(span, "<redacted>".encode_utf16());
     }
@@ -141,7 +144,7 @@ fn parse_command_inner(raw: &WideText, mode: EntryMode) -> Result<ParsedCommand,
             if word.eq_ignore_case("where") {
                 i += 1;
                 if i == spans.len() {
-                    return Err(ParseError::new(0xABFD, "Invalid alias verb.", None));
+                    return Err(ParseError::new(0xACAA, "Invalid Query.", None));
                 }
                 command.selector = Some(unquote(&units[spans[i].clone()]));
                 i += 1;
@@ -180,17 +183,27 @@ fn parse_command_inner(raw: &WideText, mode: EntryMode) -> Result<ParsedCommand,
     } else {
         &[]
     };
+    // Only GET property expressions are forwarded with unfinished quotes.
+    // Validate global values, targets, selectors and verb switches strictly.
+    for (index, span) in spans.iter().enumerate() {
+        if command.verb != Verb::Get || index < i || index >= body_end {
+            lex::tokens(&units[span.clone()])?;
+        }
+    }
     match command.verb {
         Verb::Context if !body.is_empty() => {
             return Err(ParseError::new(0xBBF1, "Invalid context syntax.", None));
         }
         Verb::Get => {
+            if body.last() == Some(&(b',' as u16)) {
+                return Err(ParseError::new(0xACAC, "Invalid Expression.", None));
+            }
             command.properties = lex::split_commas(body, false);
             if matches!(command.target, Some(Target::Class(_))) && !command.properties.is_empty() {
                 return Err(ParseError::new(0xACBC, "Invalid GET Expression.", None));
             }
             for property in &command.properties {
-                if property.0.is_empty() || lex::tokens(&property.0)?.len() != 1 {
+                if property.0.is_empty() || lex::relaxed_quote_tokens(&property.0)?.len() != 1 {
                     return Err(ParseError::new(0xACBC, "Invalid GET Expression.", None));
                 }
             }

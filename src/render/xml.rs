@@ -145,6 +145,48 @@ pub fn to_wmi_xml(result: &ManagementResult) -> Result<WideText, RenderError> {
     Ok(out)
 }
 
+#[cfg(windows)]
+pub(crate) fn error_command_xml(
+    context: &RenderContext,
+    node: &WideText,
+    error: Option<&ManagementError>,
+) -> Result<WideText, RenderError> {
+    let empty = ManagementResult::Objects(ObjectSet::default());
+    let mut xml = to_command_xml(&empty, context, node)?;
+    let mut body: WideText = "<ERROR>".into();
+    if let Some(error) = error {
+        push(&mut body, &format!("<HRESULT>0x{:X}</HRESULT>", error.code));
+    }
+    push(&mut body, "<DESCRIPTION>");
+    append(
+        &mut body,
+        &escape(
+            &error.map_or_else(|| "No Instance(s) Available.".into(), |e| e.message.clone()),
+            false,
+        ),
+    );
+    push(&mut body, "\r\n</DESCRIPTION>");
+    if let Some(error) = error {
+        let facility = match (error.code >> 16) & 0x1fff {
+            4 => "WMI",
+            7 => "Win32",
+            _ => "COM",
+        };
+        push(
+            &mut body,
+            &format!("<FACILITYCODE>{facility}</FACILITYCODE>"),
+        );
+    }
+    push(&mut body, "</ERROR>");
+    let marker: Vec<u16> = "<CIM></CIM>".encode_utf16().collect();
+    let at = xml
+        .0
+        .windows(marker.len())
+        .position(|v| v == marker)
+        .ok_or_else(|| RenderError::new("Missing empty query XML"))?;
+    xml.0.splice(at..at + marker.len(), body.0);
+    Ok(xml)
+}
 pub fn to_command_xml(
     result: &ManagementResult,
     context: &RenderContext,

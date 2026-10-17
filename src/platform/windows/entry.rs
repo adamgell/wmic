@@ -14,7 +14,8 @@ pub fn run() -> ! {
         let _layout = super::console::LayoutGuard::install();
         match (Session::new(node), WindowsManagement::new()) {
             (Ok(mut session), Ok(mut backend)) => {
-                let mut sink = crate::session::RoutedOutput::new(super::output::NativeOutput);
+                let mut sink =
+                    crate::session::RoutedOutput::new(super::output::NativeOutput::default());
                 let _interrupt = super::console::InterruptGuard::install();
                 let shell = crate::parse::parse_command(&raw, EntryMode::Process).is_ok_and(|p| {
                     p.verb == crate::model::Verb::Interactive && p.modifiers.is_empty()
