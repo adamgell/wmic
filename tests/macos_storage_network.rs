@@ -277,8 +277,14 @@ fn network_configurations_follow_the_adapters() {
         "one configuration is required for every adapter"
     );
     let mut paired = 0;
+    let mut configured = HashSet::new();
     for configuration in &configurations {
         let index = number(configuration, "InterfaceIndex");
+        assert!(index.is_some(), "configuration has no interface index");
+        assert!(
+            configured.insert(index),
+            "duplicate configuration for {index:?}"
+        );
         assert_eq!(number(configuration, "Index"), index);
         let Some(adapter) = adapters
             .iter()
@@ -328,6 +334,14 @@ fn network_configurations_follow_the_adapters() {
         paired,
         adapters.len(),
         "every adapter needs a matching configuration"
+    );
+    let expected: HashSet<_> = adapters
+        .iter()
+        .map(|adapter| number(adapter, "InterfaceIndex"))
+        .collect();
+    assert_eq!(
+        configured, expected,
+        "adapter/configuration identities differ"
     );
     for configuration in objects("nicconfig where IPEnabled=TRUE get Index,IPEnabled") {
         assert_eq!(flag(&configuration, "IPEnabled"), Some(true));
