@@ -147,6 +147,7 @@ The shell removes an unquoted backslash, so quote the account argument.
 - The build ends the logon when the server does not grant sealing. It sends no SOAP message in plain text.
 - The password does not cross the network. NTLMv2 sends a response that the build computes from it.
 - Not implemented: Basic, Kerberos, CredSSP, certificate authentication, and HTTPS (port 5986). A target that allows only these methods is not supported.
+- Security of the logon: the NTLMv2 exchange travels in HTTP headers on a TCP connection without TLS. This is the same exposure as any Windows client that uses Negotiate over the default HTTP listener, including PowerShell remoting over port 5985. A party on the network path can record the NTLMv2 response and test password guesses against it offline, so the account needs a strong password. The build negotiates signing, sealing and 128-bit keys, protects the negotiation with the message integrity code, and refuses a server that drops sealing, so a recorded exchange cannot be replayed to WinRM and a party on the path cannot read or alter the SOAP messages. HTTPS with certificate validation and channel binding, and Kerberos, are not implemented. Use the build on networks you trust, or through a tunnel such as SSH.
 - The connect timeout is 5 seconds. The read and write timeout is 90 seconds, longer than the 60 second operation timeout the request declares. A request that the server answers with a timeout fault is sent again until it completes or Ctrl+C ends it.
 
 ### Credentials and connection settings
