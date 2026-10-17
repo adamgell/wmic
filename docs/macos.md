@@ -137,20 +137,20 @@ The shell removes an unquoted backslash, so quote the account argument.
 
 - A request is remote when `/NODE` names a machine other than the local machine. [Scope](#scope) lists the local names.
 - A request for the local machine with `/USER` is refused with `User credentials cannot be used for local connections` (0x80041064), as on Windows. When `WMIC_WSMAN_PORT` is set, such a request goes to WinRM on that port instead, which serves SSH tunnels to a remote listener.
-- A `/NODE` without `/USER` sends an empty user name and an empty password. The build does not use the macOS login. Give `/USER` for each remote command.
+- A `/NODE` without `/USER` and without `/AUTHORITY:Kerberos` sends an empty user name and an empty password. The build does not use the macOS login password. Give `/USER` for each remote command, or give `/AUTHORITY:Kerberos` to use the Kerberos ticket cache. See [Kerberos](#kerberos).
 
 ### Requirements
 
 - The target has WinRM enabled. Run `Enable-PSRemoting` or `winrm quickconfig` on the target.
 - The build sends WS-Management to path `/wsman` over HTTP on TCP port 5985. With `WMIC_WSMAN_SCHEME=https` it sends HTTP over TLS on TCP port 5986. It connects directly and does not use an HTTP proxy.
-- Authentication is NTLMv2 inside the Negotiate scheme. After the logon, the build seals every SOAP message with the NTLM session key. Sealing encrypts and signs the message. This works against the Windows default, `AllowUnencrypted=false` with the Negotiate scheme enabled. Over HTTPS, the messages are sealed in the same way inside the TLS connection.
+- Authentication is Kerberos for a domain account when a KDC answers, else NTLMv2 inside the Negotiate scheme. [Kerberos](#kerberos) gives the rules. After the logon, the build seals every SOAP message with the session key of the mechanism. Sealing encrypts and signs the message. This works against the Windows default, `AllowUnencrypted=false` with the Kerberos and Negotiate schemes enabled. Over HTTPS, the messages are sealed in the same way inside the TLS connection.
 - The build ends the logon when the server does not grant sealing. It sends no SOAP message in plain text.
-- The password does not cross the network. NTLMv2 sends a response that the build computes from it.
-- Not implemented: Basic, Kerberos, CredSSP, and certificate authentication. A target that allows only these methods is not supported.
+- The password does not cross the network. With Kerberos, the build proves it to the KDC with pre-authentication and does not send it. NTLMv2 sends a response that the build computes from it.
+- Not implemented: Basic, CredSSP, and certificate authentication. A target that allows only these methods is not supported.
 - HTTPS validates the server certificate before the first HTTP byte is sent. The certificate must chain to a trust anchor and must name the host as typed in `/NODE`: a DNS name or an IP address in its subject alternative names. The trust anchors are the platform trust store, which on macOS is the Security framework evaluation over the system and login keychains, plus the certificates in the PEM file named by `WMIC_WSMAN_CA_FILE`. A certificate that fails validation ends the command with `Secure connection failed: ` and the reason (0x80072F8F). The build does not fall back to HTTP.
 - HTTPS binds the logon to the server certificate. The NTLM AUTHENTICATE_MESSAGE carries the `tls-server-end-point` channel binding of RFC 5929, the hash of the server certificate, in the `MsvAvChannelBindings` pair of MS-NLMP. A listener with `CbtHardeningLevel` set to `Strict` accepts the logon. A listener that checks channel bindings refuses a logon whose binding names another certificate with `Access is denied.`; this was measured with `Strict`. The hash is the one of the certificate's signature algorithm; MD5 and SHA-1 are raised to SHA-256. A certificate with a signature algorithm outside that rule, for example Ed25519, ends the command with `Secure connection failed`.
 - TLS is `rustls` with the `ring` provider: TLS 1.2 and 1.3, ECDHE key exchange, and AEAD cipher suites only. A listener that offers none of these fails the handshake. Certificate validation is `rustls-platform-verifier`. These crates are compiled only for non-Windows targets.
-- Security of the logon over HTTP: the NTLMv2 exchange travels in HTTP headers on a TCP connection without TLS. This is the same exposure as any Windows client that uses Negotiate over the default HTTP listener, including PowerShell remoting over port 5985. A party on the network path can record the NTLMv2 response and test password guesses against it offline, so the account needs a strong password. The build negotiates signing, sealing and 128-bit keys, protects the negotiation with the message integrity code, and refuses a server that drops sealing, so a recorded exchange cannot be replayed to WinRM and a party on the path cannot read or alter the SOAP messages. HTTPS removes the exposure of the exchange: a party on the path cannot record it without a certificate the client trusts, and a server that checks channel bindings refuses a logon relayed from another TLS connection. Kerberos is not implemented. Over HTTP, use the build on networks you trust, or through a tunnel such as SSH.
+- Security of the logon over HTTP: the NTLMv2 exchange travels in HTTP headers on a TCP connection without TLS. This is the same exposure as any Windows client that uses Negotiate over the default HTTP listener, including PowerShell remoting over port 5985. A party on the network path can record the NTLMv2 response and test password guesses against it offline, so the account needs a strong password. The build negotiates signing, sealing and 128-bit keys, protects the negotiation with the message integrity code, and refuses a server that drops sealing, so a recorded exchange cannot be replayed to WinRM and a party on the path cannot read or alter the SOAP messages. HTTPS removes the exposure of the exchange: a party on the path cannot record it without a certificate the client trusts, and a server that checks channel bindings refuses a logon relayed from another TLS connection. Kerberos removes the offline password test of the WinRM exchange: the service ticket is encrypted with the key of the server account, and the build verifies the server's reply token (mutual authentication) before it sends a SOAP message. Over HTTP with NTLM, use the build on networks you trust, or through a tunnel such as SSH.
 - The connect timeout is 5 seconds. The read and write timeout is 90 seconds, longer than the 60 second operation timeout the request declares. A `Pull` of an enumeration that the server answers with a timeout fault is sent again with the same enumeration context until it completes or Ctrl+C ends it. A timeout fault on any other request ends the command with the status of the fault.
 
 ### Credentials and connection settings
@@ -158,7 +158,9 @@ The shell removes an unquoted backslash, so quote the account argument.
 | Input | Effect |
 | --- | --- |
 | `/USER:DOMAIN\name` | Logon as `name` in `DOMAIN`. |
-| `/USER:name /AUTHORITY:NTLMDOMAIN:domain` | Logon as `name` in `domain`. A `DOMAIN\` prefix in `/USER` takes precedence. Other `/AUTHORITY` forms are ignored. |
+| `/USER:name /AUTHORITY:NTLMDOMAIN:domain` | Logon as `name` in `domain` with NTLM. A `DOMAIN\` prefix in `/USER` takes precedence. The build does not try Kerberos. |
+| `/AUTHORITY:Kerberos` | Kerberos only, for the service `HTTP@<node as typed>`. The build does not fall back to NTLM. Without `/USER`, or with an empty password, the ticket comes from the credential cache. |
+| `/AUTHORITY:"Kerberos:<principal>"` | Kerberos only, for the named service principal. The forms are those of classic WMIC: `DOMAIN\host`, `HTTP/host` or `HTTP/host@REALM`, and a bare `host`. `DOMAIN\host` names `HTTP/host` in the realm of `DOMAIN`. Quote the value as on Windows: classic WMIC refuses an unquoted value with a `/` in it. Other `/AUTHORITY` forms are ignored. |
 | `/PASSWORD:text` | The password. The shell passes it to `wmic` as an argument, so other users on the Mac can read it in the process list. |
 | `/USER` without `/PASSWORD` | `wmic` writes `Enter the password :` to standard error and reads one line from standard input. The input is not echoed when standard input is a terminal. A script can pipe the password. An empty line sends an empty password. |
 | `/AUTHLEVEL`, `/IMPLEVEL`, `/PRIVILEGES`, `/LOCALE` | Accepted. They have no effect on WinRM. Every request uses the locale `en-US`. |
@@ -166,13 +168,72 @@ The shell removes an unquoted backslash, so quote the account argument.
 | `WMIC_WSMAN_SCHEME` | An environment variable, `http` or `https`, for all nodes. The default is `http`. `https` sends HTTP over TLS to port 5986, validates the server certificate, and binds the logon to it. Another value reports `Invalid parameter` (0x80041008). |
 | `WMIC_WSMAN_PORT` | An environment variable. Its value replaces the default port, 5985 for `http` and 5986 for `https`, for all nodes. Use it for a non-standard listener or an SSH tunnel. A value that is not a port number from 1 to 65535 reports `Invalid parameter` (0x80041008). |
 | `WMIC_WSMAN_CA_FILE` | An environment variable. The path of a PEM file whose certificates are trust anchors in addition to the platform trust store. Use it for a self-signed listener certificate or for a private CA that is not in the keychain. Setting it while the scheme is `http` reports `Invalid parameter` (0x80041008). A file that cannot be read, or that holds no certificate, reports `Secure connection failed` (0x80072F8F). |
+| `WMIC_WSMAN_CONNECT` | An environment variable. The address that the TCP connection of every node goes to, for example `127.0.0.1` for an SSH tunnel. `/NODE` still names the server: in the service principal, the `Host` header, the certificate check, and `__SERVER`. A value that is empty or holds blanks reports `Invalid parameter` (0x80041008). |
+| `KRB5_CONFIG` | An environment variable that the macOS Kerberos library reads. The path of a `krb5.conf` file that replaces `/etc/krb5.conf`. See [Kerberos](#kerberos). |
 
 ```sh
 printf '%s\n' "$PASSWORD" | wmic /node:server01 '/user:CONTOSO\admin' os get Caption
 WMIC_WSMAN_SCHEME=https wmic /node:server01.contoso.com '/user:CONTOSO\admin' os get Caption
+kinit admin@CONTOSO.COM && wmic /node:server01.contoso.com /authority:Kerberos os get Caption
 ```
 
 Over HTTPS, `/NODE` must hold a name the certificate carries. A listener certificate issued to `server01.contoso.com` does not match `/node:server01` or an IP address unless the certificate names them too.
+
+### Kerberos
+
+The build uses the GSS framework of macOS, which is Heimdal Kerberos. Other Unix builds have no Kerberos and use NTLM for every account.
+
+Which accounts try Kerberos:
+
+| Account | Attempt |
+| --- | --- |
+| `/USER:DOMAIN\name` or `/USER:name@realm.example` | Kerberos first, as `name@REALM`. When Kerberos cannot be used, NTLM. |
+| `/USER:name`, `/USER:.\name`, no `/USER` | NTLM only. |
+| Any account with `/AUTHORITY:NTLMDOMAIN:domain` | NTLM only, as on Windows. |
+| Any account with `/AUTHORITY:Kerberos` | Kerberos only. |
+
+- The realm is the domain in upper case. A NetBIOS domain such as `CONTOSO` becomes the DNS suffix of `/NODE` when the first label of that suffix is the domain: `CONTOSO` with `/node:cm01.contoso.com` is the realm `CONTOSO.COM`. Otherwise the realm is the NetBIOS name, and the KDC lookup for it fails unless `krb5.conf` defines it.
+- A local account of the target, typed as `HOST\name`, gets a realm the KDC does not know, so the logon continues with NTLM.
+- The service name is the host-based name `HTTP@<node as typed>`. The Kerberos library turns it into the principal `HTTP/<host>@<REALM>`, with the realm from `krb5.conf` or DNS; where DNS resolves the host, the library can replace the host with its canonical DNS name. Give `/NODE` as the DNS name that the computer account of the target carries, not an IP address and not a tunnel address. Use `WMIC_WSMAN_CONNECT` to send the TCP connection elsewhere.
+- With a password, the build asks the KDC for a ticket-granting ticket in a new credential cache of its own, and removes that cache when the connection closes. No ticket of the account remains after `wmic` ends, and an existing ticket of the same account is not replaced.
+- Without a password, the ticket comes from the default credential cache of the login session, for example from `kinit`. Each SSH connection to a Mac is its own login session with its own cache.
+- The build sends the raw Kerberos token in the `Kerberos` HTTP scheme, not an SPNEGO token in `Negotiate`, and seals with the `application/HTTP-Kerberos-session-encrypted` protocol of MS-WSMV. It requires mutual authentication and sealing. The context is established with empty requests before the first SOAP message.
+- Over HTTPS, the Kerberos authenticator carries the `tls-server-end-point` channel binding of the server certificate. A listener with `CbtHardeningLevel` set to `Strict` accepts it.
+- A Kerberos logon carries no computer name. For `__SERVER` and the server part of object paths, the build reads `Win32_ComputerSystem.Name` with one extra query per connection.
+- The Mac clock must be within the skew the KDC allows, five minutes by default in Active Directory.
+
+When Kerberos cannot be used and `/AUTHORITY:Kerberos` is not given, the logon continues with NTLM:
+
+- The KDC is not reached, the realm is unknown, the KDC does not know the account, or the cache holds no ticket. The KDC has not checked the password.
+- The service refuses the Kerberos token, for example a listener with Kerberos disabled. The KDC has already accepted the password.
+
+Every other failure of the password logon at the KDC ends the command with `Access is denied.` and does not try NTLM: a wrong or expired password, a disabled, locked or expired account, and any failure the build cannot identify. This keeps a rejected password from counting twice against the lockout threshold. Where an unidentified failure blocks a logon that NTLM would allow, `/AUTHORITY:NTLMDOMAIN:<domain>` selects NTLM. With `/AUTHORITY:Kerberos`, every Kerberos failure ends the command.
+
+The Mac finds the KDC through DNS SRV records of the realm or through `krb5.conf`. A Mac that is not joined to the domain and cannot resolve the domain needs a `krb5.conf`. Select one with `KRB5_CONFIG`:
+
+```ini
+[libdefaults]
+	default_realm = CONTOSO.COM
+	dns_lookup_kdc = false
+	dns_lookup_realm = false
+[realms]
+	CONTOSO.COM = {
+		kdc = tcp/<kdc>:88
+	}
+[domain_realm]
+	.contoso.com = CONTOSO.COM
+	contoso.com = CONTOSO.COM
+```
+
+Through SSH tunnels, forward the KDC port and the WinRM port, name the tunnel end of the KDC in `krb5.conf` with `tcp/`, and keep the server name in `/NODE`:
+
+```sh
+ssh -N -L 1088:<kdc>:88 -L 15985:server01.contoso.com:5985 jumphost &
+KRB5_CONFIG=$HOME/krb5-lab.conf WMIC_WSMAN_CONNECT=127.0.0.1 WMIC_WSMAN_PORT=15985 \
+  wmic /node:server01.contoso.com '/user:CONTOSO\admin' os get Caption
+```
+
+In that file, `kdc = tcp/127.0.0.1:1088`. SSH forwards TCP only, so the `tcp/` prefix is required.
 
 ### What works
 
@@ -217,6 +278,9 @@ For a class in the schema, a method that the class does not have returns `<name>
 | Unknown property | `Invalid query` | 0x80041017 | 23 |
 | Unknown namespace | `Invalid namespace`, with no `Node - ` line and no output on standard output | 0x8004100E | 14 |
 | The server refuses the logon, including a channel binding the server does not accept | `Access is denied.` | 0x80070005 | 5 |
+| The KDC refuses the account or fails in a way the build cannot identify: wrong password, expired password, disabled, locked or expired account | `Access is denied.` | 0x80070005 | 5 |
+| `/AUTHORITY:Kerberos` and the service refuses the Kerberos token | `Access is denied.` | 0x80070005 | 5 |
+| `/AUTHORITY:Kerberos` and Kerberos cannot be used: unknown service principal, no KDC answers, no ticket in the cache | `The RPC server is unavailable.` | 0x800706BA | 186 |
 | Over HTTPS, the certificate is not trusted, names another host, or the TLS handshake fails; the CA file cannot be read | `Secure connection failed: ` and the reason | 0x80072F8F | 143 |
 | WMI refuses the operation | `Access denied` | 0x80041003 | 3 |
 | The connection fails: refused, name not found, or no answer in 5 seconds | `The RPC server is unavailable.` | 0x800706BA | 186 |
@@ -227,7 +291,7 @@ For a class in the schema, a method that the class does not have returns `<name>
 | A fault with another WMI status, for example an invalid parameter or an invalid method | The text of that status | The status | Low byte of the status |
 | A fault without a WMI status, an HTTP error, or a reply that is not SOAP | `Generic failure` | 0x80041001 | 1 |
 
-- The connection failure keeps the text of classic WMIC so that scripts behave the same.
+- The connection failure keeps the text of classic WMIC so that scripts behave the same. Classic WMIC also reports an unknown principal in `/AUTHORITY:"Kerberos:<principal>"` as `The RPC server is unavailable.` (0x800706BA).
 - For `GET` and `LIST`, a failed node prints `Node - <node>` and the error on standard error. The two blank lines of an empty result go to standard output once for the whole command. They appear only when no node printed a result.
 - For `CALL`, `SET`, `CREATE`, and `DELETE`, a failed node prints the error on standard error with no `Node - ` line and no blank lines. With `/FAILFAST:ON` the error is `RPC Server not available.` alone. Without it, the error is the `ERROR:` block.
 - The exit codes follow the mapping in [Exit status](#exit-status).
@@ -247,18 +311,18 @@ The output follows classic WMIC:
 - `CALL`, `SET`, `CREATE`, `DELETE`: with two or more nodes, `Node - <node>` goes to standard output before the output of each node, also before a failed node. The error of a failed node goes to standard error.
 - `/RECORD`: a command with a node list writes one `RECORD` element. Its `TARGETNODE` lists the nodes as typed, separated by a comma and a space. Its text is the standard output of the whole command.
 
-Requests to the same host, port, and account share one authenticated connection in one `wmic` process. A request that cannot change state repeats once on a new connection when a reused connection fails. A method call never repeats.
+Requests to the same host, connect address, port, scheme, `/AUTHORITY` principal, and account share one authenticated connection in one `wmic` process. A request that cannot change state repeats once on a new connection when a reused connection fails. A method call never repeats.
 
 ### Diagnose a listener
 
 The example `wsman-probe` is not part of the `wmic` executable. It does not run on Windows.
 
 ```sh
-cargo run --example wsman-probe -- HOST PORT [DOMAIN\]USER
+cargo run --example wsman-probe -- HOST PORT [DOMAIN\]USER [AUTHORITY]
 cargo run --example wsman-probe -- --challenge HOST PORT
 ```
 
-The first form reads the password from standard input, authenticates with NTLM, sends an Identify request, and prints the decrypted reply. The second form sends only the NTLM negotiate message and prints the parsed challenge. It uses no credentials. `WMIC_WSMAN_SCHEME` and `WMIC_WSMAN_CA_FILE` apply to the probe as they do to `wmic`; the port is the argument.
+The first form reads the password from standard input, authenticates as `wmic` does with `/AUTHORITY:<AUTHORITY>`, sends an Identify request, and prints the mechanism (`Kerberos` or `NTLM`), the HTTP scheme the server answered with, and the decrypted reply. A failure prints the reason from the Kerberos library or the transport, which `wmic` keeps out of its error text. The second form sends only the NTLM negotiate message and prints the parsed challenge. It uses no credentials. `WMIC_WSMAN_SCHEME`, `WMIC_WSMAN_CA_FILE`, and `WMIC_WSMAN_CONNECT` apply to the probe as they do to `wmic`; the port is the argument.
 
 ## Supported classes
 
@@ -367,6 +431,9 @@ This is an administrative shutdown path. Apple's `shutdown(8)` manual describes 
   - The build reads the password from a pipe on standard input. Classic reads the password only from a console. With a pipe, classic prints `Enter the password :` and continues with an empty password.
   - The build writes `&lt;redacted&gt;` for the password in the `COMMANDLINE` element of the `RAWXML` format. Classic prints the password.
   - A file that receives the output holds UTF-8 text with LF lines and no byte order mark. Classic writes UTF-16LE with a byte order mark. For two failed nodes, a file redirected by the shell holds two LF characters, where classic holds one line.
+  - `/AUTHORITY:Kerberos` without a principal works in the build and names `HTTP@<node>`. Classic prints `Invalid parameter` (0x80041008).
+  - `/AUTHORITY:Kerberos:HTTP/host` without quotes works in the build. Classic prints `Invalid Global Switch.` and needs `/AUTHORITY:"Kerberos:HTTP/host"`.
+  - The Kerberos principal of `/AUTHORITY` names the WinRM service, `HTTP/host`. For classic WMIC it names the DCOM server. The form `DOMAIN\host` works in both.
   - A node that does not answer fails after the 5 second connect timeout. Classic waits about 30 seconds for DCOM (28.7 to 30.6 seconds in eight runs). With `/FAILFAST:ON`, classic fails after about 5 seconds (4.7 to 5.1 seconds in eight runs) and the build after 5 seconds.
 
 ## Verification
@@ -396,14 +463,14 @@ The test files below contain these `#[test]` functions in this revision.
 | `src/backend/macos/providers/operating_system.rs` (unit tests) | 6 | macOS | All four power methods, force preservation, flag validation, fake privilege denial, and result shape through injected adapters |
 | `src/backend/macos/sys/power_tests.rs` | 8 | macOS | Exact ordinary versus forced operation selection, zero action calls when privilege is denied, command status/error mapping, and no forced fallback |
 | `tests/remote_fidelity.rs` | 28 | All platforms | Bytes measured on classic WMIC: failed nodes in a list, fail-fast text, `CALL` on a node list, `RAWXML` and `XML` with a failed node, `/RECORD` with a node list, the method name, the invalid namespace, an unknown alias with a password |
-| `tests/wsman_protocol.rs` | 58 | Unix (3 on macOS only) | Enumerate, pull, release, get, invoke, faults, typing, object paths, nested reference keys, routing, port validation, stale connections, timeouts |
-| `tests/wsman_transport.rs` | 34 | Unix | NTLM vectors from MS-NLMP 4.2.4, loopback server with a real handshake, sealing, framing variants, chunked HTTP, unsealed-reply refusal, wrong password, closed connections, the same server behind TLS with the certificates in `tests/fixtures/tls`: trusted through a CA file, untrusted, issued to another name, channel binding value, unreadable CA file, close_notify |
-| `src/backend/wsman/**` (unit tests) | 42 | Unix | Value conversion, fault precedence, parsing limits, path quoting, record building, envelopes, timeouts, the port, scheme and CA file settings, channel binding hash selection and digests |
+| `tests/wsman_protocol.rs` | 64 | Unix (3 on macOS only) | Enumerate, pull, release, get, invoke, faults, typing, object paths, nested reference keys, routing, port validation, stale connections, timeouts, the computer name read once per Kerberos connection |
+| `tests/wsman_transport.rs` | 62 | Unix (2 not on macOS) | NTLM vectors from MS-NLMP 4.2.4, loopback server with a real handshake, sealing, framing variants, chunked HTTP, unsealed-reply refusal, wrong password, closed connections, the same server behind TLS with the certificates in `tests/fixtures/tls`: trusted through a CA file, untrusted, issued to another name, channel binding value, unreadable CA file, close_notify, Kerberos framing and handshake with a fake security context: protocol name, signature length, token legs, a token sent after completion, a 401 on the last leg, missing mutual authentication, unsealed replies; the choice between Kerberos and NTLM with a fake credential: service refusal, unavailable and refused accounts, `/AUTHORITY:Kerberos` and `NTLMDOMAIN:`; and, without a Kerberos library, the NTLM fallback of a domain account |
+| `src/backend/wsman/**` (unit tests) | 56 | Unix | Value conversion, fault precedence, parsing limits, path quoting, record building, envelopes, timeouts, the port, scheme and CA file settings, channel binding hash selection and digests, the connect address, `/AUTHORITY` values, Kerberos realms and service names, the wrap token split, the Kerberos fallback decision |
 | `src/platform/unix/console.rs` (unit tests) | 4 | Unix | Signal handler, inherited dispositions, terminal restore |
 | `src/alias/predicate.rs` (unit tests) | 6 | All platforms | WHERE literal coercion and comparison types |
-| Total | 349 | | |
+| Total | 397 | | |
 
-The five `tests/macos_*.rs` files hold 109 of the 349 tests listed here. The remote-node suites run on every Unix platform. Unix and Windows-specific suites have explicit platform gates. At the earlier commit b2755a9, `cargo test --locked` reported 311 passed and 0 failed on the Mac mini, and 189 passed, 0 failed, 33 ignored on Windows. With the remote-node fixes of 2026-10-17, `cargo test --locked` reports 503 passed and 0 failed on the Mac mini, and 231 passed, 0 failed, 34 ignored on Windows.
+The five `tests/macos_*.rs` files hold 109 of the 397 tests listed here. The remote-node suites run on every Unix platform. Unix and Windows-specific suites have explicit platform gates. At the earlier commit b2755a9, `cargo test --locked` reported 311 passed and 0 failed on the Mac mini, and 189 passed, 0 failed, 33 ignored on Windows. With the remote-node fixes of 2026-10-17, `cargo test --locked` reports 503 passed and 0 failed on the Mac mini, and 231 passed, 0 failed, 34 ignored on Windows. With Kerberos, it reports 563 passed on the Mac mini, 433 passed on Ubuntu in WSL2 with rustc 1.98.1, and 231 passed, 0 failed, 34 ignored on Windows.
 
 The earlier follow-up passed 327 tests on Apple Silicon, including 12 executable tests and four fixed-snapshot mapping tests. [Review evidence](research/evidence/2026-10-16/macos-pr-review.json) records that baseline. The shutdown fix passes 340 tests: it adds 14 injected tests and replaces the prior native privilege/invalid-flag test, so all power behavior is tested through fakes, independently of the test runner's real user ID. [Shutdown fix evidence](research/evidence/2026-10-16/macos-shutdown-fix.json) records the fresh checks and remaining acceptance limits.
 
@@ -465,14 +532,62 @@ The commands below ran on 2026-10-17 from the Mac mini against the Windows 11 ho
 
 `openssl s_client` against the tunnel reported TLS 1.3 with `AEAD-AES256-GCM-SHA384` for the listener. The error text in the second row is the verdict of the macOS Security framework; another platform prints its own text after `invalid peer certificate: `.
 
+### Kerberos evidence
+
+The commands below ran on 2026-10-17 from the Mac mini against the Windows Server 2025 host above, a member of the domain `CONTOSO.COM`. The domain controller is the KDC and issued AES256 tickets (`aes256-cts-hmac-sha1-96`). SSH tunnels on the Mac forwarded `127.0.0.1:1088` to port 88 of the KDC, `127.0.0.1:15986` to port 5985 of the host, and `127.0.0.1:25988` to port 5986. Every command used `/node:cm01.contoso.com`, `WMIC_WSMAN_CONNECT=127.0.0.1`, `WMIC_WSMAN_PORT` set to the tunnel port, and `KRB5_CONFIG` with the file in [Kerberos](#kerberos) and `kdc = tcp/127.0.0.1:1088`. HTTPS used `WMIC_WSMAN_SCHEME=https` and the self-signed certificate of the host as `WMIC_WSMAN_CA_FILE`. The host had WinRM defaults: `Kerberos=true`, `AllowUnencrypted=false`, `CbtHardeningLevel=Relaxed`. The Mac clock and the KDC clock differed by 2 seconds. The build was the final release build of this branch; the channel binding rows used a separate build of the same source with one change.
+
+| Scheme | Account and switches | Result |
+| --- | --- | --- |
+| HTTP, HTTPS | `/user:contoso\LabAdmin` and the password, `os get Caption,CSName` | One row. Exit 0. The probe reports mechanism `Kerberos`, server scheme `Kerberos`. |
+| HTTP | `/user:LabAdmin@CONTOSO.COM` and the password | One row. Exit 0. |
+| HTTP, HTTPS | `/user:contoso\LabAdmin` and the password, `os get __SERVER,__PATH /format:list` | `__SERVER=CM01` and `__PATH=\CM01\ROOT\CIMV2:Win32_OperatingSystem=@`, as with NTLM. Exit 0. |
+| HTTP | `/user:contoso\LabAdmin` and the password, then `klist -l` and `/authority:Kerberos` without `/USER` and without a password, in the same SSH session | One row, exit 0. `klist -l` lists no cache of the account. The second command exits with 186: no ticket remains. |
+| HTTP, HTTPS | `kinit`, then `/authority:Kerberos` without `/USER`, in the same SSH session | One row each. Exit 0. |
+| HTTP | `kinit`, then `/user:CONTOSO\LabAdmin` with an empty password, in the same SSH session | One row. Exit 0. |
+| HTTP | `/authority:Kerberos` without `/USER`, in an SSH session without a ticket | `The RPC server is unavailable.` Exit 186. |
+| HTTP, HTTPS | `/user:contoso\LabAdmin` and a wrong password | `Access is denied.` Exit 5. The probe reports `Kerberos refused the account: Preauthentication failed (-1765328360)`. The KDC logged event 4771 with status 0x18 once per run. The host logged no NTLM logon of the account. |
+| HTTP | The same with `/authority:"Kerberos:CONTOSO\CM01"` | `Access is denied.` Exit 5. |
+| HTTP | `/authority:"Kerberos:CONTOSO\CM01"`, `/authority:"Kerberos:HTTP/cm01.contoso.com"`, `/authority:Kerberos:CM01` | One row each. Exit 0. |
+| HTTPS | `/authority:Kerberos:HTTP/cm01.contoso.com@CONTOSO.COM` | One row. Exit 0. |
+| HTTP | `/authority:"Kerberos:HTTP/wrong.contoso.com"` and `/authority:"Kerberos:CONTOSO\WRONGHOST"` | `The RPC server is unavailable.` Exit 186. The probe reports `Server (HTTP/wrong.contoso.com@CONTOSO.COM) unknown`. |
+| HTTP | `/user:LabAdmin /authority:NTLMDOMAIN:CONTOSO` | One row. Exit 0. The probe reports mechanism `NTLM`. |
+| HTTP | `/user:contoso\nosuchuser9` | The KDC does not know the client, so NTLM follows; the probe reports `authentication failed`. |
+| HTTP, HTTPS | `/user:contoso\LabAdmin` and the password, KDC tunnel stopped | One row. Exit 0. The probe reports mechanism `NTLM`, server scheme `Negotiate`. |
+| HTTP | `/authority:Kerberos`, KDC tunnel stopped | `The RPC server is unavailable.` Exit 186. The probe reports `unable to reach any KDC in realm CONTOSO.COM, tried 1 KDC`. |
+| HTTP, HTTPS | A temporary local account of the host as `cm01\name`, `name`, and `.\name` | Exit 0. The probe reports mechanism `NTLM`. The account was removed afterward. |
+| HTTP, HTTPS | `/user:contoso\LabAdmin` and the password, listener with `Auth/Kerberos=false` | One row. Exit 0. The probe reports mechanism `NTLM`, server scheme `Negotiate`. |
+| HTTP | The same with `/authority:Kerberos` | `Access is denied.` Exit 5. |
+| HTTPS, `CbtHardeningLevel` `Relaxed` and `Strict` | `/authority:Kerberos` with `/user:contoso\LabAdmin` and the password | One row. Exit 0. |
+| HTTPS, `CbtHardeningLevel` `Relaxed` and `Strict` | The same with the separate build, which flips the last byte of the channel binding data | `Access is denied.` Exit 5. Over HTTP, the same build returned one row. |
+
+The security log of the host recorded event 4624 with logon type 3 from the tunnel host for these runs: `CONTOSO.COM\LabAdmin` with package `Kerberos` and logon process `Kerberos` for the Kerberos runs, and `NTLM` with `NtLmSsp` for the NTLM runs. Heimdal's `gss_wrap` returned tokens with EC 0 and RRC 0 whose encrypted part was 44 bytes longer than the plaintext; the build sent them with RRC 28 and a 60-byte signature, and the service accepted them.
+
+Classic WMIC on the Windows 11 reference host, against the same host over DCOM:
+
+| Switch | Result |
+| --- | --- |
+| `/authority:"Kerberos:CONTOSO\CM01"`, `/authority:"Kerberos:HTTP/cm01.contoso.com"`, `/authority:Kerberos:CM01` | One row. Exit 0. |
+| `/authority:"Kerberos:CONTOSO\WRONGHOST"`, `/authority:"Kerberos:HTTP/wrong.contoso.com"` | `The RPC server is unavailable.` Exit 0x800706BA. |
+| `/authority:"Kerberos:CONTOSO\CM01"` with a wrong password | `Access is denied.` Exit 0x80070005. |
+| `/authority:Kerberos` without a principal | `Invalid parameter`, no `Node - ` line. Exit 0x80041008. |
+| `/authority:Kerberos:HTTP/wrong.contoso.com` without quotes | `Invalid Global Switch.` Exit 44125. |
+
+A concurrent run of this work on the same lab reported that the listener accepted a flipped Kerberos channel binding under `Strict`. The binding rows above were measured again alone. That run's separate build, started with its switch, returned a row in this measurement as well, with Kerberos and with the KDC not configured. A flipped binding is refused under `Strict` for Kerberos (above) and for NTLM ([HTTPS evidence](#https-evidence)), so its switch most likely did not change the binding it sent. The [Kerberos record](research/evidence/2026-10-17/wsman-kerberos.json) lists the runs.
+
 ## Not verified
 
 - Intel Macs. The code has separate values for x86_64. They have not run.
 - macOS versions before 15. Manual runs on macOS 15 are unverified.
 - Real ordinary or forced `Win32_OperatingSystem` shutdown/restart effects. Injected tests cover the privileged route and result mapping, but no native power action or GUI shutdown interaction has been exercised.
 - Experimental service control. The `StartService`, `StopService`, and `ChangeStartMode` methods have no real test-owned launchd lifecycle acceptance. Only parsing and command construction have tests.
-- Remote nodes, in addition to the commands in [Remote node evidence](#remote-node-evidence) and [HTTPS evidence](#https-evidence):
-  - Kerberos, CredSSP, Basic, and certificate authentication. The build does not implement them.
+- Remote nodes, in addition to the commands in [Remote node evidence](#remote-node-evidence), [HTTPS evidence](#https-evidence), and [Kerberos evidence](#kerberos-evidence):
+  - CredSSP, Basic, and certificate authentication. The build does not implement them.
+  - Kerberos on an Intel Mac. The GSS structures are packed to 2 bytes on x86_64; the build declares them so, but it has not run there.
+  - Kerberos with a session key other than AES. The lab issued AES keys. A wrap token in the RC4 format of RFC 4757 is refused, and the command ends with `Generic failure`; `/AUTHORITY:NTLMDOMAIN:<domain>` selects NTLM for such a host.
+  - Kerberos refusals other than a wrong password: expired password, disabled, locked or expired account. The build classifies them by the Kerberos error code; only the wrong password, the unknown account and the unreachable KDC ran.
+  - A `wmic` process that ends on a signal while it holds a password logon. The ticket cache of that logon is removed only when the connection closes.
+  - Kerberos on a Mac joined to the domain, with KDC discovery through DNS, across realms, or with a principal name that has no DNS name. The live runs used `krb5.conf` with one realm.
+  - The ticket cache of a graphical login session. The live runs used SSH sessions.
   - HTTPS with a certificate trusted through the keychain. The live runs trusted the self-signed listener certificate through `WMIC_WSMAN_CA_FILE`. Adding a trust setting to the login keychain over SSH was refused because it needs user interaction. The loopback tests exercise the platform verifier with a CA file on macOS and on Linux.
   - HTTPS with a listener certificate from a CA, with an intermediate certificate, with an RSASSA-PSS or ECDSA signature, or over TLS 1.2 only. The live listener used a self-signed `sha256RSA` certificate and negotiated TLS 1.3. The channel binding hash selection for the other signature algorithms has unit tests only.
   - HTTPS through an HTTP proxy. The build does not use proxies.
