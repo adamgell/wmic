@@ -106,7 +106,12 @@ fn errors_reach_stderr_with_actual_posix_exit_statuses() {
         ),
         (vec!["os", "get", "WmicCompatMissing"], 23, "Invalid query"),
         (
-            vec!["/node:wmic-no-such-host.invalid", "os", "get", "Caption"],
+            vec![
+                r#"/node:"wmic-no-such-host.invalid""#,
+                "os",
+                "get",
+                "Caption",
+            ],
             186,
             "RPC server",
         ),
@@ -151,32 +156,61 @@ fn shell_quoted_where_clause_produces_an_empty_success() {
 }
 
 #[test]
-fn spaced_output_path_and_append_keep_utf16_crlf_and_one_bom() {
+fn output_paths_and_append_keep_utf16_crlf_and_one_bom() {
     let directory = Directory::new();
-    let file = directory.0.join("output with spaces.txt");
-    for switch in ["output", "append"] {
-        let argument = format!("/{switch}:{}", file.display());
-        let result = run(&[&argument, "os", "get", "Caption", "/value"], b"");
-        if switch == "output" {
-            assert!(success(&result).trim().is_empty());
-        } else {
-            assert!(success(&result).contains("Caption=macOS "));
+    for filename in [
+        "output.txt",
+        "output with spaces.txt",
+        "adam's-report.txt",
+        "report\"quoted.txt",
+    ] {
+        let file = directory.0.join(filename);
+        for switch in ["output", "append"] {
+            let argument = format!("/{switch}:{}", file.display());
+            let result = run(&[&argument, "os", "get", "Caption", "/value"], b"");
+            if switch == "output" {
+                assert!(success(&result).trim().is_empty());
+            } else {
+                assert!(success(&result).contains("Caption=macOS "));
+            }
         }
+        let bytes = fs::read(file).unwrap();
+        assert_eq!(&bytes[..2], b"\xff\xfe");
+        assert_eq!(bytes.len() % 2, 0);
+        let units: Vec<u16> = bytes[2..]
+            .as_chunks::<2>()
+            .0
+            .iter()
+            .map(|pair| u16::from_le_bytes([pair[0], pair[1]]))
+            .collect();
+        let text = String::from_utf16(&units).unwrap();
+        assert_eq!(text.matches("Caption=macOS ").count(), 2);
+        assert!(!text.contains('\u{feff}'));
+        assert!(text.contains("\r\n"));
+        assert!(!text.replace("\r\n", "").contains('\n'));
     }
-    let bytes = fs::read(file).unwrap();
-    assert_eq!(&bytes[..2], b"\xff\xfe");
-    assert_eq!(bytes.len() % 2, 0);
-    let units: Vec<u16> = bytes[2..]
-        .as_chunks::<2>()
-        .0
-        .iter()
-        .map(|pair| u16::from_le_bytes([pair[0], pair[1]]))
-        .collect();
-    let text = String::from_utf16(&units).unwrap();
-    assert_eq!(text.matches("Caption=macOS ").count(), 2);
-    assert!(!text.contains('\u{feff}'));
-    assert!(text.contains("\r\n"));
-    assert!(!text.replace("\r\n", "").contains('\n'));
+}
+
+#[test]
+fn quoted_output_paths_preserve_adjacent_switches_in_the_same_argument() {
+    let directory = Directory::new();
+    for switch in ["/node:.", "/aggregate:on"] {
+        let file = directory.0.join("adjacent.txt");
+        let argument = format!("/output:\"{}\"{switch}", file.display());
+        let result = run(&[&argument, "os", "get", "Caption", "/value"], b"");
+        assert!(success(&result).trim().is_empty());
+        let bytes = fs::read(&file).unwrap();
+        let text = String::from_utf16(
+            &bytes[2..]
+                .as_chunks::<2>()
+                .0
+                .iter()
+                .map(|p| u16::from_le_bytes([p[0], p[1]]))
+                .collect::<Vec<_>>(),
+        )
+        .unwrap();
+        assert!(text.contains("Caption=macOS "), "{text}");
+    }
 }
 
 #[test]

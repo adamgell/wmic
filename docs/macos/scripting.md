@@ -48,7 +48,7 @@ report_dir=$(mktemp -d "${TMPDIR:-/tmp}/wmic-guide.XXXXXX")
 
 WMIC preserves the `/output:` part while quoting its value during argv reconstruction. This is different from composing an unquoted string and asking the shell to split it again.
 
-For comma-separated switch values, preserve any quotes that belong to WMIC itself. For example, `'/node:"a,b"'` is one node name containing a comma; `/node:"a,b"` passes an unquoted comma list after shell parsing. Neither form enables remote querying on macOS. The [quoting reference](../macos.md#shell-quoting) lists the remaining reconstruction limits.
+For comma-separated switch values, preserve any quotes that belong to WMIC itself. Quote each node separately, for example `'/node:"a","b"'`. The original node scanner also splits commas inside quotes, so quoting the whole list (`'/node:"a,b"'`) can consume the following command as part of the node value. A hyphenated node needs retained quotes such as `'/node:"host-name"'`. These forms do not enable remote querying on macOS. The [quoting reference](../macos.md#shell-quoting) lists the remaining reconstruction limits.
 
 ## Process status and method results
 

@@ -120,7 +120,7 @@ impl OutputSink for Sink {
 fn ordered_nodes_preserve_success_before_enumeration_failure() {
     let (mut b, mut sink) = (Ordered::default(), Sink::default());
     let out = Session::new(wide("LOCAL")).unwrap().execute(
-        &wide("/node:node-a,node-b os get Caption"),
+        &wide(r#"/node:"node-a","node-b" os get Caption"#),
         EntryMode::Interactive,
         &mut b,
         &mut sink,
@@ -130,6 +130,35 @@ fn ordered_nodes_preserve_success_before_enumeration_failure() {
     assert_eq!(out.nodes[1].exit_status, 0x80041003);
     assert!(sink.stdout.to_string_lossy().contains("First node"));
     assert!(sink.stderr.to_string_lossy().contains("Node - node-b"));
+}
+
+#[test]
+fn aggregated_success_has_no_extra_empty_table_from_a_failed_node() {
+    for nodes in [r#""node-a","node-b""#, r#""node-b","node-a""#] {
+        let (mut backend, mut sink) = (Ordered::default(), Sink::default());
+        let outcome = Session::new(wide("LOCAL")).unwrap().execute(
+            &wide(&format!("/node:{nodes} os get Caption")),
+            EntryMode::Interactive,
+            &mut backend,
+            &mut sink,
+        );
+        assert_eq!(outcome.exit_status, 0x80041003);
+        assert!(
+            sink.stdout.to_string_lossy().starts_with("Caption"),
+            "{:?}",
+            sink.stdout
+        );
+        assert!(sink.stderr.to_string_lossy().contains("Access denied"));
+    }
+    let (mut backend, mut sink) = (Ordered::default(), Sink::default());
+    let outcome = Session::new(wide("LOCAL")).unwrap().execute(
+        &wide(r#"/node:"node-b" os get Caption"#),
+        EntryMode::Interactive,
+        &mut backend,
+        &mut sink,
+    );
+    assert_eq!(outcome.exit_status, 0x80041003);
+    assert_eq!(sink.stdout, wide("\r\r\n\r\r\n"));
 }
 #[test]
 fn conflicting_authority_and_user_domain_is_rejected_by_connection_validation() {
@@ -283,7 +312,7 @@ fn repeated_queries_keep_their_connection_settings() {
     }
     let (mut b, mut sink) = (Ordered::default(), Sink::default());
     let out = Session::new(wide("LOCAL")).unwrap().execute_with_scheduler(
-        &wide("/node:node-a /authlevel:pktprivacy os get Caption /every:2"),
+        &wide(r#"/node:"node-a" /authlevel:pktprivacy os get Caption /every:2"#),
         EntryMode::Interactive,
         &mut b,
         &mut sink,

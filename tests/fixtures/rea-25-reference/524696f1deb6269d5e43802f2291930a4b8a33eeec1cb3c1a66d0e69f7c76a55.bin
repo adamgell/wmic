@@ -1,0 +1,6 @@
+
+Escapes to full WMI object paths.
+USAGE:
+
+PATH (<path expr> | (<class path expr> [WHERE <where clause>])) [<verb clause>]
+

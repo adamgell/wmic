@@ -67,7 +67,12 @@ fn alias_positional_selector_uses_pwhere() {
 }
 #[test]
 fn alias_seealso_expands_to_derived_command() {
-    for line in ["alias OS call SeeAlso", "alias OS SeeAlso"] {
+    for line in [
+        "alias OS call SeeAlso",
+        "alias OS SeeAlso",
+        "alias OS call ＳｅｅＡｌｓｏ",
+        "alias OS ＳｅｅＡｌｓｏ",
+    ] {
         let ResolvedCommand::Derived(d) = resolve(line) else {
             panic!()
         };
@@ -123,10 +128,20 @@ fn namespace_switch_does_not_override_alias_connection() {
 }
 #[test]
 fn external_verb_is_resolved_without_execution() {
-    let ResolvedCommand::External(d) = resolve("nicconfig call FlushDns") else {
+    for line in ["nicconfig call FlushDns", "nicconfig call ＦｌｕｓｈＤｎｓ"] {
+        let ResolvedCommand::External(d) = resolve(line) else {
+            panic!()
+        };
+        assert_eq!(d.template, wide("ipconfig /FlushDns"));
+    }
+}
+
+#[test]
+fn fullwidth_wmi_method_name_is_preserved_for_provider_validation() {
+    let ResolvedCommand::Management(r) = resolve("process call ＧｅｔＯｗｎｅｒ") else {
         panic!()
     };
-    assert_eq!(d.template, wide("ipconfig /FlushDns"));
+    assert_eq!(r.method, Some(wide("ＧｅｔＯｗｎｅｒ")));
 }
 #[test]
 fn all_views_preserve_derived_properties_and_names() {

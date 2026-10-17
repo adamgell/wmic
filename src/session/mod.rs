@@ -3,6 +3,7 @@ pub use settings::*;
 mod execute;
 pub use execute::*;
 mod nodes;
+mod repeat;
 pub use nodes::*;
 
 mod presentation;
