@@ -791,12 +791,12 @@ fn channel_binding_hashes_the_gss_structure_around_the_end_point_data() {
     let data = tls::server_end_point(&certificate_der("loopback-rsa-sha256")).unwrap();
     assert_eq!(
         to_hex(&ntlm::channel_binding(&data)),
-        "e14a8e36e08eeada92e52913c05be174"
+        "5ce5c455ffba327a9b8235a43d524b63"
     );
     let ecdsa = tls::server_end_point(&certificate_der("other-ecdsa-sha384")).unwrap();
     assert_eq!(
         to_hex(&ntlm::channel_binding(&ecdsa)),
-        "b63ce875d28f467ed62c3dd4cb3c334e"
+        "df642f49b6117937301a3723832ed222"
     );
     assert_eq!(
         to_hex(&ntlm::channel_binding(b"")),

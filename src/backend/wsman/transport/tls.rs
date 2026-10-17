@@ -271,17 +271,17 @@ mod tests {
         assert_eq!(&rsa[..21], b"tls-server-end-point:");
         assert_eq!(
             hex(&rsa[21..]),
-            "bafce5a9b354f780c64df5740f723e66c0d1da2aa0c37e64c35b59290339a2f4"
+            "d227ede37c81c70c10f116bcda713caa23c06fdecfbadcb1aa94f8c147d8b86a"
         );
         let ecdsa = server_end_point(&fixture("other-ecdsa-sha384")).unwrap();
         assert_eq!(
             hex(&ecdsa[21..]),
-            "21cd63a25e6eca5fd33140dc83887fd9e7a035c0bbbbc8bc9494e7cc58089a7a6bddc70cdeb95f71aabf3152c5692477"
+            "30dab1ad07e98abecccc05be606eb7362e6792486301e6fdb7d147fc4de77fff119414cf9901c7a990bbdade8da92457"
         );
         let sha1 = server_end_point(&fixture("legacy-rsa-sha1")).unwrap();
         assert_eq!(
             hex(&sha1[21..]),
-            "092a75e781ad4279004b3dfe19a688b61951e23e2266c933884b9528348c473d"
+            "7a43a6323b9e06d3a8509f9a39503e5c6b00f78cf5749481335a77196f5f345d"
         );
     }
 

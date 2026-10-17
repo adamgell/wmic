@@ -1,0 +1,45 @@
+{
+  "base_commit": "fd5ce4517c1dca2f7cfc0f3dd2bd3bb2fb90a12f",
+  "captured_utc": "2026-10-17",
+  "scope": "WS-Management over HTTPS (port 5986) with certificate validation and NTLM channel binding, macOS build",
+  "listener": {
+    "host": "Windows 11 Enterprise Evaluation 26200 lab client",
+    "transport": "HTTPS 5986",
+    "certificate": "self-signed, RSA 2048, sha256RSA, CN=client01.contoso.com, SAN DNS client01.contoso.com, DNS CLIENT01, IP 127.0.0.1, IP <lan>, 90 days",
+    "created_with": [
+      "New-SelfSignedCertificate -CertStoreLocation Cert:\\LocalMachine\\My -Subject CN=client01.contoso.com -KeyAlgorithm RSA -KeyLength 2048 -HashAlgorithm SHA256 -TextExtension 2.5.29.17={text}DNS=...&IPAddress=127.0.0.1 2.5.29.37={text}1.3.6.1.5.5.7.3.1",
+      "New-Item -Path WSMan:\\localhost\\Listener -Transport HTTPS -Address * -CertificateThumbPrint <thumbprint>",
+      "New-NetFirewallRule -Direction Inbound -Protocol TCP -LocalPort 5986 -Action Allow"
+    ],
+    "negotiated": "TLS 1.3, AEAD-AES256-GCM-SHA384 (openssl s_client)"
+  },
+  "client": "Mac mini, Apple M4, macOS 26.6.2, release build, /node:127.0.0.1 through an SSH tunnel, WMIC_WSMAN_PORT set to the tunnel port",
+  "runs": [
+    {"cbt": "Relaxed", "env": "WMIC_WSMAN_SCHEME=https WMIC_WSMAN_CA_FILE=client01.pem", "command": "os get Caption,CSName", "result": "one row", "exit": 0},
+    {"cbt": "Relaxed", "env": "WMIC_WSMAN_SCHEME=https", "command": "os get Caption", "result": "Secure connection failed: handshake with 127.0.0.1: invalid peer certificate: “client01.contoso.com” certificate is not trusted: -67843", "exit": 143},
+    {"cbt": "Relaxed", "env": "WMIC_WSMAN_SCHEME=http", "command": "os get Caption", "result": "one row", "exit": 0},
+    {"cbt": "Strict", "env": "WMIC_WSMAN_SCHEME=https WMIC_WSMAN_CA_FILE=client01.pem", "command": "os get Caption,CSName", "result": "one row", "exit": 0},
+    {"cbt": "Strict", "env": "WMIC_WSMAN_SCHEME=http", "command": "os get Caption", "result": "one row", "exit": 0},
+    {"cbt": "Strict", "env": "WMIC_WSMAN_SCHEME=https WMIC_WSMAN_CA_FILE=client01.pem, separate build with one byte of the channel binding flipped", "command": "os get Caption", "result": "Access denied", "exit": 5},
+    {"cbt": "Strict", "env": "WMIC_WSMAN_SCHEME=https WMIC_WSMAN_CA_FILE=client01.pem, the same separate build without the flip", "command": "os get Caption", "result": "one row", "exit": 0}
+  ],
+  "cbt_restored": "Relaxed",
+  "gates": {
+    "macos": {"fmt_check": "ok", "clippy_all_targets_deny_warnings": "ok", "cargo_test_locked": {"passed": 474, "failed": 0}},
+    "windows": {"fmt_check": "ok", "clippy_all_targets_deny_warnings": "ok", "cargo_test_locked": {"passed": 203, "failed": 0, "ignored": 33}, "dependency_tree": "identical to the base commit, 24 crates"},
+    "linux": {"note": "see the pull request for the Ubuntu run of tests/wsman_transport.rs"}
+  },
+  "dependency_footprint_net_new_crates": {
+    "method": "cargo tree --edges normal per target, minus the crates in the base lockfile",
+    "rustls_ring_platform_verifier": {"macos": 13, "linux": 12, "chosen": true},
+    "rustls_ring_native_certs": {"macos": 12, "linux": 10},
+    "native_tls": {"macos": 10, "linux": 9, "note": "plus the system OpenSSL on Linux; Secure Transport is deprecated by Apple"},
+    "rustls_ring_webpki_roots": {"macos": 9, "linux": 9, "note": "does not consult the keychain"},
+    "excluded": "aws-lc-rs needs cmake, which the macOS build machine lacks"
+  },
+  "not_verified": [
+    "a certificate trusted through the keychain (trust settings over SSH need user interaction)",
+    "a listener certificate from a CA, with an intermediate, with RSASSA-PSS or ECDSA, or over TLS 1.2 only",
+    "HTTPS through an HTTP proxy"
+  ]
+}
