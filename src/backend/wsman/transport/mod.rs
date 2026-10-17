@@ -1,8 +1,9 @@
-//! HTTP/1.1 over TCP with NTLM authentication and message encryption.
+//! HTTP/1.1 over TCP, plain or inside TLS, with NTLM authentication and message encryption.
 pub mod base64;
 pub mod framing;
 pub mod http;
 pub mod ntlm;
+pub mod tls;
 
 use super::{Endpoint, Response, Transport, TransportError};
 use crate::backend::SecretWide;
@@ -24,6 +25,9 @@ impl From<ntlm::NtlmError> for TransportError {
 /// sealed envelope. The security context belongs to the connection, so a connection that closes
 /// or fails makes every later `post` return `TransportError::Io`. An HTTP 401 reply after the
 /// handshake is returned once with an empty body and ends the connection the same way.
+///
+/// Over TLS, the NTLM exchange is bound to the server certificate with the
+/// `tls-server-end-point` channel binding, so the logon cannot be relayed to another server.
 pub struct NtlmHttpTransport {
     connection: HttpConnection,
     host: String,
@@ -31,6 +35,8 @@ pub struct NtlmHttpTransport {
     domain: String,
     /// Held until the NTLM exchange has used it.
     password: Option<SecretWide>,
+    /// MsvAvChannelBindings value: the hash of the TLS channel binding, zeros without TLS.
+    channel_binding: [u8; 16],
     server_name: Option<String>,
     session: Option<Session>,
     unusable: bool,
@@ -48,14 +54,25 @@ pub fn negotiate_token(response: &HttpResponse) -> Option<&str> {
 }
 
 impl NtlmHttpTransport {
-    /// Opens the TCP connection. Credentials are checked by the first `post`.
+    /// Opens the connection and, over TLS, validates the server certificate. Credentials are
+    /// checked by the first `post`.
     pub fn connect(endpoint: &Endpoint) -> Result<Self, TransportError> {
+        let connection =
+            HttpConnection::connect(&endpoint.host, endpoint.port, endpoint.tls.as_ref())?;
+        let channel_binding = match connection.peer_certificate() {
+            Some(certificate) => {
+                let data = tls::server_end_point(certificate).map_err(TransportError::Tls)?;
+                ntlm::channel_binding(&data)
+            }
+            None => [0; 16],
+        };
         Ok(Self {
-            connection: HttpConnection::connect(&endpoint.host, endpoint.port)?,
+            connection,
             host: endpoint.host.clone(),
             user: endpoint.user.clone(),
             domain: endpoint.domain.clone(),
             password: Some(endpoint.password.clone()),
+            channel_binding,
             server_name: None,
             session: None,
             unusable: false,
@@ -104,6 +121,7 @@ impl NtlmHttpTransport {
             client_challenge,
             exported_session_key,
             fallback_time: ntlm::filetime_now(),
+            channel_binding: self.channel_binding,
         };
         ntlm::wipe(&mut exported_session_key);
         let built = ntlm::build_authenticate(&negotiate, &challenge, &params);

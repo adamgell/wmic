@@ -1,9 +1,9 @@
 //! Management backend for nodes reached over WS-Management.
 use super::{
-    Endpoint, InvalidPort, catalog,
+    Endpoint, InvalidSetting, Listener, catalog,
     client::{Connector, Found, Target, WsmanClient, default_connector, listener_reachable},
     fault::detail_properties,
-    listener_port,
+    listener,
     path::{Keys, ObjectPath, parse_object_path},
     record::infer_schema,
     schema::ClassInfo,
@@ -20,12 +20,12 @@ use crate::{
     },
 };
 
-/// Where the listener port comes from.
-pub type PortSource = fn() -> Result<u16, InvalidPort>;
+/// Where the listener settings come from.
+pub type ListenerSource = fn() -> Result<Listener, InvalidSetting>;
 
 pub struct WsmanManagement {
     client: WsmanClient,
-    port: PortSource,
+    listener: ListenerSource,
 }
 
 fn error(node: &WideText, code: u32, message: &str, operation: &str) -> ManagementError {
@@ -47,7 +47,7 @@ fn invalid_query(node: &WideText) -> ManagementError {
     error(node, 0x80041017, "Invalid query", "query")
 }
 
-fn invalid_port(node: &WideText, invalid: &InvalidPort) -> ManagementError {
+fn invalid_setting(node: &WideText, invalid: &InvalidSetting) -> ManagementError {
     ManagementError {
         extended: detail_properties(&invalid.to_string(), None),
         ..error(node, 0x80041008, "Invalid parameter", "query")
@@ -94,7 +94,7 @@ pub fn host_of(node: &WideText) -> String {
 }
 
 /// Connection settings for a request: account from the `/user` and `/password` options.
-fn target_of(request: &ResolvedRequest, port: u16) -> Target {
+fn target_of(request: &ResolvedRequest, listener: &Listener) -> Target {
     let connection = &request.connection;
     let host = host_of(&connection.node);
     let (user, domain) = connection.identity_parts();
@@ -103,10 +103,11 @@ fn target_of(request: &ResolvedRequest, port: u16) -> Target {
     Target {
         endpoint: Endpoint {
             host: host.clone(),
-            port,
+            port: listener.port,
             user: user.to_string_lossy(),
             domain: domain.to_string_lossy(),
             password: connection.password.clone().unwrap_or_default(),
+            tls: listener.tls(),
         },
         namespace: if namespace.is_empty() {
             "root\\cimv2".into()
@@ -236,19 +237,16 @@ impl WsmanManagement {
     }
 
     pub fn with_client(client: WsmanClient) -> Self {
-        Self {
-            client,
-            port: listener_port,
-        }
+        Self { client, listener }
     }
 
-    /// Replaces the source of the listener port.
-    pub fn with_port_source(mut self, port: PortSource) -> Self {
-        self.port = port;
+    /// Replaces the source of the listener settings.
+    pub fn with_listener_source(mut self, listener: ListenerSource) -> Self {
+        self.listener = listener;
         self
     }
 
-    /// Reaches nodes with NTLM over HTTP.
+    /// Reaches nodes with NTLM over HTTP or HTTPS.
     pub fn connected() -> Self {
         Self::new(default_connector())
     }
@@ -262,8 +260,8 @@ impl WsmanManagement {
         if interrupted() {
             return Err(cancelled(node, None));
         }
-        let port = (self.port)().map_err(|e| invalid_port(node, &e))?;
-        let target = target_of(request, port);
+        let listener = (self.listener)().map_err(|e| invalid_setting(node, &e))?;
+        let target = target_of(request, &listener);
         match request.verb {
             Verb::Get | Verb::List if request.class_mode => self.schema(&target, request),
             Verb::Get | Verb::List => {
@@ -474,7 +472,8 @@ impl WsmanManagement {
 
 impl Management for WsmanManagement {
     fn reachable(&mut self, node: &WideText, timeout_ms: u32) -> bool {
-        (self.port)().is_ok_and(|port| listener_reachable(&host_of(node), port, timeout_ms))
+        (self.listener)()
+            .is_ok_and(|listener| listener_reachable(&host_of(node), listener.port, timeout_ms))
     }
 
     fn execute(&mut self, request: &ResolvedRequest) -> Result<ManagementResult, ManagementError> {

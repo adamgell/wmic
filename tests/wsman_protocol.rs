@@ -182,6 +182,7 @@ fn endpoint(port: u16) -> Endpoint {
         user: "admin".into(),
         domain: "AYW".into(),
         password: SecretWide::new(wide("secret")),
+        tls: None,
     }
 }
 
@@ -1963,8 +1964,11 @@ fn unknown_classes_of_paths_are_not_found_but_queries_keep_invalid_class() {
 #[test]
 fn a_port_the_environment_names_wrongly_is_an_invalid_parameter() {
     let w = wire();
-    let mut backend = management(&w)
-        .with_port_source(|| Err(wmic_compat::backend::wsman::InvalidPort("0".into())));
+    let mut backend = management(&w).with_listener_source(|| {
+        Err(wmic_compat::backend::wsman::InvalidSetting::Port(
+            "0".into(),
+        ))
+    });
     let error = backend.execute(&remote("os get Caption")).unwrap_err();
     assert_eq!(
         failure(error.clone()),
@@ -2059,7 +2063,7 @@ mod routing {
         assert_eq!(seen[0].password.expose(), &wide("secret"));
         assert_eq!(
             seen[0].port,
-            wmic_compat::backend::wsman::listener_port().unwrap()
+            wmic_compat::backend::wsman::listener().unwrap().port
         );
     }
 
@@ -2113,7 +2117,7 @@ mod routing {
             plain.reachable_for(&with_user, 200),
             "the request is refused before it needs a listener"
         );
-        let port = wmic_compat::backend::wsman::listener_port().unwrap();
+        let port = wmic_compat::backend::wsman::listener().unwrap().port;
         assert_eq!(
             tunnel.reachable_for(&with_user, 200),
             listener_reachable("localhost", port, 200),

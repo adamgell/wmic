@@ -142,12 +142,15 @@ The shell removes an unquoted backslash, so quote the account argument.
 ### Requirements
 
 - The target has WinRM enabled. Run `Enable-PSRemoting` or `winrm quickconfig` on the target.
-- The build sends WS-Management over HTTP to TCP port 5985, path `/wsman`. It connects directly and does not use an HTTP proxy.
-- Authentication is NTLMv2 inside the Negotiate scheme. After the logon, the build seals every SOAP message with the NTLM session key. Sealing encrypts and signs the message. This works against the Windows default, `AllowUnencrypted=false` with the Negotiate scheme enabled.
+- The build sends WS-Management to path `/wsman` over HTTP on TCP port 5985. With `WMIC_WSMAN_SCHEME=https` it sends HTTP over TLS on TCP port 5986. It connects directly and does not use an HTTP proxy.
+- Authentication is NTLMv2 inside the Negotiate scheme. After the logon, the build seals every SOAP message with the NTLM session key. Sealing encrypts and signs the message. This works against the Windows default, `AllowUnencrypted=false` with the Negotiate scheme enabled. Over HTTPS, the messages are sealed in the same way inside the TLS connection.
 - The build ends the logon when the server does not grant sealing. It sends no SOAP message in plain text.
 - The password does not cross the network. NTLMv2 sends a response that the build computes from it.
-- Not implemented: Basic, Kerberos, CredSSP, certificate authentication, and HTTPS (port 5986). A target that allows only these methods is not supported.
-- Security of the logon: the NTLMv2 exchange travels in HTTP headers on a TCP connection without TLS. This is the same exposure as any Windows client that uses Negotiate over the default HTTP listener, including PowerShell remoting over port 5985. A party on the network path can record the NTLMv2 response and test password guesses against it offline, so the account needs a strong password. The build negotiates signing, sealing and 128-bit keys, protects the negotiation with the message integrity code, and refuses a server that drops sealing, so a recorded exchange cannot be replayed to WinRM and a party on the path cannot read or alter the SOAP messages. HTTPS with certificate validation and channel binding, and Kerberos, are not implemented. Use the build on networks you trust, or through a tunnel such as SSH.
+- Not implemented: Basic, Kerberos, CredSSP, and certificate authentication. A target that allows only these methods is not supported.
+- HTTPS validates the server certificate before the first HTTP byte is sent. The certificate must chain to a trust anchor and must name the host as typed in `/NODE`: a DNS name or an IP address in its subject alternative names. The trust anchors are the platform trust store, which on macOS is the Security framework evaluation over the system and login keychains, plus the certificates in the PEM file named by `WMIC_WSMAN_CA_FILE`. A certificate that fails validation ends the command with `Secure connection failed: ` and the reason (0x80072F8F). The build does not fall back to HTTP.
+- HTTPS binds the logon to the server certificate. The NTLM AUTHENTICATE_MESSAGE carries the `tls-server-end-point` channel binding of RFC 5929, the hash of the server certificate, in the `MsvAvChannelBindings` pair of MS-NLMP. A listener with `CbtHardeningLevel` set to `Strict` accepts the logon. A logon bound to another certificate is refused with `Access denied`. The hash is the one of the certificate's signature algorithm; MD5 and SHA-1 are raised to SHA-256. A certificate with a signature algorithm outside that rule, for example Ed25519, ends the command with `Secure connection failed`.
+- TLS is `rustls` with the `ring` provider, TLS 1.2 and 1.3 with the default cipher suites. Certificate validation is `rustls-platform-verifier`. These crates are compiled only for non-Windows targets.
+- Security of the logon over HTTP: the NTLMv2 exchange travels in HTTP headers on a TCP connection without TLS. This is the same exposure as any Windows client that uses Negotiate over the default HTTP listener, including PowerShell remoting over port 5985. A party on the network path can record the NTLMv2 response and test password guesses against it offline, so the account needs a strong password. The build negotiates signing, sealing and 128-bit keys, protects the negotiation with the message integrity code, and refuses a server that drops sealing, so a recorded exchange cannot be replayed to WinRM and a party on the path cannot read or alter the SOAP messages. HTTPS removes the exposure of the exchange: a party on the path cannot record it without a certificate the client trusts, and the channel binding stops a relay of the logon to another server. Kerberos is not implemented. Over HTTP, use the build on networks you trust, or through a tunnel such as SSH.
 - The connect timeout is 5 seconds. The read and write timeout is 90 seconds, longer than the 60 second operation timeout the request declares. A `Pull` of an enumeration that the server answers with a timeout fault is sent again with the same enumeration context until it completes or Ctrl+C ends it. A timeout fault on any other request ends the command with the status of the fault.
 
 ### Credentials and connection settings
@@ -160,11 +163,16 @@ The shell removes an unquoted backslash, so quote the account argument.
 | `/USER` without `/PASSWORD` | `wmic` writes `Enter the password :` to standard error and reads one line from standard input. The input is not echoed when standard input is a terminal. A script can pipe the password. An empty line sends an empty password. |
 | `/AUTHLEVEL`, `/IMPLEVEL`, `/PRIVILEGES`, `/LOCALE` | Accepted. They have no effect on WinRM. Every request uses the locale `en-US`. |
 | `/FAILFAST:on` | Before the query, checks that a TCP connection to the listener port opens. A number sets the timeout in milliseconds. The default is 5000. On failure the command reports `RPC Server not available.` (0xABE3). |
-| `WMIC_WSMAN_PORT` | An environment variable. Its value replaces port 5985 for all nodes. Use it for a non-standard listener or an SSH tunnel. A value that is not a port number from 1 to 65535 reports `Invalid parameter` (0x80041008). |
+| `WMIC_WSMAN_SCHEME` | An environment variable, `http` or `https`, for all nodes. The default is `http`. `https` sends HTTP over TLS to port 5986, validates the server certificate, and binds the logon to it. Another value reports `Invalid parameter` (0x80041008). |
+| `WMIC_WSMAN_PORT` | An environment variable. Its value replaces the default port, 5985 for `http` and 5986 for `https`, for all nodes. Use it for a non-standard listener or an SSH tunnel. A value that is not a port number from 1 to 65535 reports `Invalid parameter` (0x80041008). |
+| `WMIC_WSMAN_CA_FILE` | An environment variable. The path of a PEM file whose certificates are trust anchors in addition to the platform trust store. Use it for a self-signed listener certificate or for a private CA that is not in the keychain. It has no effect over `http`. A file that cannot be read, or that holds no certificate, reports `Secure connection failed` (0x80072F8F). |
 
 ```sh
 printf '%s\n' "$PASSWORD" | wmic /node:server01 '/user:CONTOSO\admin' os get Caption
+WMIC_WSMAN_SCHEME=https wmic /node:server01.contoso.com '/user:CONTOSO\admin' os get Caption
 ```
+
+Over HTTPS, `/NODE` must hold a name the certificate carries. A listener certificate issued to `server01.contoso.com` does not match `/node:server01` or an IP address unless the certificate names them too.
 
 ### What works
 
@@ -208,7 +216,8 @@ For a class in the schema, a method that the class does not have returns `<name>
 | Unknown class in `PATH` | `Not found` | 0x80041002 | 2 |
 | Unknown property | `Invalid query` | 0x80041017 | 23 |
 | Unknown namespace | `Invalid namespace`, with no `Node - ` line and no output on standard output | 0x8004100E | 14 |
-| The server refuses the logon | `Access is denied.` | 0x80070005 | 5 |
+| The server refuses the logon, including a channel binding the server does not accept | `Access is denied.` | 0x80070005 | 5 |
+| Over HTTPS, the certificate is not trusted, names another host, or the TLS handshake fails; the CA file cannot be read | `Secure connection failed: ` and the reason | 0x80072F8F | 143 |
 | WMI refuses the operation | `Access denied` | 0x80041003 | 3 |
 | The connection fails: refused, name not found, or no answer in 5 seconds | `The RPC server is unavailable.` | 0x800706BA | 186 |
 | `/FAILFAST:ON` and the node does not answer | `Node - <node>`, then `RPC Server not available.`, with no `ERROR:` line | 0xABE3 | 227 |
@@ -249,7 +258,7 @@ cargo run --example wsman-probe -- HOST PORT [DOMAIN\]USER
 cargo run --example wsman-probe -- --challenge HOST PORT
 ```
 
-The first form reads the password from standard input, authenticates with NTLM, sends an Identify request, and prints the decrypted reply. The second form sends only the NTLM negotiate message and prints the parsed challenge. It uses no credentials.
+The first form reads the password from standard input, authenticates with NTLM, sends an Identify request, and prints the decrypted reply. The second form sends only the NTLM negotiate message and prints the parsed challenge. It uses no credentials. `WMIC_WSMAN_SCHEME` and `WMIC_WSMAN_CA_FILE` apply to the probe as they do to `wmic`; the port is the argument.
 
 ## Supported classes
 
@@ -388,13 +397,13 @@ The test files below contain these `#[test]` functions in this revision.
 | `src/backend/macos/sys/power_tests.rs` | 8 | macOS | Exact ordinary versus forced operation selection, zero action calls when privilege is denied, command status/error mapping, and no forced fallback |
 | `tests/remote_fidelity.rs` | 28 | All platforms | Bytes measured on classic WMIC: failed nodes in a list, fail-fast text, `CALL` on a node list, `RAWXML` and `XML` with a failed node, `/RECORD` with a node list, the method name, the invalid namespace, an unknown alias with a password |
 | `tests/wsman_protocol.rs` | 58 | Unix (3 on macOS only) | Enumerate, pull, release, get, invoke, faults, typing, object paths, nested reference keys, routing, port validation, stale connections, timeouts |
-| `tests/wsman_transport.rs` | 27 | Unix | NTLM vectors from MS-NLMP 4.2.4, loopback server with a real handshake, sealing, framing variants, chunked HTTP, unsealed-reply refusal, wrong password, closed connections |
-| `src/backend/wsman/**` (unit tests) | 34 | Unix | Value conversion, fault precedence, parsing limits, path quoting, record building, envelopes, timeouts, the port variable |
+| `tests/wsman_transport.rs` | 33 | Unix | NTLM vectors from MS-NLMP 4.2.4, loopback server with a real handshake, sealing, framing variants, chunked HTTP, unsealed-reply refusal, wrong password, closed connections, the same server behind TLS with the certificates in `tests/fixtures/tls`: trusted through a CA file, untrusted, issued to another name, channel binding value, unreadable CA file |
+| `src/backend/wsman/**` (unit tests) | 40 | Unix | Value conversion, fault precedence, parsing limits, path quoting, record building, envelopes, timeouts, the port and scheme variables, channel binding hash selection and digests |
 | `src/platform/unix/console.rs` (unit tests) | 4 | Unix | Signal handler, inherited dispositions, terminal restore |
 | `src/alias/predicate.rs` (unit tests) | 6 | All platforms | WHERE literal coercion and comparison types |
-| Total | 334 | | |
+| Total | 346 | | |
 
-The five `tests/macos_*.rs` files hold 109 of the 334 tests listed here. The remote-node suites run on every Unix platform. Unix and Windows-specific suites have explicit platform gates. At the earlier commit b2755a9, `cargo test --locked` reported 311 passed and 0 failed on the Mac mini, and 189 passed, 0 failed, 33 ignored on Windows. With the remote-node fixes of 2026-10-17, `cargo test --locked` reports 503 passed and 0 failed on the Mac mini, and 231 passed, 0 failed, 34 ignored on Windows.
+The five `tests/macos_*.rs` files hold 109 of the 346 tests listed here. The remote-node suites run on every Unix platform. Unix and Windows-specific suites have explicit platform gates. At the earlier commit b2755a9, `cargo test --locked` reported 311 passed and 0 failed on the Mac mini, and 189 passed, 0 failed, 33 ignored on Windows. With the remote-node fixes of 2026-10-17, `cargo test --locked` reports 503 passed and 0 failed on the Mac mini, and 231 passed, 0 failed, 34 ignored on Windows.
 
 The earlier follow-up passed 327 tests on Apple Silicon, including 12 executable tests and four fixed-snapshot mapping tests. [Review evidence](research/evidence/2026-10-16/macos-pr-review.json) records that baseline. The shutdown fix passes 340 tests: it adds 14 injected tests and replaces the prior native privilege/invalid-flag test, so all power behavior is tested through fakes, independently of the test runner's real user ID. [Shutdown fix evidence](research/evidence/2026-10-16/macos-shutdown-fix.json) records the fresh checks and remaining acceptance limits.
 
@@ -440,14 +449,33 @@ The commands below ran on 2026-10-16 from the Mac mini against two Windows hosts
 
 The same commands run through the Windows build against `/node:127.0.0.1` print the typed address in the `Node` column and the computer name in `__SERVER`, which is what the macOS build prints.
 
+### HTTPS evidence
+
+The commands below ran on 2026-10-17 from the Mac mini against the Windows 11 host above. An SSH tunnel on the Mac forwarded `127.0.0.1:25986` to port 5986 of the host and `127.0.0.1:15985` to port 5985, so every command used `/node:127.0.0.1` and `WMIC_WSMAN_PORT`. The host got an HTTPS listener with a self-signed certificate: RSA 2048, `sha256RSA`, subject `CN=client01.contoso.com`, subject alternative names `client01.contoso.com`, `CLIENT01`, `127.0.0.1` and the LAN address, 90 days. The IP name satisfies the name check through the tunnel. The listener was created with `New-SelfSignedCertificate` and `New-Item WSMan:\localhost\Listener -Transport HTTPS`. The certificate was exported in PEM form to the Mac as `client01.pem`. `CbtHardeningLevel` on the host was `Relaxed`, the Windows default, then `Strict`, then `Relaxed` again. The build was the release build of this revision; for the last two rows, one byte of the channel binding was flipped in a separate build when the environment variable `WMIC_BREAK_BINDING` was set. That switch is not in the source.
+
+| `CbtHardeningLevel` | Environment | Command | Result |
+| --- | --- | --- | --- |
+| Relaxed | `WMIC_WSMAN_SCHEME=https WMIC_WSMAN_CA_FILE=client01.pem` | `os get Caption,CSName` | One row. Exit 0. |
+| Relaxed | `WMIC_WSMAN_SCHEME=https`, no CA file | `os get Caption` | `Secure connection failed: handshake with 127.0.0.1: invalid peer certificate: “client01.contoso.com” certificate is not trusted: -67843`. Exit 143. The connection ended in the TLS handshake. |
+| Relaxed | `WMIC_WSMAN_SCHEME=http` | `os get Caption` | One row. Exit 0. |
+| Strict | `WMIC_WSMAN_SCHEME=https WMIC_WSMAN_CA_FILE=client01.pem` | `os get Caption,CSName` | One row. Exit 0. |
+| Strict | `WMIC_WSMAN_SCHEME=http` | `os get Caption` | One row. Exit 0. |
+| Strict | `WMIC_WSMAN_SCHEME=https WMIC_WSMAN_CA_FILE=client01.pem WMIC_BREAK_BINDING=1`, flipped binding | `os get Caption` | `Access denied`. Exit 5. |
+| Strict | `WMIC_WSMAN_SCHEME=https WMIC_WSMAN_CA_FILE=client01.pem`, the same separate build without the switch | `os get Caption` | One row. Exit 0. |
+
+`openssl s_client` against the tunnel reported TLS 1.3 with `AEAD-AES256-GCM-SHA384` for the listener. The error text in the second row is the verdict of the macOS Security framework; another platform prints its own text after `invalid peer certificate: `.
+
 ## Not verified
 
 - Intel Macs. The code has separate values for x86_64. They have not run.
 - macOS versions before 15. Manual runs on macOS 15 are unverified.
 - Real ordinary or forced `Win32_OperatingSystem` shutdown/restart effects. Injected tests cover the privileged route and result mapping, but no native power action or GUI shutdown interaction has been exercised.
 - Experimental service control. The `StartService`, `StopService`, and `ChangeStartMode` methods have no real test-owned launchd lifecycle acceptance. Only parsing and command construction have tests.
-- Remote nodes, in addition to the commands in [Remote node evidence](#remote-node-evidence):
-  - Kerberos, CredSSP, Basic, certificate authentication, and HTTPS. The build does not implement them.
+- Remote nodes, in addition to the commands in [Remote node evidence](#remote-node-evidence) and [HTTPS evidence](#https-evidence):
+  - Kerberos, CredSSP, Basic, and certificate authentication. The build does not implement them.
+  - HTTPS with a certificate trusted through the keychain. The live runs trusted the self-signed listener certificate through `WMIC_WSMAN_CA_FILE`. Adding a trust setting to the login keychain over SSH was refused because it needs user interaction. The loopback tests exercise the platform verifier with a CA file on macOS and on Linux.
+  - HTTPS with a listener certificate from a CA, with an intermediate certificate, with an RSASSA-PSS or ECDSA signature, or over TLS 1.2 only. The live listener used a self-signed `sha256RSA` certificate and negotiated TLS 1.3. The channel binding hash selection for the other signature algorithms has unit tests only.
+  - HTTPS through an HTTP proxy. The build does not use proxies.
   - Hosts that require unencrypted traffic or Basic authentication. The build does not support them.
   - Servers with a language other than English. Both live hosts use English. Every request asks for the locale `en-US`.
   - HTTP proxies. The build does not use them.

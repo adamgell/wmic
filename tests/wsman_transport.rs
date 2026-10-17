@@ -1,12 +1,16 @@
 #![cfg(not(windows))]
 
+use rustls::pki_types::pem::PemObject;
+use rustls::pki_types::{CertificateDer, PrivateKeyDer};
 use std::io::{BufRead, BufReader, Read, Write};
-use std::net::{TcpListener, TcpStream};
+use std::net::TcpListener;
+use std::path::PathBuf;
+use std::sync::Arc;
 use std::thread::JoinHandle;
 use wmic_compat::backend::SecretWide;
 use wmic_compat::backend::wsman::transport::ntlm::{self, Role, Session};
-use wmic_compat::backend::wsman::transport::{NtlmHttpTransport, base64, framing, http};
-use wmic_compat::backend::wsman::{Endpoint, Transport, TransportError};
+use wmic_compat::backend::wsman::transport::{NtlmHttpTransport, base64, framing, http, tls};
+use wmic_compat::backend::wsman::{Endpoint, Tls, Transport, TransportError};
 
 fn hex(text: &str) -> Vec<u8> {
     let text: String = text.split_whitespace().collect();
@@ -361,6 +365,7 @@ fn authenticate_requires_the_sealing_flags() {
             client_challenge: [1; 8],
             exported_session_key: [2; 16],
             fallback_time: [0; 8],
+            channel_binding: [0; 16],
         },
     );
     assert!(result.is_err());
@@ -384,6 +389,8 @@ struct Behavior {
     /// Answers the NEGOTIATE request with HTTP 401 and no challenge.
     no_challenge: bool,
     timestamp: bool,
+    /// MsvAvChannelBindings the AUTHENTICATE_MESSAGE must carry: zeros without TLS.
+    channel_binding: [u8; 16],
 }
 
 #[derive(Default, Debug)]
@@ -407,7 +414,7 @@ impl Request {
     }
 }
 
-fn read_request(reader: &mut BufReader<TcpStream>) -> Option<Request> {
+fn read_request<S: Read>(reader: &mut BufReader<S>) -> Option<Request> {
     let mut line = String::new();
     if reader.read_line(&mut line).ok()? == 0 {
         return None;
@@ -437,7 +444,7 @@ fn read_request(reader: &mut BufReader<TcpStream>) -> Option<Request> {
     Some(Request { headers, body })
 }
 
-fn respond(stream: &mut TcpStream, status: &str, headers: &[(&str, String)], body: &[u8]) {
+fn respond(stream: &mut impl Write, status: &str, headers: &[(&str, String)], body: &[u8]) {
     let mut out = format!("HTTP/1.1 {status} \r\nServer: Microsoft-HTTPAPI/2.0\r\n");
     for (k, v) in headers {
         out.push_str(&format!("{k}: {v}\r\n"));
@@ -448,7 +455,7 @@ fn respond(stream: &mut TcpStream, status: &str, headers: &[(&str, String)], bod
     stream.write_all(&bytes).unwrap();
 }
 
-fn respond_chunked(stream: &mut TcpStream, headers: &[(&str, String)], body: &[u8]) {
+fn respond_chunked(stream: &mut impl Write, headers: &[(&str, String)], body: &[u8]) {
     let mut out = String::from("HTTP/1.1 200 \r\n");
     for (k, v) in headers {
         out.push_str(&format!("{k}: {v}\r\n"));
@@ -490,7 +497,7 @@ fn authenticate_stage(
     request: &Request,
     negotiate: &[u8],
     challenge: &[u8],
-    expect_timestamp: bool,
+    behavior: &Behavior,
     log: &mut ServerLog,
 ) -> Option<Session> {
     let header = request
@@ -539,9 +546,13 @@ fn authenticate_stage(
         utf16_text(&find(ntlm::AV_TARGET_NAME).unwrap()),
         "HTTP/127.0.0.1"
     );
-    assert_eq!(find(ntlm::AV_CHANNEL_BINDINGS).unwrap(), vec![0; 16]);
+    assert_eq!(
+        find(ntlm::AV_CHANNEL_BINDINGS).unwrap(),
+        behavior.channel_binding.to_vec(),
+        "channel binding"
+    );
     assert_eq!(&blob[..8], &[1, 1, 0, 0, 0, 0, 0, 0]);
-    if expect_timestamp {
+    if behavior.timestamp {
         assert_eq!(&blob[8..16], &FILETIME);
         assert_eq!(lm, &[0; 24]);
     } else {
@@ -551,8 +562,7 @@ fn authenticate_stage(
     Some(Session::new(&exported, Role::Server))
 }
 
-fn serve(stream: TcpStream, behavior: Behavior) -> ServerLog {
-    let mut writer = stream.try_clone().unwrap();
+fn serve<S: Read + Write>(stream: S, behavior: Behavior) -> ServerLog {
     let mut reader = BufReader::new(stream);
     let mut log = ServerLog::default();
     let mut negotiate = Vec::new();
@@ -563,7 +573,7 @@ fn serve(stream: TcpStream, behavior: Behavior) -> ServerLog {
         if session.is_none() {
             if negotiate.is_empty() {
                 if behavior.no_challenge {
-                    respond(&mut writer, "401", &[], b"");
+                    respond(reader.get_mut(), "401", &[], b"");
                     return log;
                 }
                 let header = request
@@ -573,7 +583,7 @@ fn serve(stream: TcpStream, behavior: Behavior) -> ServerLog {
                 assert_eq!(negotiate, ntlm::negotiate_message());
                 assert!(request.body.is_empty());
                 respond(
-                    &mut writer,
+                    reader.get_mut(),
                     "401",
                     &[(
                         "WWW-Authenticate",
@@ -583,17 +593,11 @@ fn serve(stream: TcpStream, behavior: Behavior) -> ServerLog {
                 );
                 continue;
             }
-            match authenticate_stage(
-                &request,
-                &negotiate,
-                &challenge,
-                behavior.timestamp,
-                &mut log,
-            ) {
+            match authenticate_stage(&request, &negotiate, &challenge, &behavior, &mut log) {
                 Some(s) => session = Some(s),
                 None => {
                     respond(
-                        &mut writer,
+                        reader.get_mut(),
                         "401",
                         &[
                             ("WWW-Authenticate", "Negotiate".into()),
@@ -622,19 +626,19 @@ fn serve(stream: TcpStream, behavior: Behavior) -> ServerLog {
             .unauthorized_after
             .is_some_and(|after| handled > after)
         {
-            respond(&mut writer, "401", &[], b"");
+            respond(reader.get_mut(), "401", &[], b"");
             continue;
         }
         if behavior.forged_after.is_some_and(|after| handled > after) {
             respond(
-                &mut writer,
+                reader.get_mut(),
                 "200",
                 &[("Content-Type", "application/soap+xml;charset=UTF-8".into())],
                 b"<s:Envelope><s:Body>forged</s:Body></s:Envelope>",
             );
         } else if behavior.plain_error {
             respond(
-                &mut writer,
+                reader.get_mut(),
                 "500",
                 &[("Content-Type", "text/plain".into())],
                 b"boom",
@@ -647,9 +651,9 @@ fn serve(stream: TcpStream, behavior: Behavior) -> ServerLog {
             }
             let headers = [("Content-Type", framing::CONTENT_TYPE.to_owned())];
             if behavior.chunked {
-                respond_chunked(&mut writer, &headers, &body);
+                respond_chunked(reader.get_mut(), &headers, &body);
             } else {
-                respond(&mut writer, "200", &headers, &body);
+                respond(reader.get_mut(), "200", &headers, &body);
             }
         }
         if behavior.close_after == Some(handled) {
@@ -676,6 +680,7 @@ fn endpoint(port: u16, password: &str) -> Endpoint {
         user: LAB.user.into(),
         domain: LAB.domain.into(),
         password: SecretWide::new(password.into()),
+        tls: None,
     }
 }
 
@@ -709,6 +714,175 @@ fn loopback_handshake_and_sealed_exchange() {
             log.checks
         );
     }
+}
+
+// ---------------------------------------------------------------------------------------------
+// The same server behind TLS, with the certificates in tests/fixtures/tls.
+// ---------------------------------------------------------------------------------------------
+
+fn fixture(name: &str) -> PathBuf {
+    PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+        .join("tests/fixtures/tls")
+        .join(name)
+}
+
+fn certificate_der(stem: &str) -> Vec<u8> {
+    CertificateDer::from_pem_file(fixture(&format!("{stem}.pem")))
+        .unwrap()
+        .to_vec()
+}
+
+/// Serves one TLS connection with the fixture certificate `stem`, then the NTLM server on top.
+/// The server expects the channel binding of its own certificate. A failed handshake returns
+/// its error text; no request can reach the HTTP layer then.
+fn spawn_tls(
+    stem: &'static str,
+    behavior: Behavior,
+) -> (u16, JoinHandle<Result<ServerLog, String>>) {
+    let certificates = CertificateDer::pem_file_iter(fixture(&format!("{stem}.pem")))
+        .unwrap()
+        .collect::<Result<Vec<_>, _>>()
+        .unwrap();
+    let key = PrivateKeyDer::from_pem_file(fixture(&format!("{stem}.key"))).unwrap();
+    let provider = Arc::new(rustls::crypto::ring::default_provider());
+    let config = rustls::ServerConfig::builder_with_provider(provider)
+        .with_safe_default_protocol_versions()
+        .unwrap()
+        .with_no_client_auth()
+        .with_single_cert(certificates, key)
+        .unwrap();
+    let channel_binding =
+        ntlm::channel_binding(&tls::server_end_point(&certificate_der(stem)).unwrap());
+    let listener = TcpListener::bind("127.0.0.1:0").unwrap();
+    let port = listener.local_addr().unwrap().port();
+    let handle = std::thread::spawn(move || {
+        let (socket, _) = listener.accept().unwrap();
+        let connection = rustls::ServerConnection::new(Arc::new(config)).unwrap();
+        let mut stream = rustls::StreamOwned::new(connection, socket);
+        while stream.conn.is_handshaking() {
+            stream
+                .conn
+                .complete_io(&mut stream.sock)
+                .map_err(|e| e.to_string())?;
+        }
+        Ok(serve(
+            stream,
+            Behavior {
+                channel_binding,
+                ..behavior
+            },
+        ))
+    });
+    (port, handle)
+}
+
+fn tls_endpoint(port: u16, ca_file: Option<&str>) -> Endpoint {
+    Endpoint {
+        tls: Some(Tls {
+            ca_file: ca_file.map(fixture),
+        }),
+        ..endpoint(port, LAB.password)
+    }
+}
+
+#[test]
+fn channel_binding_hashes_the_gss_structure_around_the_end_point_data() {
+    // MD5 values from .NET over the same bytes.
+    let data = tls::server_end_point(&certificate_der("loopback-rsa-sha256")).unwrap();
+    assert_eq!(
+        to_hex(&ntlm::channel_binding(&data)),
+        "e14a8e36e08eeada92e52913c05be174"
+    );
+    let ecdsa = tls::server_end_point(&certificate_der("other-ecdsa-sha384")).unwrap();
+    assert_eq!(
+        to_hex(&ntlm::channel_binding(&ecdsa)),
+        "b63ce875d28f467ed62c3dd4cb3c334e"
+    );
+    assert_eq!(
+        to_hex(&ntlm::channel_binding(b"")),
+        "441018525208457705bf09a8ee3c1093"
+    );
+}
+
+#[test]
+fn tls_loopback_binds_the_logon_to_the_server_certificate() {
+    let (port, server) = spawn_tls("loopback-rsa-sha256", Behavior::default());
+    let endpoint = tls_endpoint(port, Some("loopback-rsa-sha256.pem"));
+    let mut transport = NtlmHttpTransport::connect(&endpoint).unwrap();
+    let first = transport.post("<one/>").unwrap();
+    assert_eq!(first.status, 200);
+    assert_eq!(
+        first.body,
+        "<s:Envelope><s:Body>echo 1: <one/></s:Body></s:Envelope>"
+    );
+    assert!(transport.is_reusable());
+    let second = transport.post("<two/>").unwrap();
+    assert!(second.body.contains("echo 2: <two/>"));
+    drop(transport);
+    let log = server.join().unwrap().expect("handshake succeeds");
+    assert!(log.authenticated, "{log:?}");
+    assert_eq!(log.requests, ["<one/>", "<two/>"]);
+}
+
+#[test]
+fn tls_loopback_refuses_an_untrusted_certificate_before_any_request() {
+    let (port, server) = spawn_tls("loopback-rsa-sha256", Behavior::default());
+    let error = NtlmHttpTransport::connect(&tls_endpoint(port, None))
+        .err()
+        .expect("refused");
+    let TransportError::Tls(reason) = &error else {
+        panic!("{error}");
+    };
+    assert!(reason.starts_with("handshake with 127.0.0.1: "), "{reason}");
+    let outcome = server.join().unwrap();
+    assert!(
+        outcome.is_err(),
+        "no request reached the server: {outcome:?}"
+    );
+}
+
+#[test]
+fn tls_loopback_refuses_a_certificate_issued_to_another_name() {
+    let (port, server) = spawn_tls("other-ecdsa-sha384", Behavior::default());
+    let error = NtlmHttpTransport::connect(&tls_endpoint(port, Some("other-ecdsa-sha384.pem")))
+        .err()
+        .expect("refused");
+    assert!(matches!(error, TransportError::Tls(_)), "{error}");
+    assert!(server.join().unwrap().is_err());
+}
+
+#[test]
+fn tls_loopback_wrong_password_is_still_an_authentication_error() {
+    let (port, server) = spawn_tls("loopback-rsa-sha256", Behavior::default());
+    let endpoint = Endpoint {
+        password: SecretWide::new("wrong password".into()),
+        ..tls_endpoint(port, Some("loopback-rsa-sha256.pem"))
+    };
+    let mut transport = NtlmHttpTransport::connect(&endpoint).unwrap();
+    assert!(matches!(
+        transport.post("<one/>"),
+        Err(TransportError::Authentication)
+    ));
+    assert!(!server.join().unwrap().unwrap().authenticated);
+}
+
+#[test]
+fn a_ca_file_that_cannot_be_read_is_a_tls_error() {
+    let listener = TcpListener::bind("127.0.0.1:0").unwrap();
+    let port = listener.local_addr().unwrap().port();
+    let missing = tls_endpoint(port, Some("missing.pem"));
+    let error = NtlmHttpTransport::connect(&missing).err().expect("refused");
+    let TransportError::Tls(reason) = &error else {
+        panic!("{error}");
+    };
+    assert!(reason.starts_with("WMIC_WSMAN_CA_FILE "), "{reason}");
+    assert!(reason.contains("missing.pem"), "{reason}");
+    let empty = tls_endpoint(port, Some("loopback-rsa-sha256.key"));
+    let error = NtlmHttpTransport::connect(&empty).err().expect("refused");
+    let TransportError::Tls(reason) = &error else {
+        panic!("{error}");
+    };
+    assert!(reason.ends_with("no certificate in the file"), "{reason}");
 }
 
 #[test]
@@ -985,7 +1159,7 @@ fn http_client_reads_content_length_and_close_delimited_bodies() {
             .write_all(b"HTTP/1.1 200\r\nConnection: close\r\n\r\nuntil close")
             .unwrap();
     });
-    let mut connection = http::HttpConnection::connect("127.0.0.1", port).unwrap();
+    let mut connection = http::HttpConnection::connect("127.0.0.1", port, None).unwrap();
     let first = connection.post("/wsman", &[], b"a").unwrap();
     assert_eq!((first.status, first.body.as_slice()), (200, &b"hello"[..]));
     assert_eq!(first.headers_named("X-A").collect::<Vec<_>>(), ["1", "2"]);
@@ -1009,7 +1183,7 @@ fn http_client_refuses_bodies_far_above_the_envelope_size() {
         read_request(&mut reader).unwrap();
         let _ = writer.write_all(b"HTTP/1.1 200 OK\r\nContent-Length: 134217728\r\n\r\n");
     });
-    let mut connection = http::HttpConnection::connect("127.0.0.1", port).unwrap();
+    let mut connection = http::HttpConnection::connect("127.0.0.1", port, None).unwrap();
     assert!(matches!(
         connection.post("/wsman", &[], b"a"),
         Err(TransportError::Protocol(_))

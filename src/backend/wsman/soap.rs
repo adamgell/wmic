@@ -1,5 +1,6 @@
 //! Request envelopes for the operations the WMI plugin serves.
 use super::{
+    Scheme,
     convert::{cim_to_xs_datetime, cim_to_xs_duration, is_cim_datetime, value_text},
     path::parse_object_path,
 };
@@ -39,11 +40,12 @@ pub fn escape(text: &str) -> String {
 }
 
 /// `http://host:port/wsman`, with brackets around an IPv6 literal.
-pub fn endpoint_url(host: &str, port: u16) -> String {
+pub fn endpoint_url(scheme: Scheme, host: &str, port: u16) -> String {
+    let scheme = scheme.as_str();
     if host.contains(':') && !host.starts_with('[') {
-        format!("http://[{host}]:{port}/wsman")
+        format!("{scheme}://[{host}]:{port}/wsman")
     } else {
-        format!("http://{host}:{port}/wsman")
+        format!("{scheme}://{host}:{port}/wsman")
     }
 }
 
@@ -328,8 +330,11 @@ mod tests {
 
     #[test]
     fn endpoint_brackets_ipv6_and_ids_are_guids() {
-        assert_eq!(endpoint_url("h", 5985), "http://h:5985/wsman");
-        assert_eq!(endpoint_url("fe80::1", 5985), "http://[fe80::1]:5985/wsman");
+        assert_eq!(endpoint_url(Scheme::Http, "h", 5985), "http://h:5985/wsman");
+        assert_eq!(
+            endpoint_url(Scheme::Https, "fe80::1", 5986),
+            "https://[fe80::1]:5986/wsman"
+        );
         let id = new_message_id();
         assert_eq!(id.len(), 5 + 36);
         assert!(

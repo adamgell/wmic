@@ -24,7 +24,7 @@ pub const MAX_ELEMENTS: u32 = 32;
 /// Creates the transport for an endpoint.
 pub type Connector = Box<dyn FnMut(&Endpoint) -> Result<Box<dyn Transport>, TransportError>>;
 
-/// NTLM over HTTP with sealed messages.
+/// NTLM over HTTP or HTTPS with sealed messages.
 pub fn default_connector() -> Connector {
     Box::new(|endpoint| {
         super::transport::NtlmHttpTransport::connect(endpoint)
@@ -48,7 +48,11 @@ pub struct Target {
 
 impl Target {
     fn to(&self) -> String {
-        soap::endpoint_url(&self.endpoint.host, self.endpoint.port)
+        soap::endpoint_url(
+            self.endpoint.scheme(),
+            &self.endpoint.host,
+            self.endpoint.port,
+        )
     }
 }
 
@@ -136,6 +140,12 @@ fn error_for(failure: Failure, target: &Target, scope: Scope) -> ManagementError
             "Access is denied.",
             "query",
             "authentication failed",
+        ),
+        Failure::Transport(TransportError::Tls(reason)) => plain(
+            0x80072f8f,
+            &format!("Secure connection failed: {reason}"),
+            "query",
+            "",
         ),
         Failure::Transport(other) => plain(
             0x80041001,

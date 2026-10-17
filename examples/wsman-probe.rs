@@ -4,6 +4,7 @@
 //! NTLM, posts an Identify request and prints the decrypted reply.
 //! `wsman-probe --challenge HOST PORT` sends only the NTLM negotiate message and prints the parsed
 //! challenge; no credential is involved.
+//! `WMIC_WSMAN_SCHEME=https` and `WMIC_WSMAN_CA_FILE` apply as they do for `wmic`.
 
 #[cfg(windows)]
 fn main() {
@@ -24,7 +25,7 @@ mod probe {
     use wmic_compat::backend::wsman::transport::{
         NtlmHttpTransport, base64, negotiate_token, ntlm,
     };
-    use wmic_compat::backend::wsman::{Endpoint, Transport};
+    use wmic_compat::backend::wsman::{Endpoint, Tls, Transport, listener};
 
     const IDENTIFY: &str = "<s:Envelope xmlns:s=\"http://www.w3.org/2003/05/soap-envelope\" xmlns:wsmid=\"http://schemas.dmtf.org/wbem/wsman/identity/1/wsmanidentity.xsd\"><s:Header/><s:Body><wsmid:Identify/></s:Body></s:Envelope>";
 
@@ -51,9 +52,16 @@ mod probe {
         text.parse().map_err(|_| format!("bad port: {text}"))
     }
 
+    fn tls_settings() -> Result<Option<Tls>, String> {
+        listener()
+            .map(|settings| settings.tls())
+            .map_err(|e| e.to_string())
+    }
+
     fn challenge(host: &str, port: &str) -> Result<(), String> {
-        let mut connection =
-            HttpConnection::connect(host, port_of(port)?).map_err(|e| e.to_string())?;
+        let tls = tls_settings()?;
+        let mut connection = HttpConnection::connect(host, port_of(port)?, tls.as_ref())
+            .map_err(|e| e.to_string())?;
         let plain = connection
             .post(
                 "/wsman",
@@ -67,8 +75,8 @@ mod probe {
             plain.headers_named("WWW-Authenticate").collect::<Vec<_>>(),
             plain.header("Connection")
         );
-        let mut connection =
-            HttpConnection::connect(host, port_of(port)?).map_err(|e| e.to_string())?;
+        let mut connection = HttpConnection::connect(host, port_of(port)?, tls.as_ref())
+            .map_err(|e| e.to_string())?;
         let negotiate = ntlm::negotiate_message();
         let header = format!("Negotiate {}", base64::encode(&negotiate));
         let reply = connection
@@ -126,6 +134,7 @@ mod probe {
             user: user.into(),
             domain: domain.into(),
             password: SecretWide::new(password.into()),
+            tls: tls_settings()?,
         };
         let mut transport = NtlmHttpTransport::connect(&endpoint).map_err(|e| e.to_string())?;
         let reply = transport.post(IDENTIFY).map_err(|e| e.to_string())?;

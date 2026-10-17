@@ -359,6 +359,20 @@ pub struct AuthenticateParams<'a> {
     pub exported_session_key: [u8; 16],
     /// FILETIME used when the challenge carries no MsvAvTimestamp.
     pub fallback_time: [u8; 8],
+    /// MsvAvChannelBindings value from `channel_binding`; zeros when the connection has no
+    /// channel binding.
+    pub channel_binding: [u8; 16],
+}
+
+/// MsvAvChannelBindings for channel binding data (MS-NLMP 3.1.5.1.2): MD5 of a
+/// gss_channel_bindings_struct whose address fields are zero and whose application data is
+/// `data`, for example the `tls-server-end-point` data of RFC 5929.
+pub fn channel_binding(data: &[u8]) -> [u8; 16] {
+    let mut hasher = Md5::new();
+    hasher.update([0u8; 16]);
+    hasher.update((data.len() as u32).to_le_bytes());
+    hasher.update(data);
+    hasher.finalize().into()
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -391,7 +405,11 @@ pub fn build_authenticate(
         AV_FLAGS,
         (server_flags | AV_FLAG_MIC_PRESENT).to_le_bytes().to_vec(),
     );
-    upsert(&mut pairs, AV_CHANNEL_BINDINGS, vec![0; 16]);
+    upsert(
+        &mut pairs,
+        AV_CHANNEL_BINDINGS,
+        params.channel_binding.to_vec(),
+    );
     upsert(&mut pairs, AV_TARGET_NAME, utf16le(params.target_name));
     let av_pairs = encode_av_pairs(&pairs);
 

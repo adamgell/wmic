@@ -1,6 +1,7 @@
-//! Blocking HTTP/1.1 client bound to one TCP connection.
+//! Blocking HTTP/1.1 client bound to one TCP connection, with or without TLS.
 
-use super::super::{TransportError, soap::MAX_ENVELOPE_SIZE};
+use super::super::{Tls, TransportError, soap::MAX_ENVELOPE_SIZE};
+use super::tls::{self, TlsStream};
 use std::io::{self, BufRead, BufReader, Read, Write};
 use std::net::{TcpStream, ToSocketAddrs};
 use std::time::Duration;
@@ -34,11 +35,64 @@ impl HttpResponse {
     }
 }
 
+/// The byte stream under HTTP: the socket itself, or TLS over it.
+pub enum Stream {
+    Plain(TcpStream),
+    Tls(Box<TlsStream>),
+}
+
+impl Stream {
+    fn socket(&self) -> &TcpStream {
+        match self {
+            Self::Plain(socket) => socket,
+            Self::Tls(tls) => tls.get_ref(),
+        }
+    }
+
+    /// True when TLS holds decrypted bytes nobody asked for, or the peer ended the session.
+    fn has_pending_plaintext(&mut self) -> bool {
+        match self {
+            Self::Plain(_) => false,
+            Self::Tls(tls) => match tls.conn.process_new_packets() {
+                Ok(state) => state.plaintext_bytes_to_read() > 0 || state.peer_has_closed(),
+                Err(_) => true,
+            },
+        }
+    }
+}
+
+impl Read for Stream {
+    fn read(&mut self, buf: &mut [u8]) -> io::Result<usize> {
+        match self {
+            Self::Plain(socket) => socket.read(buf),
+            Self::Tls(tls) => tls.read(buf),
+        }
+    }
+}
+
+impl Write for Stream {
+    fn write(&mut self, buf: &[u8]) -> io::Result<usize> {
+        match self {
+            Self::Plain(socket) => socket.write(buf),
+            Self::Tls(tls) => tls.write(buf),
+        }
+    }
+
+    fn flush(&mut self) -> io::Result<()> {
+        match self {
+            Self::Plain(socket) => socket.flush(),
+            Self::Tls(tls) => tls.flush(),
+        }
+    }
+}
+
 /// One keep-alive connection. After the peer closes it, or after any I/O error, every request fails
 /// with `TransportError::Io`; the connection is never reopened.
 pub struct HttpConnection {
-    reader: BufReader<TcpStream>,
+    reader: BufReader<Stream>,
     host_header: String,
+    /// DER of the server certificate when the connection runs over TLS.
+    certificate: Option<Vec<u8>>,
     closed: bool,
 }
 
@@ -46,35 +100,58 @@ fn protocol(message: impl Into<String>) -> TransportError {
     TransportError::Protocol(message.into())
 }
 
-impl HttpConnection {
-    pub fn connect(host: &str, port: u16) -> Result<Self, TransportError> {
-        let addresses = (host, port)
-            .to_socket_addrs()
-            .map_err(TransportError::Connect)?;
-        let mut last = io::Error::new(io::ErrorKind::NotFound, "host resolved to no address");
-        for address in addresses {
-            match TcpStream::connect_timeout(&address, CONNECT_TIMEOUT) {
-                Ok(stream) => {
-                    stream
-                        .set_read_timeout(Some(IO_TIMEOUT))
-                        .and_then(|()| stream.set_write_timeout(Some(IO_TIMEOUT)))
-                        .and_then(|()| stream.set_nodelay(true))
-                        .map_err(TransportError::Connect)?;
-                    let host_header = if host.contains(':') {
-                        format!("[{host}]:{port}")
-                    } else {
-                        format!("{host}:{port}")
-                    };
-                    return Ok(Self {
-                        reader: BufReader::new(stream),
-                        host_header,
-                        closed: false,
-                    });
-                }
-                Err(e) => last = e,
+fn open_socket(host: &str, port: u16) -> Result<TcpStream, TransportError> {
+    let addresses = (host, port)
+        .to_socket_addrs()
+        .map_err(TransportError::Connect)?;
+    let mut last = io::Error::new(io::ErrorKind::NotFound, "host resolved to no address");
+    for address in addresses {
+        match TcpStream::connect_timeout(&address, CONNECT_TIMEOUT) {
+            Ok(stream) => {
+                stream
+                    .set_read_timeout(Some(IO_TIMEOUT))
+                    .and_then(|()| stream.set_write_timeout(Some(IO_TIMEOUT)))
+                    .and_then(|()| stream.set_nodelay(true))
+                    .map_err(TransportError::Connect)?;
+                return Ok(stream);
             }
+            Err(e) => last = e,
         }
-        Err(TransportError::Connect(last))
+    }
+    Err(TransportError::Connect(last))
+}
+
+impl HttpConnection {
+    /// Opens the connection. With `tls`, the handshake runs here and the server certificate
+    /// is validated before the connection is returned.
+    pub fn connect(host: &str, port: u16, tls: Option<&Tls>) -> Result<Self, TransportError> {
+        let socket = open_socket(host, port)?;
+        let (stream, certificate) = match tls {
+            Some(settings) => {
+                let secured = tls::connect(socket, host, settings)?;
+                (
+                    Stream::Tls(Box::new(secured.stream)),
+                    Some(secured.certificate),
+                )
+            }
+            None => (Stream::Plain(socket), None),
+        };
+        let host_header = if host.contains(':') {
+            format!("[{host}]:{port}")
+        } else {
+            format!("{host}:{port}")
+        };
+        Ok(Self {
+            reader: BufReader::new(stream),
+            host_header,
+            certificate,
+            closed: false,
+        })
+    }
+
+    /// DER of the certificate the server presented; `None` on a plain connection.
+    pub fn peer_certificate(&self) -> Option<&[u8]> {
+        self.certificate.as_deref()
     }
 
     /// True when the connection is open and holds no unread byte. A peer that closed the socket
@@ -83,7 +160,10 @@ impl HttpConnection {
         if self.closed || !self.reader.buffer().is_empty() {
             return false;
         }
-        let stream = self.reader.get_ref();
+        if self.reader.get_mut().has_pending_plaintext() {
+            return false;
+        }
+        let stream = self.reader.get_ref().socket();
         if stream.set_nonblocking(true).is_err() {
             return false;
         }
