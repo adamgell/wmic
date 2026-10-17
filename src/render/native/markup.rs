@@ -117,6 +117,8 @@ fn row_style(position: usize) -> String {
 fn html_value(dom: &Dom, p: Id) -> String {
     if dom.name(p) == "PROPERTY.REFERENCE" {
         html(&reference(dom, p, false, None))
+    } else if dom.name(p) == "PROPERTY.ARRAY" {
+        format!("\r\n\t{}\r\n", html(&value(dom, p, Mode::List, "")))
     } else {
         html(&value(dom, p, Mode::List, ""))
     }
@@ -210,8 +212,13 @@ pub(super) fn htable(dom: &Dom, sortby: &str, datatype: &str) -> String {
     }
     out.push_str("</tr>\r\n");
     for (g, group) in groups.iter().enumerate() {
-        out.push_str(&row_style(g + 2));
         let mut rows = instances(dom, *group);
+        let style = row_style(g + 2);
+        out.push_str(if rows.is_empty() {
+            style.strip_suffix("\r\n").unwrap_or(&style)
+        } else {
+            &style
+        });
         if !sortby.is_empty() {
             sort_rows(dom, &mut rows, sortby, datatype)
         }
@@ -237,13 +244,16 @@ pub(super) fn hform(dom: &Dom) -> String {
     for group in groups(dom) {
         let rows = instances(dom, group);
         out.push_str(&format!(
-            "<H3>Node: {} - {} Instances of {}</H3>\r\n<table border=\"1\">\r\n",
+            "<H3>Node: {} - {} Instances of {}</H3>\r\n<table border=\"1\">",
             html(&dom.attr(group, "NODE")),
             rows.len(),
             rows.first()
                 .map(|r| html(&dom.attr(*r, "CLASSNAME")))
                 .unwrap_or_default()
         ));
+        if !rows.is_empty() {
+            out.push_str("\r\n")
+        }
         for row in rows {
             out.push_str(&format!(
                 "{HEADING}<td colspan=\"2\">INSTANCE{DOT}</td></tr>\r\n<tr style=\"background-color:#c0c0c0;font:8pt Tahoma;\">\r\n<td>Property Name</td><td>Value</td>\r\n</tr>\r\n"

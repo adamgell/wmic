@@ -114,6 +114,59 @@ fn html_formats_match_the_captured_markup() {
 }
 
 #[test]
+fn html_array_cells_preserve_msxml_indentation() {
+    for (property, expected) in [
+        (
+            "<PROPERTY.ARRAY NAME=\"A\" TYPE=\"string\"><VALUE.ARRAY><VALUE>x &amp; y</VALUE><VALUE/></VALUE.ARRAY></PROPERTY.ARRAY>",
+            "<td>\r\r\n\t{\"x &amp; y\",\"\"}\r\r\n<span style=\"height:1px;overflow-y:hidden\">.</span></td>\r\r\n",
+        ),
+        (
+            "<PROPERTY.ARRAY NAME=\"A\" TYPE=\"uint32\"><VALUE.ARRAY><VALUE>1</VALUE><VALUE>2</VALUE></VALUE.ARRAY></PROPERTY.ARRAY>",
+            "<td>\r\r\n\t{1,2}\r\r\n<span style=\"height:1px;overflow-y:hidden\">.</span></td>\r\r\n",
+        ),
+        (
+            "<PROPERTY.ARRAY NAME=\"A\" TYPE=\"string\"><VALUE.ARRAY/></PROPERTY.ARRAY>",
+            "<td>\r\r\n\t{}\r\r\n<span style=\"height:1px;overflow-y:hidden\">.</span></td>\r\r\n",
+        ),
+        (
+            "<PROPERTY.ARRAY NAME=\"A\" TYPE=\"string\"/>",
+            "<td>\r\r\n\t\r\r\n<span style=\"height:1px;overflow-y:hidden\">.</span></td>\r\r\n",
+        ),
+        (
+            "<PROPERTY NAME=\"A\" TYPE=\"string\"><VALUE>scalar</VALUE></PROPERTY>",
+            "<td>scalar<span style=\"height:1px;overflow-y:hidden\">.</span></td>\r\r\n",
+        ),
+    ] {
+        let xml = format!(
+            "<COMMAND><RESULTS NODE=\"N\"><CIM><INSTANCE CLASSNAME=\"X\">{property}</INSTANCE></CIM></RESULTS></COMMAND>"
+        );
+        for name in ["htable", "hform"] {
+            let out = render(&xml, name).unwrap().to_string_lossy();
+            assert!(out.contains(expected), "{name} {property}: {out:?}");
+        }
+    }
+}
+
+#[test]
+fn htable_empty_groups_close_without_an_inner_newline() {
+    let xml = "<COMMAND><RESULTS NODE=\"A\"><CIM/></RESULTS><RESULTS NODE=\"B\"><CIM><INSTANCE CLASSNAME=\"X\"/></CIM></RESULTS><RESULTS NODE=\"C\"><CIM/></RESULTS></COMMAND>";
+    expect(
+        xml,
+        "htable",
+        "<html>\r\r\n<H3>1 Instances of X</H3>\r\r\n<table border=\"1\">\r\r\n<tr style=\"background-color:#a0a0ff;font:10pt Tahoma;font-weight:bold;\" align=\"left\">\r\r\n<td>Node</td>\r\r\n</tr>\r\r\n<tr style=\"background-color:#e0f0f0;font:10pt Tahoma;\"></tr>\r\r\n<tr style=\"background-color:#f0f0f0;font:10pt Tahoma;\">\r\r\n<tr style=\"background-color:#f0f0f0;font:10pt Tahoma;\">\r\r\n<td align=\"left\">B</td>\r\r\n</tr>\r\r\n</tr>\r\r\n<tr style=\"background-color:#e0f0f0;font:10pt Tahoma;\"></tr>\r\r\n</table>\r\r\n</html>\r\r\n\r\r\n",
+    );
+}
+
+#[test]
+fn hform_empty_groups_close_without_an_inner_newline() {
+    expect(
+        "<COMMAND><RESULTS NODE=\"A\"><CIM/></RESULTS><RESULTS NODE=\"B\"><CIM/></RESULTS></COMMAND>",
+        "hform",
+        "<html>\r\r\n<H3>Node: A - 0 Instances of </H3>\r\r\n<table border=\"1\"></table>\r\r\n<H3>Node: B - 0 Instances of </H3>\r\r\n<table border=\"1\"></table>\r\r\n</html>\r\r\n\r\r\n",
+    );
+}
+
+#[test]
 fn xml_view_matches_the_captured_markup() {
     expect(
         &FORMAT_RAWXML.replace("/format:rawxml", "/format:xml"),
