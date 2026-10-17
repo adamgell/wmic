@@ -1,0 +1,1088 @@
+[
+  {
+    "evidence_id": "ev_05464e112e160d5d30f1cb44934b4fe67924e1270834d95d2498ecb294f13cc5",
+    "operation": "xrefs",
+    "parameters": {
+      "address": "0x14004f1b0"
+    },
+    "locations": [],
+    "provider": {
+      "id": "ghidra",
+      "name": "Ghidra",
+      "version": "12.1.4"
+    },
+    "authority": "shipped-artifact",
+    "confidence": "observed",
+    "subject": {
+      "architecture": "arm64",
+      "digest": {
+        "sha256": "2ef794c4940afea56c6d6d3b9bc9e66965bc7333e79c5dcb2def3c0e36f0834c"
+      },
+      "format": "pe",
+      "name": "microsoft-wmic-arm64.exe"
+    },
+    "analysis_profile_digest": "78013cb11a129e6691a13b1234d95ee7fa3fea86df9d7c3c7032ada074d68c06"
+  },
+  {
+    "evidence_id": "ev_082260958b41f69f56388117febf70539124f734fa902385f735bc73f1fb6b3d",
+    "operation": "procedure_pseudo_code",
+    "parameters": {
+      "procedure": "0x140030948"
+    },
+    "locations": [],
+    "provider": {
+      "id": "ghidra",
+      "name": "Ghidra",
+      "version": "12.1.4"
+    },
+    "authority": "shipped-artifact",
+    "confidence": "observed",
+    "subject": {
+      "architecture": "arm64",
+      "digest": {
+        "sha256": "2ef794c4940afea56c6d6d3b9bc9e66965bc7333e79c5dcb2def3c0e36f0834c"
+      },
+      "format": "pe",
+      "name": "microsoft-wmic-arm64.exe"
+    },
+    "analysis_profile_digest": "78013cb11a129e6691a13b1234d95ee7fa3fea86df9d7c3c7032ada074d68c06"
+  },
+  {
+    "evidence_id": "ev_09e1e215161386f64bdc3bad08c723fe1b498357e0e0877cff8d7e633f1667c8",
+    "operation": "xrefs",
+    "parameters": {
+      "address": "0x14004f240"
+    },
+    "locations": [],
+    "provider": {
+      "id": "ghidra",
+      "name": "Ghidra",
+      "version": "12.1.4"
+    },
+    "authority": "shipped-artifact",
+    "confidence": "observed",
+    "subject": {
+      "architecture": "arm64",
+      "digest": {
+        "sha256": "2ef794c4940afea56c6d6d3b9bc9e66965bc7333e79c5dcb2def3c0e36f0834c"
+      },
+      "format": "pe",
+      "name": "microsoft-wmic-arm64.exe"
+    },
+    "analysis_profile_digest": "78013cb11a129e6691a13b1234d95ee7fa3fea86df9d7c3c7032ada074d68c06"
+  },
+  {
+    "evidence_id": "ev_0d1c45b8b751acd17c93f6c073842f199ff6eade5182750ff9c112a08c1f1bd7",
+    "operation": "procedure_pseudo_code",
+    "parameters": {
+      "procedure": "0x140034420"
+    },
+    "locations": [],
+    "provider": {
+      "id": "ghidra",
+      "name": "Ghidra",
+      "version": "12.1.4"
+    },
+    "authority": "shipped-artifact",
+    "confidence": "observed",
+    "subject": {
+      "architecture": "arm64",
+      "digest": {
+        "sha256": "2ef794c4940afea56c6d6d3b9bc9e66965bc7333e79c5dcb2def3c0e36f0834c"
+      },
+      "format": "pe",
+      "name": "microsoft-wmic-arm64.exe"
+    },
+    "analysis_profile_digest": "78013cb11a129e6691a13b1234d95ee7fa3fea86df9d7c3c7032ada074d68c06"
+  },
+  {
+    "evidence_id": "ev_1c2870d671435d6650cd11e5759abfe373bf20d9505e576650da43a0b34ebbdb",
+    "operation": "procedure_pseudo_code",
+    "parameters": {
+      "procedure": "0x14002cea0"
+    },
+    "locations": [],
+    "provider": {
+      "id": "ghidra",
+      "name": "Ghidra",
+      "version": "12.1.4"
+    },
+    "authority": "shipped-artifact",
+    "confidence": "observed",
+    "subject": {
+      "architecture": "arm64",
+      "digest": {
+        "sha256": "2ef794c4940afea56c6d6d3b9bc9e66965bc7333e79c5dcb2def3c0e36f0834c"
+      },
+      "format": "pe",
+      "name": "microsoft-wmic-arm64.exe"
+    },
+    "analysis_profile_digest": "78013cb11a129e6691a13b1234d95ee7fa3fea86df9d7c3c7032ada074d68c06"
+  },
+  {
+    "evidence_id": "ev_2829d90b9cc38e632ec54d4b52b769011a05da82c493898d7e6ac5be05606284",
+    "operation": "procedure_pseudo_code",
+    "parameters": {
+      "procedure": "0x1400393d8"
+    },
+    "locations": [],
+    "provider": {
+      "id": "ghidra",
+      "name": "Ghidra",
+      "version": "12.1.4"
+    },
+    "authority": "shipped-artifact",
+    "confidence": "observed",
+    "subject": {
+      "architecture": "arm64",
+      "digest": {
+        "sha256": "2ef794c4940afea56c6d6d3b9bc9e66965bc7333e79c5dcb2def3c0e36f0834c"
+      },
+      "format": "pe",
+      "name": "microsoft-wmic-arm64.exe"
+    },
+    "analysis_profile_digest": "78013cb11a129e6691a13b1234d95ee7fa3fea86df9d7c3c7032ada074d68c06"
+  },
+  {
+    "evidence_id": "ev_2c272355f9ca0d8b3cb30c8668b85ccc36c8c3c0f29f5718f1d75e318c45c703",
+    "operation": "procedure_pseudo_code",
+    "parameters": {
+      "procedure": "0x14001f400"
+    },
+    "locations": [],
+    "provider": {
+      "id": "ghidra",
+      "name": "Ghidra",
+      "version": "12.1.4"
+    },
+    "authority": "shipped-artifact",
+    "confidence": "observed",
+    "subject": {
+      "architecture": "arm64",
+      "digest": {
+        "sha256": "2ef794c4940afea56c6d6d3b9bc9e66965bc7333e79c5dcb2def3c0e36f0834c"
+      },
+      "format": "pe",
+      "name": "microsoft-wmic-arm64.exe"
+    },
+    "analysis_profile_digest": "78013cb11a129e6691a13b1234d95ee7fa3fea86df9d7c3c7032ada074d68c06"
+  },
+  {
+    "evidence_id": "ev_30de1e881f5daecb5af09062bd80db60dd6109683872c08f40df25b37c9baac8",
+    "operation": "procedure_pseudo_code",
+    "parameters": {
+      "procedure": "0x140038768"
+    },
+    "locations": [],
+    "provider": {
+      "id": "ghidra",
+      "name": "Ghidra",
+      "version": "12.1.4"
+    },
+    "authority": "shipped-artifact",
+    "confidence": "observed",
+    "subject": {
+      "architecture": "arm64",
+      "digest": {
+        "sha256": "2ef794c4940afea56c6d6d3b9bc9e66965bc7333e79c5dcb2def3c0e36f0834c"
+      },
+      "format": "pe",
+      "name": "microsoft-wmic-arm64.exe"
+    },
+    "analysis_profile_digest": "78013cb11a129e6691a13b1234d95ee7fa3fea86df9d7c3c7032ada074d68c06"
+  },
+  {
+    "evidence_id": "ev_3ba40a368fb84d94ae1a7372c21f70012de86ecfddf5484b89e8c898546ebfea",
+    "operation": "procedure_pseudo_code",
+    "parameters": {
+      "procedure": "0x140030c48"
+    },
+    "locations": [],
+    "provider": {
+      "id": "ghidra",
+      "name": "Ghidra",
+      "version": "12.1.4"
+    },
+    "authority": "shipped-artifact",
+    "confidence": "observed",
+    "subject": {
+      "architecture": "arm64",
+      "digest": {
+        "sha256": "2ef794c4940afea56c6d6d3b9bc9e66965bc7333e79c5dcb2def3c0e36f0834c"
+      },
+      "format": "pe",
+      "name": "microsoft-wmic-arm64.exe"
+    },
+    "analysis_profile_digest": "78013cb11a129e6691a13b1234d95ee7fa3fea86df9d7c3c7032ada074d68c06"
+  },
+  {
+    "evidence_id": "ev_441df8d998ff4fe6561553ba50a7346805c7b4eab4035ff86176999f64804ce8",
+    "operation": "procedure_pseudo_code",
+    "parameters": {
+      "procedure": "0x14002ac08"
+    },
+    "locations": [],
+    "provider": {
+      "id": "ghidra",
+      "name": "Ghidra",
+      "version": "12.1.4"
+    },
+    "authority": "shipped-artifact",
+    "confidence": "observed",
+    "subject": {
+      "architecture": "arm64",
+      "digest": {
+        "sha256": "2ef794c4940afea56c6d6d3b9bc9e66965bc7333e79c5dcb2def3c0e36f0834c"
+      },
+      "format": "pe",
+      "name": "microsoft-wmic-arm64.exe"
+    },
+    "analysis_profile_digest": "78013cb11a129e6691a13b1234d95ee7fa3fea86df9d7c3c7032ada074d68c06"
+  },
+  {
+    "evidence_id": "ev_46b7d05c88b0111103a1b220ad63caa8ee13b54452755231798d6fb4aa24224c",
+    "operation": "search_strings",
+    "parameters": {
+      "case_sensitive": false,
+      "mode": "literal",
+      "pattern": "EVERY"
+    },
+    "locations": [],
+    "provider": {
+      "id": "ghidra",
+      "name": "Ghidra",
+      "version": "12.1.4"
+    },
+    "authority": "shipped-artifact",
+    "confidence": "observed",
+    "subject": {
+      "architecture": "arm64",
+      "digest": {
+        "sha256": "2ef794c4940afea56c6d6d3b9bc9e66965bc7333e79c5dcb2def3c0e36f0834c"
+      },
+      "format": "pe",
+      "name": "microsoft-wmic-arm64.exe"
+    },
+    "analysis_profile_digest": "78013cb11a129e6691a13b1234d95ee7fa3fea86df9d7c3c7032ada074d68c06"
+  },
+  {
+    "evidence_id": "ev_46ea9e2125e7abed8d3eeb80828c8b7a14cd37efe660cf83db72f39a6256363f",
+    "operation": "procedure_pseudo_code",
+    "parameters": {
+      "procedure": "0x14002cb48"
+    },
+    "locations": [],
+    "provider": {
+      "id": "ghidra",
+      "name": "Ghidra",
+      "version": "12.1.4"
+    },
+    "authority": "shipped-artifact",
+    "confidence": "observed",
+    "subject": {
+      "architecture": "arm64",
+      "digest": {
+        "sha256": "2ef794c4940afea56c6d6d3b9bc9e66965bc7333e79c5dcb2def3c0e36f0834c"
+      },
+      "format": "pe",
+      "name": "microsoft-wmic-arm64.exe"
+    },
+    "analysis_profile_digest": "78013cb11a129e6691a13b1234d95ee7fa3fea86df9d7c3c7032ada074d68c06"
+  },
+  {
+    "evidence_id": "ev_495d3d4f641f9e8ec5172dc94f2055a901520592c445df2af6faa730e13863e1",
+    "operation": "procedure_pseudo_code",
+    "parameters": {
+      "procedure": "0x14002d450"
+    },
+    "locations": [],
+    "provider": {
+      "id": "ghidra",
+      "name": "Ghidra",
+      "version": "12.1.4"
+    },
+    "authority": "shipped-artifact",
+    "confidence": "observed",
+    "subject": {
+      "architecture": "arm64",
+      "digest": {
+        "sha256": "2ef794c4940afea56c6d6d3b9bc9e66965bc7333e79c5dcb2def3c0e36f0834c"
+      },
+      "format": "pe",
+      "name": "microsoft-wmic-arm64.exe"
+    },
+    "analysis_profile_digest": "78013cb11a129e6691a13b1234d95ee7fa3fea86df9d7c3c7032ada074d68c06"
+  },
+  {
+    "evidence_id": "ev_4db535d5fcd3ec23f9ca8e01b132f7bbec76101b52c58a3929050b94bb22ea71",
+    "operation": "xrefs",
+    "parameters": {
+      "address": "0x14004f260"
+    },
+    "locations": [],
+    "provider": {
+      "id": "ghidra",
+      "name": "Ghidra",
+      "version": "12.1.4"
+    },
+    "authority": "shipped-artifact",
+    "confidence": "observed",
+    "subject": {
+      "architecture": "arm64",
+      "digest": {
+        "sha256": "2ef794c4940afea56c6d6d3b9bc9e66965bc7333e79c5dcb2def3c0e36f0834c"
+      },
+      "format": "pe",
+      "name": "microsoft-wmic-arm64.exe"
+    },
+    "analysis_profile_digest": "78013cb11a129e6691a13b1234d95ee7fa3fea86df9d7c3c7032ada074d68c06"
+  },
+  {
+    "evidence_id": "ev_5104689c9ef413fa172d395a3e2fdc0d5c8407abfa763fe7e753760cefa47508",
+    "operation": "procedure_pseudo_code",
+    "parameters": {
+      "procedure": "0x14002c490"
+    },
+    "locations": [],
+    "provider": {
+      "id": "ghidra",
+      "name": "Ghidra",
+      "version": "12.1.4"
+    },
+    "authority": "shipped-artifact",
+    "confidence": "observed",
+    "subject": {
+      "architecture": "arm64",
+      "digest": {
+        "sha256": "2ef794c4940afea56c6d6d3b9bc9e66965bc7333e79c5dcb2def3c0e36f0834c"
+      },
+      "format": "pe",
+      "name": "microsoft-wmic-arm64.exe"
+    },
+    "analysis_profile_digest": "78013cb11a129e6691a13b1234d95ee7fa3fea86df9d7c3c7032ada074d68c06"
+  },
+  {
+    "evidence_id": "ev_55aa8af9f6f175cb67cc88321b46483b51194a428afd6e0731acb6077a55701c",
+    "operation": "procedure_pseudo_code",
+    "parameters": {
+      "procedure": "0x140029238"
+    },
+    "locations": [],
+    "provider": {
+      "id": "ghidra",
+      "name": "Ghidra",
+      "version": "12.1.4"
+    },
+    "authority": "shipped-artifact",
+    "confidence": "observed",
+    "subject": {
+      "architecture": "arm64",
+      "digest": {
+        "sha256": "2ef794c4940afea56c6d6d3b9bc9e66965bc7333e79c5dcb2def3c0e36f0834c"
+      },
+      "format": "pe",
+      "name": "microsoft-wmic-arm64.exe"
+    },
+    "analysis_profile_digest": "78013cb11a129e6691a13b1234d95ee7fa3fea86df9d7c3c7032ada074d68c06"
+  },
+  {
+    "evidence_id": "ev_61625d1601bb919550f04a443d37c7ce1ee736e83a9379d3885305f427f91432",
+    "operation": "procedure_callers",
+    "parameters": {
+      "procedure": "0x140030c48"
+    },
+    "locations": [],
+    "provider": {
+      "id": "ghidra",
+      "name": "Ghidra",
+      "version": "12.1.4"
+    },
+    "authority": "shipped-artifact",
+    "confidence": "observed",
+    "subject": {
+      "architecture": "arm64",
+      "digest": {
+        "sha256": "2ef794c4940afea56c6d6d3b9bc9e66965bc7333e79c5dcb2def3c0e36f0834c"
+      },
+      "format": "pe",
+      "name": "microsoft-wmic-arm64.exe"
+    },
+    "analysis_profile_digest": "78013cb11a129e6691a13b1234d95ee7fa3fea86df9d7c3c7032ada074d68c06"
+  },
+  {
+    "evidence_id": "ev_6f088077ea74af7afe07d2c3ace738f7ba9c7eff3d3df7f2cac1d93789186487",
+    "operation": "procedure_pseudo_code",
+    "parameters": {
+      "procedure": "0x140028c50"
+    },
+    "locations": [],
+    "provider": {
+      "id": "ghidra",
+      "name": "Ghidra",
+      "version": "12.1.4"
+    },
+    "authority": "shipped-artifact",
+    "confidence": "observed",
+    "subject": {
+      "architecture": "arm64",
+      "digest": {
+        "sha256": "2ef794c4940afea56c6d6d3b9bc9e66965bc7333e79c5dcb2def3c0e36f0834c"
+      },
+      "format": "pe",
+      "name": "microsoft-wmic-arm64.exe"
+    },
+    "analysis_profile_digest": "78013cb11a129e6691a13b1234d95ee7fa3fea86df9d7c3c7032ada074d68c06"
+  },
+  {
+    "evidence_id": "ev_6fea8d1644b92b19d1534f6dad365133722f3b081db56f9d432f4cc7cf1d611c",
+    "operation": "search_strings",
+    "parameters": {
+      "case_sensitive": false,
+      "mode": "regex",
+      "pattern": "^(AUTHLEVEL|IMPLEVEL|PRIVILEGES|INTERACTIVE|AGGREGATE|CONTEXT)$"
+    },
+    "locations": [],
+    "provider": {
+      "id": "ghidra",
+      "name": "Ghidra",
+      "version": "12.1.4"
+    },
+    "authority": "shipped-artifact",
+    "confidence": "observed",
+    "subject": {
+      "architecture": "arm64",
+      "digest": {
+        "sha256": "2ef794c4940afea56c6d6d3b9bc9e66965bc7333e79c5dcb2def3c0e36f0834c"
+      },
+      "format": "pe",
+      "name": "microsoft-wmic-arm64.exe"
+    },
+    "analysis_profile_digest": "78013cb11a129e6691a13b1234d95ee7fa3fea86df9d7c3c7032ada074d68c06"
+  },
+  {
+    "evidence_id": "ev_758bbbef4414d151589c5b7eacd0f82ddf30b88f9aea1bcb4911bec9208bd622",
+    "operation": "procedure_pseudo_code",
+    "parameters": {
+      "procedure": "0x140035db0"
+    },
+    "locations": [],
+    "provider": {
+      "id": "ghidra",
+      "name": "Ghidra",
+      "version": "12.1.4"
+    },
+    "authority": "shipped-artifact",
+    "confidence": "observed",
+    "subject": {
+      "architecture": "arm64",
+      "digest": {
+        "sha256": "2ef794c4940afea56c6d6d3b9bc9e66965bc7333e79c5dcb2def3c0e36f0834c"
+      },
+      "format": "pe",
+      "name": "microsoft-wmic-arm64.exe"
+    },
+    "analysis_profile_digest": "78013cb11a129e6691a13b1234d95ee7fa3fea86df9d7c3c7032ada074d68c06"
+  },
+  {
+    "evidence_id": "ev_83627193e047f71a78629dd3e4555ee1310be8d97ef9ad546e287aa58419bb12",
+    "operation": "procedure_pseudo_code",
+    "parameters": {
+      "procedure": "0x1400303c0"
+    },
+    "locations": [],
+    "provider": {
+      "id": "ghidra",
+      "name": "Ghidra",
+      "version": "12.1.4"
+    },
+    "authority": "shipped-artifact",
+    "confidence": "observed",
+    "subject": {
+      "architecture": "arm64",
+      "digest": {
+        "sha256": "2ef794c4940afea56c6d6d3b9bc9e66965bc7333e79c5dcb2def3c0e36f0834c"
+      },
+      "format": "pe",
+      "name": "microsoft-wmic-arm64.exe"
+    },
+    "analysis_profile_digest": "78013cb11a129e6691a13b1234d95ee7fa3fea86df9d7c3c7032ada074d68c06"
+  },
+  {
+    "evidence_id": "ev_84a8b98b57916554999b80c59723e8ba7fe24682c61a63e1a1fcb51548645005",
+    "operation": "procedure_pseudo_code",
+    "parameters": {
+      "procedure": "0x14002c2b0"
+    },
+    "locations": [],
+    "provider": {
+      "id": "ghidra",
+      "name": "Ghidra",
+      "version": "12.1.4"
+    },
+    "authority": "shipped-artifact",
+    "confidence": "observed",
+    "subject": {
+      "architecture": "arm64",
+      "digest": {
+        "sha256": "2ef794c4940afea56c6d6d3b9bc9e66965bc7333e79c5dcb2def3c0e36f0834c"
+      },
+      "format": "pe",
+      "name": "microsoft-wmic-arm64.exe"
+    },
+    "analysis_profile_digest": "78013cb11a129e6691a13b1234d95ee7fa3fea86df9d7c3c7032ada074d68c06"
+  },
+  {
+    "evidence_id": "ev_85767e24a2678535d56c7a64bd349ed5f772911a29a998d5f5bad12dcd47cbdb",
+    "operation": "xrefs",
+    "parameters": {
+      "address": "0x14004f288"
+    },
+    "locations": [],
+    "provider": {
+      "id": "ghidra",
+      "name": "Ghidra",
+      "version": "12.1.4"
+    },
+    "authority": "shipped-artifact",
+    "confidence": "observed",
+    "subject": {
+      "architecture": "arm64",
+      "digest": {
+        "sha256": "2ef794c4940afea56c6d6d3b9bc9e66965bc7333e79c5dcb2def3c0e36f0834c"
+      },
+      "format": "pe",
+      "name": "microsoft-wmic-arm64.exe"
+    },
+    "analysis_profile_digest": "78013cb11a129e6691a13b1234d95ee7fa3fea86df9d7c3c7032ada074d68c06"
+  },
+  {
+    "evidence_id": "ev_9048db06ded9b622ddce5596ba874da1ad5a9626957a836a3f7b19b70b6bf838",
+    "operation": "procedure_pseudo_code",
+    "parameters": {
+      "procedure": "0x14002f478"
+    },
+    "locations": [],
+    "provider": {
+      "id": "ghidra",
+      "name": "Ghidra",
+      "version": "12.1.4"
+    },
+    "authority": "shipped-artifact",
+    "confidence": "observed",
+    "subject": {
+      "architecture": "arm64",
+      "digest": {
+        "sha256": "2ef794c4940afea56c6d6d3b9bc9e66965bc7333e79c5dcb2def3c0e36f0834c"
+      },
+      "format": "pe",
+      "name": "microsoft-wmic-arm64.exe"
+    },
+    "analysis_profile_digest": "78013cb11a129e6691a13b1234d95ee7fa3fea86df9d7c3c7032ada074d68c06"
+  },
+  {
+    "evidence_id": "ev_9672b4dc3964cf35364e5e35ee13636416f29bf787286d43aad2b604b3c384ac",
+    "operation": "procedure_pseudo_code",
+    "parameters": {
+      "procedure": "0x14002d1c8"
+    },
+    "locations": [],
+    "provider": {
+      "id": "ghidra",
+      "name": "Ghidra",
+      "version": "12.1.4"
+    },
+    "authority": "shipped-artifact",
+    "confidence": "observed",
+    "subject": {
+      "architecture": "arm64",
+      "digest": {
+        "sha256": "2ef794c4940afea56c6d6d3b9bc9e66965bc7333e79c5dcb2def3c0e36f0834c"
+      },
+      "format": "pe",
+      "name": "microsoft-wmic-arm64.exe"
+    },
+    "analysis_profile_digest": "78013cb11a129e6691a13b1234d95ee7fa3fea86df9d7c3c7032ada074d68c06"
+  },
+  {
+    "evidence_id": "ev_9868280e11b76ad98ced80703e8320ee353bc7d47e26839ac41c1eb88dda092f",
+    "operation": "procedure_pseudo_code",
+    "parameters": {
+      "procedure": "0x14000e600"
+    },
+    "locations": [],
+    "provider": {
+      "id": "ghidra",
+      "name": "Ghidra",
+      "version": "12.1.4"
+    },
+    "authority": "shipped-artifact",
+    "confidence": "observed",
+    "subject": {
+      "architecture": "arm64",
+      "digest": {
+        "sha256": "2ef794c4940afea56c6d6d3b9bc9e66965bc7333e79c5dcb2def3c0e36f0834c"
+      },
+      "format": "pe",
+      "name": "microsoft-wmic-arm64.exe"
+    },
+    "analysis_profile_digest": "78013cb11a129e6691a13b1234d95ee7fa3fea86df9d7c3c7032ada074d68c06"
+  },
+  {
+    "evidence_id": "ev_a856ab39a8ade8b4c64b4a56813455bd91c75fd9fb6fce250a3fcee7bcd39f6c",
+    "operation": "procedure_pseudo_code",
+    "parameters": {
+      "procedure": "0x14002cd98"
+    },
+    "locations": [],
+    "provider": {
+      "id": "ghidra",
+      "name": "Ghidra",
+      "version": "12.1.4"
+    },
+    "authority": "shipped-artifact",
+    "confidence": "observed",
+    "subject": {
+      "architecture": "arm64",
+      "digest": {
+        "sha256": "2ef794c4940afea56c6d6d3b9bc9e66965bc7333e79c5dcb2def3c0e36f0834c"
+      },
+      "format": "pe",
+      "name": "microsoft-wmic-arm64.exe"
+    },
+    "analysis_profile_digest": "78013cb11a129e6691a13b1234d95ee7fa3fea86df9d7c3c7032ada074d68c06"
+  },
+  {
+    "evidence_id": "ev_aa57eaab34dbb708aa10ff3a3272b5251f4faf78366a7b17fb3c34a68b619aaa",
+    "operation": "procedure_pseudo_code",
+    "parameters": {
+      "procedure": "0x1400331b8"
+    },
+    "locations": [],
+    "provider": {
+      "id": "ghidra",
+      "name": "Ghidra",
+      "version": "12.1.4"
+    },
+    "authority": "shipped-artifact",
+    "confidence": "observed",
+    "subject": {
+      "architecture": "arm64",
+      "digest": {
+        "sha256": "2ef794c4940afea56c6d6d3b9bc9e66965bc7333e79c5dcb2def3c0e36f0834c"
+      },
+      "format": "pe",
+      "name": "microsoft-wmic-arm64.exe"
+    },
+    "analysis_profile_digest": "78013cb11a129e6691a13b1234d95ee7fa3fea86df9d7c3c7032ada074d68c06"
+  },
+  {
+    "evidence_id": "ev_acb7634fc843eae444c61e89c9367d557128ca5749a34ae29606bfa8a67360b8",
+    "operation": "procedure_pseudo_code",
+    "parameters": {
+      "procedure": "0x14002fb80"
+    },
+    "locations": [],
+    "provider": {
+      "id": "ghidra",
+      "name": "Ghidra",
+      "version": "12.1.4"
+    },
+    "authority": "shipped-artifact",
+    "confidence": "observed",
+    "subject": {
+      "architecture": "arm64",
+      "digest": {
+        "sha256": "2ef794c4940afea56c6d6d3b9bc9e66965bc7333e79c5dcb2def3c0e36f0834c"
+      },
+      "format": "pe",
+      "name": "microsoft-wmic-arm64.exe"
+    },
+    "analysis_profile_digest": "78013cb11a129e6691a13b1234d95ee7fa3fea86df9d7c3c7032ada074d68c06"
+  },
+  {
+    "evidence_id": "ev_af8da103cdf252df5a721d6df2d41eea81b8ecd03fade775ed41c9350be6fccd",
+    "operation": "procedure_pseudo_code",
+    "parameters": {
+      "procedure": "0x1400051e8"
+    },
+    "locations": [],
+    "provider": {
+      "id": "ghidra",
+      "name": "Ghidra",
+      "version": "12.1.4"
+    },
+    "authority": "shipped-artifact",
+    "confidence": "observed",
+    "subject": {
+      "architecture": "arm64",
+      "digest": {
+        "sha256": "2ef794c4940afea56c6d6d3b9bc9e66965bc7333e79c5dcb2def3c0e36f0834c"
+      },
+      "format": "pe",
+      "name": "microsoft-wmic-arm64.exe"
+    },
+    "analysis_profile_digest": "78013cb11a129e6691a13b1234d95ee7fa3fea86df9d7c3c7032ada074d68c06"
+  },
+  {
+    "evidence_id": "ev_b21b5548667bb9e4971c60a40452674ad85674a6daab341a1e33d59b3919efd1",
+    "operation": "procedure_pseudo_code",
+    "parameters": {
+      "procedure": "0x140027af0"
+    },
+    "locations": [],
+    "provider": {
+      "id": "ghidra",
+      "name": "Ghidra",
+      "version": "12.1.4"
+    },
+    "authority": "shipped-artifact",
+    "confidence": "observed",
+    "subject": {
+      "architecture": "arm64",
+      "digest": {
+        "sha256": "2ef794c4940afea56c6d6d3b9bc9e66965bc7333e79c5dcb2def3c0e36f0834c"
+      },
+      "format": "pe",
+      "name": "microsoft-wmic-arm64.exe"
+    },
+    "analysis_profile_digest": "78013cb11a129e6691a13b1234d95ee7fa3fea86df9d7c3c7032ada074d68c06"
+  },
+  {
+    "evidence_id": "ev_b9be8e892e397fdd242e2fddc98f6c545d972cdc9d0f23035deac6a7d6a3158e",
+    "operation": "procedure_pseudo_code",
+    "parameters": {
+      "procedure": "0x14000cb98"
+    },
+    "locations": [],
+    "provider": {
+      "id": "ghidra",
+      "name": "Ghidra",
+      "version": "12.1.4"
+    },
+    "authority": "shipped-artifact",
+    "confidence": "observed",
+    "subject": {
+      "architecture": "arm64",
+      "digest": {
+        "sha256": "2ef794c4940afea56c6d6d3b9bc9e66965bc7333e79c5dcb2def3c0e36f0834c"
+      },
+      "format": "pe",
+      "name": "microsoft-wmic-arm64.exe"
+    },
+    "analysis_profile_digest": "78013cb11a129e6691a13b1234d95ee7fa3fea86df9d7c3c7032ada074d68c06"
+  },
+  {
+    "evidence_id": "ev_bc57d82b9bc28c5c838f27c105b0c8a062bb3dbdb1189e5a27ef2140e707bc19",
+    "operation": "procedure_pseudo_code",
+    "parameters": {
+      "procedure": "0x140030140"
+    },
+    "locations": [],
+    "provider": {
+      "id": "ghidra",
+      "name": "Ghidra",
+      "version": "12.1.4"
+    },
+    "authority": "shipped-artifact",
+    "confidence": "observed",
+    "subject": {
+      "architecture": "arm64",
+      "digest": {
+        "sha256": "2ef794c4940afea56c6d6d3b9bc9e66965bc7333e79c5dcb2def3c0e36f0834c"
+      },
+      "format": "pe",
+      "name": "microsoft-wmic-arm64.exe"
+    },
+    "analysis_profile_digest": "78013cb11a129e6691a13b1234d95ee7fa3fea86df9d7c3c7032ada074d68c06"
+  },
+  {
+    "evidence_id": "ev_bddb7efee6518d92d97f7d549f1c2c13615a9627207ecc6299cf404a9790af86",
+    "operation": "procedure_pseudo_code",
+    "parameters": {
+      "procedure": "0x14002eb38"
+    },
+    "locations": [],
+    "provider": {
+      "id": "ghidra",
+      "name": "Ghidra",
+      "version": "12.1.4"
+    },
+    "authority": "shipped-artifact",
+    "confidence": "observed",
+    "subject": {
+      "architecture": "arm64",
+      "digest": {
+        "sha256": "2ef794c4940afea56c6d6d3b9bc9e66965bc7333e79c5dcb2def3c0e36f0834c"
+      },
+      "format": "pe",
+      "name": "microsoft-wmic-arm64.exe"
+    },
+    "analysis_profile_digest": "78013cb11a129e6691a13b1234d95ee7fa3fea86df9d7c3c7032ada074d68c06"
+  },
+  {
+    "evidence_id": "ev_cbbe85cb72859ccefca4c7df5f8e95205be8c5d98e9852e7fbe917b233a2d1d5",
+    "operation": "procedure_pseudo_code",
+    "parameters": {
+      "procedure": "0x14000e298"
+    },
+    "locations": [],
+    "provider": {
+      "id": "ghidra",
+      "name": "Ghidra",
+      "version": "12.1.4"
+    },
+    "authority": "shipped-artifact",
+    "confidence": "observed",
+    "subject": {
+      "architecture": "arm64",
+      "digest": {
+        "sha256": "2ef794c4940afea56c6d6d3b9bc9e66965bc7333e79c5dcb2def3c0e36f0834c"
+      },
+      "format": "pe",
+      "name": "microsoft-wmic-arm64.exe"
+    },
+    "analysis_profile_digest": "78013cb11a129e6691a13b1234d95ee7fa3fea86df9d7c3c7032ada074d68c06"
+  },
+  {
+    "evidence_id": "ev_d387c379ce5bcbd7dca920eea2608f37bfec1c0abc111b800277b848db9c669c",
+    "operation": "procedure_pseudo_code",
+    "parameters": {
+      "procedure": "0x140031b98"
+    },
+    "locations": [],
+    "provider": {
+      "id": "ghidra",
+      "name": "Ghidra",
+      "version": "12.1.4"
+    },
+    "authority": "shipped-artifact",
+    "confidence": "observed",
+    "subject": {
+      "architecture": "arm64",
+      "digest": {
+        "sha256": "2ef794c4940afea56c6d6d3b9bc9e66965bc7333e79c5dcb2def3c0e36f0834c"
+      },
+      "format": "pe",
+      "name": "microsoft-wmic-arm64.exe"
+    },
+    "analysis_profile_digest": "78013cb11a129e6691a13b1234d95ee7fa3fea86df9d7c3c7032ada074d68c06"
+  },
+  {
+    "evidence_id": "ev_d5b85bd6fdcb3db16df542a9b56841db575639b725a074c9da5552795ffbae1e",
+    "operation": "xrefs",
+    "parameters": {
+      "address": "0x14004f178"
+    },
+    "locations": [],
+    "provider": {
+      "id": "ghidra",
+      "name": "Ghidra",
+      "version": "12.1.4"
+    },
+    "authority": "shipped-artifact",
+    "confidence": "observed",
+    "subject": {
+      "architecture": "arm64",
+      "digest": {
+        "sha256": "2ef794c4940afea56c6d6d3b9bc9e66965bc7333e79c5dcb2def3c0e36f0834c"
+      },
+      "format": "pe",
+      "name": "microsoft-wmic-arm64.exe"
+    },
+    "analysis_profile_digest": "78013cb11a129e6691a13b1234d95ee7fa3fea86df9d7c3c7032ada074d68c06"
+  },
+  {
+    "evidence_id": "ev_da11d35fa9b479dbfdddfaac669f478182ceedb85dcc2875f81f662b8b6b88e0",
+    "operation": "procedure_pseudo_code",
+    "parameters": {
+      "procedure": "0x140030750"
+    },
+    "locations": [],
+    "provider": {
+      "id": "ghidra",
+      "name": "Ghidra",
+      "version": "12.1.4"
+    },
+    "authority": "shipped-artifact",
+    "confidence": "observed",
+    "subject": {
+      "architecture": "arm64",
+      "digest": {
+        "sha256": "2ef794c4940afea56c6d6d3b9bc9e66965bc7333e79c5dcb2def3c0e36f0834c"
+      },
+      "format": "pe",
+      "name": "microsoft-wmic-arm64.exe"
+    },
+    "analysis_profile_digest": "78013cb11a129e6691a13b1234d95ee7fa3fea86df9d7c3c7032ada074d68c06"
+  },
+  {
+    "evidence_id": "ev_df5b17535b6b773255417f4d7996ddad63edf0e5ced596004abbfb917ea91add",
+    "operation": "xrefs",
+    "parameters": {
+      "address": "0x14004f138"
+    },
+    "locations": [],
+    "provider": {
+      "id": "ghidra",
+      "name": "Ghidra",
+      "version": "12.1.4"
+    },
+    "authority": "shipped-artifact",
+    "confidence": "observed",
+    "subject": {
+      "architecture": "arm64",
+      "digest": {
+        "sha256": "2ef794c4940afea56c6d6d3b9bc9e66965bc7333e79c5dcb2def3c0e36f0834c"
+      },
+      "format": "pe",
+      "name": "microsoft-wmic-arm64.exe"
+    },
+    "analysis_profile_digest": "78013cb11a129e6691a13b1234d95ee7fa3fea86df9d7c3c7032ada074d68c06"
+  },
+  {
+    "evidence_id": "ev_dfcad13c93e72a1765c39e113d7af35931e3a79a8c79026a495d57a5831069d0",
+    "operation": "procedure_pseudo_code",
+    "parameters": {
+      "procedure": "0x14002abe0"
+    },
+    "locations": [],
+    "provider": {
+      "id": "ghidra",
+      "name": "Ghidra",
+      "version": "12.1.4"
+    },
+    "authority": "shipped-artifact",
+    "confidence": "observed",
+    "subject": {
+      "architecture": "arm64",
+      "digest": {
+        "sha256": "2ef794c4940afea56c6d6d3b9bc9e66965bc7333e79c5dcb2def3c0e36f0834c"
+      },
+      "format": "pe",
+      "name": "microsoft-wmic-arm64.exe"
+    },
+    "analysis_profile_digest": "78013cb11a129e6691a13b1234d95ee7fa3fea86df9d7c3c7032ada074d68c06"
+  },
+  {
+    "evidence_id": "ev_eba9219fbde2411634a43ded320bffb287004748f0f56f6b5e71c867c5075739",
+    "operation": "procedure_pseudo_code",
+    "parameters": {
+      "procedure": "0x14000ed80"
+    },
+    "locations": [],
+    "provider": {
+      "id": "ghidra",
+      "name": "Ghidra",
+      "version": "12.1.4"
+    },
+    "authority": "shipped-artifact",
+    "confidence": "observed",
+    "subject": {
+      "architecture": "arm64",
+      "digest": {
+        "sha256": "2ef794c4940afea56c6d6d3b9bc9e66965bc7333e79c5dcb2def3c0e36f0834c"
+      },
+      "format": "pe",
+      "name": "microsoft-wmic-arm64.exe"
+    },
+    "analysis_profile_digest": "78013cb11a129e6691a13b1234d95ee7fa3fea86df9d7c3c7032ada074d68c06"
+  },
+  {
+    "evidence_id": "ev_ed7878e900a538e28a77412d2d20d9de9e8597d770d7f1633cc3bcfb84d3fcfb",
+    "operation": "procedure_pseudo_code",
+    "parameters": {
+      "procedure": "0x140031058"
+    },
+    "locations": [],
+    "provider": {
+      "id": "ghidra",
+      "name": "Ghidra",
+      "version": "12.1.4"
+    },
+    "authority": "shipped-artifact",
+    "confidence": "observed",
+    "subject": {
+      "architecture": "arm64",
+      "digest": {
+        "sha256": "2ef794c4940afea56c6d6d3b9bc9e66965bc7333e79c5dcb2def3c0e36f0834c"
+      },
+      "format": "pe",
+      "name": "microsoft-wmic-arm64.exe"
+    },
+    "analysis_profile_digest": "78013cb11a129e6691a13b1234d95ee7fa3fea86df9d7c3c7032ada074d68c06"
+  },
+  {
+    "evidence_id": "ev_f3f33fa549fd9fe1226fcd8637ef488dd133a335ca6d55902ee934501f0d0ca4",
+    "operation": "procedure_pseudo_code",
+    "parameters": {
+      "procedure": "0x14002f970"
+    },
+    "locations": [],
+    "provider": {
+      "id": "ghidra",
+      "name": "Ghidra",
+      "version": "12.1.4"
+    },
+    "authority": "shipped-artifact",
+    "confidence": "observed",
+    "subject": {
+      "architecture": "arm64",
+      "digest": {
+        "sha256": "2ef794c4940afea56c6d6d3b9bc9e66965bc7333e79c5dcb2def3c0e36f0834c"
+      },
+      "format": "pe",
+      "name": "microsoft-wmic-arm64.exe"
+    },
+    "analysis_profile_digest": "78013cb11a129e6691a13b1234d95ee7fa3fea86df9d7c3c7032ada074d68c06"
+  },
+  {
+    "evidence_id": "ev_f8b57157cbd682a2240cced507a2bb92a31af18912aa51c25af5c7196f377e8b",
+    "operation": "search_strings",
+    "parameters": {
+      "case_sensitive": false,
+      "mode": "literal",
+      "pattern": "REPEAT"
+    },
+    "locations": [],
+    "provider": {
+      "id": "ghidra",
+      "name": "Ghidra",
+      "version": "12.1.4"
+    },
+    "authority": "shipped-artifact",
+    "confidence": "observed",
+    "subject": {
+      "architecture": "arm64",
+      "digest": {
+        "sha256": "2ef794c4940afea56c6d6d3b9bc9e66965bc7333e79c5dcb2def3c0e36f0834c"
+      },
+      "format": "pe",
+      "name": "microsoft-wmic-arm64.exe"
+    },
+    "analysis_profile_digest": "78013cb11a129e6691a13b1234d95ee7fa3fea86df9d7c3c7032ada074d68c06"
+  },
+  {
+    "evidence_id": "ev_699f4a538d7c5aed2092ceaf0f2f9d4c8ccbf14941b81c6fcd22dd72e8c566ca",
+    "operation": "procedure_pseudo_code",
+    "parameters": {
+      "procedure": "0x14002d7a8"
+    },
+    "locations": [],
+    "provider": {
+      "id": "ghidra",
+      "name": "Ghidra",
+      "version": "12.1.4"
+    },
+    "authority": "shipped-artifact",
+    "confidence": "observed",
+    "subject": {
+      "name": "microsoft-wmic-arm64.exe",
+      "digest": {
+        "sha256": "2ef794c4940afea56c6d6d3b9bc9e66965bc7333e79c5dcb2def3c0e36f0834c"
+      },
+      "format": "pe",
+      "architecture": "arm64"
+    },
+    "analysis_profile_digest": "78013cb11a129e6691a13b1234d95ee7fa3fea86df9d7c3c7032ada074d68c06"
+  }
+]

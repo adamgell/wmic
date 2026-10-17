@@ -73,7 +73,7 @@ pub(super) fn context(
             .nodes
             .iter()
             .map(|n| {
-                if n.eq_ignore_case(".") {
+                if n.eq_cli(".") || n.eq_cli("localhost") || n.eq_cli_text(local) {
                     local.clone()
                 } else {
                     n.clone()
@@ -256,7 +256,7 @@ pub(super) fn context_text(settings: &SessionSettings, local: &WideText) -> Wide
         .iter()
         .map(WideText::to_string_lossy)
         .collect::<Vec<_>>()
-        .join(",");
+        .join(", ");
     for (name, value) in c.settings {
         let key = name.to_string_lossy();
         if key == "IMPLEVEL" {

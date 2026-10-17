@@ -220,16 +220,6 @@ impl Session {
         scheduler: &mut dyn RepeatScheduler,
     ) -> CommandOutcome {
         let command = parse_command(raw, mode).ok().filter(|c| !c.help);
-        let every = command.as_ref().and_then(|c| {
-            c.modifiers
-                .iter()
-                .position(|m| m.name.eq_ignore_case("every"))
-        });
-        let repeat = command.as_ref().and_then(|c| {
-            c.modifiers
-                .iter()
-                .position(|m| m.name.eq_ignore_case("repeat"))
-        });
         let switch_error = |sink: &mut dyn OutputSink, code, message: &str| {
             emit(
                 sink,
@@ -240,43 +230,66 @@ impl Session {
                 code,
             )
         };
-        if let Some(repeat) = repeat
-            && every.is_none_or(|every| repeat < every)
-        {
-            return switch_error(
-                sink,
-                0xB0A6,
-                "HINT: /REPEAT should always follow /EVERY switch.",
-            );
-        }
-        let number = |position: usize| {
-            command
+        let number = |modifier: &Modifier| match &modifier.value {
+            _ if modifier
+                .raw_value
                 .as_ref()
-                .and_then(|c| match &c.modifiers[position].value {
-                    SwitchValue::Value(v) => v.to_string_lossy().parse::<u32>().ok(),
-                    _ => None,
-                })
+                .is_some_and(|raw| raw.0.first() == Some(&45)) =>
+            {
+                None
+            }
+            SwitchValue::Value(value) => super::repeat::number(value),
+            SwitchValue::Reset
+                if modifier
+                    .raw_value
+                    .as_ref()
+                    .is_some_and(|raw| !raw.0.is_empty()) =>
+            {
+                super::repeat::number(&WideText::default())
+            }
+            _ => None,
         };
-        let interval = match every {
-            None => None,
-            Some(at) => match number(at) {
-                Some(n) => Some(n),
-                None => {
-                    return switch_error(
-                        sink,
-                        0xACAE,
-                        "Invalid interval value specified with /EVERY switch.",
-                    );
+        let mut interval = None;
+        let mut limit = None;
+        if let Some(command) = &command {
+            for (index, modifier) in command.modifiers.iter().enumerate() {
+                if modifier.name.eq_ignore_case("every") {
+                    if modifier.value == SwitchValue::Missing {
+                        return switch_error(sink, 0xADD9, "Invalid EVERY switch.");
+                    }
+                    interval = match number(modifier) {
+                        Some(number) => Some(number),
+                        None => {
+                            return switch_error(
+                                sink,
+                                0xACAE,
+                                "Invalid interval value specified with /EVERY switch.",
+                            );
+                        }
+                    };
+                    limit = None;
+                } else if modifier.name.eq_ignore_case("repeat") {
+                    if index == 0 || !command.modifiers[index - 1].name.eq_ignore_case("every") {
+                        return switch_error(
+                            sink,
+                            0xB0A6,
+                            "HINT: /REPEAT should always follow /EVERY switch.",
+                        );
+                    }
+                    // EVERY's nested REPEAT parser recognizes only a slash.
+                    if modifier.prefix == Some(45) {
+                        return switch_error(sink, 0xABE5, "Invalid command.");
+                    }
+                    if modifier.value == SwitchValue::Missing {
+                        return switch_error(sink, 0xABE6, "Invalid REPEAT switch.");
+                    }
+                    limit = match number(modifier) {
+                        Some(number) if number > 0 => Some(number),
+                        _ => return switch_error(sink, 0xABE8, "Invalid REPEAT count."),
+                    };
                 }
-            },
-        };
-        let limit = match repeat {
-            None => None,
-            Some(at) => match number(at) {
-                Some(n) if n > 0 => Some(n),
-                _ => return switch_error(sink, 0xABE8, "Invalid REPEAT count."),
-            },
-        };
+            }
+        }
         self.sequence = self.sequence.saturating_add(1);
         let mut frame = ExecutionFrame::default();
         loop {
@@ -465,6 +478,20 @@ impl Session {
             Ok(s) => s,
             Err(e) => return emit(sink, render::render_parse_error(&e), e.code),
         };
+        let mut seen = Vec::<WideText>::new();
+        settings.nodes.retain(|node| {
+            let identity = if node.eq_cli(".") || node.eq_cli("localhost") {
+                &self.local_node
+            } else {
+                node
+            };
+            if seen.iter().any(|n| n.eq_cli_text(identity)) {
+                false
+            } else {
+                seen.push(identity.clone());
+                true
+            }
+        });
         if !parsed.help && settings.user.is_some() && settings.password.is_none() {
             if sink
                 .write(OutputStream::Stderr, &"Enter the password :".into())
@@ -698,6 +725,7 @@ impl Session {
         let mut status = 0;
         let mut combined = vec![];
         let mut had_objects = false;
+        let mut error_stdout = WideText::default();
         let nodes = if settings.explicit_nodes {
             settings.nodes.clone()
         } else {
@@ -806,7 +834,18 @@ impl Session {
                 result: result.as_ref(),
                 node: &node,
             }) {
-                Ok(output) => {
+                Ok(mut output) => {
+                    if settings.aggregate
+                        && result.as_ref().is_err_and(|e| {
+                            e.operation.eq_ignore_case("query")
+                                || e.operation.eq_ignore_case("enumerate")
+                                || e.operation.eq_ignore_case("convert")
+                        })
+                    {
+                        // A failed node's empty table must not be emitted before
+                        // the final aggregate containing successful objects.
+                        error_stdout.0.append(&mut output.stdout.0);
+                    }
                     let out = emit(sink, output, code);
                     if out.exit_status != code {
                         status = out.exit_status;
@@ -830,6 +869,16 @@ impl Session {
                 Ok(output) => status = emit(sink, output, status).exit_status,
                 Err(error) => status = emit_render_error(sink, error),
             }
+        } else if !error_stdout.0.is_empty() {
+            status = emit(
+                sink,
+                RenderedOutput {
+                    stdout: error_stdout,
+                    ..Default::default()
+                },
+                status,
+            )
+            .exit_status;
         }
         CommandOutcome {
             exit_status: status,
@@ -893,6 +942,7 @@ fn configure_connection(request: &mut crate::backend::ResolvedRequest, settings:
         request.modifiers.insert(
             0,
             Modifier {
+                prefix: None,
                 raw_value: None,
                 name: "interactive".into(),
                 value: SwitchValue::Value("on".into()),

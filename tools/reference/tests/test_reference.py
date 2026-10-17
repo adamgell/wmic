@@ -125,6 +125,15 @@ class ReferenceTests(unittest.TestCase):
             manifest={'cases':[{'id':'stdin-secret','arguments':'','operation':'read_only','stdin_base64':base64.b64encode('/password:secret\r\nquit\r\n'.encode(encoding)).decode()}]}
             with self.subTest(encoding=encoding),self.assertRaises(ValueError):parallels.validate_manifest(manifest)
 
+    def test_password_guard_covers_native_hyphen_and_fullwidth_spellings(self):
+        for prefix in ['-password', '/ＰＡＳＳＷＯＲＤ', '-Ｐａｓｓｗｏｒｄ', '/pa\u00adssword']:
+            text = prefix + ' : "test-only-secret" context'
+            with self.assertRaises(ValueError):
+                parallels.validate_manifest({'cases': [{'id': 'credential', 'arguments': text}]})
+            with self.assertRaises(ValueError):
+                parallels.validate_manifest({'cases': [{'id': 'credential', 'arguments': '',
+                    'stdin_base64': base64.b64encode(text.encode('utf-16le')).decode()}]})
+
     def test_controlled_writes_are_not_part_of_default_capture(self):
         manifest = {"cases": [{"id": "write", "arguments": "process call create example", "operation": "controlled_write"}]}
         with self.assertRaises(ValueError):

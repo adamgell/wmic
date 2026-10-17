@@ -1,0 +1,1706 @@
+{
+  "schema_version": 1,
+  "cases": [
+    {
+      "id": "p01-00",
+      "arguments": "-node:. context",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": true
+    },
+    {
+      "id": "p01-01",
+      "arguments": "-aggregate:off context",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": true
+    },
+    {
+      "id": "p01-02",
+      "arguments": "-?",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": true
+    },
+    {
+      "id": "p01-03",
+      "arguments": "/\uff2e\uff2f\uff24\uff25:. context",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": true
+    },
+    {
+      "id": "p01-04",
+      "arguments": "/aggregate:\uff2f\uff26\uff26 context",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": true
+    },
+    {
+      "id": "p01-05",
+      "arguments": "/trace:\uff2f\uff26\uff26 context",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": true
+    },
+    {
+      "id": "p02-00",
+      "arguments": "/node : . context",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": true
+    },
+    {
+      "id": "p02-01",
+      "arguments": "/aggregate : off context",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": true
+    },
+    {
+      "id": "p02-02",
+      "arguments": "/authlevel : pktprivacy context",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": true
+    },
+    {
+      "id": "p02-03",
+      "arguments": "/node:./aggregate:off context",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": true
+    },
+    {
+      "id": "p02-04",
+      "arguments": "/aggregate:off/node:. context",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": true
+    },
+    {
+      "id": "p02-05",
+      "arguments": "/locale:ms_409 /node : . context",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": true
+    },
+    {
+      "id": "p03-00",
+      "arguments": "/trace /?",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": true
+    },
+    {
+      "id": "p03-01",
+      "arguments": "/aggregate /?",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": true
+    },
+    {
+      "id": "p03-02",
+      "arguments": "/node /?",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": true
+    },
+    {
+      "id": "p03-03",
+      "arguments": "-trace -?",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": true
+    },
+    {
+      "id": "p03-04",
+      "arguments": "/node: /?",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": true
+    },
+    {
+      "id": "p03-05",
+      "arguments": "/node : /?",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": true
+    },
+    {
+      "id": "p03-06",
+      "arguments": "/node:bogus /?",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": true
+    },
+    {
+      "id": "p03-07",
+      "arguments": "/trace:bogus /?",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": true
+    },
+    {
+      "id": "p04-00",
+      "arguments": "/namespace:\\\\ROOT\\CIMV2 context",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": true
+    },
+    {
+      "id": "p04-01",
+      "arguments": "/namespace:\\\\ROOT\\CIMV2 /namespace:\\\\root\\cimv2 context",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": true
+    },
+    {
+      "id": "p04-02",
+      "arguments": "/namespace:one /namespace:two context",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": true
+    },
+    {
+      "id": "p04-03",
+      "arguments": "/namespace:\\\\root\\cimv2\\ context",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": true
+    },
+    {
+      "id": "p04-04",
+      "arguments": "/namespace:\\\\root\\cimv2 /namespace:\"\" context",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": true
+    },
+    {
+      "id": "p05-00",
+      "arguments": "/role:\\\\ROOT\\CLI context",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": true
+    },
+    {
+      "id": "p05-01",
+      "arguments": "/role:\\\\ROOT\\CLI /role:\\\\root\\cli context",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": true
+    },
+    {
+      "id": "p05-02",
+      "arguments": "/role:one /role:two context",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": true
+    },
+    {
+      "id": "p05-03",
+      "arguments": "/role:\\\\root\\cli\\ context",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": true
+    },
+    {
+      "id": "p05-04",
+      "arguments": "/role:\\\\root\\cli /role:\"\" context",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": true
+    },
+    {
+      "id": "p06-00",
+      "arguments": "/node:\".,\" context",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": true
+    },
+    {
+      "id": "p06-01",
+      "arguments": "/node:\",.\" context",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": true
+    },
+    {
+      "id": "p06-02",
+      "arguments": "/node:\".,,.\" context",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": true
+    },
+    {
+      "id": "p06-03",
+      "arguments": "/node:\" . \" context",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": true
+    },
+    {
+      "id": "p06-04",
+      "arguments": "/node:\"localhost,LOCALHOST\" context",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": true
+    },
+    {
+      "id": "p06-05",
+      "arguments": "/node:\"a,b,a\" context",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": true
+    },
+    {
+      "id": "p06-06",
+      "arguments": "/node:\"\"a,b\"\" context",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": true
+    },
+    {
+      "id": "p07-00",
+      "arguments": "/authlevel:\uff30\uff2b\uff34\uff30\uff32\uff29\uff36\uff21\uff23\uff39 context",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": true
+    },
+    {
+      "id": "p07-01",
+      "arguments": "/authlevel:6 context",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": true
+    },
+    {
+      "id": "p07-02",
+      "arguments": "/authlevel:DEFAULT context",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": true
+    },
+    {
+      "id": "p07-03",
+      "arguments": "/authlevel:\" DEFAULT\" context",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": true
+    },
+    {
+      "id": "p07-04",
+      "arguments": "/authlevel: /?",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": true
+    },
+    {
+      "id": "p07-05",
+      "arguments": "/authlevel : pktprivacy /?",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": true
+    },
+    {
+      "id": "p08-00",
+      "arguments": "/implevel:\uff29\uff2d\uff30\uff25\uff32\uff33\uff2f\uff2e\uff21\uff34\uff25 context",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": true
+    },
+    {
+      "id": "p08-01",
+      "arguments": "/implevel:3 context",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": true
+    },
+    {
+      "id": "p08-02",
+      "arguments": "/implevel:IMPERSONATE context",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": true
+    },
+    {
+      "id": "p08-03",
+      "arguments": "/implevel:\"IMPERSONATE \" context",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": true
+    },
+    {
+      "id": "p08-04",
+      "arguments": "/implevel: /?",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": true
+    },
+    {
+      "id": "p09-00",
+      "arguments": "/privileges:\uff25\uff2e\uff21\uff22\uff2c\uff25 context",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": true
+    },
+    {
+      "id": "p09-01",
+      "arguments": "/privileges:\uff24\uff29\uff33\uff21\uff22\uff2c\uff25 context",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": true
+    },
+    {
+      "id": "p09-02",
+      "arguments": "/privileges: /?",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": true
+    },
+    {
+      "id": "p09-03",
+      "arguments": "/privileges : enable context",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": true
+    },
+    {
+      "id": "p09-04",
+      "arguments": "-privileges:disable context",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": true
+    },
+    {
+      "id": "p10-00",
+      "arguments": "/interactive:\uff2f\uff26\uff26 context",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": true
+    },
+    {
+      "id": "p10-01",
+      "arguments": "/interactive:\uff2f\uff2e context",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": true
+    },
+    {
+      "id": "p10-02",
+      "arguments": "/interactive:\"\" context",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": true
+    },
+    {
+      "id": "p10-03",
+      "arguments": "/interactive:bogus /?",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": true
+    },
+    {
+      "id": "p10-04",
+      "arguments": "/interactive : off context",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": true
+    },
+    {
+      "id": "p11-00",
+      "arguments": "/aggregate:\uff2f\uff2e context",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": true
+    },
+    {
+      "id": "p11-01",
+      "arguments": "/aggregate:\uff2f\uff26\uff26 context",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": true
+    },
+    {
+      "id": "p11-02",
+      "arguments": "/aggregate:on /aggregate:OFF context",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": true
+    },
+    {
+      "id": "p11-03",
+      "arguments": "/aggregate:\"on \" context",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": true
+    },
+    {
+      "id": "p11-04",
+      "arguments": "/aggregate: /?",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": true
+    },
+    {
+      "id": "p12-00",
+      "arguments": "\uff23\uff2f\uff2e\uff34\uff25\uff38\uff34",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": true
+    },
+    {
+      "id": "p12-01",
+      "arguments": "context /?",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": true
+    },
+    {
+      "id": "p12-02",
+      "arguments": "context /value",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": true
+    },
+    {
+      "id": "p12-03",
+      "arguments": "context extra",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": true
+    },
+    {
+      "id": "p12-04",
+      "arguments": "context /aggregate:off",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": true
+    },
+    {
+      "id": "p12-05",
+      "arguments": "-node:. context",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": true
+    },
+    {
+      "id": "p12-06",
+      "arguments": "/node:. context extra",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": true
+    },
+    {
+      "id": "p13-00",
+      "arguments": "os get Caption /every:\"0\" /repeat:1",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": false
+    },
+    {
+      "id": "p13-01",
+      "arguments": "os get Caption /every:\"00\" /repeat:1",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": false
+    },
+    {
+      "id": "p13-02",
+      "arguments": "os get Caption /every:\"+0\" /repeat:1",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": false
+    },
+    {
+      "id": "p13-03",
+      "arguments": "os get Caption /every:\" 0\" /repeat:1",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": false
+    },
+    {
+      "id": "p13-04",
+      "arguments": "os get Caption /every:\"0 \" /repeat:1",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": false
+    },
+    {
+      "id": "p13-05",
+      "arguments": "os get Caption /every:\"\uff10\" /repeat:1",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": false
+    },
+    {
+      "id": "p13-06",
+      "arguments": "os get Caption /every:\"0ms\" /repeat:1",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": false
+    },
+    {
+      "id": "p13-07",
+      "arguments": "os get Caption /every:\"0.0\" /repeat:1",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": false
+    },
+    {
+      "id": "p13-08",
+      "arguments": "os get Caption /every:\"x\" /repeat:1",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": false
+    },
+    {
+      "id": "p13-09",
+      "arguments": "os get Caption /every:\"-1\" /repeat:1",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": false
+    },
+    {
+      "id": "p13-10",
+      "arguments": "os get Caption /every:\"4294967296\" /repeat:1",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": false
+    },
+    {
+      "id": "p13-11",
+      "arguments": "os get Caption /every:\"12\" /repeat:1",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": false
+    },
+    {
+      "id": "p13-12",
+      "arguments": "os get Caption /every:\"\uff11\uff12\" /repeat:1",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": false
+    },
+    {
+      "id": "p14-00",
+      "arguments": "os get Caption /every:0 /repeat:\"1\"",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": false
+    },
+    {
+      "id": "p14-01",
+      "arguments": "os get Caption /every:0 /repeat:\"2\"",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": false
+    },
+    {
+      "id": "p14-02",
+      "arguments": "os get Caption /every:0 /repeat:\"+2\"",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": false
+    },
+    {
+      "id": "p14-03",
+      "arguments": "os get Caption /every:0 /repeat:\" 2\"",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": false
+    },
+    {
+      "id": "p14-04",
+      "arguments": "os get Caption /every:0 /repeat:\"2 \"",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": false
+    },
+    {
+      "id": "p14-05",
+      "arguments": "os get Caption /every:0 /repeat:\"\uff12\"",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": false
+    },
+    {
+      "id": "p14-06",
+      "arguments": "os get Caption /every:0 /repeat:\"2ms\"",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": false
+    },
+    {
+      "id": "p14-07",
+      "arguments": "os get Caption /every:0 /repeat:\"-4294967294\"",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": false
+    },
+    {
+      "id": "p14-08",
+      "arguments": "os get Caption /every:0 /repeat:\"0\"",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": false
+    },
+    {
+      "id": "p14-09",
+      "arguments": "os get Caption /every:0 /value /repeat:2",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": false
+    },
+    {
+      "id": "p14-10",
+      "arguments": "os get Caption /every:0 /repeat:2 /value",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": false
+    },
+    {
+      "id": "p14-11",
+      "arguments": "os get Caption /repeat:2 /every:0",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": false
+    },
+    {
+      "id": "p14-12",
+      "arguments": "os get Caption /every:0 /repeat:1 /repeat:2",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": false
+    },
+    {
+      "id": "p15-00",
+      "arguments": "os get \"Caption\",Version",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": false
+    },
+    {
+      "id": "p15-01",
+      "arguments": "os get Caption , Version",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": false
+    },
+    {
+      "id": "p15-02",
+      "arguments": "os get Caption,Caption",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": false
+    },
+    {
+      "id": "p15-03",
+      "arguments": "os get \"Caption,Version\"",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": false
+    },
+    {
+      "id": "p15-04",
+      "arguments": "os get Caption,,Version",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": false
+    },
+    {
+      "id": "p15-05",
+      "arguments": "os get Caption,",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": false
+    },
+    {
+      "id": "p15-06",
+      "arguments": "os get \"Caption\"Version",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": false
+    },
+    {
+      "id": "p16-00",
+      "arguments": "os where \"Caption like 'Microsoft%'\" get Caption",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": false
+    },
+    {
+      "id": "p16-01",
+      "arguments": "os where (Caption like 'Microsoft%') get Caption",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": false
+    },
+    {
+      "id": "p16-02",
+      "arguments": "os where \"Caption='__rea_missing__'\" get Caption",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": false
+    },
+    {
+      "id": "p16-03",
+      "arguments": "os where get Caption",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": false
+    },
+    {
+      "id": "p16-04",
+      "arguments": "os where \"\" get Caption",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": false
+    },
+    {
+      "id": "p16-05",
+      "arguments": "os WHERE \"Caption is not null\" GET Caption",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": false
+    },
+    {
+      "id": "p16-06",
+      "arguments": "path Win32_OperatingSystem where \"Caption is not null\" get Caption",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": false
+    },
+    {
+      "id": "p17-00",
+      "arguments": "path Win32_OperatingSystem get Caption",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": false
+    },
+    {
+      "id": "p17-01",
+      "arguments": "path Win32_OperatingSystem=@ get Caption",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": false
+    },
+    {
+      "id": "p17-02",
+      "arguments": "path \"Win32_OperatingSystem=@\" get Caption",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": false
+    },
+    {
+      "id": "p17-03",
+      "arguments": "path \"\\\\.\\root\\cimv2:Win32_OperatingSystem=@\" get Caption",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": false
+    },
+    {
+      "id": "p17-04",
+      "arguments": "path \"\\\\DESKTOP-N4H9E7R\\root\\cimv2:Win32_OperatingSystem=@\" get Caption",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": false
+    },
+    {
+      "id": "p17-05",
+      "arguments": "path Win32_OperatingSystem where \"Caption is not null\" get Caption",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": false
+    },
+    {
+      "id": "p17-06",
+      "arguments": "path /?",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": false
+    },
+    {
+      "id": "p18-00",
+      "arguments": "os list brief",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": false
+    },
+    {
+      "id": "p18-01",
+      "arguments": "os list BRIEF",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": false
+    },
+    {
+      "id": "p18-02",
+      "arguments": "os list \uff22\uff32\uff29\uff25\uff26",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": false
+    },
+    {
+      "id": "p18-03",
+      "arguments": "os list br",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": false
+    },
+    {
+      "id": "p18-04",
+      "arguments": "os list instance",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": false
+    },
+    {
+      "id": "p18-05",
+      "arguments": "os list brief brief",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": false
+    },
+    {
+      "id": "p18-06",
+      "arguments": "os list /?",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": false
+    },
+    {
+      "id": "p19-00",
+      "arguments": "os get Caption /format:CSV",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": false
+    },
+    {
+      "id": "p19-01",
+      "arguments": "os get Caption /format:\"csv\"",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": false
+    },
+    {
+      "id": "p19-02",
+      "arguments": "os get Caption /format:\uff23\uff33\uff36",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": false
+    },
+    {
+      "id": "p19-03",
+      "arguments": "os get Caption /format:csv.xsl",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": false
+    },
+    {
+      "id": "p19-04",
+      "arguments": "os get Caption /format:WmicReaMissing",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": false
+    },
+    {
+      "id": "p19-05",
+      "arguments": "os get Caption /format",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": false
+    },
+    {
+      "id": "p19-06",
+      "arguments": "os get Caption /format:",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": false
+    },
+    {
+      "id": "p20-00",
+      "arguments": "os get Caption /format:rawxml,csv",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": false
+    },
+    {
+      "id": "p20-01",
+      "arguments": "os get Caption /format:\"rawxml,csv\"",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": false
+    },
+    {
+      "id": "p20-02",
+      "arguments": "os get Caption /format:csv:\"norefcomma=true\"",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": false
+    },
+    {
+      "id": "p20-03",
+      "arguments": "os get Caption /format:csv:norefcomma=true",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": false
+    },
+    {
+      "id": "p20-04",
+      "arguments": "os get Caption /format:csv:\"unused=a=b\"",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": false
+    },
+    {
+      "id": "p20-05",
+      "arguments": "os get Caption /format:csv:\"unused=a,b\"",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": false
+    },
+    {
+      "id": "p20-06",
+      "arguments": "os get Caption /format:csv : \"unused=x\"",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": false
+    },
+    {
+      "id": "p21-00",
+      "arguments": "os get Caption /translate:BasicXml /format:csv",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": false
+    },
+    {
+      "id": "p21-01",
+      "arguments": "os get Caption /translate:basicxml /format:csv",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": false
+    },
+    {
+      "id": "p21-02",
+      "arguments": "os get Caption /translate:\uff22\uff41\uff53\uff49\uff43\uff38\uff4d\uff4c /format:csv",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": false
+    },
+    {
+      "id": "p21-03",
+      "arguments": "os get Caption /translate:WmicReaMissing",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": false
+    },
+    {
+      "id": "p21-04",
+      "arguments": "os get Caption /translate:",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": false
+    },
+    {
+      "id": "p21-05",
+      "arguments": "os get Caption /translate /?",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": false
+    },
+    {
+      "id": "p21-06",
+      "arguments": "os get Caption /translate:BasicXml /translate:BasicXml /format:csv",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": false
+    },
+    {
+      "id": "p22-00",
+      "arguments": "path Win32_OperatingSystem=@ assoc /resultclass:Win32_ComputerSystem",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": false
+    },
+    {
+      "id": "p22-01",
+      "arguments": "path Win32_OperatingSystem=@ assoc /resultrole:GroupComponent",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": false
+    },
+    {
+      "id": "p22-02",
+      "arguments": "path Win32_OperatingSystem=@ assoc /assocclass:Win32_ComputerSystemOperatingSystem",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": false
+    },
+    {
+      "id": "p22-03",
+      "arguments": "os assoc /?",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": false
+    },
+    {
+      "id": "p22-04",
+      "arguments": "os assoc /resultclass:",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": false
+    },
+    {
+      "id": "p22-05",
+      "arguments": "os assoc extra",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": false
+    },
+    {
+      "id": "p22-06",
+      "arguments": "os assoc /invalid:x",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": false
+    },
+    {
+      "id": "p23-00",
+      "arguments": "process call GetOwner /?",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": false
+    },
+    {
+      "id": "p23-01",
+      "arguments": "process call GetOwnerSid /?",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": false
+    },
+    {
+      "id": "p23-02",
+      "arguments": "process call /?",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": false
+    },
+    {
+      "id": "p23-03",
+      "arguments": "process call WmicReaMissing /?",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": false
+    },
+    {
+      "id": "p23-04",
+      "arguments": "process call GetOwner /? extra",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": false
+    },
+    {
+      "id": "p23-05",
+      "arguments": "path Win32_Process call GetOwner /?",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": false
+    },
+    {
+      "id": "p24-00",
+      "arguments": "os get Caption /format:rawxml",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "normalizations": [
+        {
+          "kind": "wmic-command-starttime",
+          "stream": "stdout"
+        }
+      ],
+      "controller_oracle": false
+    },
+    {
+      "id": "p24-01",
+      "arguments": "os get Caption,__CLASS /format:rawxml",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "normalizations": [
+        {
+          "kind": "wmic-command-starttime",
+          "stream": "stdout"
+        }
+      ],
+      "controller_oracle": false
+    },
+    {
+      "id": "p24-02",
+      "arguments": "path Win32_OperatingSystem get Caption /format:rawxml",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "normalizations": [
+        {
+          "kind": "wmic-command-starttime",
+          "stream": "stdout"
+        }
+      ],
+      "controller_oracle": false
+    },
+    {
+      "id": "p24-03",
+      "arguments": "os where \"Caption='__rea_missing__'\" get Caption /format:rawxml",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "normalizations": [
+        {
+          "kind": "wmic-command-starttime",
+          "stream": "stdout"
+        }
+      ],
+      "controller_oracle": false
+    },
+    {
+      "id": "p24-04",
+      "arguments": "/namespace:\\ROOT\\CIMV2 os get Caption /format:rawxml",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "normalizations": [
+        {
+          "kind": "wmic-command-starttime",
+          "stream": "stdout"
+        }
+      ],
+      "controller_oracle": false
+    },
+    {
+      "id": "p25-00",
+      "arguments": "",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "stdin_base64": "Y29udGV4dA0KcXVpdA0K",
+      "controller_oracle": false
+    },
+    {
+      "id": "p25-01",
+      "arguments": "",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "stdin_base64": "L2FnZ3JlZ2F0ZTpvZmYNCmNvbnRleHQNCnF1aXQNCg==",
+      "controller_oracle": false
+    },
+    {
+      "id": "p25-02",
+      "arguments": "",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "stdin_base64": "Y29udGV4dCAvdmFsdWUNCmNvbnRleHQNCnF1aXQNCg==",
+      "controller_oracle": false
+    },
+    {
+      "id": "p25-03",
+      "arguments": "",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "stdin_base64": "L25hbWVzcGFjZTouLg0KY29udGV4dA0KL25hbWVzcGFjZToiIg0KY29udGV4dA0KcXVpdA0K",
+      "controller_oracle": false
+    },
+    {
+      "id": "p25-04",
+      "arguments": "",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "stdin_base64": "V21pY1JlYU1pc3NpbmcNCm9zIGdldCBDYXB0aW9uDQpleGl0DQo=",
+      "controller_oracle": false
+    },
+    {
+      "id": "p25-05",
+      "arguments": "",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "stdin_base64": "ZXhpdA0Kb3MgZ2V0IENhcHRpb24NCg==",
+      "controller_oracle": false
+    },
+    {
+      "id": "p04-parent-00",
+      "arguments": "/namespace:.. context",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": true
+    },
+    {
+      "id": "p04-parent-01",
+      "arguments": "/namespace:..\\Child context",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": true
+    },
+    {
+      "id": "p04-parent-02",
+      "arguments": "/namespace:..Child context",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": true
+    },
+    {
+      "id": "p04-parent-03",
+      "arguments": "/namespace:.. /namespace:.. context",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": true
+    },
+    {
+      "id": "p04-parent-04",
+      "arguments": "/namespace:\\\\Root\\Mixed /namespace:\\\\root\\mixed context",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": true
+    },
+    {
+      "id": "p04-parent-05",
+      "arguments": "/namespace:\\\\Root\\Mixed /namespace:\"\" context",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": true
+    },
+    {
+      "id": "p05-parent-00",
+      "arguments": "/role:.. context",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": true
+    },
+    {
+      "id": "p05-parent-01",
+      "arguments": "/role:..\\Child context",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": true
+    },
+    {
+      "id": "p05-parent-02",
+      "arguments": "/role:..Child context",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": true
+    },
+    {
+      "id": "p05-parent-03",
+      "arguments": "/role:.. /role:.. context",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": true
+    },
+    {
+      "id": "p05-parent-04",
+      "arguments": "/role:\\\\Root\\Mixed /role:\\\\root\\mixed context",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": true
+    },
+    {
+      "id": "p05-parent-05",
+      "arguments": "/role:\\\\Root\\Mixed /role:\"\" context",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": true
+    },
+    {
+      "id": "unusual-reset",
+      "arguments": "/role:\\\\Something /namespace:other /namespace:\"\" context",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": true
+    },
+    {
+      "id": "role-cross-default",
+      "arguments": "/role:\\\\root\\cimv2 /namespace:other /namespace:\"\" context",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": true
+    },
+    {
+      "id": "numempty-0",
+      "arguments": "os get Caption /every:\"\" /repeat:1",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": false
+    },
+    {
+      "id": "numempty-1",
+      "arguments": "os get Caption /every:\" \" /repeat:1",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": false
+    },
+    {
+      "id": "numempty-2",
+      "arguments": "os get Caption /every:\"+\" /repeat:1",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": false
+    },
+    {
+      "id": "numempty-3",
+      "arguments": "os get Caption /every:\"-\" /repeat:1",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": false
+    },
+    {
+      "id": "followup-00",
+      "arguments": "os get Caption /every:0 /repeat:1 /every:0 /repeat:2",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": false
+    },
+    {
+      "id": "followup-01",
+      "arguments": "os get Caption /every:x /value /repeat:2",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": false
+    },
+    {
+      "id": "followup-02",
+      "arguments": "os get Caption /every:0 /repeat:x /repeat:2",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": false
+    },
+    {
+      "id": "followup-03",
+      "arguments": "os get Caption /every:0 -repeat:1",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": false
+    },
+    {
+      "id": "followup-04",
+      "arguments": "os get Caption /every:0 /repeat:1 -value",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": false
+    },
+    {
+      "id": "followup-05",
+      "arguments": "/node:localhost,LOCALHOST context",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": true
+    },
+    {
+      "id": "followup-06",
+      "arguments": "/node:a,b,a context",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": true
+    },
+    {
+      "id": "followup-07",
+      "arguments": "/node:\"a,b\" context",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": true
+    },
+    {
+      "id": "followup-08",
+      "arguments": "/node:\"a\",\"b\" context",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": true
+    },
+    {
+      "id": "followup-09",
+      "arguments": "/node:a,,b context",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": true
+    },
+    {
+      "id": "followup-10",
+      "arguments": "/node:. -aggregate:off context",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": true
+    },
+    {
+      "id": "followup-11",
+      "arguments": "/node:.-aggregate:off context",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": true
+    },
+    {
+      "id": "followup-12",
+      "arguments": "os get Caption /format:rawxml",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "normalizations": [
+        {
+          "stream": "stdout",
+          "kind": "wmic-command-starttime"
+        }
+      ],
+      "controller_oracle": false
+    },
+    {
+      "id": "followup-13",
+      "arguments": "os get Caption /format:csv.xsl",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": false
+    },
+    {
+      "id": "followup-14",
+      "arguments": "os get Caption /format:CSV.XSL",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": false
+    },
+    {
+      "id": "followup-15",
+      "arguments": "os get Caption /format:wmiclicsvformat",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": false
+    },
+    {
+      "id": "followup-16",
+      "arguments": "os get Caption /format:\uff23\uff33\uff36",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": false
+    },
+    {
+      "id": "followup-17",
+      "arguments": "os get Caption /format:csv:\"unused=a,b\"",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": false
+    },
+    {
+      "id": "followup-18",
+      "arguments": "os assoc /resultclass:\"\"",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": false
+    },
+    {
+      "id": "followup-19",
+      "arguments": "os assoc /resultclass",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": false
+    },
+    {
+      "id": "syntax-00",
+      "arguments": "os get Caption /every",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": false
+    },
+    {
+      "id": "syntax-01",
+      "arguments": "os get Caption /every:",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": false
+    },
+    {
+      "id": "syntax-02",
+      "arguments": "os get Caption /every:0 /repeat",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": false
+    },
+    {
+      "id": "syntax-03",
+      "arguments": "os get Caption /every:0 /repeat:",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": false
+    },
+    {
+      "id": "syntax-04",
+      "arguments": "/node:\"unfinished",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": true
+    },
+    {
+      "id": "syntax-05",
+      "arguments": "/node:\"a,b\" context",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": true
+    },
+    {
+      "id": "syntax-06",
+      "arguments": "/node:\".com,host\" context",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": true
+    },
+    {
+      "id": "syntax-07",
+      "arguments": "/node:. /?",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": false
+    },
+    {
+      "id": "syntax-08",
+      "arguments": "/node:. -?",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": false
+    },
+    {
+      "id": "node-hyphen-0",
+      "arguments": "/node:node-a context",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": true
+    },
+    {
+      "id": "node-hyphen-1",
+      "arguments": "/node:\"node-a\" context",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": true
+    },
+    {
+      "id": "node-hyphen-2",
+      "arguments": "/node:.,localhost,. context",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": true
+    },
+    {
+      "id": "paramcomma-0",
+      "arguments": "os get Caption /format:csv:\"unused=a,b\"",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": false
+    },
+    {
+      "id": "paramcomma-1",
+      "arguments": "os get Caption /format:csv:\"unused=a,b,c\"",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": false
+    },
+    {
+      "id": "paramcomma-2",
+      "arguments": "os get Caption /format:csv:\"unused=,b\"",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": false
+    },
+    {
+      "id": "paramcomma-3",
+      "arguments": "os get Caption /format:csv:\"unused=a,\"",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": false
+    },
+    {
+      "id": "paramcomma-4",
+      "arguments": "os get Caption /format:csv:\"norefcomma=a,b\"",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": false
+    },
+    {
+      "id": "paramcomma-5",
+      "arguments": "os get Caption /format:csv:\"unused=a,b\" /value",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": false
+    },
+    {
+      "id": "paramcomma-6",
+      "arguments": "os get Caption /format:csv:\"unused=a\\,b\"",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": false
+    },
+    {
+      "id": "paramcomma-7",
+      "arguments": "os get Caption /format:csv:'unused=a,b'",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": false
+    },
+    {
+      "id": "closing-0",
+      "arguments": "context -?",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": true
+    },
+    {
+      "id": "closing-1",
+      "arguments": "/node:.,localhost,. os get Caption",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": false
+    },
+    {
+      "id": "closing-2",
+      "arguments": "os get Caption /format:csv:\"unused=a=b,c\"",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": false
+    },
+    {
+      "id": "closing-3",
+      "arguments": "os get Caption /format:csv:\"unused==,b\"",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": false
+    },
+    {
+      "id": "closing-4",
+      "arguments": "os get Caption /format:csv:\"unused=a,b\" /format:table",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": false
+    },
+    {
+      "id": "boundary-0",
+      "arguments": "/pa\u00adssword /?",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": true
+    },
+    {
+      "id": "boundary-1",
+      "arguments": "\uff2f\uff33 get Caption",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": false
+    },
+    {
+      "id": "boundary-2",
+      "arguments": "process call \uff27\uff45\uff54\uff2f\uff57\uff4e\uff45\uff52 /?",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": false
+    },
+    {
+      "id": "boundary-3",
+      "arguments": "os get Caption /every:-1 /repeat:1",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": false
+    },
+    {
+      "id": "boundary-4",
+      "arguments": "os get Caption /every:0 /repeat:-4294967294",
+      "operation": "read_only",
+      "timeout_ms": 7000,
+      "controller_oracle": false
+    }
+  ]
+}

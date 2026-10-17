@@ -7,7 +7,7 @@ pub(super) fn modifier(
     verb: Verb,
 ) -> Result<Modifier, ParseError> {
     let colon = units.iter().position(|u| *u == b':' as u16);
-    let name = WideText(units[1..colon.unwrap_or(units.len())].to_vec());
+    let name = WideText(units[1..colon.unwrap_or(units.len())].to_vec()).trim_ascii();
     let allowed: &[&str] = match scope {
         ModifierScope::Global => &[
             "namespace",
@@ -52,9 +52,12 @@ pub(super) fn modifier(
             _ => &["?"],
         },
     };
-    if !allowed.iter().any(|word| name.eq_ignore_case(word)) {
+    let canonical = allowed.iter().find(|word| name.eq_cli(word));
+    if canonical.is_none() {
         let (code, message) = if scope == ModifierScope::Global {
             (0xAC5D, "Invalid Global Switch.")
+        } else if verb == Verb::Assoc {
+            (0xB088, "Invalid Assoc Switch.")
         } else if verb == Verb::Get {
             (0xACB4, "Invalid GET switch.")
         } else {
@@ -65,7 +68,7 @@ pub(super) fn modifier(
     let value = match colon {
         None => SwitchValue::Missing,
         Some(i) => {
-            let value = unquote(&units[i + 1..]);
+            let value = unquote(&WideText(units[i + 1..].to_vec()).trim_ascii().0);
             if value.0.is_empty() {
                 SwitchValue::Reset
             } else {
@@ -74,9 +77,10 @@ pub(super) fn modifier(
         }
     };
     Ok(Modifier {
-        name,
+        prefix: units.first().copied(),
+        name: canonical.unwrap().to_ascii_lowercase().into(),
         value,
         scope,
-        raw_value: colon.map(|i| WideText(units[i + 1..].to_vec())),
+        raw_value: colon.map(|i| WideText(units[i + 1..].to_vec()).trim_ascii()),
     })
 }

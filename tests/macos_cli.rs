@@ -106,7 +106,12 @@ fn errors_reach_stderr_with_actual_posix_exit_statuses() {
         ),
         (vec!["os", "get", "WmicCompatMissing"], 23, "Invalid query"),
         (
-            vec!["/node:wmic-no-such-host.invalid", "os", "get", "Caption"],
+            vec![
+                r#"/node:"wmic-no-such-host.invalid""#,
+                "os",
+                "get",
+                "Caption",
+            ],
             186,
             "RPC server",
         ),

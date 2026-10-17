@@ -60,10 +60,16 @@ fn node_values(args: &[&str]) -> Vec<WideText> {
 }
 
 #[test]
-fn quotes_typed_inside_a_shell_argument_survive() {
+fn quoted_node_commas_preserve_the_native_command_consumption_quirk() {
     let args = ["wmic", r#"/node:"a,b""#, "os", "get", "Caption"];
     assert_eq!(rebuild(&args), r#""wmic" /node:"a,b" os get Caption"#);
-    assert_eq!(node_values(&args), vec![wide("a,b")]);
+    assert_eq!(node_values(&args), vec![wide(r#""a,b" os get Caption"#)]);
+    assert_eq!(
+        parse_command(&wide(&rebuild(&args)), EntryMode::Process)
+            .unwrap()
+            .verb,
+        Verb::Interactive
+    );
 }
 
 #[test]

@@ -85,14 +85,21 @@ impl SessionSettings {
                 "record" => s.record = value,
                 "namespace" => {
                     s.explicit_namespace = value.is_some();
-                    s.namespace = namespace(
-                        value,
-                        &s.namespace,
-                        &defaults.namespace,
-                        m.raw_value.as_ref(),
-                        0xAC4B,
-                        "Invalid Namespace.",
-                    )?;
+                    // WMIC's empty namespace setter compares the role against
+                    // the default namespace before deciding whether to reset.
+                    if !(value.is_none()
+                        && m.raw_value.as_ref().is_some_and(|v| !v.0.is_empty())
+                        && s.role.eq_cli_text(&defaults.namespace))
+                    {
+                        s.namespace = namespace(
+                            value,
+                            &s.namespace,
+                            &defaults.namespace,
+                            m.raw_value.as_ref(),
+                            0xAC4B,
+                            "Invalid Namespace.",
+                        )?;
+                    }
                 }
                 "role" => {
                     s.explicit_role = value.is_some();
@@ -297,8 +304,8 @@ fn failfast_timeout(value: &WideText) -> Option<u32> {
 fn toggle(v: Option<&WideText>, on: &str, off: &str, default: bool) -> Option<bool> {
     match v {
         None => Some(default),
-        Some(v) if v.eq_ignore_case(on) => Some(true),
-        Some(v) if v.eq_ignore_case(off) => Some(false),
+        Some(v) if v.eq_cli(on) => Some(true),
+        Some(v) if v.eq_cli(off) => Some(false),
         _ => None,
     }
 }
@@ -318,15 +325,38 @@ fn namespace(
     code: u32,
     message: &str,
 ) -> Result<WideText, crate::model::ParseError> {
-    match value {
-        None if raw.is_some_and(|v| v.0.is_empty()) => Err(setting_error(code, message)),
-        None => Ok(default.clone()),
-        Some(v) if v.0.starts_with(&[92, 92]) => Ok(WideText(v.0[2..].to_vec())),
+    let mut result = match value {
+        None if raw.is_some_and(|v| v.0.is_empty()) => return Err(setting_error(code, message)),
+        None => return Ok(default.clone()),
+        Some(v) if v.0.starts_with(&[92, 92]) => WideText(v.0[2..].to_vec()),
+        Some(v) if v.0.starts_with(&[46, 46]) => {
+            let mut result = current.clone();
+            if let Some(parent) = result
+                .0
+                .iter()
+                .rposition(|unit| *unit == 92)
+                .filter(|i| *i > 0)
+            {
+                result.0.truncate(parent);
+            }
+            result.0.extend(&v.0[2..]);
+            result
+        }
         Some(v) => {
             let mut result = current.clone();
             result.0.push(92);
             result.0.extend(v.0);
-            Ok(result)
+            result
         }
+    };
+    // The shared WMIC path helper removes one final separator, except when
+    // the whole result is two separators.
+    if result.0.last() == Some(&92) && result.0 != [92, 92] {
+        result.0.pop();
     }
+    // Both setters keep the stored spelling when the normalized path is equal.
+    if result.eq_cli_text(current) {
+        result = current.clone();
+    }
+    Ok(result)
 }

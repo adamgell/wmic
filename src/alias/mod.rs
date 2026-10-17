@@ -366,7 +366,7 @@ impl AliasStore {
             if let Some(f) = a
                 .formats
                 .iter()
-                .find(|f| f.name.eq_ignore_ascii_case(&view))
+                .find(|f| WideText::from(view.as_str()).eq_cli(&f.name))
             {
                 req.display = f
                     .properties
@@ -379,6 +379,12 @@ impl AliasStore {
                     })
                     .collect();
                 req.format = f.format.as_deref().map(Into::into);
+            } else if command.verb == Verb::List && command.view.is_some() && !command.help {
+                return Err(error(
+                    0xACB3,
+                    "Invalid format specified (or) format not applicable for this alias.",
+                    None,
+                ));
             }
             if req.verb == Verb::Call
                 && let Some(m) = &method

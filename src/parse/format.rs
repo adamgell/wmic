@@ -53,11 +53,33 @@ pub fn parse_format_spec(value: &WideText) -> Result<FormatSpec, ParseError> {
         let mut parameters = vec![];
         while value.0.get(at) == Some(&58) {
             at += 1;
+            while value.0.get(at).is_some_and(|u| matches!(u, 9 | 32)) {
+                at += 1;
+            }
             // The legacy lexer requires each parameter token to be quoted.
             if !value.0.get(at).is_some_and(|u| matches!(u, 34 | 39)) {
                 return Err(invalid());
             }
             let (token, _) = atom(&value.0, &mut at)?;
+            if let Some(comma) = token.0.iter().position(|u| *u == 44) {
+                // WMIC's first lexer terminates even a quoted parameter at a
+                // comma (0x14000e298). Its wcstok("=") handler (0x14002f970)
+                // rejects an absent value; a surviving, incomplete quoted name
+                // reaches MSXML and produces the observed E_FAIL diagnostic.
+                if token.0[..comma]
+                    .split(|u| *u == 61)
+                    .filter(|part| !part.is_empty())
+                    .count()
+                    < 2
+                {
+                    return Err(invalid());
+                }
+                return Err(ParseError::new(
+                    0x80004005,
+                    "ERROR:\r\r\nDescription = Unspecified error",
+                    None,
+                ));
+            }
             let pieces: Vec<_> = token.0.split(|u| *u == 61).collect();
             if pieces.len() < 2 {
                 return Err(invalid());

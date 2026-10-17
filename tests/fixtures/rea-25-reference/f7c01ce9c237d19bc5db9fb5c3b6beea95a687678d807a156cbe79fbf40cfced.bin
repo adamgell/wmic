@@ -1,0 +1,8 @@
+
+TRACE - Specify whether output debug information is to be copied to stderr
+        during the processing of the request(s).
+USAGE:
+
+/TRACE:<option>
+NOTE: Allowed value(s) for <option> is either ON or OFF.
+
