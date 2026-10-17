@@ -23,8 +23,10 @@
       "differ": 11
     },
     "after": {
-      "match_on_text_and_low_byte_status": 18,
-      "differ_by_design": 2
+      "match_on_text_and_low_byte_status": 17,
+      "not_rerun": 1,
+      "differ_by_design": 2,
+      "not_rerun_cases": [9]
     },
     "differ_by_design_cases": [
       19,
@@ -289,6 +291,7 @@
     "CIM_OperatingSystem derives from CIM_LogicalElement"
   ],
   "tests_after": {
+    "tree": "0d0d8c9 with the remote-node fixes; the gates of the later stages are in wsman-tls.json and wsman-kerberos.json",
     "windows_passed": 231,
     "windows_failed": 0,
     "windows_ignored": 34,

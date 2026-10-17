@@ -409,7 +409,7 @@ impl AliasStore {
                         );
                     }
                     req.method = Some(v.derivation.as_str().into());
-                    req.method_echo = Some(if v.verb_type.is_some() {
+                    req.method_echo = Some(if v.verb_type == Some(0) {
                         v.name.as_str().into()
                     } else {
                         m.clone()

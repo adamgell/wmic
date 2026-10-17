@@ -45,8 +45,10 @@
     {"id": "S1", "scheme": "http and https", "listener": "Auth/Kerberos=false", "account": "contoso\\LabAdmin", "password": "<pw>", "command": "os get CSName", "result": "one row", "exit": 0, "probe": "mechanism NTLM, server scheme Negotiate"},
     {"id": "S4", "scheme": "http", "listener": "Auth/Kerberos=false", "switches": "/authority:Kerberos", "result": "Access is denied.", "exit": 5},
     {"id": "B1", "scheme": "https", "cbt": "Relaxed and Strict", "switches": "/authority:Kerberos", "account": "contoso\\LabAdmin", "password": "<pw>", "result": "one row", "exit": 0},
-    {"id": "B2", "scheme": "https", "cbt": "Relaxed and Strict", "build": "separate build of the same source with the last byte of the channel binding application data flipped, built outside the checkout", "switches": "/authority:Kerberos", "result": "Access is denied.", "exit": 5},
-    {"id": "B3", "scheme": "http", "cbt": "Relaxed and Strict", "build": "the same separate build", "switches": "/authority:Kerberos", "result": "one row", "exit": 0}
+    {"id": "B2", "scheme": "https", "cbt": "Relaxed and Strict", "build": "separate build with flip-channel-binding.patch (last byte of the tls-server-end-point data flipped)", "switches": "/authority:Kerberos", "result": "Access is denied.", "exit": 5},
+    {"id": "B3", "scheme": "http", "cbt": "Relaxed and Strict", "build": "the same separate build", "switches": "/authority:Kerberos", "result": "one row", "exit": 0},
+    {"id": "B4", "scheme": "https", "cbt": "Relaxed and Strict", "account": "LabAdmin", "switches": "/authority:NTLMDOMAIN:CONTOSO", "password": "<pw>", "result": "one row with the normal build; Access is denied. (exit 5) with the separate build"},
+    {"id": "B5", "scheme": "http", "cbt": "Relaxed and Strict", "build": "the same separate build", "switches": "/authority:NTLMDOMAIN:CONTOSO", "result": "one row", "exit": 0}
   ],
   "server_events": {
     "source": "Security log of the host, event 4624, logon type 3, source address <tunnel host>, during the matrix",

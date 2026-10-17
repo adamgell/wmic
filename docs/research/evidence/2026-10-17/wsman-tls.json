@@ -25,6 +25,7 @@
   ],
   "cbt_restored": "Relaxed",
   "gates": {
+    "scope": "the HTTPS stage (wsman-tls); the gates of the Kerberos stage are in wsman-kerberos.json",
     "macos": {"platform": "Mac mini, Apple M4, macOS 26.6.2, rustc 1.98.1", "fmt_check": "ok", "clippy_all_targets_deny_warnings": "ok", "cargo_test_locked": {"passed": 517, "failed": 0}},
     "windows": {"fmt_check": "ok", "clippy_all_targets_deny_warnings": "ok", "cargo_test_locked": {"passed": 231, "failed": 0, "ignored": 34}, "dependency_tree": "identical to the base commit, 24 crates"},
     "linux": {"platform": "Ubuntu in WSL2, rustc 1.98.1", "note": "measured on the earlier base fd5ce45 rebased on main 0bb50c5", "fmt_check": "ok", "clippy_all_targets_deny_warnings": "ok", "cargo_test_locked": {"passed": 350, "failed": 0}}

@@ -1,0 +1,12 @@
+--- a/src/backend/wsman/transport/mod.rs
++++ b/src/backend/wsman/transport/mod.rs
+@@ -69,5 +69,9 @@ fn binding_data(connection: &HttpConnection) -> Result<Option<Vec<u8>>, TransportError> {
+     connection
+         .peer_certificate()
+         .map(|certificate| tls::server_end_point(certificate).map_err(TransportError::Tls))
+         .transpose()
++        .map(|data| data.map(|mut data| {
++            *data.last_mut().unwrap() ^= 1;
++            data
++        }))
+ }
