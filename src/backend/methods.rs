@@ -129,17 +129,83 @@ pub fn convert_input(raw: &WideText, ty: u32) -> Result<CimValue, InputError> {
         }
     })
 }
+/// Validate method parameter direction before converting values to their CIM types.
 pub fn bind_method(schema: &MethodSchema, args: &[WideText]) -> Result<Vec<Property>, InputError> {
+    validate_named_arguments(
+        args,
+        schema
+            .input
+            .iter()
+            .map(|p| (p.name.clone(), true))
+            .chain(schema.output.iter().map(|p| (p.name.clone(), false))),
+    )
+    .map_err(input_error)?;
     bind_parameters(schema, args, true)
 }
+
+/// Validate names in WMIC's UTF-16 map order before binding or showing method help.
+pub(crate) fn validate_named_arguments(
+    args: &[WideText],
+    parameters: impl IntoIterator<Item = (WideText, bool)>,
+) -> Result<(), ParseError> {
+    if args
+        .first()
+        .and_then(crate::parse::named_argument)
+        .is_none()
+    {
+        return Ok(());
+    }
+    let parameters: Vec<_> = parameters.into_iter().collect();
+    let mut names: Vec<_> = args
+        .iter()
+        .filter_map(crate::parse::named_argument)
+        .map(|(name, _)| name)
+        .collect();
+    names.sort();
+    for name in names {
+        let parameter = parameters.iter().find(|(p, _)| name.eq_cli_text(p));
+        let (code, message) = match parameter {
+            Some((_, true)) => continue,
+            Some((_, false)) => (0xADE5, "Not a input parameter."),
+            None => (0xB0AB, "Not a parameter of the verb or method."),
+        };
+        let safe = crate::parse::diagnostic_command_line(&name, EntryMode::Interactive) == name;
+        return Err(ParseError::new(code, message, safe.then_some(name)));
+    }
+    Ok(())
+}
+
+/// Preserve a safe diagnostic token, including the native prefix for an empty name.
+pub(crate) fn input_error(error: ParseError) -> InputError {
+    let mut message = WideText::default();
+    if let Some(token) = error.token {
+        message = token;
+        message.0.extend(" - ".encode_utf16());
+    }
+    message.0.extend(error.message.0);
+    InputError {
+        code: error.code,
+        message,
+    }
+}
+/// Bind by parameter ID or name; CALL enables literal named NULL and CLI name matching.
 pub(super) fn bind_parameters(
     schema: &MethodSchema,
     args: &[WideText],
     named_null_literal: bool,
 ) -> Result<Vec<Property>, InputError> {
     if schema.input.is_empty() && !args.is_empty() {
-        if let Some(at) = args[0].0.iter().position(|u| *u == 61) {
-            return Err(not_input(WideText(args[0].0[..at].to_vec()).trim_ascii()));
+        let name = if named_null_literal {
+            crate::parse::named_argument(&args[0]).map(|(name, _)| name)
+        } else {
+            args[0]
+                .0
+                .iter()
+                .position(|u| *u == 61)
+                .map(|at| WideText(args[0].0[..at].to_vec()).trim_ascii())
+        };
+        if let Some(name) = name {
+            return Err(not_input(name));
         }
         return Err(InputError {
             code: 0xADE6,
@@ -150,18 +216,32 @@ pub(super) fn bind_parameters(
     parameters.sort_by_key(|p| p.id.unwrap_or(u32::MAX));
     let mut out: Vec<Property> = vec![];
     for (i, arg) in args.iter().enumerate() {
-        let assignment = arg
-            .0
-            .iter()
-            .position(|u| *u == 61)
-            .filter(|at| !arg.0[..*at].iter().any(|u| matches!(u, 34 | 39 | 123)));
-        let (p, expr) = if let Some(at) = assignment {
-            let name = WideText(arg.0[..at].to_vec()).trim_ascii();
+        let assignment = if named_null_literal {
+            crate::parse::named_argument(arg)
+        } else {
+            arg.0
+                .iter()
+                .position(|u| *u == 61)
+                .filter(|at| !arg.0[..*at].iter().any(|u| matches!(u, 34 | 39 | 123)))
+                .map(|at| {
+                    (
+                        WideText(arg.0[..at].to_vec()).trim_ascii(),
+                        WideText(arg.0[at + 1..].to_vec()).trim_ascii(),
+                    )
+                })
+        };
+        let (p, expr) = if let Some((name, value)) = &assignment {
             let p = parameters
                 .iter()
-                .find(|p| name.eq_ignore_case(&p.name.to_string_lossy()))
-                .ok_or_else(|| not_input(name))?;
-            (*p, WideText(arg.0[at + 1..].to_vec()).trim_ascii())
+                .find(|p| {
+                    if named_null_literal {
+                        name.eq_cli_text(&p.name)
+                    } else {
+                        name.eq_ordinal_ignore_case(&p.name)
+                    }
+                })
+                .ok_or_else(|| not_input(name.clone()))?;
+            (*p, value.clone())
         } else {
             (*parameters.get(i).ok_or_else(invalid)?, arg.clone())
         };

@@ -7,6 +7,17 @@ from switch_values import generate as switch_values
 from run_corpus import SUITES,FOLDERS,compare_suite
 
 class FixtureInventoryTests(unittest.TestCase):
+    def test_method_arguments_retain_read_only_diagnostics_and_control_oracles(self):
+        """Guard diagnostic coverage, provider-free selections and completed captures."""
+        fixtures=Path(__file__).resolve().parents[3]/'tests/fixtures'
+        cases=json.loads((fixtures/'method-arguments-cases.json').read_text())['cases']
+        self.assertEqual(len(cases),106)
+        self.assertEqual(sum(c['controller_oracle'] for c in cases),64)
+        self.assertEqual(len({c['id'] for c in cases}),106)
+        self.assertTrue(all(c['operation']=='read_only' for c in cases))
+        capture=json.loads((fixtures/'method-arguments-reference/capture.json').read_text())
+        self.assertTrue(all(c['state']=='completed' and c['exit_status']!=0 for c in capture['cases']))
+
     def test_rea_passes_retain_all_read_only_cases_and_control_oracles(self):
         fixtures=Path(__file__).resolve().parents[3]/'tests/fixtures'
         cases=json.loads((fixtures/'rea-25-cases.json').read_text())['cases']

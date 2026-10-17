@@ -456,6 +456,7 @@ impl Session {
             ..Default::default()
         }
     }
+    /// Resolve one command, checking argument errors before help or provider execution.
     fn execute_once(
         &mut self,
         raw: &WideText,
@@ -584,6 +585,13 @@ impl Session {
                 );
             }
         }
+        if let Err(error) = self.aliases.validate_method_arguments(&parsed) {
+            return emit(
+                sink,
+                render::render_resolve_error_for(&error, secret_of(&settings)),
+                error.code,
+            );
+        }
         if parsed.help {
             let schema = if (matches!(parsed.target, Some(Target::Path(_)))
                 && parsed.verb == Verb::Get
@@ -640,6 +648,29 @@ impl Session {
             } else {
                 None
             };
+            if parsed.verb == Verb::Call
+                && let (Some(schema), Some(method)) = (&schema, &parsed.method)
+                && let Some(method) = schema.methods.iter().find(|m| method.eq_cli_text(&m.name))
+                && let Err(error) = crate::backend::methods::validate_named_arguments(
+                    &parsed.raw_arguments,
+                    method
+                        .input
+                        .iter()
+                        .map(|p| (p.name.clone(), true))
+                        .chain(method.output.iter().map(|p| (p.name.clone(), false))),
+                )
+            {
+                let error = ResolveError {
+                    code: error.code,
+                    message: error.message,
+                    token: error.token,
+                };
+                return emit(
+                    sink,
+                    render::render_resolve_error_for(&error, secret_of(&settings)),
+                    error.code,
+                );
+            }
             if let Some(Target::Alias(name)) = &parsed.target
                 && self.aliases.find(name).is_none()
                 && let Err(error) = self.aliases.resolve(&parsed, &settings)

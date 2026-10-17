@@ -1,0 +1,748 @@
+{
+  "schema_version": 1,
+  "cases": [
+    {
+      "id": "alias-ascii-unknown",
+      "arguments": "process where \"ProcessId=0\" call GetOwner Unknown=1",
+      "operation": "read_only",
+      "timeout_ms": 10000,
+      "controller_oracle": true
+    },
+    {
+      "id": "alias-ascii-out",
+      "arguments": "process where \"ProcessId=0\" call GetOwner User=\"test\"",
+      "operation": "read_only",
+      "timeout_ms": 10000,
+      "controller_oracle": true
+    },
+    {
+      "id": "alias-ascii-quoted",
+      "arguments": "process where \"ProcessId=0\" call GetOwner \"Unknown=1\"",
+      "operation": "read_only",
+      "timeout_ms": 10000,
+      "controller_oracle": false
+    },
+    {
+      "id": "alias-ascii-unknown-first",
+      "arguments": "process where \"ProcessId=0\" call GetOwner Unknown=1 User=x",
+      "operation": "read_only",
+      "timeout_ms": 10000,
+      "controller_oracle": true
+    },
+    {
+      "id": "alias-ascii-out-first",
+      "arguments": "process where \"ProcessId=0\" call GetOwner User=x Unknown=1",
+      "operation": "read_only",
+      "timeout_ms": 10000,
+      "controller_oracle": true
+    },
+    {
+      "id": "alias-wide-unknown",
+      "arguments": "process where \"ProcessId=0\" call \uff27\uff45\uff54\uff2f\uff57\uff4e\uff45\uff52 Unknown=1",
+      "operation": "read_only",
+      "timeout_ms": 10000,
+      "controller_oracle": true
+    },
+    {
+      "id": "alias-wide-out",
+      "arguments": "process where \"ProcessId=0\" call \uff27\uff45\uff54\uff2f\uff57\uff4e\uff45\uff52 User=\"test\"",
+      "operation": "read_only",
+      "timeout_ms": 10000,
+      "controller_oracle": true
+    },
+    {
+      "id": "alias-wide-quoted",
+      "arguments": "process where \"ProcessId=0\" call \uff27\uff45\uff54\uff2f\uff57\uff4e\uff45\uff52 \"Unknown=1\"",
+      "operation": "read_only",
+      "timeout_ms": 10000,
+      "controller_oracle": false
+    },
+    {
+      "id": "alias-wide-unknown-first",
+      "arguments": "process where \"ProcessId=0\" call \uff27\uff45\uff54\uff2f\uff57\uff4e\uff45\uff52 Unknown=1 User=x",
+      "operation": "read_only",
+      "timeout_ms": 10000,
+      "controller_oracle": true
+    },
+    {
+      "id": "alias-wide-out-first",
+      "arguments": "process where \"ProcessId=0\" call \uff27\uff45\uff54\uff2f\uff57\uff4e\uff45\uff52 User=x Unknown=1",
+      "operation": "read_only",
+      "timeout_ms": 10000,
+      "controller_oracle": true
+    },
+    {
+      "id": "alias-missing-unknown",
+      "arguments": "process where \"ProcessId=0\" call WmicCompatMissingMethod Unknown=1",
+      "operation": "read_only",
+      "timeout_ms": 10000,
+      "controller_oracle": false
+    },
+    {
+      "id": "alias-missing-out",
+      "arguments": "process where \"ProcessId=0\" call WmicCompatMissingMethod User=\"test\"",
+      "operation": "read_only",
+      "timeout_ms": 10000,
+      "controller_oracle": false
+    },
+    {
+      "id": "alias-missing-quoted",
+      "arguments": "process where \"ProcessId=0\" call WmicCompatMissingMethod \"Unknown=1\"",
+      "operation": "read_only",
+      "timeout_ms": 10000,
+      "controller_oracle": false
+    },
+    {
+      "id": "alias-missing-unknown-first",
+      "arguments": "process where \"ProcessId=0\" call WmicCompatMissingMethod Unknown=1 User=x",
+      "operation": "read_only",
+      "timeout_ms": 10000,
+      "controller_oracle": false
+    },
+    {
+      "id": "alias-missing-out-first",
+      "arguments": "process where \"ProcessId=0\" call WmicCompatMissingMethod User=x Unknown=1",
+      "operation": "read_only",
+      "timeout_ms": 10000,
+      "controller_oracle": false
+    },
+    {
+      "id": "path-ascii-unknown",
+      "arguments": "path Win32_Process where \"ProcessId=0\" call GetOwner Unknown=1",
+      "operation": "read_only",
+      "timeout_ms": 10000,
+      "controller_oracle": false
+    },
+    {
+      "id": "path-ascii-out",
+      "arguments": "path Win32_Process where \"ProcessId=0\" call GetOwner User=\"test\"",
+      "operation": "read_only",
+      "timeout_ms": 10000,
+      "controller_oracle": false
+    },
+    {
+      "id": "path-ascii-quoted",
+      "arguments": "path Win32_Process where \"ProcessId=0\" call GetOwner \"Unknown=1\"",
+      "operation": "read_only",
+      "timeout_ms": 10000,
+      "controller_oracle": false
+    },
+    {
+      "id": "path-ascii-unknown-first",
+      "arguments": "path Win32_Process where \"ProcessId=0\" call GetOwner Unknown=1 User=x",
+      "operation": "read_only",
+      "timeout_ms": 10000,
+      "controller_oracle": false
+    },
+    {
+      "id": "path-ascii-out-first",
+      "arguments": "path Win32_Process where \"ProcessId=0\" call GetOwner User=x Unknown=1",
+      "operation": "read_only",
+      "timeout_ms": 10000,
+      "controller_oracle": false
+    },
+    {
+      "id": "path-wide-unknown",
+      "arguments": "path Win32_Process where \"ProcessId=0\" call \uff27\uff45\uff54\uff2f\uff57\uff4e\uff45\uff52 Unknown=1",
+      "operation": "read_only",
+      "timeout_ms": 10000,
+      "controller_oracle": false
+    },
+    {
+      "id": "path-wide-out",
+      "arguments": "path Win32_Process where \"ProcessId=0\" call \uff27\uff45\uff54\uff2f\uff57\uff4e\uff45\uff52 User=\"test\"",
+      "operation": "read_only",
+      "timeout_ms": 10000,
+      "controller_oracle": false
+    },
+    {
+      "id": "path-wide-quoted",
+      "arguments": "path Win32_Process where \"ProcessId=0\" call \uff27\uff45\uff54\uff2f\uff57\uff4e\uff45\uff52 \"Unknown=1\"",
+      "operation": "read_only",
+      "timeout_ms": 10000,
+      "controller_oracle": false
+    },
+    {
+      "id": "path-wide-unknown-first",
+      "arguments": "path Win32_Process where \"ProcessId=0\" call \uff27\uff45\uff54\uff2f\uff57\uff4e\uff45\uff52 Unknown=1 User=x",
+      "operation": "read_only",
+      "timeout_ms": 10000,
+      "controller_oracle": false
+    },
+    {
+      "id": "path-wide-out-first",
+      "arguments": "path Win32_Process where \"ProcessId=0\" call \uff27\uff45\uff54\uff2f\uff57\uff4e\uff45\uff52 User=x Unknown=1",
+      "operation": "read_only",
+      "timeout_ms": 10000,
+      "controller_oracle": false
+    },
+    {
+      "id": "extra-0",
+      "arguments": "process where \"ProcessId=0\" call GetOwner =1",
+      "operation": "read_only",
+      "timeout_ms": 10000,
+      "controller_oracle": true
+    },
+    {
+      "id": "extra-1",
+      "arguments": "process where \"ProcessId=0\" call GetOwner Unknown",
+      "operation": "read_only",
+      "timeout_ms": 10000,
+      "controller_oracle": false
+    },
+    {
+      "id": "extra-2",
+      "arguments": "process where \"ProcessId=0\" call GetOwner Unknown=",
+      "operation": "read_only",
+      "timeout_ms": 10000,
+      "controller_oracle": true
+    },
+    {
+      "id": "extra-3",
+      "arguments": "process where \"ProcessId=0\" call GetOwner unknown=1",
+      "operation": "read_only",
+      "timeout_ms": 10000,
+      "controller_oracle": true
+    },
+    {
+      "id": "extra-4",
+      "arguments": "process where \"ProcessId=0\" call GetOwner \uff35\uff4e\uff4b\uff4e\uff4f\uff57\uff4e=1",
+      "operation": "read_only",
+      "timeout_ms": 10000,
+      "controller_oracle": false
+    },
+    {
+      "id": "extra-5",
+      "arguments": "process where \"ProcessId=0\" call GetOwner User=x Domain=y",
+      "operation": "read_only",
+      "timeout_ms": 10000,
+      "controller_oracle": true
+    },
+    {
+      "id": "extra-6",
+      "arguments": "process where \"ProcessId=0\" call GetOwner \"User\"=x",
+      "operation": "read_only",
+      "timeout_ms": 10000,
+      "controller_oracle": true
+    },
+    {
+      "id": "extra-7",
+      "arguments": "process where \"ProcessId=0\" call GetOwner 'User'=x",
+      "operation": "read_only",
+      "timeout_ms": 10000,
+      "controller_oracle": true
+    },
+    {
+      "id": "extra-8",
+      "arguments": "process where \"ProcessId=0\" call GetOwner Unknown=\"a=b\"",
+      "operation": "read_only",
+      "timeout_ms": 10000,
+      "controller_oracle": true
+    },
+    {
+      "id": "extra-9",
+      "arguments": "process where \"ProcessId=0\" call GetOwner Unknown=1 Unknown=2",
+      "operation": "read_only",
+      "timeout_ms": 10000,
+      "controller_oracle": true
+    },
+    {
+      "id": "extra-10",
+      "arguments": "process where \"ProcessId=0\" call GetOwner Unknown =1",
+      "operation": "read_only",
+      "timeout_ms": 10000,
+      "controller_oracle": true
+    },
+    {
+      "id": "extra-11",
+      "arguments": "process where \"ProcessId=0\" call GetOwner Unknown= 1",
+      "operation": "read_only",
+      "timeout_ms": 10000,
+      "controller_oracle": true
+    },
+    {
+      "id": "extra-12",
+      "arguments": "process where \"ProcessId=0\" call GetOwner Unknown = 1",
+      "operation": "read_only",
+      "timeout_ms": 10000,
+      "controller_oracle": true
+    },
+    {
+      "id": "extra-13",
+      "arguments": "process where \"ProcessId=0\" call GetOwner Unknown=1,User=x",
+      "operation": "read_only",
+      "timeout_ms": 10000,
+      "controller_oracle": true
+    },
+    {
+      "id": "extra-14",
+      "arguments": "process where \"ProcessId=0\" call GetOwner Unknown=1 /?",
+      "operation": "read_only",
+      "timeout_ms": 10000,
+      "controller_oracle": true
+    },
+    {
+      "id": "extra-15",
+      "arguments": "process where \"ProcessId=0\" call GetOwner User=x Unknown=1 /?",
+      "operation": "read_only",
+      "timeout_ms": 10000,
+      "controller_oracle": true
+    },
+    {
+      "id": "extra-16",
+      "arguments": "process where \"ProcessId=0\" call GetOwner User=x /?",
+      "operation": "read_only",
+      "timeout_ms": 10000,
+      "controller_oracle": true
+    },
+    {
+      "id": "extra-17",
+      "arguments": "process where \"ProcessId=0\" call GetOwner Unknown=1 -?",
+      "operation": "read_only",
+      "timeout_ms": 10000,
+      "controller_oracle": true
+    },
+    {
+      "id": "empty-selection",
+      "arguments": "process where \"ProcessId=4294967295\" call GetOwner Unknown=1",
+      "operation": "read_only",
+      "timeout_ms": 10000,
+      "controller_oracle": true
+    },
+    {
+      "id": "names-0",
+      "arguments": "process where \"ProcessId=0\" call GetOwner User=x Domain=y",
+      "operation": "read_only",
+      "timeout_ms": 10000,
+      "controller_oracle": true
+    },
+    {
+      "id": "names-1",
+      "arguments": "process where \"ProcessId=0\" call GetOwner Domain=y User=x",
+      "operation": "read_only",
+      "timeout_ms": 10000,
+      "controller_oracle": true
+    },
+    {
+      "id": "names-2",
+      "arguments": "process where \"ProcessId=0\" call GetOwner Zebra=1 Alpha=2",
+      "operation": "read_only",
+      "timeout_ms": 10000,
+      "controller_oracle": true
+    },
+    {
+      "id": "names-3",
+      "arguments": "process where \"ProcessId=0\" call GetOwner Alpha=1 Zebra=2",
+      "operation": "read_only",
+      "timeout_ms": 10000,
+      "controller_oracle": true
+    },
+    {
+      "id": "names-4",
+      "arguments": "process where \"ProcessId=0\" call GetOwner user=x",
+      "operation": "read_only",
+      "timeout_ms": 10000,
+      "controller_oracle": true
+    },
+    {
+      "id": "names-5",
+      "arguments": "process where \"ProcessId=0\" call GetOwner \uff35\uff53\uff45\uff52=x",
+      "operation": "read_only",
+      "timeout_ms": 10000,
+      "controller_oracle": false
+    },
+    {
+      "id": "names-6",
+      "arguments": "process where \"ProcessId=0\" call GetOwner U\u00adser=x",
+      "operation": "read_only",
+      "timeout_ms": 10000,
+      "controller_oracle": false
+    },
+    {
+      "id": "names-7",
+      "arguments": "process where \"ProcessId=0\" call GetOwner User=x User=y",
+      "operation": "read_only",
+      "timeout_ms": 10000,
+      "controller_oracle": true
+    },
+    {
+      "id": "names-8",
+      "arguments": "process where \"ProcessId=0\" call GetOwner \"User\"=x",
+      "operation": "read_only",
+      "timeout_ms": 10000,
+      "controller_oracle": true
+    },
+    {
+      "id": "names-9",
+      "arguments": "process where \"ProcessId=0\" call GetOwner \"Unknown\"=1",
+      "operation": "read_only",
+      "timeout_ms": 10000,
+      "controller_oracle": true
+    },
+    {
+      "id": "names-10",
+      "arguments": "process where \"ProcessId=0\" call GetOwner User = x",
+      "operation": "read_only",
+      "timeout_ms": 10000,
+      "controller_oracle": true
+    },
+    {
+      "id": "names-11",
+      "arguments": "process where \"ProcessId=0\" call GetOwner Domain=y User=x Unknown=1",
+      "operation": "read_only",
+      "timeout_ms": 10000,
+      "controller_oracle": true
+    },
+    {
+      "id": "names-12",
+      "arguments": "process where \"ProcessId=0\" call GetOwner \"a=b\"",
+      "operation": "read_only",
+      "timeout_ms": 10000,
+      "controller_oracle": false
+    },
+    {
+      "id": "names-13",
+      "arguments": "process where \"ProcessId=0\" call GetOwner User=x Unknown",
+      "operation": "read_only",
+      "timeout_ms": 10000,
+      "controller_oracle": true
+    },
+    {
+      "id": "names-14",
+      "arguments": "process where \"ProcessId=0\" call GetOwner Unknown=1 User=",
+      "operation": "read_only",
+      "timeout_ms": 10000,
+      "controller_oracle": true
+    },
+    {
+      "id": "names-15",
+      "arguments": "process where \"ProcessId=0\" call GetOwner User= Unknown=1",
+      "operation": "read_only",
+      "timeout_ms": 10000,
+      "controller_oracle": true
+    },
+    {
+      "id": "class-valid-0",
+      "arguments": "class Win32_Process call GetOwner Unknown=1",
+      "operation": "read_only",
+      "timeout_ms": 10000,
+      "controller_oracle": false
+    },
+    {
+      "id": "class-valid-1",
+      "arguments": "class Win32_Process call GetOwner User=x",
+      "operation": "read_only",
+      "timeout_ms": 10000,
+      "controller_oracle": false
+    },
+    {
+      "id": "class-valid-2",
+      "arguments": "class Win32_Process call GetOwner \"a=b\"",
+      "operation": "read_only",
+      "timeout_ms": 10000,
+      "controller_oracle": false
+    },
+    {
+      "id": "class-valid-3",
+      "arguments": "class Win32_Process call GetOwner Unknown=1 /?",
+      "operation": "read_only",
+      "timeout_ms": 10000,
+      "controller_oracle": false
+    },
+    {
+      "id": "path-valid-0",
+      "arguments": "path Win32_Process call GetOwner Unknown=1",
+      "operation": "read_only",
+      "timeout_ms": 10000,
+      "controller_oracle": false
+    },
+    {
+      "id": "path-valid-1",
+      "arguments": "path Win32_Process call GetOwner User=x",
+      "operation": "read_only",
+      "timeout_ms": 10000,
+      "controller_oracle": false
+    },
+    {
+      "id": "path-valid-2",
+      "arguments": "path Win32_Process call GetOwner \"a=b\"",
+      "operation": "read_only",
+      "timeout_ms": 10000,
+      "controller_oracle": false
+    },
+    {
+      "id": "path-valid-3",
+      "arguments": "path Win32_Process call GetOwner Unknown=1 /?",
+      "operation": "read_only",
+      "timeout_ms": 10000,
+      "controller_oracle": false
+    },
+    {
+      "id": "alias-order-0",
+      "arguments": "process call GetOwner alpha=1 Beta=2",
+      "operation": "read_only",
+      "timeout_ms": 10000,
+      "controller_oracle": true
+    },
+    {
+      "id": "alias-order-1",
+      "arguments": "process call GetOwner Beta=1 alpha=2",
+      "operation": "read_only",
+      "timeout_ms": 10000,
+      "controller_oracle": true
+    },
+    {
+      "id": "alias-order-2",
+      "arguments": "process call GetOwner \uff21\uff4c\uff50\uff48\uff41=1 Beta=2",
+      "operation": "read_only",
+      "timeout_ms": 10000,
+      "controller_oracle": true
+    },
+    {
+      "id": "alias-order-3",
+      "arguments": "process call GetOwner User=x domain=y",
+      "operation": "read_only",
+      "timeout_ms": 10000,
+      "controller_oracle": true
+    },
+    {
+      "id": "alias-order-4",
+      "arguments": "process call GetOwner user=x User=y",
+      "operation": "read_only",
+      "timeout_ms": 10000,
+      "controller_oracle": true
+    },
+    {
+      "id": "alias-order-5",
+      "arguments": "process call GetOwner ReturnValue=1",
+      "operation": "read_only",
+      "timeout_ms": 10000,
+      "controller_oracle": true
+    },
+    {
+      "id": "alias-order-6",
+      "arguments": "process call GetOwner Domain=y ReturnValue=1",
+      "operation": "read_only",
+      "timeout_ms": 10000,
+      "controller_oracle": true
+    },
+    {
+      "id": "alias-order-7",
+      "arguments": "process call GetOwner User=\"\" Unknown=1",
+      "operation": "read_only",
+      "timeout_ms": 10000,
+      "controller_oracle": true
+    },
+    {
+      "id": "alias-order-8",
+      "arguments": "process call GetOwner User=\"NULL\" Unknown=1",
+      "operation": "read_only",
+      "timeout_ms": 10000,
+      "controller_oracle": true
+    },
+    {
+      "id": "path-order-0",
+      "arguments": "path Win32_Process call GetOwner alpha=1 Beta=2",
+      "operation": "read_only",
+      "timeout_ms": 10000,
+      "controller_oracle": false
+    },
+    {
+      "id": "path-order-1",
+      "arguments": "path Win32_Process call GetOwner Beta=1 alpha=2",
+      "operation": "read_only",
+      "timeout_ms": 10000,
+      "controller_oracle": false
+    },
+    {
+      "id": "path-order-2",
+      "arguments": "path Win32_Process call GetOwner \uff21\uff4c\uff50\uff48\uff41=1 Beta=2",
+      "operation": "read_only",
+      "timeout_ms": 10000,
+      "controller_oracle": false
+    },
+    {
+      "id": "path-order-3",
+      "arguments": "path Win32_Process call GetOwner User=x domain=y",
+      "operation": "read_only",
+      "timeout_ms": 10000,
+      "controller_oracle": false
+    },
+    {
+      "id": "path-order-4",
+      "arguments": "path Win32_Process call GetOwner user=x User=y",
+      "operation": "read_only",
+      "timeout_ms": 10000,
+      "controller_oracle": false
+    },
+    {
+      "id": "path-order-5",
+      "arguments": "path Win32_Process call GetOwner ReturnValue=1",
+      "operation": "read_only",
+      "timeout_ms": 10000,
+      "controller_oracle": false
+    },
+    {
+      "id": "path-order-6",
+      "arguments": "path Win32_Process call GetOwner Domain=y ReturnValue=1",
+      "operation": "read_only",
+      "timeout_ms": 10000,
+      "controller_oracle": false
+    },
+    {
+      "id": "path-order-7",
+      "arguments": "path Win32_Process call GetOwner User=\"\" Unknown=1",
+      "operation": "read_only",
+      "timeout_ms": 10000,
+      "controller_oracle": false
+    },
+    {
+      "id": "path-order-8",
+      "arguments": "path Win32_Process call GetOwner User=\"NULL\" Unknown=1",
+      "operation": "read_only",
+      "timeout_ms": 10000,
+      "controller_oracle": false
+    },
+    {
+      "id": "review-0",
+      "arguments": "process where ProcessId=0 call GetOwner \"Unknown\\\\\"=1",
+      "operation": "read_only",
+      "timeout_ms": 10000,
+      "controller_oracle": false
+    },
+    {
+      "id": "review-2",
+      "arguments": "process where ProcessId=0 call GetOwner Unknown(1)=x",
+      "operation": "read_only",
+      "timeout_ms": 10000,
+      "controller_oracle": true
+    },
+    {
+      "id": "review-3",
+      "arguments": "process where ProcessId=0 call GetOwner \"Unknown(1)\"=x",
+      "operation": "read_only",
+      "timeout_ms": 10000,
+      "controller_oracle": true
+    },
+    {
+      "id": "review-4",
+      "arguments": "process where ProcessId=0 call GetOwner Unknown[1]=x",
+      "operation": "read_only",
+      "timeout_ms": 10000,
+      "controller_oracle": true
+    },
+    {
+      "id": "review-5",
+      "arguments": "process where ProcessId=0 call GetOwner {Unknown=1}",
+      "operation": "read_only",
+      "timeout_ms": 10000,
+      "controller_oracle": true
+    },
+    {
+      "id": "review-6",
+      "arguments": "process where ProcessId=0 call GetOwner Unknown=a=b",
+      "operation": "read_only",
+      "timeout_ms": 10000,
+      "controller_oracle": true
+    },
+    {
+      "id": "review-7",
+      "arguments": "process where ProcessId=0 call GetOwner Unknown= a=b",
+      "operation": "read_only",
+      "timeout_ms": 10000,
+      "controller_oracle": true
+    },
+    {
+      "id": "review-8",
+      "arguments": "process where ProcessId=0 call GetOwner Unknown=\"a=b\"",
+      "operation": "read_only",
+      "timeout_ms": 10000,
+      "controller_oracle": true
+    },
+    {
+      "id": "comma-0",
+      "arguments": "process call GetOwner Unknown,=1",
+      "operation": "read_only",
+      "timeout_ms": 10000,
+      "controller_oracle": true
+    },
+    {
+      "id": "comma-1",
+      "arguments": "process call GetOwner User,Unknown=x",
+      "operation": "read_only",
+      "timeout_ms": 10000,
+      "controller_oracle": true
+    },
+    {
+      "id": "comma-2",
+      "arguments": "process call GetOwner \"Unknown,Name\"=1",
+      "operation": "read_only",
+      "timeout_ms": 10000,
+      "controller_oracle": false
+    },
+    {
+      "id": "comma-3",
+      "arguments": "process call GetOwner Unknown=1,",
+      "operation": "read_only",
+      "timeout_ms": 10000,
+      "controller_oracle": true
+    },
+    {
+      "id": "boundary-0",
+      "arguments": "process call GetOwner User= Unknown =1",
+      "operation": "read_only",
+      "timeout_ms": 10000,
+      "controller_oracle": true
+    },
+    {
+      "id": "boundary-1",
+      "arguments": "process call GetOwner User= Unknown = 1",
+      "operation": "read_only",
+      "timeout_ms": 10000,
+      "controller_oracle": true
+    },
+    {
+      "id": "boundary-2",
+      "arguments": "process call GetOwner Unknown= =1",
+      "operation": "read_only",
+      "timeout_ms": 10000,
+      "controller_oracle": true
+    },
+    {
+      "id": "boundary-3",
+      "arguments": "process call GetOwner \"\"=1",
+      "operation": "read_only",
+      "timeout_ms": 10000,
+      "controller_oracle": true
+    },
+    {
+      "id": "boundary-4",
+      "arguments": "process call GetOwner ''=1",
+      "operation": "read_only",
+      "timeout_ms": 10000,
+      "controller_oracle": true
+    },
+    {
+      "id": "boundary-7",
+      "arguments": "process call GetOwner Unknown(1)=x",
+      "operation": "read_only",
+      "timeout_ms": 10000,
+      "controller_oracle": true
+    },
+    {
+      "id": "boundary-8",
+      "arguments": "process call GetOwner Unknown=1 User,=x",
+      "operation": "read_only",
+      "timeout_ms": 10000,
+      "controller_oracle": true
+    },
+    {
+      "id": "boundary-path-empty",
+      "arguments": "path Win32_Process call GetOwner \"\"=1",
+      "operation": "read_only",
+      "timeout_ms": 10000,
+      "controller_oracle": false
+    }
+  ],
+  "reference_sha256": "2EF794C4940AFEA56C6D6D3B9BC9E66965BC7333E79C5DCB2DEF3C0E36F0834C"
+}

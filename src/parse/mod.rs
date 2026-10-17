@@ -1,4 +1,6 @@
+mod call;
 mod command;
+pub(crate) use call::named_argument;
 mod lex;
 mod switches;
 pub use command::{diagnostic_command_line, parse_command};
