@@ -116,6 +116,7 @@ pub(super) fn status_text(code: u32) -> WideText {
     }
     diagnostic(code).into()
 }
+/// Validate names before WMI lookup, then bind values and invoke each selected target.
 pub(super) fn execute(
     svc: &IWbemServices,
     r: &ResolvedRequest,

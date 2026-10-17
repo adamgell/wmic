@@ -5,15 +5,15 @@
   "patches": {
     "fix_source": {
       "sha256": "b5cbcaacfac6144792257e3415866c7ff090cd69f114222b03e6e718870d6515",
-      "command": "git diff 3e1e1f66229d9797023ae3d3197c46c7a1971418 --binary -- src"
+      "command": "git diff 3e1e1f66229d9797023ae3d3197c46c7a1971418 98f2cc14cf26549be5775e988d4a4d2cd59e0524 --binary -- src"
     },
     "regression_tests": {
       "sha256": "bed31cd1f58ca24f9dbe408d13c0cb6016d93790c88d0e59a4a7470ef1d4d632",
-      "command": "git diff 3e1e1f66229d9797023ae3d3197c46c7a1971418 --binary -- tests"
+      "command": "git diff 3e1e1f66229d9797023ae3d3197c46c7a1971418 98f2cc14cf26549be5775e988d4a4d2cd59e0524 --binary -- tests"
     },
     "reference_tools": {
       "sha256": "5219c2771d4b8b10d02f93468255a9789f7d9711d8eac9df981caaca86fc4e35",
-      "command": "git diff 3e1e1f66229d9797023ae3d3197c46c7a1971418 --binary -- tools/reference"
+      "command": "git diff 3e1e1f66229d9797023ae3d3197c46c7a1971418 98f2cc14cf26549be5775e988d4a4d2cd59e0524 --binary -- tools/reference"
     }
   },
   "fixtures": {
@@ -688,5 +688,6 @@
     "The full ARM64 strict gate returns 1 for the two changing OS queries and implementation-specific TRACE transcript. No known-difference allowlist changes the gate.",
     "The 23 excluded exploratory differences are earlier observations with the recorded baseline candidates, outside the final selected diagnostics; they are not counted as passing or remeasured on the final candidates.",
     "One Windows version, locale and SYSTEM profile. No remote endpoint or destructive/provider-specific method acceptance is claimed."
-  ]
+  ],
+  "measured_commit": "98f2cc14cf26549be5775e988d4a4d2cd59e0524"
 }

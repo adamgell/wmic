@@ -244,10 +244,12 @@ fn malformed_password_never_reaches_stderr_or_the_complete_record() {
 }
 
 #[test]
+/// Check the entire RECORD file and both output streams for synthetic credential text.
 fn credential_looking_method_parameter_names_and_values_are_not_recorded() {
     use wmic_compat::backend::{Management, ResolvedRequest};
     struct NoProvider;
     impl Management for NoProvider {
+        /// Keep credential-redaction probes independent of a live provider.
         fn execute(&mut self, _: &ResolvedRequest) -> Result<ManagementResult, ManagementError> {
             panic!("invalid method parameters must never execute a provider")
         }

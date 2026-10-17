@@ -123,6 +123,7 @@ fn duplicate_and_unknown_parameters_fail_before_invocation() {
 }
 
 #[test]
+/// Pin the native error codes and the first failing name in UTF-16 order.
 fn named_method_errors_distinguish_unknown_names_from_output_parameters() {
     let schema = MethodSchema {
         name: wide("GetOwner"),
@@ -192,6 +193,7 @@ fn named_method_errors_distinguish_unknown_names_from_output_parameters() {
 }
 
 #[test]
+/// Ensure invalid arguments beat help, empty selections and raw WMI name failures.
 fn alias_named_parameter_errors_precede_help_and_provider_execution() {
     use wmic_compat::{
         backend::{Management, ResolvedRequest},
@@ -200,6 +202,7 @@ fn alias_named_parameter_errors_precede_help_and_provider_execution() {
     };
     struct NoProvider;
     impl Management for NoProvider {
+        /// Catch accidental provider execution before the argument diagnostic is returned.
         fn execute(&mut self, _: &ResolvedRequest) -> Result<ManagementResult, ManagementError> {
             panic!("invalid alias parameters must never execute a provider")
         }
@@ -207,6 +210,7 @@ fn alias_named_parameter_errors_precede_help_and_provider_execution() {
     #[derive(Default)]
     struct Sink(WideText);
     impl OutputSink for Sink {
+        /// Require empty stdout and retain the complete stderr diagnostic.
         fn write(&mut self, stream: OutputStream, text: &WideText) -> Result<(), OutputError> {
             if stream == OutputStream::Stdout {
                 assert!(text.0.is_empty());
@@ -239,6 +243,7 @@ fn alias_named_parameter_errors_precede_help_and_provider_execution() {
 }
 
 #[test]
+/// Separate accepted assignment whitespace from a missing value before another name.
 fn named_method_arguments_allow_spaces_around_equals_and_reject_missing_values() {
     use wmic_compat::parse::parse_command;
     for line in ["Unknown=1", "Unknown =1", "Unknown= 1", "Unknown = 1"] {
@@ -271,6 +276,7 @@ fn named_method_arguments_allow_spaces_around_equals_and_reject_missing_values()
 }
 
 #[test]
+/// Keep positional-format errors distinct from malformed named-list errors.
 fn malformed_named_method_tokens_keep_native_lexical_errors() {
     use wmic_compat::parse::parse_command;
     for (tail, code) in [
@@ -291,6 +297,7 @@ fn malformed_named_method_tokens_keep_native_lexical_errors() {
 }
 
 #[test]
+/// Exercise valid arrays and quoted delimiters through both parsing and typed binding.
 fn method_assignment_parsing_preserves_arrays_and_quoted_equals_values() {
     let schema = MethodSchema {
         name: wide("Sample"),

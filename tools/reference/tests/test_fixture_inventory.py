@@ -8,6 +8,7 @@ from run_corpus import SUITES,FOLDERS,compare_suite
 
 class FixtureInventoryTests(unittest.TestCase):
     def test_method_arguments_retain_read_only_diagnostics_and_control_oracles(self):
+        """Guard diagnostic coverage, provider-free selections and completed captures."""
         fixtures=Path(__file__).resolve().parents[3]/'tests/fixtures'
         cases=json.loads((fixtures/'method-arguments-cases.json').read_text())['cases']
         self.assertEqual(len(cases),106)

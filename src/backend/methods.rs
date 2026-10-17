@@ -117,6 +117,7 @@ pub fn convert_input(raw: &WideText, ty: u32) -> Result<CimValue, InputError> {
         }
     })
 }
+/// Validate method parameter direction before converting values to their CIM types.
 pub fn bind_method(schema: &MethodSchema, args: &[WideText]) -> Result<Vec<Property>, InputError> {
     validate_named_arguments(
         args,
@@ -162,6 +163,7 @@ pub(crate) fn validate_named_arguments(
     Ok(())
 }
 
+/// Preserve a safe diagnostic token, including the native prefix for an empty name.
 pub(crate) fn input_error(error: ParseError) -> InputError {
     let mut message = WideText::default();
     if let Some(token) = error.token {
@@ -174,6 +176,7 @@ pub(crate) fn input_error(error: ParseError) -> InputError {
         message,
     }
 }
+/// Bind by parameter ID or name; CALL enables literal named NULL and CLI name matching.
 pub(super) fn bind_parameters(
     schema: &MethodSchema,
     args: &[WideText],

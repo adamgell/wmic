@@ -56,6 +56,7 @@ pub fn parse_command(raw: &WideText, mode: EntryMode) -> Result<ParsedCommand, P
         error
     })
 }
+/// Parse raw UTF-16 grammar while retaining CALL quotes for later type conversion.
 fn parse_command_inner(raw: &WideText, mode: EntryMode) -> Result<ParsedCommand, ParseError> {
     let units = command_units(raw, mode)?;
     let spans = lex::command_tokens(units)?;

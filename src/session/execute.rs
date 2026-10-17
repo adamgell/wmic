@@ -456,6 +456,7 @@ impl Session {
             ..Default::default()
         }
     }
+    /// Resolve one command, checking argument errors before help or provider execution.
     fn execute_once(
         &mut self,
         raw: &WideText,

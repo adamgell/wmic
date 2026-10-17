@@ -29,6 +29,7 @@ pub(crate) fn named_argument(raw: &WideText) -> Option<(WideText, WideText)> {
     None
 }
 
+/// Report malformed positional syntax with the native parameter-list hint.
 fn invalid_format() -> ParseError {
     ParseError::new(
         0xB7CE,
@@ -37,6 +38,7 @@ fn invalid_format() -> ParseError {
     )
 }
 
+/// Report an incomplete named assignment without echoing its value.
 fn invalid_named() -> ParseError {
     ParseError::new(
         0xADDC,

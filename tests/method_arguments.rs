@@ -9,6 +9,7 @@ use wmic_compat::{
 
 struct NoProvider;
 impl Management for NoProvider {
+    /// Fail immediately if a controller-only case reaches management execution.
     fn execute(&mut self, _: &ResolvedRequest) -> Result<ManagementResult, ManagementError> {
         panic!("method argument control oracle must never reach a provider")
     }
@@ -20,6 +21,7 @@ struct Sink {
     stderr: Vec<u8>,
 }
 impl OutputSink for Sink {
+    /// Encode both streams for exact comparison with the ASCII control captures.
     fn write(&mut self, stream: OutputStream, text: &WideText) -> Result<(), OutputError> {
         let bytes = encode_output(text, &DestinationProfile::pipe(1252))?;
         match stream {
@@ -30,6 +32,7 @@ impl OutputSink for Sink {
     }
 }
 
+/// Locate raw captures, allowing the native harness to supply a staged fixture directory.
 fn fixtures() -> PathBuf {
     std::env::var_os("WMIC_METHOD_ARGUMENT_FIXTURE_DIR")
         .map(PathBuf::from)
@@ -38,6 +41,7 @@ fn fixtures() -> PathBuf {
                 .join("tests/fixtures/method-arguments-reference")
         })
 }
+/// Pair captured results with invocations and guard the selected test inventory.
 fn cases(controls_only: bool) -> (String, Vec<(String, String, serde_json::Value)>) {
     let manifest: serde_json::Value =
         serde_json::from_str(include_str!("fixtures/method-arguments-cases.json")).unwrap();
@@ -78,11 +82,13 @@ fn cases(controls_only: bool) -> (String, Vec<(String, String, serde_json::Value
         cases,
     )
 }
+/// Read the captured bytes directly so encoding and line endings remain significant.
 fn stream(case: &serde_json::Value, name: &str) -> Vec<u8> {
     std::fs::read(fixtures().join(case[name]["file"].as_str().unwrap())).unwrap()
 }
 
 #[test]
+/// Prove the 64 controller failures occur before any management operation.
 fn control_oracles_match_status_and_both_streams_without_a_provider() {
     let (node, cases) = cases(true);
     for (id, arguments, expected) in cases {
@@ -105,6 +111,7 @@ fn control_oracles_match_status_and_both_streams_without_a_provider() {
 
 #[test]
 #[cfg(windows)]
+/// Compare all 106 commands through a real child process with bounded execution.
 fn windows_cli_matches_all_method_argument_oracles() {
     use std::{
         io::Read,

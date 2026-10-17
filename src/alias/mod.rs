@@ -207,6 +207,7 @@ impl AliasStore {
         }
         Ok(())
     }
+    /// Expand alias metadata into a management request or a derived command.
     pub fn resolve(
         &self,
         command: &ParsedCommand,

@@ -12,6 +12,7 @@ REFERENCES={'arm64':(r'C:\Windows\System32\wbem\WMIC.exe','2EF794C4940AFEA56C6D6
 
 
 def compare_suite(manifest,expected,actual,expected_root=None,actual_root=None):
+    """Validate capture identity and inventory before comparing exact streams and statuses."""
     validate_manifest(manifest)
     wanted={c['id']:c for c in manifest['cases']}
     indexes=[]
@@ -39,6 +40,7 @@ def compare_suite(manifest,expected,actual,expected_root=None,actual_root=None):
 
 
 def report_status(report):
+    """Return the strict comparison status, rejecting incomplete or inconsistent reports."""
     suites=report.get('suites')
     if not isinstance(suites,dict) or not suites:raise ValueError('report has no suites')
     requested=report.get('requested_suites')
@@ -54,6 +56,7 @@ def report_status(report):
 
 
 def run(vm,target,binary,out,fixtures,suites,reference_dir=None):
+    """Stage a hash-pinned candidate and persist each selected comparison before continuing."""
     if out.exists():raise ValueError('use a fresh output directory')
     path,sha=stage_artifact(vm,binary)
     out.mkdir(parents=True)
@@ -84,6 +87,7 @@ def run(vm,target,binary,out,fixtures,suites,reference_dir=None):
 
 
 def main():
+    """Run selected suites or validate a saved report using the same strict exit-code gate."""
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--check-report',type=Path);parser.add_argument('--vm');parser.add_argument('--target',choices=['aarch64-pc-windows-msvc','x86_64-pc-windows-msvc','i686-pc-windows-msvc']);parser.add_argument('--binary',type=Path);parser.add_argument('--out',type=Path);parser.add_argument('--fixtures',type=Path,default=Path('tests/fixtures'));parser.add_argument('--suite',action='append',choices=SUITES);parser.add_argument('--reference-dir',type=Path)
     args=parser.parse_args()
