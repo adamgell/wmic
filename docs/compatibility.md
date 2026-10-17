@@ -1,8 +1,42 @@
 # Compatibility status
 
+## Expanded regression validation, 2026-10-16
+
+The compatibility changes in this revision were built for all three MSVC targets and measured on the reference Windows ARM64 machine. The [testing guide](testing.md) describes the matrix and strict gates; [committed evidence](research/evidence/2026-10-16/backwards-compatibility/) identifies exact executable bytes, a source snapshot, comparison reports, and checks. These are local unsigned test builds, separate from the previously published signed development release. Full classic WMIC compatibility is not claimed.
+
+| Candidate | Full corpus matched | Additional stable matrix | Controlled cases matched |
+| --- | ---: | ---: | ---: |
+| ARM64, native | 1,559 / 1,562 | 742 / 742 | 121 / 121 |
+| x64, emulated | 1,559 / 1,562 | 742 / 742 | 121 / 121 |
+| x86, emulated | 1,559 / 1,562 | 742 / 742 | 121 / 121 |
+
+The original ARM64 executable is the reference for ARM64 and x64; x64 is explicitly a cross-architecture comparison. The x86 corpus and unchanged-script tests use the installed x86 original. The remaining controlled x86 harnesses compare with the ARM64 original. Native AMD64/x86 hardware acceptance remains open.
+
+Every full corpus run completed all 17 requested suites. Its strict exit status remains **1**, because `schema/os-default` and `schema/os-get-default` contain changing OS data, and `connection/trace` retains implementation-specific diagnostics. These differences are visible in the reports and are not waived. The separate 742-case stable matrix passes the same gate with status **0**. No additional corpus differences remain.
+
+The expanded tests found and fixed format-dependent empty/error output (including XML error envelopes), HTML array and empty-result whitespace, missing-WHERE/trailing-comma/incomplete-GET quoting behavior, localhost CSV node labels, and stdout disk redirection. Disk tests cover UTF-16LE/CRLF, BOM handling on append, repeated queries, mixed interactive prompts, help, errors and methods. Malformed credential switches remain rejected and redacted from diagnostics and complete recordings.
+
+Controlled results comprise 17 unchanged scripts, 22 output/append/record cases, 7 Unicode file cases, 9 session-file cases, 24 string/whitespace format cases, 22 owned-object lifecycle cases, 9 private-console cases, and 11 direct disk-redirection cases per architecture. The corrected PowerShell fixture path actually executes the exact bytes as command input without changing execution policy. Success and deliberate-error scripts must reach their expected process statuses; equal policy failures cannot pass. The `FOR /F` and conditional-success fixtures additionally require their expected success output in both the guest harness and offline comparator.
+
+The controlled summary combines only fully completed source runs through the reproducible offline aggregation gate. Each entry records its original report and digest, candidate hash, current raw harness hash, evidence digest, full case inventory and verified fixture cleanup. All 30 selected suites have `source_run_completed: true`; fresh captures replace the five ARM64 suites previously selected from interrupted source runs. Incomplete reports, missing cases, timeouts and equally invalid outcomes are rejected. Controlled operations are not automatically replayed after a lost transport reply.
+
+Fresh verification passes **168 portable Rust tests, 22 native Windows tests (18 library, 3 backend, 1 format), 52 reference Python tests, 11 release Python tests, and 8 certificate-identity cases**. Formatting, portable and all-three-target Clippy checks, all release builds, workflow lint and PowerShell harness parsing pass. Independent review found no remaining Critical or Important issues after the fixes. The gate also checks oracle integrity and rejects incomplete reports, invalid statuses, missing console/file evidence and blocked scripts.
+
+The measured executable hashes are:
+
+| Target | SHA256 |
+| --- | --- |
+| `aarch64-pc-windows-msvc` | `1f15d762c024b89ff5b90853c2f27a82d91a92831fa77abfc5612dcea6d12e9d` |
+| `x86_64-pc-windows-msvc` | `78c640e991d60b3aea0a0e9d8959789a4506ecd0d89321eb39cbbcdd6877f436` |
+| `i686-pc-windows-msvc` | `ab2f86eb3675963d3ec7ea0c598147b6d384f3ec8ba8e64825035fad477fbced` |
+
+The platform, account, provider, remote-endpoint and Defender limits below continue to apply. Signing does not establish runtime compatibility or clear the historical detection.
+
+## Earlier development baseline
+
 Development build `0.1.0-dev`, 2026-10-16; measured application baseline source commit `ac390d4`. All 13 planned implementation tasks are delivered. **Full classic WMIC compatibility is not claimed.** This is a measured development replacement with explicit differences and incomplete platform/provider acceptance. The corpus results below apply to the local unsigned baseline. GitHub release builds use a separate build environment and acquire different hashes after signing; their manifests and signature receipts identify their exact bytes, source commit, and workflow run. Signing does not establish additional runtime compatibility.
 
-## Reference profile and architecture matrix
+### Reference profile and architecture matrix
 
 The selected Parallels guest is `Windows 11 Home Domain`, UUID `{ec3bc428-7a31-4f17-8424-7ce78923f7f3}`, hostname `DESKTOP-N4H9E7R`, endpoint `192.168.2.107`. The installed OS is Windows 11 Pro 25H2 ARM64, build 26200.8037, en-US. Captures run as `NT AUTHORITY\SYSTEM`, ACP 1252, OEM/console code page 437. Ordinary-user acceptance is separate and unverified.
 
@@ -16,7 +50,7 @@ Microsoft ARM64 WMIC version 10.0.26100.1 is pinned to SHA256 `2EF794C4940AFEA56
 
 All three MSVC release targets compiled with static CRT linkage. Native AMD64 and native x86 hardware execution are unverified. The controlled scripts/files/methods/console matrix uses the installed ARM64 original for all candidates; the main x86 corpus alone is paired with the installed x86 original. No additional endpoint was accessed for these tests.
 
-## Corpus results
+### Corpus results
 
 The following is a bounded corpus of 820 cases per candidate, not a percentage of all WMIC behavior. Every matched case compares stdout, stderr, exact UTF16 arguments, completion state and full-DWORD process exit status. The same 3 known differences occur on each architecture.
 
@@ -42,15 +76,17 @@ The following is a bounded corpus of 820 cases per candidate, not a percentage o
 
 `os-default` and `os-get-default` retain raw differences in changing OS memory/time/process data; stable headers and status match, but exact equality of these rows is not asserted. `connection/trace` retains an intentional stderr difference: this implementation reports its own activity instead of fabricating Microsoft's C++ trace locations/call sequence. Password redaction is another intentional difference for credential-bearing XML/record/error output; reference corpora prohibit password-bearing captures.
 
-## Controlled effects and scripts
+### Controlled effects and scripts
 
-Each candidate completed 100 controlled comparison cases: 7 unchanged scripts, 22 output/append/record cases, 7 Unicode file cases, 9 persistent/inline session-routing cases, 12 string-format cases, 12 whitespace-string-format cases, 11 owned-object lifecycle cases, 11 named-method lifecycle cases, and 9 completed private-console cases. All match under the explicitly declared clock/PID policies below. Negative method probes are also compared within the lifecycle evidence. Every harness checks its own cleanup; output harnesses preserve an unrelated sentinel.
+**Historical correction:** the three PowerShell fixtures in the earlier 7-script harness were blocked by the reference guest's default file execution policy on both sides. Their equal failures establish no WMIC script compatibility. The earlier total of 100 paired comparisons therefore included three nonfunctional script cases. The expanded validation executes the exact fixture bytes as command input, checks their expected exit statuses, and measures all 17 scripts again without changing policy.
 
-The unchanged `.cmd`/`.ps1` files call literal `wmic`: querying, piping, CSV parsing and error handling work under process-local PATH precedence. Resolution is read back and its executable hash checked. A hardcoded `C:\Windows\System32\wbem\WMIC.exe` call continues to use Microsoft WMIC under either PATH. No system executable or machine-wide PATH was replaced.
+Each candidate completed 100 paired comparison cases: 7 unchanged scripts, 22 output/append/record cases, 7 Unicode file cases, 9 persistent/inline session-routing cases, 12 string-format cases, 12 whitespace-string-format cases, 11 owned-object lifecycle cases, 11 named-method lifecycle cases, and 9 completed private-console cases. All match under the explicitly declared clock/PID policies below. Negative method probes are also compared within the lifecycle evidence. Every harness checks its own cleanup; output harnesses preserve an unrelated sentinel.
+
+The unchanged `.cmd` files call literal `wmic` under process-local PATH precedence; the earlier `.ps1` acceptance claim is superseded by the correction above and the expanded validation. Resolution is read back and its executable hash checked. A hardcoded `C:\Windows\System32\wbem\WMIC.exe` call continues to use Microsoft WMIC under either PATH. No system executable or machine-wide PATH was replaced.
 
 Native console cases cover context/query/empty line/EOF, finite repetition, CtrlC before/after another cycle and ordinary-key interruption in new hidden private consoles. A separate ARM64 typeahead case matches the original partial screen/cursor/buffer state; **both programs time out**, have null application exit status, and are forcibly terminated by the harness. It is not counted as a completed success. It confirms the measured legacy consumption of one queued key after a query.
 
-## Regression and implementation coverage
+### Regression and implementation coverage
 
 The portable Rust suite passes 158 tests. Native Windows tests pass 18 library and 3 backend tests; Python reference/package suites pass 24+4. Formatting, both Clippy runs and all release cross-builds pass. The one independent whole-branch review found 4 Important issues, all fixed in a single RED-to-GREEN pass: malformed-password diagnostic leakage, cancellation during the final backend call/batch, dropped association partial results, and invalid Unicode-code-page append arguments. No Critical findings or deferred minors remain from that review. There was no second review.
 
@@ -58,7 +94,7 @@ Cancellation requests COM cancellation on the executing thread, stops before lat
 
 The implementation includes raw UTF16 WMIC grammar, live/default-bundled aliases, direct PATH/CLASS/WQL/ASSOC, schema-driven methods/instance and class operations, ordered multiple-node settings, embedded stock formatting and custom XSL/script support, translations, output/append/record/clipboard destinations, interactive context, repetitions and CtrlC handling. The bundle contains 81 aliases and 426 views. Forced missing-default-role tests cover stock alias use and local read-only ALIAS scalar/object introspection. A genuinely missing-`root\cli` machine profile remains unverified; advanced intrinsic/schema/mutation behavior of the virtual alias provider is limited. Missing custom roles return errors.
 
-## Evidence and normalization
+### Evidence and normalization
 
 Committed source evidence under `docs/research/evidence/2026-10-16` contains per-architecture passed/different case IDs, the controlled-matrix summary, check results and an evidence-integrity index. Original reference streams and manifests remain in `tests/fixtures`. Post-fix raw captures and complete harness results are retained locally under `artifacts/reviewed-conformance-*` and `artifacts/reviewed-*.json`; they are excluded from release packages. The index hashes their capture manifests and harness outputs; stored capture manifests in turn hash every raw stream.
 
@@ -72,7 +108,7 @@ The locally measured unsigned baseline executable hashes are:
 | x64 | `x86_64-pc-windows-msvc` | `7024a58f151713cba12662aaa94444a87dcc5634756e2d4073c3f5bf7dc6e7eb` |
 | x86 | `i686-pc-windows-msvc` | `1732bd1a506c7284d369867221b0bd5f4fbaa504f5044b0c6dcb819f8d71afd8` |
 
-## Open acceptance and known limits
+### Open acceptance and known limits
 
 Additional authenticated remote endpoints, IPv6 fail-fast, non-en-US Windows, Windows 10/Server, native AMD64/x86 hardware and ordinary-user profiles are unverified. Clipboard APIs and class-repository writes are implemented but live acceptance is unexercised. Destructive methods, account/service/security changes, reboot operations and Win32_Product instance inventory were not exercised. Safe schema/help reads do not certify those effects.
 

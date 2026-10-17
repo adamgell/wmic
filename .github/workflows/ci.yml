@@ -18,6 +18,9 @@ jobs:
       - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
         with:
           python-version: '3.12'
+      - run: rustup update stable --no-self-update
+      - run: rustup default stable
+      - run: rustup component add rustfmt clippy
       - run: cargo fmt --check
       - run: cargo clippy --locked --all-targets -- -D warnings
       - run: cargo test --locked
@@ -36,6 +39,9 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
+      - run: rustup update stable --no-self-update
+      - run: rustup default stable
+      - run: rustup component add clippy
       - run: rustup target add ${{ matrix.target }}
       - run: cargo clippy --locked --target ${{ matrix.target }} --all-targets -- -D warnings
       - run: cargo build --locked --release --target ${{ matrix.target }}

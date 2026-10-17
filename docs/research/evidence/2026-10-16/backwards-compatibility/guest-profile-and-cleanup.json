@@ -1,0 +1,14 @@
+{
+  "captured_utc": "2026-10-17T00:02:53.5138463Z",
+  "effective_execution_policy": "Restricted",
+  "build": "26200",
+  "display_version": "25H2",
+  "architecture": "ARMv8 (64-bit) Family 8 Model 0 Revision   0",
+  "version": "10.0.26200",
+  "ubr": 8037,
+  "computer": "DESKTOP-N4H9E7R",
+  "identity": "NT AUTHORITY\\SYSTEM",
+  "caption": "Microsoft Windows 11 Pro",
+  "remaining_test_environment_values": 0,
+  "remaining_test_child_processes": 0
+}

@@ -31,7 +31,17 @@ pub(super) fn unquote(units: &[u16]) -> WideText {
 }
 
 pub(super) fn tokens(units: &[u16]) -> Result<Vec<Range<usize>>, ParseError> {
-    let mut result = vec![];
+    tokens_inner(units, false)
+}
+
+// The command parser validates every non-GET span with strict `tokens` after
+// identifying the grammar. Lexing alone cannot tell a verb from a password value.
+pub(super) fn relaxed_quote_tokens(units: &[u16]) -> Result<Vec<Range<usize>>, ParseError> {
+    tokens_inner(units, true)
+}
+
+fn tokens_inner(units: &[u16], property_expression: bool) -> Result<Vec<Range<usize>>, ParseError> {
+    let mut result: Vec<Range<usize>> = vec![];
     let mut i = 0;
     while i < units.len() {
         while i < units.len() && space(units[i]) {
@@ -60,7 +70,7 @@ pub(super) fn tokens(units: &[u16]) -> Result<Vec<Range<usize>>, ParseError> {
             }
             i += 1;
         }
-        if quote.is_some() || depth != 0 {
+        if (quote.is_some() && !property_expression) || depth != 0 {
             return Err(ParseError::new(
                 0xABFD,
                 "Invalid alias verb.",

@@ -20,10 +20,11 @@ process and records `state=timeout`, `exit_status=null`. Completed processes
 retain their complete unsigned Windows exit status. Base64 protects all bytes
 while they cross Parallels' terminal transport.
 
+See [the testing guide](../../docs/testing.md) for the 1,562-case corpus, strict exit codes, all-three-target execution, and controlled runner.
+
 Saved stream hashes are verified before comparisons. Comparisons use only
-normalization rules explicitly declared by the reference case. Currently the
-only rule replaces the raw XML root `COMMAND` element's volatile `STARTTIME`
-attribute; it does not change the stored bytes, property values, whitespace,
+normalization rules explicitly declared by the reference case. The rules replace the raw XML root `COMMAND` element's volatile `STARTTIME`
+attribute or its exact HTML metadata representation; it does not change the stored bytes, property values, whitespace,
 line endings, or other timestamps. All other cases remain byte comparisons.
 
 Cases that contain password arguments or request writes are excluded from
@@ -36,3 +37,5 @@ normalization. Console and file-output encodings require their own tests;
 these captures establish native pipe behavior only.
 
 Parallels occasionally reports `PrlJob_GetResult` or `PrlJob_GetRetCode: Invalid argument` despite a responsive guest. `run_guest_script(..., replay_safe=True)` permits up to three attempts for only those errors. The default never replays scripts. Hash-verified artifact staging opts in because it is idempotent. `capture(..., replay_safe=True)` requires an explicit caller choice; do not opt in for controlled writes or commands whose side effects are uncertain. Guest application failures are never retried by this mechanism.
+
+Calls using the same VM UUID are serialized across threads and host processes; the lock covers the whole guest call, including explicitly safe retries. This avoids overlapping Parallels Tools jobs losing their result/status. Controlled operations are still never automatically replayed.

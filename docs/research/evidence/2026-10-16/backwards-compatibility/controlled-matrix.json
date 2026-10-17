@@ -1,0 +1,398 @@
+{
+  "arm64": {
+    "kind": "validated-suite-aggregation",
+    "completed": true,
+    "artifact": {
+      "sha256": "1f15d762c024b89ff5b90853c2f27a82d91a92831fa77abfc5612dcea6d12e9d",
+      "target": "aarch64-pc-windows-msvc"
+    },
+    "requested_suites": [
+      "redirection",
+      "scripts",
+      "files",
+      "unicode",
+      "session-files",
+      "formats",
+      "whitespace-formats",
+      "lifecycle",
+      "named-lifecycle",
+      "console"
+    ],
+    "tests": {
+      "redirection": {
+        "total": 11,
+        "differences": [],
+        "reference_architecture": "arm64",
+        "script_sha256": "76684c9f5b571bf14fe8961f9ff5c86c07c80a59f1ba23c268251e72794782cd",
+        "evidence_sha256": "7cfb51aca7775d22d7dc579173d3a959006878a344e37dccdbda70d54c8f47c9",
+        "source_report": "artifacts/coderabbit-review2-arm64-redirection/report.json",
+        "source_report_sha256": "693842fb1301491bfd23e6c4d0e10bf8e16354d1ee6852967397cbf4e5f7dc71",
+        "source_run_completed": true,
+        "fixture_cleanup_verified": true
+      },
+      "scripts": {
+        "total": 17,
+        "differences": [],
+        "reference_architecture": "arm64",
+        "script_sha256": "00f63e723f7ba02516f88e3ed0786885691843b5144b7735076cbeb313a90217",
+        "evidence_sha256": "5771e59635a984732f34a2886199c0da944375ac7802696aa303806f8c56cfeb",
+        "source_report": "artifacts/coderabbit-review2-arm64-scripts/report.json",
+        "source_report_sha256": "574bb9ed0f79eca0d9f00ed8ce7bc0496f3f5e91417382e5cc67750ae7b0444a",
+        "source_run_completed": true,
+        "fixture_cleanup_verified": true
+      },
+      "files": {
+        "total": 22,
+        "differences": [],
+        "reference_architecture": "arm64",
+        "script_sha256": "5f92c8407b131dd5486b267a10ca6f619d5c395306b30b59f6a2572b59c04c8e",
+        "evidence_sha256": "77cfdbb6d192286ebeaf4666c31d484e2f0a1d4287d482575388fe4044254b5c",
+        "source_report": "artifacts/coderabbit-review2-arm64-files/report.json",
+        "source_report_sha256": "0aea92b3a2b5295dccf8289d3bd0a5c6456b1852fff2f74d216f7207303dbbdc",
+        "source_run_completed": true,
+        "fixture_cleanup_verified": true
+      },
+      "unicode": {
+        "total": 7,
+        "differences": [],
+        "reference_architecture": "arm64",
+        "script_sha256": "55cbbdb7a96457a1236baab903fe00e2c8d127741ce465e44ab33e9f25104423",
+        "evidence_sha256": "554acc517922a4d3b562e3727f869bcdbb29740176227ebd1dc536f1bab369eb",
+        "source_report": "artifacts/coderabbit-review2-arm64-unicode/report.json",
+        "source_report_sha256": "397c53ebd7c5ca258f369698d0934ac18d58548736aaf31188bf67b0bafa2a73",
+        "source_run_completed": true,
+        "fixture_cleanup_verified": true
+      },
+      "session-files": {
+        "total": 9,
+        "differences": [],
+        "reference_architecture": "arm64",
+        "script_sha256": "ba2e6b8f48620216528ee7c8adf7613d4ca2d40f6d225b5e7b70aca281bd9ded",
+        "evidence_sha256": "f46628ec327b5a565bc99cb1784aec0b547cf793c3173b53364d1afae89f0e37",
+        "source_report": "artifacts/coderabbit-review2-arm64-session-files/report.json",
+        "source_report_sha256": "7662b5853d947b68a3cb2d4309b964159bfa7fe320f9dba360b3f9068868dde2",
+        "source_run_completed": true,
+        "fixture_cleanup_verified": true
+      },
+      "formats": {
+        "total": 12,
+        "differences": [],
+        "reference_architecture": "arm64",
+        "script_sha256": "20bee634632d9c6cc1386b74d6411eb8aafaec0399dce9a4f0cf3a1c202e989d",
+        "evidence_sha256": "50ada401050f5f4339ea7bf56a2aba0bedfc85367274b6e3f455c831e01ea570",
+        "source_report": "artifacts/coderabbit-review2-arm64-formats/report.json",
+        "source_report_sha256": "827dd5570e05eb67351de87377be0ec5e2afa8a00fed223a2874d1a5774403bf",
+        "source_run_completed": true,
+        "fixture_cleanup_verified": true
+      },
+      "whitespace-formats": {
+        "total": 12,
+        "differences": [],
+        "reference_architecture": "arm64",
+        "script_sha256": "20bee634632d9c6cc1386b74d6411eb8aafaec0399dce9a4f0cf3a1c202e989d",
+        "evidence_sha256": "de3ffb8222e4361ac9f25837b412ac2d24a759c0fccc979e58ef76efa9c100ff",
+        "source_report": "artifacts/controlled-arm64-remaining/report.json",
+        "source_report_sha256": "a06b27bf32e266a4f968785fcd4bbf6071c839aacee862de81da865a5e929906",
+        "source_run_completed": true,
+        "fixture_cleanup_verified": true
+      },
+      "lifecycle": {
+        "total": 11,
+        "differences": [],
+        "reference_architecture": "arm64",
+        "script_sha256": "5ff0475c3ed57aa6ec43ab56a5c4cdf64dec64175828c2f796e3c67b8756787b",
+        "evidence_sha256": "5f6e61ea72e33febbc6db1610e6077220df6d998811ad5ef5b8520454c1e1f46",
+        "source_report": "artifacts/controlled-arm64-remaining/report.json",
+        "source_report_sha256": "a06b27bf32e266a4f968785fcd4bbf6071c839aacee862de81da865a5e929906",
+        "source_run_completed": true,
+        "fixture_cleanup_verified": true
+      },
+      "named-lifecycle": {
+        "total": 11,
+        "differences": [],
+        "reference_architecture": "arm64",
+        "script_sha256": "5ff0475c3ed57aa6ec43ab56a5c4cdf64dec64175828c2f796e3c67b8756787b",
+        "evidence_sha256": "4bf6be8f6b0d28ce416327f3eb4835b102f42691ff2bd84f60cf92cea9947b3e",
+        "source_report": "artifacts/controlled-arm64-remaining/report.json",
+        "source_report_sha256": "a06b27bf32e266a4f968785fcd4bbf6071c839aacee862de81da865a5e929906",
+        "source_run_completed": true,
+        "fixture_cleanup_verified": true
+      },
+      "console": {
+        "total": 9,
+        "differences": [],
+        "reference_architecture": "arm64",
+        "script_sha256": "208d1015f7a6649e7573d9de62fcca3c8328f3dcaa63277bcb95dd006f2ff276",
+        "evidence_sha256": "24e4aad7ef2b92960f92757b6ea0fa1ca26e7a9b0444b5d46ba84716e9ea15c1",
+        "source_report": "artifacts/controlled-arm64-remaining/report.json",
+        "source_report_sha256": "a06b27bf32e266a4f968785fcd4bbf6071c839aacee862de81da865a5e929906",
+        "source_run_completed": true,
+        "fixture_cleanup_verified": true
+      }
+    }
+  },
+  "x64": {
+    "kind": "validated-suite-aggregation",
+    "completed": true,
+    "artifact": {
+      "sha256": "78c640e991d60b3aea0a0e9d8959789a4506ecd0d89321eb39cbbcdd6877f436",
+      "target": "x86_64-pc-windows-msvc"
+    },
+    "requested_suites": [
+      "redirection",
+      "scripts",
+      "files",
+      "unicode",
+      "session-files",
+      "formats",
+      "whitespace-formats",
+      "lifecycle",
+      "named-lifecycle",
+      "console"
+    ],
+    "tests": {
+      "redirection": {
+        "total": 11,
+        "differences": [],
+        "reference_architecture": "arm64",
+        "script_sha256": "76684c9f5b571bf14fe8961f9ff5c86c07c80a59f1ba23c268251e72794782cd",
+        "evidence_sha256": "6980d8f91c82b7b25ff2292b01b6bc4f45b35f3b67e82da0028b4f25e5d79deb",
+        "source_report": "artifacts/coderabbit-review2-x64-rest/report.json",
+        "source_report_sha256": "1ba5595072e72b1878d07998c194df49090efa981107b8322d3c57497a38002e",
+        "source_run_completed": true,
+        "fixture_cleanup_verified": true
+      },
+      "scripts": {
+        "total": 17,
+        "differences": [],
+        "reference_architecture": "arm64",
+        "script_sha256": "00f63e723f7ba02516f88e3ed0786885691843b5144b7735076cbeb313a90217",
+        "evidence_sha256": "78ce900226517fb2a23dbc3ef65133e56433631b32c4b380d3993420d6809da5",
+        "source_report": "artifacts/coderabbit-review2-x64-scripts/report.json",
+        "source_report_sha256": "ac3c38cbe027378e43f085da474be6c7f4af1b7b9bd53dd28d5e725deed7f0c1",
+        "source_run_completed": true,
+        "fixture_cleanup_verified": true
+      },
+      "files": {
+        "total": 22,
+        "differences": [],
+        "reference_architecture": "arm64",
+        "script_sha256": "5f92c8407b131dd5486b267a10ca6f619d5c395306b30b59f6a2572b59c04c8e",
+        "evidence_sha256": "36e6e7bd8ba6607c24b08e0e0e02cef51095c6a47eaaef65b86ee97b08b2d178",
+        "source_report": "artifacts/coderabbit-review2-x64-rest/report.json",
+        "source_report_sha256": "1ba5595072e72b1878d07998c194df49090efa981107b8322d3c57497a38002e",
+        "source_run_completed": true,
+        "fixture_cleanup_verified": true
+      },
+      "unicode": {
+        "total": 7,
+        "differences": [],
+        "reference_architecture": "arm64",
+        "script_sha256": "55cbbdb7a96457a1236baab903fe00e2c8d127741ce465e44ab33e9f25104423",
+        "evidence_sha256": "35ecc5732c11141f6b86b5690de69b50f1ad71196d1a403e6f5d8b7845be95f6",
+        "source_report": "artifacts/coderabbit-review2-x64-rest/report.json",
+        "source_report_sha256": "1ba5595072e72b1878d07998c194df49090efa981107b8322d3c57497a38002e",
+        "source_run_completed": true,
+        "fixture_cleanup_verified": true
+      },
+      "session-files": {
+        "total": 9,
+        "differences": [],
+        "reference_architecture": "arm64",
+        "script_sha256": "ba2e6b8f48620216528ee7c8adf7613d4ca2d40f6d225b5e7b70aca281bd9ded",
+        "evidence_sha256": "54911b977ddd2a185a2113db53d6b86dac2f0d423e196dac7ce4218243f68f0b",
+        "source_report": "artifacts/coderabbit-review2-x64-rest/report.json",
+        "source_report_sha256": "1ba5595072e72b1878d07998c194df49090efa981107b8322d3c57497a38002e",
+        "source_run_completed": true,
+        "fixture_cleanup_verified": true
+      },
+      "formats": {
+        "total": 12,
+        "differences": [],
+        "reference_architecture": "arm64",
+        "script_sha256": "20bee634632d9c6cc1386b74d6411eb8aafaec0399dce9a4f0cf3a1c202e989d",
+        "evidence_sha256": "a7a1dad7234ce90f90da80686331a1fc530f7bd1615e3f409c47d08f4ea63bfa",
+        "source_report": "artifacts/coderabbit-review2-x64-rest/report.json",
+        "source_report_sha256": "1ba5595072e72b1878d07998c194df49090efa981107b8322d3c57497a38002e",
+        "source_run_completed": true,
+        "fixture_cleanup_verified": true
+      },
+      "whitespace-formats": {
+        "total": 12,
+        "differences": [],
+        "reference_architecture": "arm64",
+        "script_sha256": "20bee634632d9c6cc1386b74d6411eb8aafaec0399dce9a4f0cf3a1c202e989d",
+        "evidence_sha256": "6196809fe7dd718670b46270a423ac3bc3fb7fd42d2a5969e5e9033bf210e035",
+        "source_report": "artifacts/coderabbit-review2-x64-rest/report.json",
+        "source_report_sha256": "1ba5595072e72b1878d07998c194df49090efa981107b8322d3c57497a38002e",
+        "source_run_completed": true,
+        "fixture_cleanup_verified": true
+      },
+      "lifecycle": {
+        "total": 11,
+        "differences": [],
+        "reference_architecture": "arm64",
+        "script_sha256": "5ff0475c3ed57aa6ec43ab56a5c4cdf64dec64175828c2f796e3c67b8756787b",
+        "evidence_sha256": "09abcd9907d91a2783284e21246fa88db36aa493ee48060ceb16aebc6a2a6802",
+        "source_report": "artifacts/coderabbit-review2-x64-rest/report.json",
+        "source_report_sha256": "1ba5595072e72b1878d07998c194df49090efa981107b8322d3c57497a38002e",
+        "source_run_completed": true,
+        "fixture_cleanup_verified": true
+      },
+      "named-lifecycle": {
+        "total": 11,
+        "differences": [],
+        "reference_architecture": "arm64",
+        "script_sha256": "5ff0475c3ed57aa6ec43ab56a5c4cdf64dec64175828c2f796e3c67b8756787b",
+        "evidence_sha256": "2f9e69023a6397288bf18ac177bb550ad4ccaaeec5a394d3f640517430229889",
+        "source_report": "artifacts/coderabbit-review2-x64-rest/report.json",
+        "source_report_sha256": "1ba5595072e72b1878d07998c194df49090efa981107b8322d3c57497a38002e",
+        "source_run_completed": true,
+        "fixture_cleanup_verified": true
+      },
+      "console": {
+        "total": 9,
+        "differences": [],
+        "reference_architecture": "arm64",
+        "script_sha256": "208d1015f7a6649e7573d9de62fcca3c8328f3dcaa63277bcb95dd006f2ff276",
+        "evidence_sha256": "13b6ff9986f5ce72d63b653d7c32fa05f76b177e503ae5469bee4d9a436c0b74",
+        "source_report": "artifacts/coderabbit-review2-x64-rest/report.json",
+        "source_report_sha256": "1ba5595072e72b1878d07998c194df49090efa981107b8322d3c57497a38002e",
+        "source_run_completed": true,
+        "fixture_cleanup_verified": true
+      }
+    }
+  },
+  "x86": {
+    "kind": "validated-suite-aggregation",
+    "completed": true,
+    "artifact": {
+      "sha256": "ab2f86eb3675963d3ec7ea0c598147b6d384f3ec8ba8e64825035fad477fbced",
+      "target": "i686-pc-windows-msvc"
+    },
+    "requested_suites": [
+      "redirection",
+      "scripts",
+      "files",
+      "unicode",
+      "session-files",
+      "formats",
+      "whitespace-formats",
+      "lifecycle",
+      "named-lifecycle",
+      "console"
+    ],
+    "tests": {
+      "redirection": {
+        "total": 11,
+        "differences": [],
+        "reference_architecture": "arm64",
+        "script_sha256": "76684c9f5b571bf14fe8961f9ff5c86c07c80a59f1ba23c268251e72794782cd",
+        "evidence_sha256": "6c374546b5603085472d9159e28de627a0896910b64de9bd9a914f5decafdda3",
+        "source_report": "artifacts/coderabbit-review2-x86-rest/report.json",
+        "source_report_sha256": "7fc829ea12d7ce9e36c12466648054fffddeaa9657102bb41c4306d00c269bc3",
+        "source_run_completed": true,
+        "fixture_cleanup_verified": true
+      },
+      "scripts": {
+        "total": 17,
+        "differences": [],
+        "reference_architecture": "x86",
+        "script_sha256": "00f63e723f7ba02516f88e3ed0786885691843b5144b7735076cbeb313a90217",
+        "evidence_sha256": "1a7430ecf2db756979eb8dab990b7a2be3deb1beb6040ff14d43136e739605f2",
+        "source_report": "artifacts/coderabbit-review2-x86-scripts/report.json",
+        "source_report_sha256": "11e9c162dd6eeb819f79906cda9ac61be5fa3a09d7f520f19ece66c79551f2ef",
+        "source_run_completed": true,
+        "fixture_cleanup_verified": true
+      },
+      "files": {
+        "total": 22,
+        "differences": [],
+        "reference_architecture": "arm64",
+        "script_sha256": "5f92c8407b131dd5486b267a10ca6f619d5c395306b30b59f6a2572b59c04c8e",
+        "evidence_sha256": "8ba911280fc084871b0a593533fcc3b226cdbd09d93651f6ddc5d90712a7b63f",
+        "source_report": "artifacts/coderabbit-review2-x86-rest/report.json",
+        "source_report_sha256": "7fc829ea12d7ce9e36c12466648054fffddeaa9657102bb41c4306d00c269bc3",
+        "source_run_completed": true,
+        "fixture_cleanup_verified": true
+      },
+      "unicode": {
+        "total": 7,
+        "differences": [],
+        "reference_architecture": "arm64",
+        "script_sha256": "55cbbdb7a96457a1236baab903fe00e2c8d127741ce465e44ab33e9f25104423",
+        "evidence_sha256": "5ea48e54bdfe0ca993a6b3adf99272de9d1ee9a59c553eb3af9db364321c3278",
+        "source_report": "artifacts/coderabbit-review2-x86-rest/report.json",
+        "source_report_sha256": "7fc829ea12d7ce9e36c12466648054fffddeaa9657102bb41c4306d00c269bc3",
+        "source_run_completed": true,
+        "fixture_cleanup_verified": true
+      },
+      "session-files": {
+        "total": 9,
+        "differences": [],
+        "reference_architecture": "arm64",
+        "script_sha256": "ba2e6b8f48620216528ee7c8adf7613d4ca2d40f6d225b5e7b70aca281bd9ded",
+        "evidence_sha256": "03bd517f18d11c72cdf1c688c65c58d86e7d5cad4f44b041dc8c281e64c6c7ba",
+        "source_report": "artifacts/coderabbit-review2-x86-rest/report.json",
+        "source_report_sha256": "7fc829ea12d7ce9e36c12466648054fffddeaa9657102bb41c4306d00c269bc3",
+        "source_run_completed": true,
+        "fixture_cleanup_verified": true
+      },
+      "formats": {
+        "total": 12,
+        "differences": [],
+        "reference_architecture": "arm64",
+        "script_sha256": "20bee634632d9c6cc1386b74d6411eb8aafaec0399dce9a4f0cf3a1c202e989d",
+        "evidence_sha256": "d4e125a2fd4f6083d762f6c16ac92eb6fa53868a19bba1da3f2e92895b11197b",
+        "source_report": "artifacts/coderabbit-review2-x86-rest/report.json",
+        "source_report_sha256": "7fc829ea12d7ce9e36c12466648054fffddeaa9657102bb41c4306d00c269bc3",
+        "source_run_completed": true,
+        "fixture_cleanup_verified": true
+      },
+      "whitespace-formats": {
+        "total": 12,
+        "differences": [],
+        "reference_architecture": "arm64",
+        "script_sha256": "20bee634632d9c6cc1386b74d6411eb8aafaec0399dce9a4f0cf3a1c202e989d",
+        "evidence_sha256": "8bd8063c0edc69b592165ad329f2d6b19e766a962df2f195d0e39885294c179e",
+        "source_report": "artifacts/coderabbit-review2-x86-rest/report.json",
+        "source_report_sha256": "7fc829ea12d7ce9e36c12466648054fffddeaa9657102bb41c4306d00c269bc3",
+        "source_run_completed": true,
+        "fixture_cleanup_verified": true
+      },
+      "lifecycle": {
+        "total": 11,
+        "differences": [],
+        "reference_architecture": "arm64",
+        "script_sha256": "5ff0475c3ed57aa6ec43ab56a5c4cdf64dec64175828c2f796e3c67b8756787b",
+        "evidence_sha256": "cc4a3079bccc3f2019711d06ab633ce93dfae8d59517908c2fa51f1226bff5d6",
+        "source_report": "artifacts/coderabbit-review2-x86-rest/report.json",
+        "source_report_sha256": "7fc829ea12d7ce9e36c12466648054fffddeaa9657102bb41c4306d00c269bc3",
+        "source_run_completed": true,
+        "fixture_cleanup_verified": true
+      },
+      "named-lifecycle": {
+        "total": 11,
+        "differences": [],
+        "reference_architecture": "arm64",
+        "script_sha256": "5ff0475c3ed57aa6ec43ab56a5c4cdf64dec64175828c2f796e3c67b8756787b",
+        "evidence_sha256": "b81a2aed29ec404c9d27dd195f400a04139fd5a8c5b882f46dada6446e7a046c",
+        "source_report": "artifacts/coderabbit-review2-x86-rest/report.json",
+        "source_report_sha256": "7fc829ea12d7ce9e36c12466648054fffddeaa9657102bb41c4306d00c269bc3",
+        "source_run_completed": true,
+        "fixture_cleanup_verified": true
+      },
+      "console": {
+        "total": 9,
+        "differences": [],
+        "reference_architecture": "arm64",
+        "script_sha256": "208d1015f7a6649e7573d9de62fcca3c8328f3dcaa63277bcb95dd006f2ff276",
+        "evidence_sha256": "6f85beab83cafea542139013be00d01c48a2079c39cf8319ebad5e109fef5e47",
+        "source_report": "artifacts/coderabbit-review2-x86-rest/report.json",
+        "source_report_sha256": "7fc829ea12d7ce9e36c12466648054fffddeaa9657102bb41c4306d00c269bc3",
+        "source_run_completed": true,
+        "fixture_cleanup_verified": true
+      }
+    }
+  }
+}

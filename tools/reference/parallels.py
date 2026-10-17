@@ -7,10 +7,37 @@ import base64
 import copy
 import hashlib
 import json
+import os
 from pathlib import Path
 import re
 import subprocess
+import tempfile
+import threading
 import time
+from contextlib import contextmanager
+
+
+_guest_threads = {}
+_guest_threads_guard = threading.Lock()
+
+
+@contextmanager
+def _guest_lock(vm):
+    key = hashlib.sha256(vm.strip('{}').lower().encode()).hexdigest()
+    with _guest_threads_guard:
+        lock = _guest_threads.setdefault(key, threading.Lock())
+    with lock:
+        # The native transport runs on macOS. Keep offline Windows tests usable.
+        if os.name == 'nt':
+            yield
+            return
+        import fcntl
+        with (Path(tempfile.gettempdir()) / ('wmic-parallels-' + str(os.getuid()) + '-' + key + '.lock')).open('a+b') as handle:
+            fcntl.flock(handle, fcntl.LOCK_EX)
+            try:
+                yield
+            finally:
+                fcntl.flock(handle, fcntl.LOCK_UN)
 
 
 def validate_manifest(manifest: dict, allow_writes: bool = False) -> None:
@@ -24,7 +51,12 @@ def validate_manifest(manifest: dict, allow_writes: bool = False) -> None:
             raise ValueError("invalid or duplicate case ID: " + repr(name))
         seen.add(name)
         if "stdin_base64" in case:
-            base64.b64decode(case["stdin_base64"], validate=True)
+            stdin = base64.b64decode(case["stdin_base64"], validate=True)
+            texts = [stdin.decode('latin1')]
+            if len(stdin) % 2 == 0:
+                texts.append(stdin.decode('utf-16le', errors='surrogatepass'))
+            if any(re.search(r"(?i)/password\s*:", text) for text in texts):
+                raise ValueError("credential commands must not be persisted in stdin captures")
         arguments = case.get("arguments", "")
         if "arguments_utf16_base64" in case:
             raw = base64.b64decode(case["arguments_utf16_base64"], validate=True)
@@ -68,6 +100,13 @@ def write_capture(payload: dict, out: Path) -> dict:
 
 
 def run_guest_script(vm: str, script: str, timeout: int = 300, *, replay_safe: bool = False) -> bytes:
+    # Concurrent prlctl jobs on one guest can lose their result/status. Hold the
+    # lock across the entire execution, including explicitly safe retries.
+    with _guest_lock(vm):
+        return _run_guest_script(vm, script, timeout, replay_safe=replay_safe)
+
+
+def _run_guest_script(vm: str, script: str, timeout: int, *, replay_safe: bool) -> bytes:
     for attempt in range(3 if replay_safe else 1):
         result = subprocess.run(
             ["prlctl", "exec", vm, "powershell.exe", "-NoProfile", "-NonInteractive", "-Command", "-"],

@@ -104,6 +104,57 @@ pub(crate) fn lookup<'a>(r: &'a Record, name: &WideText) -> Option<&'a CimValue>
         .find(|p| p.name.eq_ignore_case(&name.to_string_lossy()))
         .map(|p| &p.value)
 }
+fn empty_output(
+    req: &ResolvedRequest,
+    node: &WideText,
+    error: Option<&ManagementError>,
+) -> Result<RenderedOutput, RenderError> {
+    #[cfg(windows)]
+    if let (Some(context), Some(spec)) = (&req.render_context, &req.format_spec) {
+        let mut output = transform(&xml::error_command_xml(context, node, error)?, spec)?;
+        if error.is_none() {
+            output.stderr = "No Instance(s) Available.\r\r\n".into();
+        }
+        return Ok(output);
+    }
+    let _ = node;
+    let explicit = req.modifiers.iter().rev().find_map(|m| {
+        if m.name.eq_ignore_case("format") {
+            if let SwitchValue::Value(v) = &m.value {
+                Some(v)
+            } else {
+                None
+            }
+        } else {
+            None
+        }
+    });
+    let format = explicit.or_else(|| req.view.as_ref().and(req.format.as_ref()));
+    let value = req.modifiers.iter().any(|m| m.name.eq_ignore_case("value"))
+        || format.is_some_and(|f| {
+            f.eq_ignore_case("list")
+                || f.eq_ignore_case("value")
+                || f.eq_ignore_case("wmiclivalueformat")
+        });
+    let stdout = if value {
+        "\r\r\n\r\r\n\r\r\n"
+    } else if format.is_some_and(|f| f.eq_ignore_case("csv")) {
+        "\r\r\nNode,\r\r\n"
+    } else if format.is_some_and(|f| f.eq_ignore_case("mof")) {
+        "\r\r\n"
+    } else {
+        "\r\r\n\r\r\n"
+    };
+    Ok(RenderedOutput {
+        stdout: stdout.into(),
+        stderr: if error.is_none() {
+            "No Instance(s) Available.\r\r\n".into()
+        } else {
+            WideText::default()
+        },
+        record: None,
+    })
+}
 pub fn render(input: RenderRequest<'_>) -> Result<RenderedOutput, RenderError> {
     let req = input.request;
     let result = match input.result {
@@ -128,6 +179,12 @@ pub fn render(input: RenderRequest<'_>) -> Result<RenderedOutput, RenderError> {
                 return Ok(diagnostic::text(&e.message, None));
             }
             let mut output = diagnostic::management(e, input.node);
+            if e.operation.eq_ignore_case("query")
+                || e.operation.eq_ignore_case("enumerate")
+                || e.operation.eq_ignore_case("convert")
+            {
+                output.stdout = empty_output(req, input.node, Some(e))?.stdout;
+            }
             if e.operation.eq_ignore_case("method") {
                 if !crate::backend::write::interactive(req) {
                     output.stdout =
@@ -158,16 +215,6 @@ pub fn render(input: RenderRequest<'_>) -> Result<RenderedOutput, RenderError> {
                     append(&mut output.stdout, &operation::start(req.verb, &e.target));
                 }
             }
-            if !output.stdout.0.is_empty()
-                && req.verb == Verb::List
-                && req.view.is_some()
-                && req
-                    .format
-                    .as_ref()
-                    .is_some_and(|f| f.eq_ignore_case("list"))
-            {
-                push(&mut output.stdout, NL);
-            }
             return Ok(output);
         }
     };
@@ -179,6 +226,9 @@ pub fn render(input: RenderRequest<'_>) -> Result<RenderedOutput, RenderError> {
                 .iter()
                 .any(|m| m.name.eq_ignore_case("format") || m.name.eq_ignore_case("translate"));
         let empty = matches!(result,ManagementResult::Objects(s) if s.objects.is_empty());
+        if empty {
+            return empty_output(req, input.node, None);
+        }
         let association_default = matches!(result, ManagementResult::Associations(_))
             && !req
                 .modifiers
@@ -219,11 +269,7 @@ pub fn render(input: RenderRequest<'_>) -> Result<RenderedOutput, RenderError> {
         return Err(RenderError::new("Not supported"));
     };
     if set.objects.is_empty() {
-        return Ok(RenderedOutput {
-            stdout: "\r\r\n\r\r\n".into(),
-            stderr: "No Instance(s) Available.\r\r\n".into(),
-            record: None,
-        });
+        return empty_output(req, input.node, None);
     }
     let cols = columns(req, &set.objects);
     let format = req

@@ -1,0 +1,32 @@
+[
+  {
+    "architecture": "arm64",
+    "target": "aarch64-pc-windows-msvc",
+    "sha256": "1f15d762c024b89ff5b90853c2f27a82d91a92831fa77abfc5612dcea6d12e9d",
+    "pe_machine": 43620,
+    "matched": 1559,
+    "total": 1562,
+    "new_stable_cases": 742,
+    "controlled_matched": 121
+  },
+  {
+    "architecture": "x64",
+    "target": "x86_64-pc-windows-msvc",
+    "sha256": "78c640e991d60b3aea0a0e9d8959789a4506ecd0d89321eb39cbbcdd6877f436",
+    "pe_machine": 34404,
+    "matched": 1559,
+    "total": 1562,
+    "new_stable_cases": 742,
+    "controlled_matched": 121
+  },
+  {
+    "architecture": "x86",
+    "target": "i686-pc-windows-msvc",
+    "sha256": "ab2f86eb3675963d3ec7ea0c598147b6d384f3ec8ba8e64825035fad477fbced",
+    "pe_machine": 332,
+    "matched": 1559,
+    "total": 1562,
+    "new_stable_cases": 742,
+    "controlled_matched": 121
+  }
+]
