@@ -1,0 +1,1028 @@
+{
+  "schema_version": 1,
+  "goal": "25 additional REA investigation passes after PR6",
+  "completed_passes": 25,
+  "definition": "One distinct compatibility hypothesis with native REA evidence, source comparison, controlled behavioral probes where supported, and a recorded finding or bounded negative/unknown result; setup calls do not count.",
+  "passes": [
+    {
+      "pass": 1,
+      "id": "global-prefix",
+      "question": "Slash versus hyphen switch prefixes and token boundaries",
+      "status": "investigated",
+      "native_evidence_ids": [
+        "ev_0d1c45b8b751acd17c93f6c073842f199ff6eade5182750ff9c112a08c1f1bd7"
+      ],
+      "probe_manifest": "artifacts/rea-goal-25/passes-01-06.json",
+      "case_ids": [
+        "p01-00",
+        "p01-01",
+        "p01-02",
+        "p01-03",
+        "p01-04",
+        "p01-05"
+      ],
+      "matched": 0,
+      "differences": {
+        "p01-00": [
+          "p01-00: exit_status: 0 != 44135",
+          "p01-00: stdout: 534 != 0 bytes; first difference at 0",
+          "p01-00: stderr: 0 != 29 bytes; first difference at 0"
+        ],
+        "p01-01": [
+          "p01-01: exit_status: 0 != 44135",
+          "p01-01: stdout: 535 != 0 bytes; first difference at 0",
+          "p01-01: stderr: 0 != 36 bytes; first difference at 0"
+        ],
+        "p01-02": [
+          "p01-02: exit_status: 0 != 44135",
+          "p01-02: stdout: 7379 != 0 bytes; first difference at 0",
+          "p01-02: stderr: 0 != 24 bytes; first difference at 0"
+        ],
+        "p01-03": [
+          "p01-03: exit_status: 0 != 44125",
+          "p01-03: stdout: 534 != 0 bytes; first difference at 0",
+          "p01-03: stderr: 0 != 25 bytes; first difference at 0"
+        ],
+        "p01-04": [
+          "p01-04: exit_status: 0 != 44143",
+          "p01-04: stdout: 535 != 0 bytes; first difference at 0",
+          "p01-04: stderr: 0 != 52 bytes; first difference at 0"
+        ],
+        "p01-05": [
+          "p01-05: exit_status: 0 != 44116",
+          "p01-05: stdout: 534 != 0 bytes; first difference at 0",
+          "p01-05: stderr: 0 != 48 bytes; first difference at 0"
+        ]
+      },
+      "result": "Hyphen-prefixed global switches and fullwidth CLI names/booleans are accepted by original, rejected by candidate.",
+      "fix_status": "fixed-and-verified",
+      "reference_capture_sha256": "25cb877f9d7b66094a4b02efc4b4ebbf74d56ea8607b0bb07819e67922bb38b7",
+      "verification_manifest": "tests/fixtures/rea-25-cases.json",
+      "verification": "All selected cases in 237-case suite pass on the native ARM64 reference profile; per-target reports are recorded separately."
+    },
+    {
+      "pass": 2,
+      "id": "global-separator",
+      "question": "Colon spacing, empty values, and adjacent switches",
+      "status": "investigated",
+      "native_evidence_ids": [
+        "ev_ed7878e900a538e28a77412d2d20d9de9e8597d770d7f1633cc3bcfb84d3fcfb"
+      ],
+      "probe_manifest": "artifacts/rea-goal-25/passes-01-06.json",
+      "case_ids": [
+        "p02-00",
+        "p02-01",
+        "p02-02",
+        "p02-03",
+        "p02-04",
+        "p02-05"
+      ],
+      "matched": 0,
+      "differences": {
+        "p02-00": [
+          "p02-00: exit_status: 0 != 44125",
+          "p02-00: stdout: 534 != 0 bytes; first difference at 0",
+          "p02-00: stderr: 0 != 25 bytes; first difference at 0"
+        ],
+        "p02-01": [
+          "p02-01: exit_status: 0 != 44125",
+          "p02-01: stdout: 535 != 0 bytes; first difference at 0",
+          "p02-01: stderr: 0 != 25 bytes; first difference at 0"
+        ],
+        "p02-02": [
+          "p02-02: exit_status: 0 != 44125",
+          "p02-02: stdout: 534 != 0 bytes; first difference at 0",
+          "p02-02: stderr: 0 != 25 bytes; first difference at 0"
+        ],
+        "p02-03": [
+          "p02-03: stdout: 535 != 534 bytes; first difference at 96"
+        ],
+        "p02-04": [
+          "p02-04: exit_status: 0 != 44143",
+          "p02-04: stdout: 535 != 0 bytes; first difference at 0",
+          "p02-04: stderr: 0 != 52 bytes; first difference at 0"
+        ],
+        "p02-05": [
+          "p02-05: exit_status: 0 != 44125",
+          "p02-05: stdout: 534 != 0 bytes; first difference at 0",
+          "p02-05: stderr: 0 != 25 bytes; first difference at 0"
+        ]
+      },
+      "result": "Separate colon tokens and adjacent switches are parsed by original; candidate whitespace-only switch tokenization differs.",
+      "fix_status": "fixed-and-verified",
+      "reference_capture_sha256": "25cb877f9d7b66094a4b02efc4b4ebbf74d56ea8607b0bb07819e67922bb38b7",
+      "verification_manifest": "tests/fixtures/rea-25-cases.json",
+      "verification": "All selected cases in 237-case suite pass on the native ARM64 reference profile; per-target reports are recorded separately."
+    },
+    {
+      "pass": 3,
+      "id": "global-help",
+      "question": "Help precedence and missing/invalid global value diagnostics",
+      "status": "investigated",
+      "native_evidence_ids": [
+        "ev_441df8d998ff4fe6561553ba50a7346805c7b4eab4035ff86176999f64804ce8"
+      ],
+      "probe_manifest": "artifacts/rea-goal-25/passes-01-06.json",
+      "case_ids": [
+        "p03-00",
+        "p03-01",
+        "p03-02",
+        "p03-03",
+        "p03-04",
+        "p03-05",
+        "p03-06",
+        "p03-07"
+      ],
+      "matched": 6,
+      "differences": {
+        "p03-03": [
+          "p03-03: exit_status: 0 != 44135",
+          "p03-03: stdout: 223 != 0 bytes; first difference at 0",
+          "p03-03: stderr: 0 != 28 bytes; first difference at 0"
+        ],
+        "p03-05": [
+          "p03-05: exit_status: 44103 != 44135",
+          "p03-05: stderr: 21 != 23 bytes; first difference at 0"
+        ]
+      },
+      "result": "Ordinary slash help/error cases match; hyphen help and separated-colon help reveal parser/precedence gaps.",
+      "fix_status": "fixed-and-verified",
+      "reference_capture_sha256": "25cb877f9d7b66094a4b02efc4b4ebbf74d56ea8607b0bb07819e67922bb38b7",
+      "verification_manifest": "tests/fixtures/rea-25-cases.json",
+      "verification": "All selected cases in 237-case suite pass on the native ARM64 reference profile; per-target reports are recorded separately."
+    },
+    {
+      "pass": 4,
+      "id": "namespace",
+      "question": "Relative/absolute namespace chaining and no-op spelling",
+      "status": "investigated",
+      "native_evidence_ids": [
+        "ev_aa57eaab34dbb708aa10ff3a3272b5251f4faf78366a7b17fb3c34a68b619aaa"
+      ],
+      "probe_manifest": "artifacts/rea-goal-25/passes-01-06.json",
+      "case_ids": [
+        "p04-00",
+        "p04-01",
+        "p04-02",
+        "p04-03",
+        "p04-04"
+      ],
+      "matched": 3,
+      "differences": {
+        "p04-00": [
+          "p04-00: stdout: 534 != 534 bytes; first difference at 24"
+        ],
+        "p04-03": [
+          "p04-03: stdout: 534 != 535 bytes; first difference at 34"
+        ]
+      },
+      "result": "Namespace equality preserves spelling, trims one trailing slash, and processes parent-prefix paths; missing in baseline.",
+      "fix_status": "fixed-and-verified",
+      "reference_capture_sha256": "25cb877f9d7b66094a4b02efc4b4ebbf74d56ea8607b0bb07819e67922bb38b7",
+      "verification_manifest": "tests/fixtures/rea-25-cases.json",
+      "verification": "All selected cases in 237-case suite pass on the native ARM64 reference profile; per-target reports are recorded separately."
+    },
+    {
+      "pass": 5,
+      "id": "role",
+      "question": "Role path/reset behavior and help precedence",
+      "status": "investigated",
+      "native_evidence_ids": [
+        "ev_55aa8af9f6f175cb67cc88321b46483b51194a428afd6e0731acb6077a55701c"
+      ],
+      "probe_manifest": "artifacts/rea-goal-25/passes-01-06.json",
+      "case_ids": [
+        "p05-00",
+        "p05-01",
+        "p05-02",
+        "p05-03",
+        "p05-04"
+      ],
+      "matched": 3,
+      "differences": {
+        "p05-00": [
+          "p05-00: stdout: 534 != 534 bytes; first difference at 61"
+        ],
+        "p05-03": [
+          "p05-03: stdout: 534 != 535 bytes; first difference at 69"
+        ]
+      },
+      "result": "Role shares namespace expansion and preserves equal spelling; baseline misses these rules.",
+      "fix_status": "fixed-and-verified",
+      "reference_capture_sha256": "25cb877f9d7b66094a4b02efc4b4ebbf74d56ea8607b0bb07819e67922bb38b7",
+      "verification_manifest": "tests/fixtures/rea-25-cases.json",
+      "verification": "All selected cases in 237-case suite pass on the native ARM64 reference profile; per-target reports are recorded separately."
+    },
+    {
+      "pass": 6,
+      "id": "node-list",
+      "question": "Node-list quoting, empty entries, and duplicate ordering",
+      "status": "investigated",
+      "native_evidence_ids": [
+        "ev_699f4a538d7c5aed2092ceaf0f2f9d4c8ccbf14941b81c6fcd22dd72e8c566ca",
+        "ev_9868280e11b76ad98ced80703e8320ee353bc7d47e26839ac41c1eb88dda092f",
+        "ev_b21b5548667bb9e4971c60a40452674ad85674a6daab341a1e33d59b3919efd1",
+        "ev_cbbe85cb72859ccefca4c7df5f8e95205be8c5d98e9852e7fbe917b233a2d1d5"
+      ],
+      "probe_manifest": "artifacts/rea-goal-25/passes-01-06.json",
+      "case_ids": [
+        "p06-00",
+        "p06-01",
+        "p06-02",
+        "p06-03",
+        "p06-04",
+        "p06-05",
+        "p06-06"
+      ],
+      "matched": 1,
+      "differences": {
+        "p06-00": [
+          "p06-00: stdout: 0 != 534 bytes; first difference at 0"
+        ],
+        "p06-01": [
+          "p06-01: stdout: 0 != 534 bytes; first difference at 0"
+        ],
+        "p06-02": [
+          "p06-02: exit_status: 44135 != 0",
+          "p06-02: stdout: 0 != 534 bytes; first difference at 0",
+          "p06-02: stderr: 32 != 0 bytes; first difference at 0"
+        ],
+        "p06-04": [
+          "p06-04: stdout: 0 != 528 bytes; first difference at 0"
+        ],
+        "p06-05": [
+          "p06-05: stdout: 0 != 522 bytes; first difference at 0"
+        ],
+        "p06-06": [
+          "p06-06: stdout: 527 != 526 bytes; first difference at 100"
+        ]
+      },
+      "result": "Quoted comma-containing node lists can consume CONTEXT or produce different alias errors; candidate differs. Lexer root cause still under investigation.",
+      "fix_status": "fixed-and-verified",
+      "reference_capture_sha256": "25cb877f9d7b66094a4b02efc4b4ebbf74d56ea8607b0bb07819e67922bb38b7",
+      "verification_manifest": "tests/fixtures/rea-25-cases.json",
+      "verification": "All selected cases in 237-case suite pass on the native ARM64 reference profile; per-target reports are recorded separately."
+    },
+    {
+      "pass": 7,
+      "id": "authlevel",
+      "question": "Authentication symbolic values and value/error precedence",
+      "status": "investigated",
+      "native_evidence_ids": [
+        "ev_af8da103cdf252df5a721d6df2d41eea81b8ecd03fade775ed41c9350be6fccd"
+      ],
+      "probe_manifest": "artifacts/rea-goal-25/passes-07-12.json",
+      "case_ids": [
+        "p07-00",
+        "p07-01",
+        "p07-02",
+        "p07-03",
+        "p07-04",
+        "p07-05"
+      ],
+      "matched": 5,
+      "differences": {
+        "p07-05": [
+          "p07-05: exit_status: 0 != 44135",
+          "p07-05: stdout: 7379 != 0 bytes; first difference at 0",
+          "p07-05: stderr: 0 != 23 bytes; first difference at 0"
+        ]
+      },
+      "result": "Authentication names use uppercased ordinal map keys: fullwidth and numeric security values reject in both; spaced-colon help differs.",
+      "fix_status": "fixed-and-verified",
+      "reference_capture_sha256": "46ab38ce693d41a3a2c219630e2acafb083d7a5c77c99b4edf9219b768f4b7ee",
+      "verification_manifest": "tests/fixtures/rea-25-cases.json",
+      "verification": "All selected cases in 237-case suite pass on the native ARM64 reference profile; per-target reports are recorded separately."
+    },
+    {
+      "pass": 8,
+      "id": "implevel",
+      "question": "Impersonation symbolic values and reset diagnostics",
+      "status": "investigated",
+      "native_evidence_ids": [
+        "ev_df5b17535b6b773255417f4d7996ddad63edf0e5ced596004abbfb917ea91add"
+      ],
+      "probe_manifest": "artifacts/rea-goal-25/passes-07-12.json",
+      "case_ids": [
+        "p08-00",
+        "p08-01",
+        "p08-02",
+        "p08-03",
+        "p08-04"
+      ],
+      "matched": 5,
+      "differences": {},
+      "result": "All five selected impersonation symbolic/numeric/fullwidth/space/reset probes match; bounded negative result.",
+      "fix_status": "bounded-no-change",
+      "reference_capture_sha256": "46ab38ce693d41a3a2c219630e2acafb083d7a5c77c99b4edf9219b768f4b7ee",
+      "verification_manifest": "tests/fixtures/rea-25-cases.json",
+      "verification": "All selected cases in 237-case suite pass on the native ARM64 reference profile; per-target reports are recorded separately."
+    },
+    {
+      "pass": 9,
+      "id": "privileges",
+      "question": "Privilege toggle spacing and token consumption",
+      "status": "investigated",
+      "native_evidence_ids": [
+        "ev_d5b85bd6fdcb3db16df542a9b56841db575639b725a074c9da5552795ffbae1e"
+      ],
+      "probe_manifest": "artifacts/rea-goal-25/passes-07-12.json",
+      "case_ids": [
+        "p09-00",
+        "p09-01",
+        "p09-02",
+        "p09-03",
+        "p09-04"
+      ],
+      "matched": 1,
+      "differences": {
+        "p09-00": [
+          "p09-00: exit_status: 0 != 44126",
+          "p09-00: stdout: 534 != 0 bytes; first difference at 0",
+          "p09-00: stderr: 0 != 61 bytes; first difference at 0"
+        ],
+        "p09-01": [
+          "p09-01: exit_status: 0 != 44126",
+          "p09-01: stdout: 535 != 0 bytes; first difference at 0",
+          "p09-01: stderr: 0 != 61 bytes; first difference at 0"
+        ],
+        "p09-03": [
+          "p09-03: exit_status: 0 != 44125",
+          "p09-03: stdout: 534 != 0 bytes; first difference at 0",
+          "p09-03: stderr: 0 != 25 bytes; first difference at 0"
+        ],
+        "p09-04": [
+          "p09-04: exit_status: 0 != 44135",
+          "p09-04: stdout: 535 != 0 bytes; first difference at 0",
+          "p09-04: stderr: 0 != 41 bytes; first difference at 0"
+        ]
+      },
+      "result": "Privilege toggles accept fullwidth ENABLE/DISABLE in original; candidate rejects. Shared global token gaps also reproduced.",
+      "fix_status": "fixed-and-verified",
+      "reference_capture_sha256": "46ab38ce693d41a3a2c219630e2acafb083d7a5c77c99b4edf9219b768f4b7ee",
+      "verification_manifest": "tests/fixtures/rea-25-cases.json",
+      "verification": "All selected cases in 237-case suite pass on the native ARM64 reference profile; per-target reports are recorded separately."
+    },
+    {
+      "pass": 10,
+      "id": "interactive-toggle",
+      "question": "Interactive confirmation state and reset/help diagnostics",
+      "status": "investigated",
+      "native_evidence_ids": [
+        "ev_05464e112e160d5d30f1cb44934b4fe67924e1270834d95d2498ecb294f13cc5"
+      ],
+      "probe_manifest": "artifacts/rea-goal-25/passes-07-12.json",
+      "case_ids": [
+        "p10-00",
+        "p10-01",
+        "p10-02",
+        "p10-03",
+        "p10-04"
+      ],
+      "matched": 2,
+      "differences": {
+        "p10-00": [
+          "p10-00: exit_status: 0 != 44134",
+          "p10-00: stdout: 534 != 0 bytes; first difference at 0",
+          "p10-00: stderr: 0 != 54 bytes; first difference at 0"
+        ],
+        "p10-01": [
+          "p10-01: exit_status: 0 != 44134",
+          "p10-01: stdout: 533 != 0 bytes; first difference at 0",
+          "p10-01: stderr: 0 != 54 bytes; first difference at 0"
+        ],
+        "p10-04": [
+          "p10-04: exit_status: 0 != 44125",
+          "p10-04: stdout: 534 != 0 bytes; first difference at 0",
+          "p10-04: stderr: 0 != 25 bytes; first difference at 0"
+        ]
+      },
+      "result": "Interactive ON/OFF values use width-insensitive comparison; candidate rejects those values; missing/error help probes match.",
+      "fix_status": "fixed-and-verified",
+      "reference_capture_sha256": "46ab38ce693d41a3a2c219630e2acafb083d7a5c77c99b4edf9219b768f4b7ee",
+      "verification_manifest": "tests/fixtures/rea-25-cases.json",
+      "verification": "All selected cases in 237-case suite pass on the native ARM64 reference profile; per-target reports are recorded separately."
+    },
+    {
+      "pass": 11,
+      "id": "aggregate",
+      "question": "Aggregation toggle state and idempotence",
+      "status": "investigated",
+      "native_evidence_ids": [
+        "ev_09e1e215161386f64bdc3bad08c723fe1b498357e0e0877cff8d7e633f1667c8"
+      ],
+      "probe_manifest": "artifacts/rea-goal-25/passes-07-12.json",
+      "case_ids": [
+        "p11-00",
+        "p11-01",
+        "p11-02",
+        "p11-03",
+        "p11-04"
+      ],
+      "matched": 3,
+      "differences": {
+        "p11-00": [
+          "p11-00: exit_status: 0 != 44143",
+          "p11-00: stdout: 534 != 0 bytes; first difference at 0",
+          "p11-00: stderr: 0 != 52 bytes; first difference at 0"
+        ],
+        "p11-01": [
+          "p11-01: exit_status: 0 != 44143",
+          "p11-01: stdout: 535 != 0 bytes; first difference at 0",
+          "p11-01: stderr: 0 != 52 bytes; first difference at 0"
+        ]
+      },
+      "result": "Aggregation values show same width-insensitive gap; ordinary repeated value, invalid spaces and help match.",
+      "fix_status": "fixed-and-verified",
+      "reference_capture_sha256": "46ab38ce693d41a3a2c219630e2acafb083d7a5c77c99b4edf9219b768f4b7ee",
+      "verification_manifest": "tests/fixtures/rea-25-cases.json",
+      "verification": "All selected cases in 237-case suite pass on the native ARM64 reference profile; per-target reports are recorded separately."
+    },
+    {
+      "pass": 12,
+      "id": "context",
+      "question": "CONTEXT trailing-token and switch grammar",
+      "status": "investigated",
+      "native_evidence_ids": [
+        "ev_3ba40a368fb84d94ae1a7372c21f70012de86ecfddf5484b89e8c898546ebfea"
+      ],
+      "probe_manifest": "artifacts/rea-goal-25/passes-07-12.json",
+      "case_ids": [
+        "p12-00",
+        "p12-01",
+        "p12-02",
+        "p12-03",
+        "p12-04",
+        "p12-05",
+        "p12-06"
+      ],
+      "matched": 3,
+      "differences": {
+        "p12-00": [
+          "p12-00: exit_status: 0 != 44135",
+          "p12-00: stdout: 534 != 0 bytes; first difference at 0",
+          "p12-00: stderr: 0 != 29 bytes; first difference at 0"
+        ],
+        "p12-02": [
+          "p12-02: exit_status: 48113 != 44124",
+          "p12-02: stderr: 26 != 35 bytes; first difference at 0"
+        ],
+        "p12-04": [
+          "p12-04: exit_status: 48113 != 44124",
+          "p12-04: stderr: 26 != 35 bytes; first difference at 0"
+        ],
+        "p12-05": [
+          "p12-05: exit_status: 0 != 44135",
+          "p12-05: stdout: 534 != 0 bytes; first difference at 0",
+          "p12-05: stderr: 0 != 29 bytes; first difference at 0"
+        ]
+      },
+      "result": "Original accepts fullwidth CONTEXT; invalid trailing switches use BBF1 context syntax error, candidate uses AC5C switch-level error.",
+      "fix_status": "fixed-and-verified",
+      "reference_capture_sha256": "46ab38ce693d41a3a2c219630e2acafb083d7a5c77c99b4edf9219b768f4b7ee",
+      "verification_manifest": "tests/fixtures/rea-25-cases.json",
+      "verification": "All selected cases in 237-case suite pass on the native ARM64 reference profile; per-target reports are recorded separately."
+    },
+    {
+      "pass": 13,
+      "id": "every-number",
+      "question": "EVERY numeric conversion, bounds, and scheduling grammar",
+      "status": "investigated",
+      "native_evidence_ids": [
+        "ev_9048db06ded9b622ddce5596ba874da1ad5a9626957a836a3f7b19b70b6bf838"
+      ],
+      "probe_manifest": "artifacts/rea-goal-25/passes-13-14.json",
+      "case_ids": [
+        "p13-00",
+        "p13-01",
+        "p13-02",
+        "p13-03",
+        "p13-04",
+        "p13-05",
+        "p13-06",
+        "p13-07",
+        "p13-08",
+        "p13-09",
+        "p13-10",
+        "p13-11",
+        "p13-12"
+      ],
+      "matched": 8,
+      "differences": {
+        "p13-03": [
+          "p13-03: exit_status: 0 != 44206",
+          "p13-03: stdout: 61 != 0 bytes; first difference at 0",
+          "p13-03: stderr: 0 != 55 bytes; first difference at 0"
+        ],
+        "p13-05": [
+          "p13-05: exit_status: 0 != 44206",
+          "p13-05: stdout: 61 != 0 bytes; first difference at 0",
+          "p13-05: stderr: 0 != 55 bytes; first difference at 0"
+        ],
+        "p13-09": [
+          "p13-09: exit_status: 0 != 44206",
+          "p13-09: stdout: 61 != 0 bytes; first difference at 0",
+          "p13-09: stderr: 0 != 55 bytes; first difference at 0"
+        ],
+        "p13-10": [
+          "p13-10: exit_status: 0 != 44206",
+          "p13-10: stdout: 61 != 0 bytes; first difference at 0",
+          "p13-10: stderr: 0 != 55 bytes; first difference at 0"
+        ],
+        "p13-12": [
+          "p13-12: exit_status: 0 != 44206",
+          "p13-12: stdout: 61 != 0 bytes; first difference at 0",
+          "p13-12: stderr: 0 != 55 bytes; first difference at 0"
+        ]
+      },
+      "result": "wcstoul accepts leading legacy whitespace, fullwidth digits, negative and overflow values; Rust u32 parser rejects them. Quoted empty value is zero.",
+      "fix_status": "fixed-and-verified",
+      "reference_capture_sha256": "e3fa9f7a83168c8dbdd20a11e7f460294369fc911b94f5f79dfb42329a8366c3",
+      "verification_manifest": "tests/fixtures/rea-25-cases.json",
+      "verification": "All selected cases in 237-case suite pass on the native ARM64 reference profile; per-target reports are recorded separately."
+    },
+    {
+      "pass": 14,
+      "id": "repeat-number",
+      "question": "REPEAT conversion, ordering, and bounded iteration",
+      "status": "investigated",
+      "native_evidence_ids": [
+        "ev_9672b4dc3964cf35364e5e35ee13636416f29bf787286d43aad2b604b3c384ac"
+      ],
+      "probe_manifest": "artifacts/rea-goal-25/passes-13-14.json",
+      "case_ids": [
+        "p14-00",
+        "p14-01",
+        "p14-02",
+        "p14-03",
+        "p14-04",
+        "p14-05",
+        "p14-06",
+        "p14-07",
+        "p14-08",
+        "p14-09",
+        "p14-10",
+        "p14-11",
+        "p14-12"
+      ],
+      "matched": 8,
+      "differences": {
+        "p14-03": [
+          "p14-03: exit_status: 0 != 44008",
+          "p14-03: stdout: 122 != 0 bytes; first difference at 0",
+          "p14-03: stderr: 0 != 24 bytes; first difference at 0"
+        ],
+        "p14-05": [
+          "p14-05: exit_status: 0 != 44008",
+          "p14-05: stdout: 122 != 0 bytes; first difference at 0",
+          "p14-05: stderr: 0 != 24 bytes; first difference at 0"
+        ],
+        "p14-07": [
+          "p14-07: exit_status: 0 != 44008",
+          "p14-07: stdout: 122 != 0 bytes; first difference at 0",
+          "p14-07: stderr: 0 != 24 bytes; first difference at 0"
+        ],
+        "p14-09": [
+          "p14-09: exit_status: 45222 != 0",
+          "p14-09: stdout: 0 != 100 bytes; first difference at 0",
+          "p14-09: stderr: 52 != 0 bytes; first difference at 0"
+        ],
+        "p14-12": [
+          "p14-12: exit_status: 45222 != 0",
+          "p14-12: stdout: 0 != 61 bytes; first difference at 0",
+          "p14-12: stderr: 52 != 0 bytes; first difference at 0"
+        ]
+      },
+      "result": "REPEAT uses wcstoul and must immediately follow EVERY; intervening VALUE and duplicate REPEAT produce B0A6.",
+      "fix_status": "fixed-and-verified",
+      "reference_capture_sha256": "e3fa9f7a83168c8dbdd20a11e7f460294369fc911b94f5f79dfb42329a8366c3",
+      "verification_manifest": "tests/fixtures/rea-25-cases.json",
+      "verification": "All selected cases in 237-case suite pass on the native ARM64 reference profile; per-target reports are recorded separately."
+    },
+    {
+      "pass": 15,
+      "id": "get-properties",
+      "question": "GET expression/property quoting and comma boundaries",
+      "status": "investigated",
+      "native_evidence_ids": [
+        "ev_495d3d4f641f9e8ec5172dc94f2055a901520592c445df2af6faa730e13863e1"
+      ],
+      "probe_manifest": "artifacts/rea-goal-25/passes-15-21.json",
+      "case_ids": [
+        "p15-00",
+        "p15-01",
+        "p15-02",
+        "p15-03",
+        "p15-04",
+        "p15-05",
+        "p15-06"
+      ],
+      "matched": 6,
+      "differences": {
+        "p15-00": [
+          "p15-00: exit_status: 0 != 2147749911",
+          "p15-00: stdout: 85 != 6 bytes; first difference at 0",
+          "p15-00: stderr: 0 != 64 bytes; first difference at 0"
+        ]
+      },
+      "result": "Separately quoted property followed by comma is unquoted by original but retained as a WQL quote by candidate.",
+      "fix_status": "fixed-and-verified",
+      "reference_capture_sha256": "2123de6f61f0727a896c9b9a855d06ca6c2c1f09ca0a0b8b86ab7ffc23fc3666",
+      "verification_manifest": "tests/fixtures/rea-25-cases.json",
+      "verification": "All selected cases in 237-case suite pass on the native ARM64 reference profile; per-target reports are recorded separately."
+    },
+    {
+      "pass": 16,
+      "id": "where-tokens",
+      "question": "WHERE token boundaries and malformed conditions",
+      "status": "investigated",
+      "native_evidence_ids": [
+        "ev_082260958b41f69f56388117febf70539124f734fa902385f735bc73f1fb6b3d"
+      ],
+      "probe_manifest": "artifacts/rea-goal-25/passes-15-21.json",
+      "case_ids": [
+        "p16-00",
+        "p16-01",
+        "p16-02",
+        "p16-03",
+        "p16-04",
+        "p16-05",
+        "p16-06"
+      ],
+      "matched": 7,
+      "differences": {},
+      "result": "Bounded negative: all seven selected quoted, parenthesized, empty and malformed WHERE probes match.",
+      "fix_status": "bounded-no-change",
+      "reference_capture_sha256": "2123de6f61f0727a896c9b9a855d06ca6c2c1f09ca0a0b8b86ab7ffc23fc3666",
+      "verification_manifest": "tests/fixtures/rea-25-cases.json",
+      "verification": "All selected cases in 237-case suite pass on the native ARM64 reference profile; per-target reports are recorded separately."
+    },
+    {
+      "pass": 17,
+      "id": "path-target",
+      "question": "Direct class/instance target parsing and quoted paths",
+      "status": "investigated",
+      "native_evidence_ids": [
+        "ev_acb7634fc843eae444c61e89c9367d557128ca5749a34ae29606bfa8a67360b8"
+      ],
+      "probe_manifest": "artifacts/rea-goal-25/passes-15-21.json",
+      "case_ids": [
+        "p17-00",
+        "p17-01",
+        "p17-02",
+        "p17-03",
+        "p17-04",
+        "p17-05",
+        "p17-06"
+      ],
+      "matched": 7,
+      "differences": {},
+      "result": "Bounded negative: all seven selected class/singleton/local-dot/local-host PATH probes match.",
+      "fix_status": "bounded-no-change",
+      "reference_capture_sha256": "2123de6f61f0727a896c9b9a855d06ca6c2c1f09ca0a0b8b86ab7ffc23fc3666",
+      "verification_manifest": "tests/fixtures/rea-25-cases.json",
+      "verification": "All selected cases in 237-case suite pass on the native ARM64 reference profile; per-target reports are recorded separately."
+    },
+    {
+      "pass": 18,
+      "id": "list-view",
+      "question": "LIST views, abbreviations, duplicate views, and option order",
+      "status": "investigated",
+      "native_evidence_ids": [
+        "ev_bddb7efee6518d92d97f7d549f1c2c13615a9627207ecc6299cf404a9790af86"
+      ],
+      "probe_manifest": "artifacts/rea-goal-25/passes-15-21.json",
+      "case_ids": [
+        "p18-00",
+        "p18-01",
+        "p18-02",
+        "p18-03",
+        "p18-04",
+        "p18-05",
+        "p18-06"
+      ],
+      "matched": 4,
+      "differences": {
+        "p18-02": [
+          "p18-02: exit_status: 0 != 2147749911",
+          "p18-02: stdout: 211 != 6 bytes; first difference at 0",
+          "p18-02: stderr: 0 != 64 bytes; first difference at 0"
+        ],
+        "p18-03": [
+          "p18-03: exit_status: 44211 != 2147749911",
+          "p18-03: stdout: 0 != 6 bytes; first difference at 0",
+          "p18-03: stderr: 70 != 64 bytes; first difference at 0"
+        ],
+        "p18-05": [
+          "p18-05: exit_status: 44214 != 2147749911",
+          "p18-05: stdout: 0 != 6 bytes; first difference at 0",
+          "p18-05: stderr: 27 != 64 bytes; first difference at 0"
+        ]
+      },
+      "result": "Fullwidth LIST view lookup and invalid/duplicate view diagnostic statuses differ.",
+      "fix_status": "fixed-and-verified",
+      "reference_capture_sha256": "2123de6f61f0727a896c9b9a855d06ca6c2c1f09ca0a0b8b86ab7ffc23fc3666",
+      "verification_manifest": "tests/fixtures/rea-25-cases.json",
+      "verification": "All selected cases in 237-case suite pass on the native ARM64 reference profile; per-target reports are recorded separately."
+    },
+    {
+      "pass": 19,
+      "id": "format-name",
+      "question": "FORMAT aliases, case, and invalid-name diagnostics",
+      "status": "investigated",
+      "native_evidence_ids": [
+        "ev_1c2870d671435d6650cd11e5759abfe373bf20d9505e576650da43a0b34ebbdb"
+      ],
+      "probe_manifest": "artifacts/rea-goal-25/passes-15-21.json",
+      "case_ids": [
+        "p19-00",
+        "p19-01",
+        "p19-02",
+        "p19-03",
+        "p19-04",
+        "p19-05",
+        "p19-06"
+      ],
+      "matched": 3,
+      "differences": {
+        "p19-02": [
+          "p19-02: exit_status: 0 != 44210",
+          "p19-02: stdout: 61 != 0 bytes; first difference at 0",
+          "p19-02: stderr: 0 != 37 bytes; first difference at 0"
+        ],
+        "p19-03": [
+          "p19-03: exit_status: 44210 != 0",
+          "p19-03: stdout: 0 != 61 bytes; first difference at 0",
+          "p19-03: stderr: 37 != 0 bytes; first difference at 0"
+        ],
+        "p19-05": [
+          "p19-05: exit_status: 0 != 44212",
+          "p19-05: stdout: 61 != 0 bytes; first difference at 0",
+          "p19-05: stderr: 0 != 22 bytes; first difference at 0"
+        ],
+        "p19-06": [
+          "p19-06: exit_status: 44210 != 44212",
+          "p19-06: stderr: 37 != 22 bytes; first difference at 8"
+        ]
+      },
+      "result": "Fullwidth format names, bare FORMAT, empty FORMAT and csv.xsl resolution differ.",
+      "fix_status": "fixed-and-verified",
+      "reference_capture_sha256": "2123de6f61f0727a896c9b9a855d06ca6c2c1f09ca0a0b8b86ab7ffc23fc3666",
+      "verification_manifest": "tests/fixtures/rea-25-cases.json",
+      "verification": "All selected cases in 237-case suite pass on the native ARM64 reference profile; per-target reports are recorded separately."
+    },
+    {
+      "pass": 20,
+      "id": "format-parameters",
+      "question": "FORMAT parameter quoting and transform chain grammar",
+      "status": "investigated",
+      "native_evidence_ids": [
+        "ev_9868280e11b76ad98ced80703e8320ee353bc7d47e26839ac41c1eb88dda092f",
+        "ev_f3f33fa549fd9fe1226fcd8637ef488dd133a335ca6d55902ee934501f0d0ca4"
+      ],
+      "probe_manifest": "artifacts/rea-goal-25/passes-15-21.json",
+      "case_ids": [
+        "p20-00",
+        "p20-01",
+        "p20-02",
+        "p20-03",
+        "p20-04",
+        "p20-05",
+        "p20-06"
+      ],
+      "matched": 5,
+      "differences": {
+        "p20-05": [
+          "p20-05: exit_status: 2147500037 != 0",
+          "p20-05: stdout: 0 != 61 bytes; first difference at 0",
+          "p20-05: stderr: 43 != 0 bytes; first difference at 0"
+        ],
+        "p20-06": [
+          "p20-06: exit_status: 0 != 44029",
+          "p20-06: stdout: 61 != 0 bytes; first difference at 0",
+          "p20-06: stderr: 0 != 26 bytes; first difference at 0"
+        ]
+      },
+      "result": "Comma inside a quoted parameter exercises original tokenizer failure; spaced parameter colons are accepted by original.",
+      "fix_status": "fixed-and-verified",
+      "reference_capture_sha256": "2123de6f61f0727a896c9b9a855d06ca6c2c1f09ca0a0b8b86ab7ffc23fc3666",
+      "verification_manifest": "tests/fixtures/rea-25-cases.json",
+      "verification": "All selected cases in 237-case suite pass on the native ARM64 reference profile; per-target reports are recorded separately."
+    },
+    {
+      "pass": 21,
+      "id": "translate",
+      "question": "TRANSLATE naming, case, order and errors",
+      "status": "investigated",
+      "native_evidence_ids": [
+        "ev_bc57d82b9bc28c5c838f27c105b0c8a062bb3dbdb1189e5a27ef2140e707bc19"
+      ],
+      "probe_manifest": "artifacts/rea-goal-25/passes-15-21.json",
+      "case_ids": [
+        "p21-00",
+        "p21-01",
+        "p21-02",
+        "p21-03",
+        "p21-04",
+        "p21-05",
+        "p21-06"
+      ],
+      "matched": 6,
+      "differences": {
+        "p21-04": [
+          "p21-04: exit_status: 44012 != 44013",
+          "p21-04: stderr: 28 != 54 bytes; first difference at 0"
+        ]
+      },
+      "result": "Empty TRANSLATE must report ABEC syntax error before table lookup; remaining selected probes match.",
+      "fix_status": "fixed-and-verified",
+      "reference_capture_sha256": "2123de6f61f0727a896c9b9a855d06ca6c2c1f09ca0a0b8b86ab7ffc23fc3666",
+      "verification_manifest": "tests/fixtures/rea-25-cases.json",
+      "verification": "All selected cases in 237-case suite pass on the native ARM64 reference profile; per-target reports are recorded separately."
+    },
+    {
+      "pass": 22,
+      "id": "assoc-options",
+      "question": "ASSOC option grammar/help without mutable operations",
+      "status": "investigated",
+      "native_evidence_ids": [
+        "ev_84a8b98b57916554999b80c59723e8ba7fe24682c61a63e1a1fcb51548645005"
+      ],
+      "probe_manifest": "artifacts/rea-goal-25/passes-22-25.json",
+      "case_ids": [
+        "p22-00",
+        "p22-01",
+        "p22-02",
+        "p22-03",
+        "p22-04",
+        "p22-05",
+        "p22-06"
+      ],
+      "matched": 4,
+      "differences": {
+        "p22-04": [
+          "p22-04: exit_status: 45192 != 0",
+          "p22-04: stdout: 0 != 7716 bytes; first difference at 0",
+          "p22-04: stderr: 24 != 0 bytes; first difference at 0"
+        ],
+        "p22-05": [
+          "p22-05: exit_status: 46019 != 0",
+          "p22-05: stdout: 0 != 7716 bytes; first difference at 0",
+          "p22-05: stderr: 24 != 0 bytes; first difference at 0"
+        ],
+        "p22-06": [
+          "p22-06: exit_status: 45192 != 44124",
+          "p22-06: stderr: 24 != 35 bytes; first difference at 0"
+        ]
+      },
+      "result": "Empty/unknown ASSOC modifiers and unexpected positional tokens need native B088/B3C3 diagnostics.",
+      "fix_status": "fixed-and-verified",
+      "reference_capture_sha256": "1fb396e2d475885d6fb0d620e04d5d2f2b0197b53c27e4b23a3d9fde50a5f4f4",
+      "verification_manifest": "tests/fixtures/rea-25-cases.json",
+      "verification": "All selected cases in 237-case suite pass on the native ARM64 reference profile; per-target reports are recorded separately."
+    },
+    {
+      "pass": 23,
+      "id": "method-arguments",
+      "question": "Method argument/help parsing; only read-only runtime probes",
+      "status": "investigated",
+      "native_evidence_ids": [
+        "ev_46ea9e2125e7abed8d3eeb80828c8b7a14cd37efe660cf83db72f39a6256363f"
+      ],
+      "probe_manifest": "artifacts/rea-goal-25/passes-22-25.json",
+      "case_ids": [
+        "p23-00",
+        "p23-01",
+        "p23-02",
+        "p23-03",
+        "p23-04",
+        "p23-05"
+      ],
+      "matched": 4,
+      "differences": {
+        "p23-03": [
+          "p23-03: exit_status: 44029 != 0",
+          "p23-03: stdout: 0 != 83 bytes; first difference at 0",
+          "p23-03: stderr: 39 != 0 bytes; first difference at 0"
+        ],
+        "p23-04": [
+          "p23-04: exit_status: 44005 != 44029",
+          "p23-04: stderr: 19 != 30 bytes; first difference at 0"
+        ]
+      },
+      "result": "Unknown method help and help followed by extra token have incorrect diagnostics; known read-only method help matches.",
+      "fix_status": "fixed-and-verified",
+      "reference_capture_sha256": "1fb396e2d475885d6fb0d620e04d5d2f2b0197b53c27e4b23a3d9fde50a5f4f4",
+      "verification_manifest": "tests/fixtures/rea-25-cases.json",
+      "verification": "All selected cases in 237-case suite pass on the native ARM64 reference profile; per-target reports are recorded separately."
+    },
+    {
+      "pass": 24,
+      "id": "xml-context",
+      "question": "Projected XML metadata and context representation",
+      "status": "investigated",
+      "native_evidence_ids": [
+        "ev_30de1e881f5daecb5af09062bd80db60dd6109683872c08f40df25b37c9baac8"
+      ],
+      "probe_manifest": "artifacts/rea-goal-25/passes-22-25.json",
+      "case_ids": [
+        "p24-00",
+        "p24-01",
+        "p24-02",
+        "p24-03",
+        "p24-04"
+      ],
+      "matched": 0,
+      "differences": {
+        "p24-00": [
+          "p24-00: stdout: 944 != 944 bytes; first difference at 83"
+        ],
+        "p24-01": [
+          "p24-01: stdout: 1684 != 1684 bytes; first difference at 83"
+        ],
+        "p24-02": [
+          "p24-02: stdout: 968 != 968 bytes; first difference at 83"
+        ],
+        "p24-03": [
+          "p24-03: stdout: 881 != 881 bytes; first difference at 83"
+        ],
+        "p24-04": [
+          "p24-04: stdout: 979 != 979 bytes; first difference at 83"
+        ]
+      },
+      "result": "Five projected/raw XML probes match after predeclared root COMMAND STARTTIME-only normalization. All other envelope/data bytes remain strict.",
+      "fix_status": "bounded-no-change",
+      "reference_capture_sha256": "1fb396e2d475885d6fb0d620e04d5d2f2b0197b53c27e4b23a3d9fde50a5f4f4",
+      "verification_manifest": "tests/fixtures/rea-25-cases.json",
+      "verification": "All selected cases in 237-case suite pass on the native ARM64 reference profile; per-target reports are recorded separately."
+    },
+    {
+      "pass": 25,
+      "id": "interactive-recovery",
+      "question": "EOF/error recovery and persistent settings",
+      "status": "investigated",
+      "native_evidence_ids": [
+        "ev_2829d90b9cc38e632ec54d4b52b769011a05da82c493898d7e6ac5be05606284"
+      ],
+      "probe_manifest": "artifacts/rea-goal-25/passes-22-25.json",
+      "case_ids": [
+        "p25-00",
+        "p25-01",
+        "p25-02",
+        "p25-03",
+        "p25-04",
+        "p25-05"
+      ],
+      "matched": 4,
+      "differences": {
+        "p25-02": [
+          "p25-02: stderr: 26 != 35 bytes; first difference at 0"
+        ],
+        "p25-03": [
+          "p25-03: stdout: 1130 != 1139 bytes; first difference at 56"
+        ]
+      },
+      "result": "Interactive error recovery works; context error diagnostics and parent namespace state differ as independently confirmed in passes4/12.",
+      "fix_status": "fixed-and-verified",
+      "reference_capture_sha256": "1fb396e2d475885d6fb0d620e04d5d2f2b0197b53c27e4b23a3d9fde50a5f4f4",
+      "verification_manifest": "tests/fixtures/rea-25-cases.json",
+      "verification": "All selected cases in 237-case suite pass on the native ARM64 reference profile; per-target reports are recorded separately."
+    }
+  ],
+  "merge_pr6": {
+    "state": "MERGED",
+    "commit": "0bb50c5b574ee2521edca57665a8d47bed08701e"
+  },
+  "implementation_complete": true,
+  "reference_artifact": {
+    "architecture": "ARM64",
+    "version": "10.0.26100.1",
+    "sha256": "2ef794c4940afea56c6d6d3b9bc9e66965bc7333e79c5dcb2def3c0e36f0834c"
+  },
+  "native_bundle": {
+    "sha256": "e93566c2e0c56cb924c4703d106ad7fdc5fd013359810f967d121115d68cdfe4",
+    "records": 44,
+    "retained_locally": true,
+    "redistributed": false
+  },
+  "post_merge_baseline": "0bb50c5b574ee2521edca57665a8d47bed08701e",
+  "privacy_boundary": "Credential-looking text swallowed by NODE is rejected before settings assignment; malformed credential names/colons use conservative redaction.",
+  "additional_regressions": [
+    {
+      "cases": [
+        "switch-help/switch-help-7",
+        "more-help/more-help-7",
+        "more-help/more-help-8"
+      ],
+      "resolution": "ASSOC filter value validation deferred until terminal help is recognized."
+    },
+    {
+      "cases": [
+        "connection/selected-ip-and-local",
+        "node-file/nodes-file-ascii",
+        "node-file/nodes-file-utf16"
+      ],
+      "resolution": "An aggregate with successful objects no longer emits an empty table for each failed node; the pre-PR6 baseline reproduced this blank-output behavior on the current selected-IP fixture."
+    }
+  ]
+}

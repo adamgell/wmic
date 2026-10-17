@@ -120,7 +120,7 @@ impl OutputSink for Sink {
 fn ordered_nodes_preserve_success_before_enumeration_failure() {
     let (mut b, mut sink) = (Ordered::default(), Sink::default());
     let out = Session::new(wide("LOCAL")).unwrap().execute(
-        &wide("/node:node-a,node-b os get Caption"),
+        &wide(r#"/node:"node-a","node-b" os get Caption"#),
         EntryMode::Interactive,
         &mut b,
         &mut sink,
@@ -130,6 +130,35 @@ fn ordered_nodes_preserve_success_before_enumeration_failure() {
     assert_eq!(out.nodes[1].exit_status, 0x80041003);
     assert!(sink.stdout.to_string_lossy().contains("First node"));
     assert!(sink.stderr.to_string_lossy().contains("Node - node-b"));
+}
+
+#[test]
+fn aggregated_success_has_no_extra_empty_table_from_a_failed_node() {
+    for nodes in [r#""node-a","node-b""#, r#""node-b","node-a""#] {
+        let (mut backend, mut sink) = (Ordered::default(), Sink::default());
+        let outcome = Session::new(wide("LOCAL")).unwrap().execute(
+            &wide(&format!("/node:{nodes} os get Caption")),
+            EntryMode::Interactive,
+            &mut backend,
+            &mut sink,
+        );
+        assert_eq!(outcome.exit_status, 0x80041003);
+        assert!(
+            sink.stdout.to_string_lossy().starts_with("Caption"),
+            "{:?}",
+            sink.stdout
+        );
+        assert!(sink.stderr.to_string_lossy().contains("Access denied"));
+    }
+    let (mut backend, mut sink) = (Ordered::default(), Sink::default());
+    let outcome = Session::new(wide("LOCAL")).unwrap().execute(
+        &wide(r#"/node:"node-b" os get Caption"#),
+        EntryMode::Interactive,
+        &mut backend,
+        &mut sink,
+    );
+    assert_eq!(outcome.exit_status, 0x80041003);
+    assert_eq!(sink.stdout, wide("\r\r\n\r\r\n"));
 }
 #[test]
 fn conflicting_authority_and_user_domain_is_rejected_by_connection_validation() {
@@ -158,6 +187,85 @@ fn numeric_failfast_keeps_the_requested_timeout() {
     assert!(s.failfast);
     assert_eq!(s.failfast_timeout_ms, 125);
     assert_eq!(SessionSettings::default().failfast_timeout_ms, 5000);
+}
+
+#[test]
+fn numeric_failfast_matches_captured_windows_crt_conversion() {
+    let fixture: serde_json::Value =
+        serde_json::from_str(include_str!("fixtures/legacy-wtol.json")).unwrap();
+    for case in fixture["values"].as_array().unwrap() {
+        let input = case["input"].as_str().unwrap();
+        if input.eq_ignore_ascii_case("on") || input.eq_ignore_ascii_case("off") {
+            continue;
+        }
+        let expected = case["value"].as_i64().unwrap();
+        let parsed = parse_command(
+            &wide(&format!("/failfast:\"{input}\" context")),
+            EntryMode::Interactive,
+        )
+        .unwrap();
+        let actual = SessionSettings::default().for_command(&parsed);
+        if expected > 0 {
+            let actual = actual.unwrap_or_else(|e| panic!("{input:?}: {e:?}"));
+            assert!(actual.failfast, "{input:?}");
+            assert_eq!(actual.failfast_timeout_ms, expected as u32, "{input:?}");
+        } else {
+            assert_eq!(actual.unwrap_err().code, 0xAC68, "{input:?}");
+        }
+    }
+}
+
+#[test]
+fn numeric_failfast_accepts_captured_crt_digit_and_space_classes() {
+    let fixture: serde_json::Value =
+        serde_json::from_str(include_str!("fixtures/legacy-wtol.json")).unwrap();
+    for zero in fixture["digit_zero_units"].as_array().unwrap() {
+        let zero = zero.as_u64().unwrap() as u32;
+        for digit in 0..10 {
+            let input = format!("{}1", char::from_u32(zero + digit).unwrap());
+            let actual = settings(&format!("/failfast:\"{input}\" context"));
+            assert_eq!(actual.failfast_timeout_ms, digit * 10 + 1, "{input:?}");
+        }
+    }
+    for unit in fixture["space_units"].as_array().unwrap() {
+        let input = format!(
+            "{}125",
+            char::from_u32(unit.as_u64().unwrap() as u32).unwrap()
+        );
+        assert_eq!(
+            settings(&format!("/failfast:\"{input}\" context")).failfast_timeout_ms,
+            125,
+            "{input:?}"
+        );
+    }
+}
+
+#[test]
+fn locale_keeps_the_spelling_of_an_unchanged_value() {
+    let initial = settings("/locale:MS_409 context");
+    assert_eq!(initial.locale, wide("ms_409"));
+    let changed = initial
+        .for_command(
+            &parse_command(&wide("/locale:MS_411 context"), EntryMode::Interactive).unwrap(),
+        )
+        .unwrap();
+    assert_eq!(changed.locale, wide("MS_411"));
+    let same = changed
+        .for_command(
+            &parse_command(&wide("/locale:ms_411 context"), EntryMode::Interactive).unwrap(),
+        )
+        .unwrap();
+    assert_eq!(same.locale, wide("MS_411"));
+    let default = same
+        .for_command(
+            &parse_command(&wide("/locale:MS_409 context"), EntryMode::Interactive).unwrap(),
+        )
+        .unwrap();
+    assert_eq!(default.locale, wide("MS_409"));
+    let reset = default
+        .for_command(&parse_command(&wide("/locale:\"\" context"), EntryMode::Interactive).unwrap())
+        .unwrap();
+    assert_eq!(reset.locale, wide("MS_409"));
 }
 
 #[test]
@@ -204,7 +312,7 @@ fn repeated_queries_keep_their_connection_settings() {
     }
     let (mut b, mut sink) = (Ordered::default(), Sink::default());
     let out = Session::new(wide("LOCAL")).unwrap().execute_with_scheduler(
-        &wide("/node:node-a /authlevel:pktprivacy os get Caption /every:2"),
+        &wide(r#"/node:"node-a" /authlevel:pktprivacy os get Caption /every:2"#),
         EntryMode::Interactive,
         &mut b,
         &mut sink,

@@ -7,6 +7,44 @@ use std::fmt;
 pub struct WideText(pub Vec<u16>);
 
 impl WideText {
+    /// WMIC's command-language comparator uses the user's Windows locale,
+    /// ignoring case and character width. WMI identifiers remain ordinal.
+    pub fn eq_cli(&self, text: &str) -> bool {
+        self.eq_cli_text(&Self::from(text))
+    }
+
+    pub fn eq_cli_text(&self, other: &Self) -> bool {
+        if self.0.is_empty() || other.0.is_empty() {
+            return self.0.is_empty() && other.0.is_empty();
+        }
+        #[cfg(windows)]
+        {
+            (unsafe {
+                windows::Win32::Globalization::CompareStringW(0x400, 0x20001, &self.0, &other.0)
+            }) == windows::Win32::Globalization::CSTR_EQUAL
+        }
+        #[cfg(not(windows))]
+        {
+            // Portable command keywords cover ASCII and its fullwidth forms.
+            // Windows uses CompareStringW for the complete locale behavior.
+            fn narrow(value: &WideText) -> WideText {
+                WideText(
+                    value
+                        .0
+                        .iter()
+                        .filter(|&&u| u != 0x00ad)
+                        .map(|&u| match u {
+                            0xff01..=0xff5e => u - 0xfee0,
+                            0x3000 => 0x20,
+                            _ => u,
+                        })
+                        .collect(),
+                )
+            }
+            narrow(self).eq_ordinal_ignore_case(&narrow(other))
+        }
+    }
+
     pub fn eq_ignore_case(&self, text: &str) -> bool {
         if text.is_ascii() && self.0.iter().all(|u| *u < 128) {
             return self.0.len() == text.len()

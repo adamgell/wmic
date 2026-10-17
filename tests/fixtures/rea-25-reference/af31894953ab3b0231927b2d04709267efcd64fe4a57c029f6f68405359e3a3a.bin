@@ -1,0 +1,9 @@
+
+NODE - Specify which servers the alias will operate against.
+USAGE:
+
+/NODE:<machine id list>
+NOTE: <machine id list> ::= <@filename | machine id> | <@filename | machine id> <,machine id list>
+
+NOTE: Enclose the switch value in  double quotes, if the value contains special  characters like '-' or '/'.
+

@@ -1,0 +1,13 @@
+
+Returns the result of query: ASSOCIATORS OF {<wmi object>}.
+USAGE:
+
+ASSOC[:<format specifier>] [<assoc switches>]
+NOTE: <format specifier> ::= (<xsl file name> |  KEYWORD)
+
+The following ASSOC switches are available:
+
+/RESULTCLASS:<classname>    - Indicates that the returned endpoints associated with the source object must belong to or be derived from the specified class.
+/RESULTROLE:<rolename>      - Indicates that the returned endpoints must play a particular role in their association with the source object.
+/ASSOCCLASS:<assocclass>    - Indicates that the returned endpoints must be associated with the source through the specified class or one of its derived classes.
+

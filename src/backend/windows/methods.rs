@@ -127,7 +127,7 @@ pub(super) fn execute(
     let method = schema
         .methods
         .iter()
-        .find(|m| requested.eq_ignore_case(&m.name.to_string_lossy()))
+        .find(|m| requested.eq_cli_text(&m.name))
         .ok_or_else(|| input_error(undeclared_method(&requested, r.alias_target), r))?;
     let bound = bind_method(method, &r.arguments).map_err(|e| input_error(e, r))?;
     let targets = if method.is_static || r.class_mode {
@@ -140,7 +140,9 @@ pub(super) fn execute(
             .collect()
     };
     let mut signature = None;
-    let name: Vec<u16> = method.name.0.iter().copied().chain([0]).collect();
+    // WMIC recognizes the CLI verb before asking WMI to validate its original
+    // spelling. Fullwidth WMI identifiers therefore fail with WBEM_E_NOT_FOUND.
+    let name: Vec<u16> = requested.0.iter().copied().chain([0]).collect();
     unsafe {
         class.GetMethod(
             PCWSTR(name.as_ptr()),

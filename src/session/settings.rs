@@ -85,14 +85,21 @@ impl SessionSettings {
                 "record" => s.record = value,
                 "namespace" => {
                     s.explicit_namespace = value.is_some();
-                    s.namespace = namespace(
-                        value,
-                        &s.namespace,
-                        &defaults.namespace,
-                        m.raw_value.as_ref(),
-                        0xAC4B,
-                        "Invalid Namespace.",
-                    )?;
+                    // WMIC's empty namespace setter compares the role against
+                    // the default namespace before deciding whether to reset.
+                    if !(value.is_none()
+                        && m.raw_value.as_ref().is_some_and(|v| !v.0.is_empty())
+                        && s.role.eq_cli_text(&defaults.namespace))
+                    {
+                        s.namespace = namespace(
+                            value,
+                            &s.namespace,
+                            &defaults.namespace,
+                            m.raw_value.as_ref(),
+                            0xAC4B,
+                            "Invalid Namespace.",
+                        )?;
+                    }
                 }
                 "role" => {
                     s.explicit_role = value.is_some();
@@ -148,7 +155,13 @@ impl SessionSettings {
                     )
                     .ok_or_else(|| setting_error(0xAC48, "Invalid Impersonation Level."))?;
                 }
-                "locale" => s.locale = value.unwrap_or_else(|| defaults.locale.clone()),
+                "locale" => {
+                    let next = value.unwrap_or_else(|| defaults.locale.clone());
+                    // WMIC's setter leaves the stored spelling intact for an equal locale.
+                    if !s.locale.eq_ordinal_ignore_case(&next) {
+                        s.locale = next;
+                    }
+                }
                 "privileges" => {
                     if value.is_none() {
                         return Err(setting_error(
@@ -171,11 +184,7 @@ impl SessionSettings {
                             "Invalid FailFast Option Value (ON|OFF expected).",
                         ));
                     }
-                    if let Some(ms) = value
-                        .as_ref()
-                        .and_then(|v| v.to_string_lossy().parse::<u32>().ok())
-                        .filter(|ms| *ms > 0)
-                    {
+                    if let Some(ms) = value.as_ref().and_then(failfast_timeout) {
                         s.failfast = true;
                         s.failfast_timeout_ms = ms;
                     } else {
@@ -248,11 +257,55 @@ fn level(v: Option<&WideText>, names: &[&str], base: u32, default: u32) -> Optio
             .map(|i| i as u32 + base),
     }
 }
+
+// The original calls legacy msvcrt!_wtol, then checks the signed 32-bit result.
+// Its digit/space classes and wrapping arithmetic differ from Rust's parsers and
+// modern UCRT conversion. See docs/research/rea-switch-values.md for the oracle.
+fn failfast_timeout(value: &WideText) -> Option<u32> {
+    let mut units = value
+        .0
+        .iter()
+        .copied()
+        .skip_while(|u| {
+            matches!(
+                u,
+                0x09..=0x0d | 0x20 | 0xa0 | 0x1680 | 0x180e | 0x2000..=0x200a
+                    | 0x2028 | 0x2029 | 0x202f | 0x205f | 0x3000
+            )
+        })
+        .peekable();
+    let negative = match units.peek() {
+        Some(0x2b) => {
+            units.next();
+            false
+        }
+        Some(0x2d) => {
+            units.next();
+            true
+        }
+        _ => false,
+    };
+    let mut number = 0_u32;
+    for unit in units {
+        let digit = [
+            0x0030, 0x0660, 0x06f0, 0x0966, 0x09e6, 0x0a66, 0x0ae6, 0x0b66, 0x0c66, 0x0ce6, 0x0d66,
+            0x0e50, 0x0ed0, 0x0f20, 0x1040, 0x17e0, 0x1810, 0xff10,
+        ]
+        .into_iter()
+        .find_map(|zero| unit.checked_sub(zero).filter(|d| *d < 10));
+        let Some(digit) = digit else { break };
+        number = number.wrapping_mul(10).wrapping_add(u32::from(digit));
+    }
+    if negative {
+        number = number.wrapping_neg();
+    }
+    ((number as i32) > 0).then_some(number)
+}
 fn toggle(v: Option<&WideText>, on: &str, off: &str, default: bool) -> Option<bool> {
     match v {
         None => Some(default),
-        Some(v) if v.eq_ignore_case(on) => Some(true),
-        Some(v) if v.eq_ignore_case(off) => Some(false),
+        Some(v) if v.eq_cli(on) => Some(true),
+        Some(v) if v.eq_cli(off) => Some(false),
         _ => None,
     }
 }
@@ -272,15 +325,38 @@ fn namespace(
     code: u32,
     message: &str,
 ) -> Result<WideText, crate::model::ParseError> {
-    match value {
-        None if raw.is_some_and(|v| v.0.is_empty()) => Err(setting_error(code, message)),
-        None => Ok(default.clone()),
-        Some(v) if v.0.starts_with(&[92, 92]) => Ok(WideText(v.0[2..].to_vec())),
+    let mut result = match value {
+        None if raw.is_some_and(|v| v.0.is_empty()) => return Err(setting_error(code, message)),
+        None => return Ok(default.clone()),
+        Some(v) if v.0.starts_with(&[92, 92]) => WideText(v.0[2..].to_vec()),
+        Some(v) if v.0.starts_with(&[46, 46]) => {
+            let mut result = current.clone();
+            if let Some(parent) = result
+                .0
+                .iter()
+                .rposition(|unit| *unit == 92)
+                .filter(|i| *i > 0)
+            {
+                result.0.truncate(parent);
+            }
+            result.0.extend(&v.0[2..]);
+            result
+        }
         Some(v) => {
             let mut result = current.clone();
             result.0.push(92);
             result.0.extend(v.0);
-            Ok(result)
+            result
         }
+    };
+    // The shared WMIC path helper removes one final separator, except when
+    // the whole result is two separators.
+    if result.0.last() == Some(&92) && result.0 != [92, 92] {
+        result.0.pop();
     }
+    // Both setters keep the stored spelling when the normalized path is equal.
+    if result.eq_cli_text(current) {
+        result = current.clone();
+    }
+    Ok(result)
 }

@@ -131,7 +131,7 @@ python3.12 -m unittest discover -s tools/release/tests
 pwsh -File tools/release/tests/signature-policy.Tests.ps1
 ```
 
-The [testing guide](docs/testing.md) describes the reproducible 1,562-case oracle corpus, strict comparison gates, and 121 controlled cases per architecture. The [compatibility report](docs/compatibility.md) pins the measured baseline executable hashes, corpus results, and remaining acceptance limits. Release automation requires Python 3.11 or later; CI uses Python 3.12.
+The [testing guide](docs/testing.md) describes the reproducible 2,085-case oracle corpus, strict comparison gates, and 121 controlled cases per architecture. The [compatibility report](docs/compatibility.md) pins the measured baseline executable hashes, corpus results, and remaining acceptance limits, including the separately measured 286-case switch-value suite and [237 REA regression cases](docs/research/rea-25-passes.md). Release automation requires Python 3.11 or later; CI uses Python 3.12.
 
 On macOS, `cargo test --locked` also runs the macOS suites. The [macOS guide](docs/macos.md) lists their scope, evidence, and remaining acceptance limits.
 

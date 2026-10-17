@@ -75,7 +75,7 @@ The shell removes quotes before `wmic` starts. `wmic` rebuilds a Windows command
 - `wmic` keeps an empty argument as `""`.
 - An argument that contains white space and both quote characters keeps escape backslashes in its value. Avoid that form.
 - `wmic` does not restore quotes that the shell removed. The command `wmic /node:"a,b" os get Caption` passes `/node:a,b`. WMIC reads two nodes.
-- To pass quotes to WMIC, put the whole argument in single quotes. The command `wmic '/node:"a,b"' os get Caption` passes one node, `a,b`.
+- To pass quotes to WMIC, put the whole argument in single quotes. Quote each node separately, for example `wmic '/node:"a","b"' CONTEXT`. Microsoft's legacy node scanner treats a comma as a separator even inside quotes. Quoting the entire list (`'/node:"a,b"'`) can consume the following command as part of the node value; this build preserves that measured behavior. Quote a node containing a hyphen as `'/node:"host-name"'`.
 - `wmic` converts bytes that are not valid UTF-8 to U+FFFD.
 
 ### Exit status

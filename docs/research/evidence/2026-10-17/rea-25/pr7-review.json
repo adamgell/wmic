@@ -1,0 +1,279 @@
+{
+  "schema_version": 1,
+  "baseline_commit": "800f9ef8d778ca98e6a9f74dd4213824fd4d11c1",
+  "fix_source_patch_sha256": "96a2b61905d832d1cebc3fde923c52b9f03469d8d762c925ceb0e919ee334124",
+  "fix_source_patch_command": "git diff 800f9ef8d778ca98e6a9f74dd4213824fd4d11c1 --binary -- src",
+  "scope": "PR7 CodeRabbit findings: POSIX path reconstruction, alias verb dispatch and reference-capture privacy",
+  "method_dispatch_cases": [
+    {
+      "id": "alias-verb-0",
+      "arguments": "alias OS call SeeAlso",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "alias-verb-1",
+      "arguments": "alias OS call \uff33\uff45\uff45\uff21\uff4c\uff53\uff4f",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "alias-verb-2",
+      "arguments": "alias OS SeeAlso",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "alias-verb-3",
+      "arguments": "alias OS \uff33\uff45\uff45\uff21\uff4c\uff53\uff4f",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "alias-verb-4",
+      "arguments": "process where \"ProcessId=0\" call GetOwner",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "alias-verb-5",
+      "arguments": "process where \"ProcessId=0\" call \uff27\uff45\uff54\uff2f\uff57\uff4e\uff45\uff52",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "alias-verb-7",
+      "arguments": "path Win32_Process where \"ProcessId=0\" call \uff27\uff45\uff54\uff2f\uff57\uff4e\uff45\uff52",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    }
+  ],
+  "targets": {
+    "aarch64-pc-windows-msvc": {
+      "candidate_sha256": "1c486c968c0d0c67cb8591bfda6e4de0bf349ce27ae069f766519f197020d210",
+      "reference_sha256": "2EF794C4940AFEA56C6D6D3B9BC9E66965BC7333E79C5DCB2DEF3C0E36F0834C",
+      "reference_profile": {
+        "role": "reference",
+        "executable": "C:\\Windows\\System32\\wbem\\WMIC.exe",
+        "executable_sha256": "2EF794C4940AFEA56C6D6D3B9BC9E66965BC7333E79C5DCB2DEF3C0E36F0834C",
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "signature": "Valid",
+        "computer": "DESKTOP-N4H9E7R",
+        "identity": "NT AUTHORITY\\SYSTEM",
+        "launcher_architecture": "ARM64",
+        "culture": "en-US",
+        "ui_culture": "en-US",
+        "ansi_codepage": 1252,
+        "oem_codepage": 437,
+        "console_output_codepage": 437,
+        "directory": "C:\\",
+        "launch_api": "CreateProcessW",
+        "output_mode": "native pipes"
+      },
+      "method_dispatch": {
+        "passed": [
+          "alias-verb-0",
+          "alias-verb-1",
+          "alias-verb-2",
+          "alias-verb-3",
+          "alias-verb-4",
+          "alias-verb-5",
+          "alias-verb-7"
+        ],
+        "differences": {},
+        "total": 7,
+        "candidate_sha256": "1c486c968c0d0c67cb8591bfda6e4de0bf349ce27ae069f766519f197020d210"
+      },
+      "corpus": {
+        "alias": {
+          "matched": 4,
+          "total": 4,
+          "differences": {}
+        },
+        "method": {
+          "matched": 13,
+          "total": 13,
+          "differences": {}
+        },
+        "rea-25": {
+          "matched": 237,
+          "total": 237,
+          "differences": {}
+        }
+      },
+      "reference_capture_sha256": "44c5754662b8237c6775b196cbeb81211826785c4e23eab5f2ae7cebb04356b7",
+      "candidate_capture_sha256": "5709b345c43a0747e70bb55b10295680c13a255fd0a7f6a02ada1060bc4957f2",
+      "corpus_report_sha256": "3f7149bd578c942a84658b8ae39437b16d57787de8a6ae552ec9915555d1de74"
+    },
+    "x86_64-pc-windows-msvc": {
+      "candidate_sha256": "9be35b795f23636023ce88fda62088fa675f041d02168fb907f2bdcc92d9521d",
+      "reference_sha256": "2EF794C4940AFEA56C6D6D3B9BC9E66965BC7333E79C5DCB2DEF3C0E36F0834C",
+      "reference_profile": {
+        "role": "reference",
+        "executable": "C:\\Windows\\System32\\wbem\\WMIC.exe",
+        "executable_sha256": "2EF794C4940AFEA56C6D6D3B9BC9E66965BC7333E79C5DCB2DEF3C0E36F0834C",
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "signature": "Valid",
+        "computer": "DESKTOP-N4H9E7R",
+        "identity": "NT AUTHORITY\\SYSTEM",
+        "launcher_architecture": "ARM64",
+        "culture": "en-US",
+        "ui_culture": "en-US",
+        "ansi_codepage": 1252,
+        "oem_codepage": 437,
+        "console_output_codepage": 437,
+        "directory": "C:\\",
+        "launch_api": "CreateProcessW",
+        "output_mode": "native pipes"
+      },
+      "method_dispatch": {
+        "passed": [
+          "alias-verb-0",
+          "alias-verb-1",
+          "alias-verb-2",
+          "alias-verb-3",
+          "alias-verb-4",
+          "alias-verb-5",
+          "alias-verb-7"
+        ],
+        "differences": {},
+        "total": 7,
+        "candidate_sha256": "9be35b795f23636023ce88fda62088fa675f041d02168fb907f2bdcc92d9521d"
+      },
+      "corpus": {
+        "alias": {
+          "matched": 4,
+          "total": 4,
+          "differences": {}
+        },
+        "method": {
+          "matched": 13,
+          "total": 13,
+          "differences": {}
+        },
+        "rea-25": {
+          "matched": 237,
+          "total": 237,
+          "differences": {}
+        }
+      },
+      "reference_capture_sha256": "e75406d69a72a665f7be36e2c5deb2a89670e89f044183566b86cfa6b2366a48",
+      "candidate_capture_sha256": "2ee30af224ff8ea1c04116573919ec1bcd7a7128d1b5fc44f5b9e6a055a8c474",
+      "corpus_report_sha256": "58f74a9a121865ed6e8d7c4e29dfce8f204a06af1ec6f0a61617764319460a4c"
+    },
+    "i686-pc-windows-msvc": {
+      "candidate_sha256": "121e19362847dc6ee3b484ec9d09788b02b692f8874b1c3e7f988348b6f8c96a",
+      "reference_sha256": "4AFE43FF64AD20475D75D9816A269FC03E10C492033B67E60C9886F3512E900E",
+      "reference_profile": {
+        "role": "reference",
+        "executable": "C:\\Windows\\SysWOW64\\wbem\\WMIC.exe",
+        "executable_sha256": "4AFE43FF64AD20475D75D9816A269FC03E10C492033B67E60C9886F3512E900E",
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "signature": "Valid",
+        "computer": "DESKTOP-N4H9E7R",
+        "identity": "NT AUTHORITY\\SYSTEM",
+        "launcher_architecture": "ARM64",
+        "culture": "en-US",
+        "ui_culture": "en-US",
+        "ansi_codepage": 1252,
+        "oem_codepage": 437,
+        "console_output_codepage": 437,
+        "directory": "C:\\",
+        "launch_api": "CreateProcessW",
+        "output_mode": "native pipes"
+      },
+      "method_dispatch": {
+        "passed": [
+          "alias-verb-0",
+          "alias-verb-1",
+          "alias-verb-2",
+          "alias-verb-3",
+          "alias-verb-4",
+          "alias-verb-5",
+          "alias-verb-7"
+        ],
+        "differences": {},
+        "total": 7,
+        "candidate_sha256": "121e19362847dc6ee3b484ec9d09788b02b692f8874b1c3e7f988348b6f8c96a"
+      },
+      "corpus": {
+        "alias": {
+          "matched": 4,
+          "total": 4,
+          "differences": {}
+        },
+        "method": {
+          "matched": 13,
+          "total": 13,
+          "differences": {}
+        },
+        "rea-25": {
+          "matched": 237,
+          "total": 237,
+          "differences": {}
+        }
+      },
+      "reference_capture_sha256": "a251a3203d2849b24d88d54c7434f28a00c84c4000f5a15dc26e731223f1170d",
+      "candidate_capture_sha256": "d3deee839ee9c96babdb33b39ea65313c10568add79d55496066d839d44b8390",
+      "corpus_report_sha256": "ba5444eddd18772d32872bc4bfc6a39d909975bbfb12b6b7a6aa10c284f775a7"
+    }
+  },
+  "local_checks": {
+    "rust_tests": {
+      "passed": 418,
+      "failed": 0
+    },
+    "python_reference_tests": {
+      "passed": 55,
+      "failed": 0
+    },
+    "python_release_tests": {
+      "passed": 11,
+      "failed": 0
+    },
+    "rustfmt": "passed",
+    "macos_clippy": "passed",
+    "windows_clippy_all_three_targets": "passed",
+    "windows_release_build_all_three_targets": "passed"
+  },
+  "limitations": [
+    "Native ARM64 execution; AMD64 and x86 candidates run under Windows emulation. AMD64 compares with the ARM64 original.",
+    "Results cover the selected Windows locale and permissions, not general WMIC certification.",
+    "The earlier full-corpus evidence remains historical and retains its volatile-data and TRACE differences.",
+    "An additional malformed-argument probe is recorded separately and is not counted among passing method-dispatch probes."
+  ],
+  "local_log_sha256": {
+    "cargo-test-closure.log": "11fca3202fab9ad9c1c20628fa368f3b05037da507ba24f6ce80cdb8c25da23f",
+    "macos-cli-closure2.log": "1cf65ba9e2870c074345e8aed68a3fc710afef32029d9362b39cf4afdd344cc4",
+    "macos-clippy-closure2.log": "3da82467f088f5606a46727ab9fb80cfef034d48ff456bb912d5fd30162339ac",
+    "windows-clippy-final.log": "2fd1ba3d333fbc95892b9576af08fe30092d5ff68691d6e2a44961ec171262a0",
+    "windows-build-final.log": "ee7512bd8f53d5a7070fab7c784f1931267d4610a9dfe76bd56f6d0ca0edcb18"
+  },
+  "known_exploratory_gap": {
+    "case": {
+      "id": "alias-verb-6",
+      "arguments": "process where \"ProcessId=0\" call \uff27\uff45\uff54\uff2f\uff57\uff4e\uff45\uff52 Unknown=1",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    "comparison": {
+      "passed": [],
+      "differences": {
+        "alias-verb-6": [
+          "alias-verb-6: exit_status: 45227 != 44517",
+          "alias-verb-6: stderr: 51 != 35 bytes; first difference at 16"
+        ]
+      },
+      "total": 1,
+      "candidate_sha256": "1c486c968c0d0c67cb8591bfda6e4de0bf349ce27ae069f766519f197020d210"
+    },
+    "reference_status": "0xB0AB",
+    "candidate_status": "0xADE5",
+    "candidate_sha256": "1c486c968c0d0c67cb8591bfda6e4de0bf349ce27ae069f766519f197020d210",
+    "counted_as_pass": false
+  },
+  "reference_tools_patch_sha256": "8cd3231d5acae1ca6fe2a21b02f87233bd14fabb3504358eb43048bfc4e8fda0",
+  "reference_tools_patch_command": "git diff 800f9ef8d778ca98e6a9f74dd4213824fd4d11c1 --binary -- tools/reference",
+  "regression_tests_patch_sha256": "0afe2ce15c9763bcc70e1a7cfb7242dec7517762af8db28811235745a3982b27",
+  "regression_tests_patch_command": "git diff 800f9ef8d778ca98e6a9f74dd4213824fd4d11c1 --binary -- tests"
+}
