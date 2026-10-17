@@ -295,6 +295,60 @@ fn a_verb_level_switch_value_with_whitespace_stays_a_switch_value() {
 }
 
 #[test]
+fn unquoted_path_switches_keep_slashes_inside_their_values() {
+    for (arg, name, value) in [
+        ("/output:/tmp/report.txt", "output", "/tmp/report.txt"),
+        (
+            "/append:./reports/report.txt",
+            "append",
+            "./reports/report.txt",
+        ),
+        ("/record:/tmp/session.txt", "record", "/tmp/session.txt"),
+        (
+            "/output:/tmp/adam's-report.txt",
+            "output",
+            "/tmp/adam's-report.txt",
+        ),
+        (
+            "/output:/tmp/report\"quoted.txt",
+            "output",
+            "/tmp/report\"quoted.txt",
+        ),
+        ("-output:/tmp/report.txt", "output", "/tmp/report.txt"),
+        ("/ＯＵＴＰＵＴ:/tmp/report.txt", "output", "/tmp/report.txt"),
+    ] {
+        assert_eq!(
+            switch_value(&["wmic", arg, "os", "get", "Caption"]),
+            (name.to_string(), SwitchValue::Value(wide(value))),
+            "{arg}"
+        );
+    }
+    for arg in ["/format:styles/table.xsl", "-format:styles/table.xsl"] {
+        assert_eq!(
+            switch_value(&["wmic", "os", "get", "Caption", arg]),
+            (
+                "format".to_string(),
+                SwitchValue::Value(wide("styles/table.xsl"))
+            ),
+            "{arg}"
+        );
+    }
+}
+
+#[test]
+fn explicit_path_quotes_and_adjacent_non_path_switches_are_preserved() {
+    for arg in [
+        r#"/output:"/tmp/report.txt""#,
+        r#"-output:"/tmp/report.txt""#,
+        r#"/output:"/tmp/report.txt"/node:."#,
+        r#"/output:"/tmp/report.txt"/aggregate:on"#,
+        "/aggregate:on/node:.",
+    ] {
+        assert_eq!(quote_argument(&wide(arg).0), wide(arg).0);
+    }
+}
+
+#[test]
 fn a_switch_prefix_with_whitespace_is_wrapped_as_one_token() {
     assert_eq!(quote_argument(&wide("/a b:c").0), wide("\"/a b:c\"").0);
     assert_eq!(quote_argument(&wide("/a b").0), wide("\"/a b\"").0);

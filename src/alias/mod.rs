@@ -307,7 +307,7 @@ impl AliasStore {
             let mut method = command.method.clone();
             if !command.verb_explicit
                 && let Some(last) = pos.last()
-                && a.verbs.iter().any(|v| last.eq_ignore_case(&v.name))
+                && a.verbs.iter().any(|v| last.eq_cli(&v.name))
             {
                 method = pos.pop();
                 req.verb = Verb::Call;
@@ -389,7 +389,7 @@ impl AliasStore {
             if req.verb == Verb::Call
                 && let Some(m) = &method
             {
-                if let Some(v) = a.verbs.iter().find(|v| m.eq_ignore_case(&v.name)) {
+                if let Some(v) = a.verbs.iter().find(|v| m.eq_cli(&v.name)) {
                     if v.verb_type == Some(2) {
                         let d = DerivedCommand {
                             template: v.derivation.as_str().into(),
@@ -411,7 +411,13 @@ impl AliasStore {
                             },
                         );
                     }
-                    req.method = Some(v.derivation.as_str().into());
+                    // CLI verb matching ignores width, but WMI method names
+                    // still go through the provider's identifier lookup.
+                    req.method = Some(if m.eq_ignore_case(&v.name) {
+                        v.derivation.as_str().into()
+                    } else {
+                        m.clone()
+                    });
                 } else {
                     req.method = method;
                 }

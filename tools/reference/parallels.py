@@ -42,9 +42,10 @@ def _guest_lock(vm):
 
 
 def _contains_credentials(text: str) -> bool:
+    """Reject native-equivalent credential switches, including overlapping prefixes."""
     # Conservative host-side guard: native CompareStringW also ignores some
     # characters (e.g. soft hyphen) that NFKC alone preserves.
-    for match in re.finditer(r'[/-]([^\s:]*)(?:\s*:)', text):
+    for match in re.finditer(r'(?=[/-]([^\s:]*)\s*:)', text):
         folded = unicodedata.normalize('NFKD', match[1]).casefold()
         if ''.join(ch for ch in folded if ch.isascii()) == 'password':
             return True
@@ -52,6 +53,7 @@ def _contains_credentials(text: str) -> bool:
 
 
 def validate_manifest(manifest: dict, allow_writes: bool = False) -> None:
+    """Validate capture IDs, credential privacy and explicit write selection."""
     cases = manifest.get("cases")
     if not isinstance(cases, list) or not cases:
         raise ValueError("manifest must contain cases")
@@ -64,6 +66,7 @@ def validate_manifest(manifest: dict, allow_writes: bool = False) -> None:
         if "stdin_base64" in case:
             stdin = base64.b64decode(case["stdin_base64"], validate=True)
             texts = [stdin.decode('latin1')]
+            texts.append(stdin.decode('utf-8', errors='replace'))
             if len(stdin) % 2 == 0:
                 texts.append(stdin.decode('utf-16le', errors='surrogatepass'))
             if any(_contains_credentials(text) for text in texts):
