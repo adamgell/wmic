@@ -552,7 +552,7 @@ impl Session {
             if let Err(error) = self.aliases.load_role(&settings, &mut loader) {
                 return emit(
                     sink,
-                    render::render_resolve_error_for(&error, raw),
+                    render::render_resolve_error_for(&error, secret_of(&settings)),
                     error.code,
                 );
             }
@@ -569,7 +569,7 @@ impl Session {
                     Err(error) => {
                         return emit(
                             sink,
-                            render::render_resolve_error_for(&error, raw),
+                            render::render_resolve_error_for(&error, secret_of(&settings)),
                             error.code,
                         );
                     }
@@ -619,7 +619,7 @@ impl Session {
             {
                 return emit(
                     sink,
-                    render::render_resolve_error_for(&error, raw),
+                    render::render_resolve_error_for(&error, secret_of(&settings)),
                     error.code,
                 );
             }
@@ -653,7 +653,13 @@ impl Session {
         }
         let resolved = match self.aliases.resolve(&parsed, &settings) {
             Ok(r) => r,
-            Err(e) => return emit(sink, render::render_resolve_error_for(&e, raw), e.code),
+            Err(e) => {
+                return emit(
+                    sink,
+                    render::render_resolve_error_for(&e, secret_of(&settings)),
+                    e.code,
+                );
+            }
         };
         let resolved = match resolved {
             ResolvedCommand::Derived(command) => {
@@ -698,11 +704,29 @@ impl Session {
         let mut status = 0;
         let mut combined = vec![];
         let mut had_objects = false;
+        let mut stdout_written = false;
+        let mut blank_output = WideText::default();
+        let mut failed_nodes: Vec<(WideText, ManagementError)> = vec![];
+        let mut node_order: Vec<WideText> = vec![];
         let nodes = if settings.explicit_nodes {
             settings.nodes.clone()
         } else {
             vec![request.connection.node.clone()]
         };
+        let listed = nodes.len() > 1;
+        request.multiple_nodes = listed;
+        let acts = matches!(
+            request.verb,
+            Verb::Call | Verb::Set | Verb::Create | Verb::Delete
+        );
+        let shows_errors = request
+            .format_spec
+            .as_ref()
+            .is_some_and(render::shows_errors);
+        let one_document = shows_errors
+            && settings.aggregate
+            && matches!(request.verb, Verb::Get | Verb::List)
+            && !request.class_mode;
         for target in &nodes {
             if scheduler.cancelled() {
                 status = 0xC000013A;
@@ -733,13 +757,23 @@ impl Session {
                     break;
                 }
             }
+            node_order.push(node.clone());
+            if listed && acts {
+                let mut line: WideText = "Node - ".into();
+                line.0.extend(&node.0);
+                line.0.extend("\r\r\n".encode_utf16());
+                if sink.write(OutputStream::Stdout, &line).is_err() {
+                    status = 0x80070005;
+                    break;
+                }
+            }
             let mut result =
                 if settings.failfast && !backend.reachable(&node, settings.failfast_timeout_ms) {
                     Err(ManagementError {
                         code: 0xABE3,
                         target: node.clone(),
                         message: "RPC Server not available.".into(),
-                        operation: "query".into(),
+                        operation: "failfast".into(),
                         extended: vec![],
                         partial: None,
                     })
@@ -792,6 +826,7 @@ impl Session {
                         node: &node,
                     }) {
                         Ok(output) => {
+                            stdout_written |= !output.stdout.0.is_empty();
                             let outcome = emit(sink, output, code);
                             if outcome.exit_status != code {
                                 status = outcome.exit_status;
@@ -806,7 +841,23 @@ impl Session {
                 result: result.as_ref(),
                 node: &node,
             }) {
-                Ok(output) => {
+                Ok(mut output) => {
+                    if let Err(error) = &result
+                        && !acts
+                        && error.partial.is_none()
+                        && render::is_node_failure(error)
+                    {
+                        if one_document {
+                            failed_nodes.push((node.clone(), error.clone()));
+                            output.stdout = WideText::default();
+                        } else if !shows_errors {
+                            let blank = std::mem::take(&mut output.stdout);
+                            if blank_output.0.is_empty() {
+                                blank_output = blank;
+                            }
+                        }
+                    }
+                    stdout_written |= !output.stdout.0.is_empty();
                     let out = emit(sink, output, code);
                     if out.exit_status != code {
                         status = out.exit_status;
@@ -817,19 +868,32 @@ impl Session {
                 }
             }
         }
-        if settings.aggregate && (had_objects || !combined.is_empty()) {
+        if settings.aggregate && (had_objects || !combined.is_empty() || !failed_nodes.is_empty()) {
             let result = ManagementResult::Objects(ObjectSet {
                 objects: combined,
                 schema: None,
             });
-            match render::render(render::RenderRequest {
-                request: &request,
-                result: Ok(&result),
-                node: &self.local_node,
-            }) {
-                Ok(output) => status = emit(sink, output, status).exit_status,
+            match render::render_with_failures(
+                render::RenderRequest {
+                    request: &request,
+                    result: Ok(&result),
+                    node: &self.local_node,
+                },
+                &node_order,
+                &failed_nodes,
+            ) {
+                Ok(output) => {
+                    stdout_written |= !output.stdout.0.is_empty();
+                    status = emit(sink, output, status).exit_status
+                }
                 Err(error) => status = emit_render_error(sink, error),
             }
+        }
+        if !stdout_written
+            && !blank_output.0.is_empty()
+            && sink.write(OutputStream::Stdout, &blank_output).is_err()
+        {
+            status = 0x80070005;
         }
         CommandOutcome {
             exit_status: status,
@@ -837,6 +901,9 @@ impl Session {
             ..Default::default()
         }
     }
+}
+fn secret_of(settings: &SessionSettings) -> Option<&WideText> {
+    settings.password.as_ref().map(|p| p.expose())
 }
 fn emit_render_error(sink: &mut dyn OutputSink, error: render::RenderError) -> u32 {
     let code = error.code;

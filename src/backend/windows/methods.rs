@@ -1,5 +1,5 @@
 use super::*;
-use crate::backend::methods::{InputError, bind_method};
+use crate::backend::methods::{InputError, bind_method, undeclared_method};
 use windows::{
     Win32::System::{
         Com::{CLSCTX_INPROC_SERVER, CoCreateInstance},
@@ -128,17 +128,7 @@ pub(super) fn execute(
         .methods
         .iter()
         .find(|m| requested.eq_ignore_case(&m.name.to_string_lossy()))
-        .ok_or_else(|| {
-            let mut msg = requested.clone();
-            msg.0.extend(" - Invalid alias verb.".encode_utf16());
-            input_error(
-                InputError {
-                    code: 0xABFD,
-                    message: msg,
-                },
-                r,
-            )
-        })?;
+        .ok_or_else(|| input_error(undeclared_method(&requested, r.alias_target), r))?;
     let bound = bind_method(method, &r.arguments).map_err(|e| input_error(e, r))?;
     let targets = if method.is_static || r.class_mode {
         vec![r.class_name.clone()]

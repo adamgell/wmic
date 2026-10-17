@@ -204,33 +204,13 @@ pub struct FaultContext<'a> {
     pub by_path: bool,
 }
 
-/// Short text WMIC prints for a status code.
+/// Text `IWbemStatusCodeText` returns for a status code.
 pub fn status_text(code: u32) -> Option<&'static str> {
-    Some(match code {
-        0x8004_1001 => "Generic failure",
-        0x8004_1002 => "Not found",
-        0x8004_1003 | 0x8007_0005 => "Access denied",
-        0x8004_1005 => "Type mismatch",
-        0x8004_1008 => "Invalid parameter",
-        0x8004_100C => "Not supported",
-        0x8004_100D => "Invalid superclass",
-        0x8004_100E => "Invalid namespace",
-        0x8004_1010 => "Invalid class",
-        0x8004_1014 => "Initialization failure",
-        0x8004_1017 => "Invalid query",
-        0x8004_1018 => "Invalid query type",
-        0x8004_1019 => "Already exists",
-        0x8004_1025 => "Class has children",
-        0x8004_1026 => "Class has instances",
-        0x8004_102E => "Invalid method",
-        0x8004_103A => "Invalid object path",
-        0x8004_1069 => "Timed out",
-        0x8004_106C => "Quota violation",
-        0x8007_06BA => "The RPC server is unavailable.",
-        _ => return None,
-    })
+    super::status_text::STATUS_TEXT
+        .binary_search_by_key(&code, |(known, _)| *known)
+        .ok()
+        .map(|at| super::status_text::STATUS_TEXT[at].1)
 }
-
 /// Diagnostic properties kept on an error: the server text and the failing WMI call.
 pub fn detail_properties(detail: &str, fault: Option<&Fault>) -> Vec<Property> {
     let property = |name: &str, value: &str| Property {
@@ -262,7 +242,9 @@ pub fn to_error(fault: &Fault, context: &FaultContext) -> ManagementError {
     if code == 0x8004_1010 && context.by_path {
         code = 0x8004_1002;
         operation = "class";
-    } else if matches!(code, 0x8004_1010 | 0x8004_100E) {
+    } else if code == 0x8004_100E {
+        operation = "connect";
+    } else if code == 0x8004_1010 && context.operation != "method" {
         operation = "query";
     }
     let message = status_text(code).unwrap_or_else(|| fault.text());
@@ -365,6 +347,76 @@ mod tests {
             r#"<f:WSManFault Code="5"><f:Message>Access is denied.</f:Message></f:WSManFault>"#,
         );
         assert_eq!(access.hresult(), 0x8007_0005);
+    }
+
+    #[test]
+    fn status_text_follows_the_measured_table() {
+        for (code, text) in [
+            (0x8004_1003, "Access denied"),
+            (0x8004_1019, "Object or property already exists"),
+            (0x8004_1062, "Privilege not held."),
+            (
+                0x8004_1064,
+                "User credentials cannot be used for local connections",
+            ),
+            (0x8004_1069, "Operation times out"),
+            (0x8004_106C, "Quota violation"),
+            (0x8004_102F, "Invalid method Parameter(s)"),
+            (0x8007_0005, "Access is denied."),
+            (0x8007_0035, "The network path was not found."),
+            (0x8007_06BA, "The RPC server is unavailable."),
+        ] {
+            assert_eq!(status_text(code), Some(text), "{code:#010x}");
+        }
+        assert_eq!(status_text(0x8004_104A), None);
+        assert_eq!(status_text(0x8007_2EE2), None);
+        assert!(
+            crate::backend::wsman::status_text::STATUS_TEXT
+                .windows(2)
+                .all(|pair| pair[0].0 < pair[1].0)
+        );
+    }
+
+    #[test]
+    fn a_namespace_fault_reports_the_connect_operation() {
+        let node: WideText = "SRV".into();
+        let fault = parse(
+            "a:DestinationUnreachable",
+            r#"<p:MSFT_WmiError xmlns:p="q"><p:CIMStatusCode>3</p:CIMStatusCode></p:MSFT_WmiError>"#,
+        );
+        for by_path in [false, true] {
+            let error = to_error(
+                &fault,
+                &FaultContext {
+                    node: &node,
+                    operation: "query",
+                    by_path,
+                },
+            );
+            assert_eq!(error.code, 0x8004_100E);
+            assert_eq!(error.operation, WideText::from("connect"));
+        }
+    }
+
+    #[test]
+    fn a_class_fault_keeps_the_method_operation_of_a_call() {
+        let node: WideText = "SRV".into();
+        let fault = parse(
+            "a:DestinationUnreachable",
+            r#"<p:MSFT_WmiError xmlns:p="q"><p:CIMStatusCode>5</p:CIMStatusCode></p:MSFT_WmiError>"#,
+        );
+        for (operation, expected) in [("method", "method"), ("query", "query")] {
+            let error = to_error(
+                &fault,
+                &FaultContext {
+                    node: &node,
+                    operation,
+                    by_path: false,
+                },
+            );
+            assert_eq!(error.code, 0x8004_1010);
+            assert_eq!(error.operation, WideText::from(expected));
+        }
     }
 
     #[test]

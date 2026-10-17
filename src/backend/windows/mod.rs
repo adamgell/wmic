@@ -27,7 +27,8 @@ pub(crate) fn wide(s: &BSTR) -> WideText {
 pub(crate) fn diagnostic(code: u32) -> &'static str {
     match code {
         0x80041002 => "Not found",
-        0x80041003 | 0x80070005 => "Access denied",
+        0x80041003 => "Access denied",
+        0x80070005 => "Access is denied.",
         0x8004100e => "Invalid namespace",
         0x80041010 => "Invalid class",
         0x80041017 => "Invalid query",

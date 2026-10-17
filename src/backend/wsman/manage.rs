@@ -12,7 +12,7 @@ use crate::{
     alias::predicate::Predicate,
     backend::{
         Confirmation, Management, ResolvedRequest, build_query, cancellable_targets, keyword,
-        methods::{InputError, bind_method},
+        methods::{InputError, bind_method, undeclared_method},
     },
     model::{
         ClassSchema, ManagementError, ManagementResult, MethodResult, MethodSchema, ObjectSet,
@@ -115,6 +115,7 @@ fn target_of(request: &ResolvedRequest, port: u16) -> Target {
         },
         node: connection.node.clone(),
         server: host.to_uppercase(),
+        multiple_nodes: request.multiple_nodes,
     }
 }
 
@@ -136,7 +137,14 @@ fn projection(request: &ResolvedRequest) -> Vec<String> {
 }
 
 /// Drops the properties the server added, such as keys, that the command did not name.
-fn keep_columns(records: &mut [Record], columns: &[String]) {
+fn keep_columns(records: &mut [Record], request: &ResolvedRequest) {
+    let columns = projection(request);
+    if request.projects_properties() {
+        for record in records.iter_mut() {
+            let count = record.properties.iter().filter(|p| !p.system).count();
+            record.project_class_metadata(&columns, count);
+        }
+    }
     if columns.is_empty() || columns.iter().any(|c| c == "*") {
         return;
     }
@@ -263,12 +271,12 @@ impl WsmanManagement {
                     Ok(records) => records,
                     Err(mut error) => {
                         if let Some(ManagementResult::Objects(set)) = error.partial.as_deref_mut() {
-                            keep_columns(&mut set.objects, &projection(request));
+                            keep_columns(&mut set.objects, request);
                         }
                         return Err(error);
                     }
                 };
-                keep_columns(&mut records, &projection(request));
+                keep_columns(&mut records, request);
                 Ok(ManagementResult::Objects(ObjectSet {
                     objects: records,
                     schema: None,
@@ -383,14 +391,9 @@ impl WsmanManagement {
                 .find(|m| requested.eq_ignore_case(&m.name.to_string_lossy()))
                 .cloned()
                 .ok_or_else(|| {
-                    let mut message = requested.clone();
-                    message.0.extend(" - Invalid alias verb.".encode_utf16());
                     input_error(
                         &request.class_name,
-                        InputError {
-                            code: 0xABFD,
-                            message,
-                        },
+                        undeclared_method(&requested, request.alias_target),
                     )
                 })?,
             None => unknown_method(request, &requested),
@@ -421,7 +424,7 @@ impl WsmanManagement {
                 let mut prompt: WideText = "Execute (".into();
                 prompt.0.extend(&path.0);
                 prompt.0.extend(")->".encode_utf16());
-                prompt.0.extend(&method.name.0);
+                prompt.0.extend(&request.shown_method().0);
                 prompt.0.extend("() (Y/N/?)? ".encode_utf16());
                 if !confirm(request, &mut confirmation, &prompt)? {
                     continue;

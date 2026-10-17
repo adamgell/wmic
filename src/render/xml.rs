@@ -145,16 +145,14 @@ pub fn to_wmi_xml(result: &ManagementResult) -> Result<WideText, RenderError> {
     Ok(out)
 }
 
-#[cfg(windows)]
-pub(crate) fn error_command_xml(
-    context: &RenderContext,
-    node: &WideText,
-    error: Option<&ManagementError>,
-) -> Result<WideText, RenderError> {
-    let empty = ManagementResult::Objects(ObjectSet::default());
-    let mut xml = to_command_xml(&empty, context, node)?;
+/// The `ERROR` element of a node that returned no result. A fail-fast refusal comes from the tool
+/// itself, so it carries no status code and no facility.
+fn error_element(error: Option<&ManagementError>) -> WideText {
     let mut body: WideText = "<ERROR>".into();
-    if let Some(error) = error {
+    let own_text = error.is_some_and(|e| e.operation.eq_ignore_case("failfast"));
+    if let Some(error) = error
+        && !own_text
+    {
         push(&mut body, &format!("<HRESULT>0x{:X}</HRESULT>", error.code));
     }
     push(&mut body, "<DESCRIPTION>");
@@ -166,7 +164,9 @@ pub(crate) fn error_command_xml(
         ),
     );
     push(&mut body, "\r\n</DESCRIPTION>");
-    if let Some(error) = error {
+    if let Some(error) = error
+        && !own_text
+    {
         let facility = match (error.code >> 16) & 0x1fff {
             4 => "WMI",
             7 => "Win32",
@@ -178,6 +178,17 @@ pub(crate) fn error_command_xml(
         );
     }
     push(&mut body, "</ERROR>");
+    body
+}
+/// The command document of a node that returned no result.
+pub(crate) fn error_command_xml(
+    context: &RenderContext,
+    node: &WideText,
+    error: Option<&ManagementError>,
+) -> Result<WideText, RenderError> {
+    let empty = ManagementResult::Objects(ObjectSet::default());
+    let mut xml = to_command_xml(&empty, context, node)?;
+    let body = error_element(error);
     let marker: Vec<u16> = "<CIM></CIM>".encode_utf16().collect();
     let at = xml
         .0
@@ -191,6 +202,26 @@ pub fn to_command_xml(
     result: &ManagementResult,
     context: &RenderContext,
     node: &WideText,
+) -> Result<WideText, RenderError> {
+    command_xml(result, context, node, &[], &[])
+}
+/// One command document for every node: the results of the nodes that answered and an `ERROR`
+/// result for each failed node, in node order.
+pub fn to_command_xml_with_failures(
+    result: &ManagementResult,
+    context: &RenderContext,
+    node: &WideText,
+    order: &[WideText],
+    failures: &[(WideText, ManagementError)],
+) -> Result<WideText, RenderError> {
+    command_xml(result, context, node, order, failures)
+}
+fn command_xml(
+    result: &ManagementResult,
+    context: &RenderContext,
+    node: &WideText,
+    order: &[WideText],
+    failures: &[(WideText, ManagementError)],
 ) -> Result<WideText, RenderError> {
     let mut out: WideText = "<COMMAND".into();
     attribute(
@@ -237,24 +268,43 @@ pub fn to_command_xml(
             }
         }
     }
-    if groups.is_empty() {
+    if groups.is_empty() && failures.is_empty() {
         push(&mut out, "<RESULTS");
         attribute(&mut out, "NODE", node);
         out.0.push(62);
         append(&mut out, &to_wmi_xml(result)?);
         push(&mut out, "</RESULTS>");
     } else {
-        for (label, objects) in groups {
+        let mut labels: Vec<&WideText> = order.iter().collect();
+        for label in groups
+            .iter()
+            .map(|(l, _)| l)
+            .chain(failures.iter().map(|(l, _)| l))
+        {
+            if !labels.contains(&label) {
+                labels.push(label)
+            }
+        }
+        let mut written: Vec<&WideText> = vec![];
+        for label in labels {
+            if written.contains(&label) {
+                continue;
+            }
+            written.push(label);
             push(&mut out, "<RESULTS");
-            attribute(&mut out, "NODE", &label);
+            attribute(&mut out, "NODE", label);
             out.0.push(62);
-            append(
-                &mut out,
-                &to_wmi_xml(&ManagementResult::Objects(ObjectSet {
-                    objects,
-                    schema: None,
-                }))?,
-            );
+            if let Some((_, error)) = failures.iter().find(|(l, _)| l == label) {
+                append(&mut out, &error_element(Some(error)));
+            } else if let Some((_, objects)) = groups.iter().find(|(l, _)| l == label) {
+                append(
+                    &mut out,
+                    &to_wmi_xml(&ManagementResult::Objects(ObjectSet {
+                        objects: objects.clone(),
+                        schema: None,
+                    }))?,
+                );
+            }
             push(&mut out, "</RESULTS>");
         }
     }

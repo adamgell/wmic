@@ -89,6 +89,9 @@ struct RecordOutput {
     context: Option<RenderContext>,
     node: WideText,
     text: WideText,
+    /// The record stands for a node list: `text` holds the unconverted stdout of the whole
+    /// command until the command ends.
+    whole: bool,
 }
 pub struct RoutedOutput<T: OutputSink> {
     pub inner: T,
@@ -106,6 +109,8 @@ pub struct RoutedOutput<T: OutputSink> {
     clipboard_append: bool,
     clipboard_text: WideText,
     records: Vec<RecordOutput>,
+    /// Iteration whose record already stands for the whole node list.
+    listed: Option<u32>,
     empty: bool,
 }
 impl<T: OutputSink> RoutedOutput<T> {
@@ -126,6 +131,7 @@ impl<T: OutputSink> RoutedOutput<T> {
             clipboard_append: false,
             clipboard_text: WideText::default(),
             records: vec![],
+            listed: None,
             empty: true,
         }
     }
@@ -144,6 +150,7 @@ impl<T: OutputSink> OutputSink for RoutedOutput<T> {
         self.append_name = None;
         self.output_name = None;
         self.records.clear();
+        self.listed = None;
         self.empty = true;
         self.managed = false;
         self.record_enabled = true;
@@ -202,6 +209,7 @@ impl<T: OutputSink> OutputSink for RoutedOutput<T> {
         self.output_name = None;
         self.last_iteration = 0;
         self.records.clear();
+        self.listed = None;
         self.clipboard_text = WideText::default();
         self.empty = true;
         self.managed = false;
@@ -231,6 +239,7 @@ impl<T: OutputSink> OutputSink for RoutedOutput<T> {
             context: Some(context.clone()),
             node: context.issued_from.clone(),
             text: WideText::default(),
+            whole: false,
         });
         Ok(())
     }
@@ -245,10 +254,20 @@ impl<T: OutputSink> OutputSink for RoutedOutput<T> {
             self.output = Some(open_file(name, false)?);
         }
         self.last_iteration = context.every_count;
+        let list = context.nodes.len() > 1;
+        if list && self.listed == Some(context.every_count) {
+            return Ok(());
+        }
+        self.listed = list.then_some(context.every_count);
         self.records.push(RecordOutput {
             context: Some(context.clone()),
-            node: node.clone(),
+            node: if list {
+                node_list(&context.nodes)
+            } else {
+                node.clone()
+            },
             text: WideText::default(),
+            whole: list,
         });
         Ok(())
     }
@@ -267,7 +286,10 @@ impl<T: OutputSink> OutputSink for RoutedOutput<T> {
         self.empty = false;
         let body = file_text(text, true);
         if let Some(record) = self.records.last_mut() {
-            record.text.0.extend(&body.0)
+            record
+                .text
+                .0
+                .extend(if record.whole { &text.0 } else { &body.0 })
         }
         if self.clipboard || self.clipboard_append {
             self.clipboard_text.0.extend(&body.0)
@@ -295,6 +317,10 @@ impl<T: OutputSink> OutputSink for RoutedOutput<T> {
         }
     }
     fn finish(&mut self) -> Result<(), OutputError> {
+        for record in self.records.iter_mut().filter(|r| r.whole) {
+            record.text = file_text(&record.text, true);
+            record.whole = false;
+        }
         if self.empty && self.managed {
             if let Some(file) = &mut self.output {
                 write_file(file, &"\r\n".into())?;
@@ -337,6 +363,18 @@ impl<T: OutputSink> OutputSink for RoutedOutput<T> {
         }
         Ok(())
     }
+}
+/// A node list as the record names its target: the nodes in command order, joined by a comma and
+/// a space.
+fn node_list(nodes: &[WideText]) -> WideText {
+    let mut out = WideText::default();
+    for (i, node) in nodes.iter().enumerate() {
+        if i > 0 {
+            out.0.extend(", ".encode_utf16());
+        }
+        out.0.extend(&node.0);
+    }
+    out
 }
 fn escape(s: &WideText) -> WideText {
     let mut out = WideText::default();

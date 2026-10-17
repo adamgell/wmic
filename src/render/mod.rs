@@ -109,8 +109,9 @@ fn empty_output(
     node: &WideText,
     error: Option<&ManagementError>,
 ) -> Result<RenderedOutput, RenderError> {
-    #[cfg(windows)]
-    if let (Some(context), Some(spec)) = (&req.render_context, &req.format_spec) {
+    if let (Some(context), Some(spec)) = (&req.render_context, &req.format_spec)
+        && (cfg!(windows) || shows_errors(spec))
+    {
         let mut output = transform(&xml::error_command_xml(context, node, error)?, spec)?;
         if error.is_none() {
             output.stderr = "No Instance(s) Available.\r\r\n".into();
@@ -155,6 +156,57 @@ fn empty_output(
         record: None,
     })
 }
+/// The verbs that act on instances; their connection failures print neither a Node line nor
+/// blank query output.
+fn writes_or_calls(req: &ResolvedRequest) -> bool {
+    matches!(
+        req.verb,
+        Verb::Call | Verb::Set | Verb::Create | Verb::Delete
+    )
+}
+/// The failure happened while the node was reached or queried, so the diagnostic names the node.
+pub fn is_node_failure(error: &ManagementError) -> bool {
+    diagnostic::names_node(&error.operation)
+}
+/// The format prints the whole command document, so a failed node appears in it as an `ERROR`
+/// result. Table, list and the other formats print nothing for a failed node.
+pub fn shows_errors(spec: &FormatSpec) -> bool {
+    spec.transforms.first().is_some_and(|step| {
+        matches!(
+            builtin_kind(&step.name),
+            Some(BuiltinKind::Rawxml | BuiltinKind::Xml)
+        )
+    })
+}
+/// Renders one document for a command that reached several nodes: the objects that came back and
+/// an `ERROR` result for each failed node, in node order.
+pub fn render_with_failures(
+    input: RenderRequest<'_>,
+    order: &[WideText],
+    failures: &[(WideText, ManagementError)],
+) -> Result<RenderedOutput, RenderError> {
+    let (Some(context), Some(spec), Ok(result)) = (
+        &input.request.render_context,
+        &input.request.format_spec,
+        input.result,
+    ) else {
+        return render(input);
+    };
+    if failures.is_empty() || !shows_errors(spec) {
+        return render(input);
+    }
+    let narrowed;
+    let result = if let ManagementResult::Objects(set) = result {
+        narrowed = ManagementResult::Objects(restrict::selected(input.request, set));
+        &narrowed
+    } else {
+        result
+    };
+    transform(
+        &xml::to_command_xml_with_failures(result, context, input.node, order, failures)?,
+        spec,
+    )
+}
 pub fn render(input: RenderRequest<'_>) -> Result<RenderedOutput, RenderError> {
     let req = input.request;
     let result = match input.result {
@@ -178,24 +230,21 @@ pub fn render(input: RenderRequest<'_>) -> Result<RenderedOutput, RenderError> {
             if e.operation.eq_ignore_case("input") {
                 return Ok(diagnostic::text(&e.message, None));
             }
-            let mut output = diagnostic::management(e, input.node);
-            if e.operation.eq_ignore_case("query")
-                || e.operation.eq_ignore_case("enumerate")
-                || e.operation.eq_ignore_case("convert")
-            {
+            let calls = writes_or_calls(req);
+            let mut output = diagnostic::management(e, input.node, calls);
+            if diagnostic::names_node(&e.operation) && !calls {
                 output.stdout = empty_output(req, input.node, Some(e))?.stdout;
             }
             if e.operation.eq_ignore_case("method") {
                 if !crate::backend::write::interactive(req) {
-                    output.stdout =
-                        method::start(&e.target, &req.method.clone().unwrap_or_default());
+                    output.stdout = method::start(&e.target, &req.shown_method());
                 }
                 if let Some(partial) = &e.partial
                     && let ManagementResult::Methods(methods) = partial.as_ref()
                 {
                     let mut completed = method::render(
                         methods,
-                        &req.method.clone().unwrap_or_default(),
+                        &req.shown_method(),
                         !crate::backend::write::interactive(req),
                     );
                     append(&mut completed.stdout, &output.stdout);
@@ -253,7 +302,7 @@ pub fn render(input: RenderRequest<'_>) -> Result<RenderedOutput, RenderError> {
     if let ManagementResult::Methods(methods) = result {
         return Ok(method::render(
             methods,
-            &req.method.clone().unwrap_or_default(),
+            &req.shown_method(),
             !crate::backend::write::interactive(req),
         ));
     }
@@ -337,12 +386,12 @@ pub fn render_parse_error(e: &ParseError) -> RenderedOutput {
     )
 }
 pub fn render_resolve_error(e: &crate::alias::ResolveError) -> RenderedOutput {
-    render_resolve_error_for(e, &WideText::default())
+    render_resolve_error_for(e, None)
 }
-/// Withholds the error token when the command line carries a password switch.
+/// Withholds the error token when it is the password value.
 pub fn render_resolve_error_for(
     e: &crate::alias::ResolveError,
-    command_line: &WideText,
+    password: Option<&WideText>,
 ) -> RenderedOutput {
     if e.code & 0x80000000 != 0 {
         return diagnostic::management(
@@ -355,13 +404,14 @@ pub fn render_resolve_error_for(
                 partial: None,
             },
             &WideText::default(),
+            false,
         );
     }
-    let secret = command_line
-        .to_string_lossy()
-        .to_ascii_lowercase()
-        .contains("/password");
-    diagnostic::text(&e.message, e.token.as_ref().filter(|_| !secret))
+    let secret = password.filter(|p| !p.0.is_empty());
+    diagnostic::text(
+        &e.message,
+        e.token.as_ref().filter(|token| Some(*token) != secret),
+    )
 }
 pub mod help;
 pub mod mof;

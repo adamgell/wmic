@@ -53,6 +53,26 @@ pub struct Record {
     pub properties: Vec<Property>,
 }
 
+impl Record {
+    /// Class metadata of a projected record: the property count is the number of non-system
+    /// properties kept, `__DYNASTY` is empty, and `__DERIVATION` and `__SUPERCLASS` are empty
+    /// unless the command names them.
+    pub fn project_class_metadata(&mut self, requested: &[String], count: usize) {
+        let named = |name: &str| requested.iter().any(|r| r.eq_ignore_ascii_case(name));
+        for property in self.properties.iter_mut().filter(|p| p.system) {
+            if property.name.eq_ignore_case("__PROPERTY_COUNT") {
+                property.value = CimValue::Sint32(count as i32);
+            } else if property.name.eq_ignore_case("__DYNASTY") {
+                property.value = CimValue::String("".into());
+            } else if property.name.eq_ignore_case("__DERIVATION") && !named("__DERIVATION") {
+                property.value = CimValue::Array(vec![]);
+            } else if property.name.eq_ignore_case("__SUPERCLASS") && !named("__SUPERCLASS") {
+                property.value = CimValue::String("".into());
+            }
+        }
+    }
+}
+
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 pub struct PropertySchema {
     pub name: WideText,

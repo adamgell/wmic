@@ -6,7 +6,10 @@ use super::{
     query,
 };
 use crate::{
-    backend::{Confirmation, ResolvedRequest, cancellable_targets, methods::bind_method},
+    backend::{
+        Confirmation, ResolvedRequest, cancellable_targets,
+        methods::{bind_method, undeclared_method},
+    },
     model::{
         ManagementError, ManagementResult, MethodResult, OperationResult, Record, Verb, WideText,
     },
@@ -27,14 +30,9 @@ pub(super) fn call(
         .iter()
         .find(|m| requested.eq_ignore_case(&m.name.to_string_lossy()))
         .ok_or_else(|| {
-            let mut message = requested.clone();
-            message.0.extend(" - Invalid alias verb.".encode_utf16());
             error::input_error(
                 &request.class_name,
-                crate::backend::methods::InputError {
-                    code: 0xABFD,
-                    message,
-                },
+                undeclared_method(&requested, request.alias_target),
             )
         })?;
     let input = bind_method(method, &request.arguments)
@@ -59,7 +57,7 @@ pub(super) fn call(
             let mut prompt: WideText = "Execute (".into();
             prompt.0.extend(&path.0);
             prompt.0.extend(")->".encode_utf16());
-            prompt.0.extend(&method.name.0);
+            prompt.0.extend(&request.shown_method().0);
             prompt.0.extend("() (Y/N/?)? ".encode_utf16());
             let Some(c) = confirmation.as_deref_mut() else {
                 return Err(error::confirmation_unavailable(&request.class_name));

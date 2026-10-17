@@ -106,6 +106,7 @@ pub mod parse;
 pub mod path;
 pub mod record;
 pub mod soap;
+mod status_text;
 #[cfg(target_os = "macos")]
 pub use crate::backend::macos::schema;
 #[cfg(not(target_os = "macos"))]

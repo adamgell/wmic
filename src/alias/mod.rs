@@ -237,6 +237,8 @@ impl AliasStore {
             class_name: WideText::default(),
             instance_path: None,
             class_mode: matches!(target, Target::Class(_)),
+            alias_target: matches!(target, Target::Alias(_)),
+            multiple_nodes: false,
             query: None,
             selector: command.selector.clone(),
             verb: if !command.verb_explicit && command.verb == Verb::List {
@@ -246,6 +248,7 @@ impl AliasStore {
             },
             properties: command.properties.clone(),
             method: command.method.clone(),
+            method_echo: None,
             arguments: if command.raw_arguments.is_empty() {
                 command.arguments.clone()
             } else {
@@ -406,6 +409,11 @@ impl AliasStore {
                         );
                     }
                     req.method = Some(v.derivation.as_str().into());
+                    req.method_echo = Some(if v.verb_type.is_some() {
+                        v.name.as_str().into()
+                    } else {
+                        m.clone()
+                    });
                 } else {
                     req.method = method;
                 }

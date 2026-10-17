@@ -12,6 +12,8 @@ use wmic_compat::{
         },
     },
     model::*,
+    render::OutputError,
+    session::{OutputSink, OutputStream, Session},
 };
 
 const FIXTURES: &str = concat!(env!("CARGO_MANIFEST_DIR"), "/tests/fixtures/wsman/");
@@ -41,7 +43,7 @@ struct Rule {
     replies: VecDeque<Reply>,
 }
 
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 struct Sent {
     action: String,
     resource: String,
@@ -189,6 +191,7 @@ fn target() -> Target {
         namespace: "root\\cimv2".into(),
         node: wide("AYW"),
         server: "AYW".into(),
+        multiple_nodes: false,
     }
 }
 
@@ -324,7 +327,7 @@ fn typed_operating_system_instance_with_paths_and_system_properties() {
     let CimValue::Array(derivation) = &property(os, "__DERIVATION").value else {
         panic!("derivation is not an array")
     };
-    assert_eq!(derivation.len(), 4);
+    assert_eq!(derivation.len(), 3);
 }
 
 #[test]
@@ -351,6 +354,169 @@ fn projection_returns_requested_properties_and_system_properties_only() {
         query[0].starts_with("SELECT Caption,Primary FROM"),
         "{query:?}"
     );
+}
+
+fn class_metadata(record: &Record) -> (CimValue, CimValue, CimValue, CimValue) {
+    (
+        property(record, "__DERIVATION").value.clone(),
+        property(record, "__PROPERTY_COUNT").value.clone(),
+        property(record, "__DYNASTY").value.clone(),
+        property(record, "__SUPERCLASS").value.clone(),
+    )
+}
+
+#[test]
+fn a_projection_reduces_the_class_metadata() {
+    let w = wire();
+    script(&w, "/Enumerate", None, vec![ok("wql-process-fragment")]);
+    let records = objects(
+        management(&w)
+            .execute(&remote(
+                "process where \"ProcessId=4\" get Name,ProcessId,CommandLine,CreationDate",
+            ))
+            .unwrap(),
+    );
+    let (derivation, count, dynasty, superclass) = class_metadata(&records[0]);
+    assert_eq!(derivation, CimValue::Array(vec![]));
+    assert_eq!(
+        count,
+        CimValue::Sint32(5),
+        "the four named properties and the key Handle the server added"
+    );
+    assert_eq!(dynasty, CimValue::String(wide("")));
+    assert_eq!(superclass, CimValue::String(wide("")));
+    for name in ["__PATH", "__RELPATH", "__NAMESPACE", "__SERVER", "__CLASS"] {
+        assert!(
+            matches!(&property(&records[0], name).value, CimValue::String(s) if !s.0.is_empty()),
+            "{name}"
+        );
+    }
+    assert_eq!(property(&records[0], "__GENUS").value, CimValue::Sint32(2));
+}
+
+#[test]
+fn a_projection_fills_the_derivation_and_superclass_it_names() {
+    let w = wire();
+    script(&w, "/Enumerate", None, vec![ok("wql-process-fragment")]);
+    let records = objects(
+        management(&w)
+            .execute(&remote(
+                "process where \"ProcessId=4\" get Name,__DERIVATION,__SUPERCLASS,__DYNASTY",
+            ))
+            .unwrap(),
+    );
+    let (derivation, count, dynasty, superclass) = class_metadata(&records[0]);
+    assert_eq!(
+        derivation,
+        CimValue::Array(
+            [
+                "CIM_Process",
+                "CIM_LogicalElement",
+                "CIM_ManagedSystemElement"
+            ]
+            .map(|class| CimValue::String(wide(class)))
+            .to_vec()
+        )
+    );
+    assert_eq!(superclass, CimValue::String(wide("CIM_Process")));
+    assert_eq!(dynasty, CimValue::String(wide("")));
+    assert_eq!(count, CimValue::Sint32(5));
+}
+
+#[test]
+fn a_command_without_a_projection_keeps_the_class_metadata() {
+    for command in ["os get", "os get *", "os list full"] {
+        let w = wire();
+        script(
+            &w,
+            "/Enumerate",
+            Some("/root/cimv2/*"),
+            vec![ok("enumerate-os")],
+        );
+        let records = objects(management(&w).execute(&remote(command)).unwrap());
+        let (derivation, count, dynasty, superclass) = class_metadata(&records[0]);
+        assert!(
+            matches!(derivation, CimValue::Array(items) if items.len() == 3),
+            "{command}"
+        );
+        assert_ne!(count, CimValue::Sint32(0), "{command}");
+        assert_eq!(dynasty, CimValue::String(wide("CIM_ManagedSystemElement")));
+        assert_eq!(superclass, CimValue::String(wide("CIM_OperatingSystem")));
+    }
+}
+
+/// Stdout and stderr of one command run through the session against the scripted wire.
+fn session_output(w: &Shared, command: &str) -> (String, String, u32) {
+    struct Capture(String, String);
+    impl OutputSink for Capture {
+        fn write(&mut self, stream: OutputStream, text: &WideText) -> Result<(), OutputError> {
+            match stream {
+                OutputStream::Stdout => self.0.push_str(&text.to_string_lossy()),
+                OutputStream::Stderr => self.1.push_str(&text.to_string_lossy()),
+            }
+            Ok(())
+        }
+    }
+    let mut capture = Capture(String::new(), String::new());
+    let outcome = Session::new(wide("LOCAL")).unwrap().execute(
+        &wide(&format!(
+            " /node:AYW /user:AYW\\admin /password:secret {command}"
+        )),
+        EntryMode::Interactive,
+        &mut management(w),
+        &mut capture,
+    );
+    (capture.0, capture.1, outcome.exit_status)
+}
+
+// Case 03 of the remote measurement: the system properties of a projection that names none of the
+// class properties. The reply is what a server returns for a query with system properties only.
+#[test]
+fn a_system_property_list_matches_the_measured_classic_output() {
+    let w = wire();
+    script(&w, "/Enumerate", None, vec![ok("enumerate-os-system-only")]);
+    let (stdout, stderr, status) =
+        session_output(&w, "os get __SERVER,__PATH,__NAMESPACE /format:list");
+    let measured = include_str!("fixtures/remote-reference/system-properties-list.stdout.bin")
+        .replace("NODE1", "AYW");
+    assert_eq!(stdout, measured);
+    assert_eq!((stderr.as_str(), status), ("", 0));
+}
+
+// Case E15: an alias carries its own namespace, so the switch does not change it. A path target
+// uses the switch.
+#[test]
+fn the_namespace_switch_does_not_change_an_alias_target() {
+    let w = wire();
+    script(&w, "/Enumerate", None, vec![ok("enumerate-os")]);
+    let (stdout, stderr, status) = session_output(&w, r"/namespace:\\root\nosuchns os get Caption");
+    assert!(stdout.starts_with("Caption"), "{stdout}");
+    assert_eq!((stderr.as_str(), status), ("", 0));
+    assert!(
+        sent(&w)[0].resource.ends_with("/root/cimv2/*"),
+        "{:?}",
+        sent(&w)
+    );
+
+    let w = wire();
+    script(
+        &w,
+        "/Enumerate",
+        None,
+        vec![fault("fault-unknown-namespace")],
+    );
+    let (stdout, stderr, status) = session_output(
+        &w,
+        r"/namespace:\\root\nosuchns path Win32_OperatingSystem get Caption",
+    );
+    assert!(
+        sent(&w)[0].resource.contains("/root/nosuchns/"),
+        "{:?}",
+        sent(&w)
+    );
+    assert_eq!(stdout, "");
+    assert_eq!(stderr, "ERROR:\r\r\nDescription = Invalid namespace\r\r\n");
+    assert_eq!(status, 0x8004100e);
 }
 
 #[test]
@@ -901,7 +1067,7 @@ fn interactive_calls_prompt_per_instance_and_a_no_skips_the_invoke() {
             .unwrap();
         assert_eq!(
             answer.prompts,
-            ["Execute (\\\\AYW\\ROOT\\CIMV2:Win32_Process.Handle=\"4\")->GetOwner() (Y/N/?)? "]
+            ["Execute (\\\\AYW\\ROOT\\CIMV2:Win32_Process.Handle=\"4\")->getowner() (Y/N/?)? "]
         );
         assert_eq!(
             kinds(&w).iter().filter(|k| *k == "GetOwner").count(),
@@ -919,6 +1085,40 @@ fn interactive_calls_prompt_per_instance_and_a_no_skips_the_invoke() {
         )))
         .unwrap_err();
     assert_eq!(error.operation, wide("input"));
+}
+
+#[test]
+fn an_undeclared_method_reports_the_verb_for_aliases_and_the_class_method_otherwise() {
+    for (command, code, text) in [
+        (
+            "process call nosuchmethod",
+            0xABFD,
+            "nosuchmethod - Invalid alias verb.",
+        ),
+        (
+            "path Win32_Process call nosuchmethod",
+            0xABFC,
+            "nosuchmethod - Invalid class method.",
+        ),
+        (
+            "class Win32_Process call nosuchmethod",
+            0xABFC,
+            "nosuchmethod - Invalid class method.",
+        ),
+    ] {
+        let w = wire();
+        let error = management(&w).execute(&remote(command)).unwrap_err();
+        assert_eq!(
+            (
+                error.code,
+                error.operation.to_string_lossy(),
+                error.message.to_string_lossy()
+            ),
+            (code, "input".to_owned(), text.to_owned()),
+            "{command}"
+        );
+        assert!(sent(&w).is_empty(), "{command}");
+    }
 }
 
 #[test]
@@ -1047,7 +1247,7 @@ fn fault_rows_map_to_wmi_status_message_and_operation() {
         (
             "fault-unknown-namespace",
             Call::Enumerate,
-            expect(0x8004100e, "Invalid namespace", "query"),
+            expect(0x8004100e, "Invalid namespace", "connect"),
         ),
         (
             "fault-wql-syntax",
@@ -1199,6 +1399,41 @@ fn alias_query_unknown_class_and_path_unknown_class_report_differently() {
 }
 
 #[test]
+fn a_node_list_skips_the_class_lookup_rewrite() {
+    for (command, fault_name, action) in [
+        (
+            "path Win32_NoSuchClass.Id=\"1\" get Name",
+            "fault-unknown-class-get",
+            "/Get",
+        ),
+        (
+            "path Win32_NoSuchClass get Name",
+            "fault-unknown-class-enumerate",
+            "/Enumerate",
+        ),
+    ] {
+        let w = wire();
+        script(&w, action, None, vec![fault(fault_name)]);
+        let mut request = remote(command);
+        request.multiple_nodes = true;
+        let error = management(&w).execute(&request).unwrap_err();
+        assert_eq!(
+            failure(error),
+            expect(0x80041010, "Invalid class", "query"),
+            "{command}"
+        );
+        let w = wire();
+        script(&w, action, None, vec![fault(fault_name)]);
+        let error = management(&w).execute(&remote(command)).unwrap_err();
+        assert_eq!(
+            failure(error),
+            expect(0x80041002, "Not found", "class"),
+            "{command}"
+        );
+    }
+}
+
+#[test]
 fn unsupported_verbs_report_the_operation_they_would_have_run() {
     let w = wire();
     let mut backend = management(&w);
@@ -1229,7 +1464,7 @@ fn transport_errors_map_to_rpc_unavailable_access_denied_and_generic_failure() {
         ),
         (
             Reply::Authentication,
-            expect(0x80070005, "Access denied", "query"),
+            expect(0x80070005, "Access is denied.", "query"),
         ),
         (Reply::Io, expect(0x80041001, "Generic failure", "query")),
         (
@@ -1242,7 +1477,7 @@ fn transport_errors_map_to_rpc_unavailable_access_denied_and_generic_failure() {
         ),
         (
             Reply::Xml(401, String::new()),
-            expect(0x80070005, "Access denied", "query"),
+            expect(0x80070005, "Access is denied.", "query"),
         ),
     ];
     for (reply, expected) in cases {
@@ -1649,7 +1884,10 @@ fn a_401_reply_evicts_the_connection() {
     let error = c
         .enumerate(&target(), "A", Some("SELECT * FROM A"))
         .unwrap_err();
-    assert_eq!(failure(error), expect(0x80070005, "Access denied", "query"));
+    assert_eq!(
+        failure(error),
+        expect(0x80070005, "Access is denied.", "query")
+    );
     assert_eq!(w.borrow().connections, 1);
     c.enumerate(&target(), "A", Some("SELECT * FROM A"))
         .unwrap();

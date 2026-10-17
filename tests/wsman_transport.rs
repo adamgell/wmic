@@ -900,6 +900,7 @@ fn a_connection_closed_while_idle_is_replaced_before_an_invoke_and_the_invoke_is
         namespace: r"root\cimv2".into(),
         node: "127.0.0.1".into(),
         server: "127.0.0.1".into(),
+        multiple_nodes: false,
     };
     let mut client = WsmanClient::new(default_connector());
     let _ = client.get(&target, "Win32_Process", &[("Handle".into(), "4".into())]);

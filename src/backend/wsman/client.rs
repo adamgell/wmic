@@ -42,6 +42,8 @@ pub struct Target {
     pub node: WideText,
     /// Value of `__SERVER` when the service does not report its computer name.
     pub server: String,
+    /// The command names several nodes, so no class lookup precedes the query.
+    pub multiple_nodes: bool,
 }
 
 impl Target {
@@ -120,7 +122,7 @@ fn error_for(failure: Failure, target: &Target, scope: Scope) -> ManagementError
             &FaultContext {
                 node: &target.node,
                 operation: scope.operation,
-                by_path: scope.by_path,
+                by_path: scope.by_path && !target.multiple_nodes,
             },
         ),
         Failure::Transport(TransportError::Connect(e)) => plain(
@@ -131,7 +133,7 @@ fn error_for(failure: Failure, target: &Target, scope: Scope) -> ManagementError
         ),
         Failure::Transport(TransportError::Authentication) => plain(
             0x80070005,
-            "Access denied",
+            "Access is denied.",
             "query",
             "authentication failed",
         ),

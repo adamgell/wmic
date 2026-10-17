@@ -5,6 +5,18 @@ pub struct InputError {
     pub code: u32,
     pub message: WideText,
 }
+/// The error for a method the class does not declare: an alias target reports the verb, a path or
+/// class target reports the class method.
+pub fn undeclared_method(requested: &WideText, alias_target: bool) -> InputError {
+    let (code, text) = if alias_target {
+        (0xABFD, " - Invalid alias verb.")
+    } else {
+        (0xABFC, " - Invalid class method.")
+    };
+    let mut message = requested.clone();
+    message.0.extend(text.encode_utf16());
+    InputError { code, message }
+}
 fn invalid() -> InputError {
     InputError {
         code: 0x80041005,

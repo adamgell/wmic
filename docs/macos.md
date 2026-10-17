@@ -207,21 +207,36 @@ For a class in the schema, a method that the class does not have returns `<name>
 | Unknown class in an alias or WQL query | `Invalid class` | 0x80041010 | 16 |
 | Unknown class in `PATH` | `Not found` | 0x80041002 | 2 |
 | Unknown property | `Invalid query` | 0x80041017 | 23 |
-| Unknown namespace | `Invalid namespace` | 0x8004100E | 14 |
-| The server refuses the logon | `Access denied` | 0x80070005 | 5 |
+| Unknown namespace | `Invalid namespace`, with no `Node - ` line and no output on standard output | 0x8004100E | 14 |
+| The server refuses the logon | `Access is denied.` | 0x80070005 | 5 |
 | WMI refuses the operation | `Access denied` | 0x80041003 | 3 |
 | The connection fails: refused, name not found, or no answer in 5 seconds | `The RPC server is unavailable.` | 0x800706BA | 186 |
+| `/FAILFAST:ON` and the node does not answer | `Node - <node>`, then `RPC Server not available.`, with no `ERROR:` line | 0xABE3 | 227 |
+| Unknown method on an alias | `<name> - Invalid alias verb.` | 0xABFD | 253 |
+| Unknown method on `PATH` or `CLASS` | `<name> - Invalid class method.` | 0xABFC | 252 |
 | `SET`, `CREATE`, `DELETE`, `ASSOC` | `Not supported` | 0x8004100C | 12 |
 | A fault with another WMI status, for example an invalid parameter or an invalid method | The text of that status | The status | Low byte of the status |
 | A fault without a WMI status, an HTTP error, or a reply that is not SOAP | `Generic failure` | 0x80041001 | 1 |
 
 - The connection failure keeps the text of classic WMIC so that scripts behave the same.
+- For `GET` and `LIST`, a failed node prints `Node - <node>` and the error on standard error. The two blank lines of an empty result go to standard output once for the whole command. They appear only when no node printed a result.
+- For `CALL`, `SET`, `CREATE`, and `DELETE`, a failed node prints the error on standard error with no `Node - ` line and no blank lines. With `/FAILFAST:ON` the error is `RPC Server not available.` alone. Without it, the error is the `ERROR:` block.
 - The exit codes follow the mapping in [Exit status](#exit-status).
+- The text of a WBEM or Win32 status is the text that `IWbemStatusCodeText` returns on Windows. A status that this table lacks shows the text from the server.
+- A query with named properties, or a `LIST` view other than `FULL`, returns `__DERIVATION`, `__PROPERTY_COUNT`, `__DYNASTY`, and `__SUPERCLASS` empty. `GET` without names, `GET *`, and the `FULL` view return their values.
+- A command with two or more nodes does not look up the class before the query. An unknown class in `PATH` then reports `Invalid class`, as in an alias query.
 - A WMI status that has no WMIC text shows the text from the server. For `Generic failure`, the server text is kept in the error record and is not printed.
 
 ### Several nodes
 
-`/NODE:a,b` runs the command for each node in turn. The build chooses the backend for each node. A local name stays on the local backend. With `/USER`, every remote node goes to WinRM, and a local name is refused unless `WMIC_WSMAN_PORT` is set. Each node prints its own result. A failure on one node does not stop the next node. The exit status is the status of the last node that failed.
+`/NODE:a,b` runs the command for each node in turn. The build chooses the backend for each node. A local name stays on the local backend. With `/USER`, every remote node goes to WinRM, and a local name is refused unless `WMIC_WSMAN_PORT` is set. A failure on one node does not stop the next node. The exit status is the status of the last node that failed.
+
+The output follows classic WMIC:
+
+- `GET` and `LIST`: the results of the nodes that answered form one output, with the trailing blank line of the format. A failed node adds nothing to standard output. Its `Node - ` line and its message go to standard error, in node order. When every node failed, standard output holds one pair of blank lines for the whole command. The file of `/OUTPUT` then holds one line.
+- `/FORMAT:RAWXML` and `/FORMAT:XML`: one `COMMAND` document holds a `RESULTS` element for each node, in node order. A failed node has a `RESULTS` element with an `ERROR` element. Its message also goes to standard error.
+- `CALL`, `SET`, `CREATE`, `DELETE`: with two or more nodes, `Node - <node>` goes to standard output before the output of each node, also before a failed node. The error of a failed node goes to standard error.
+- `/RECORD`: a command with a node list writes one `RECORD` element. Its `TARGETNODE` lists the nodes as typed, separated by a comma and a space. Its text is the standard output of the whole command.
 
 Requests to the same host, port, and account share one authenticated connection in one `wmic` process. A request that cannot change state repeats once on a new connection when a reused connection fails. A method call never repeats.
 
@@ -336,6 +351,14 @@ This is an administrative shutdown path. Apple's `shutdown(8)` manual describes 
 - `Win32_Process.Create` ignores `ProcessStartupInformation`.
 - The format and stylesheet differences are listed in [Formats and stylesheets](#formats-and-stylesheets).
 - The console differences are listed in [Console](#console).
+- `LIST FULL` of `OS` fails with `Invalid query` (0x80041017) on current Windows, in classic WMIC and in this build. The bundled `FULL` view names `QuantumLength` and `QuantumType`, which WMI no longer has. `os get QuantumLength` and `os get QuantumType` fail in the same way. Classic WMIC showed this on Windows Server 2025 (cases E12b to E12d of the measurement record). The Windows build of this tool shows it on the local Windows build.
+- Remote nodes, measured against classic WMIC (see [Remote node measurement](#remote-node-measurement)):
+  - The exit code carries the low byte of the status. Status 0xAC67 exits with 103, and status 0x8004100E exits with 14.
+  - Standard output and standard error use LF. Classic uses `\r\r\n`, and `\r\n` inside method result blocks.
+  - The build reads the password from a pipe on standard input. Classic reads the password only from a console. With a pipe, classic prints `Enter the password :` and continues with an empty password.
+  - The build writes `&lt;redacted&gt;` for the password in the `COMMANDLINE` element of the `RAWXML` format. Classic prints the password.
+  - A file that receives the output holds UTF-8 text with LF lines and no byte order mark. Classic writes UTF-16LE with a byte order mark. For two failed nodes, a file redirected by the shell holds two LF characters, where classic holds one line.
+  - A node that does not answer fails after the 5 second connect timeout. Classic waits about 30 seconds for DCOM (28.7 to 30.6 seconds in eight runs). With `/FAILFAST:ON`, classic fails after about 5 seconds (4.7 to 5.1 seconds in eight runs) and the build after 5 seconds.
 
 ## Verification
 
@@ -354,8 +377,8 @@ The test files below contain these `#[test]` functions in this revision.
 | File | Tests | Runs on | Checks |
 | --- | ---: | --- | --- |
 | `tests/platform_unix.rs` | 22 | Unix | Argument quoting, switch values, exit-status mapping, node name, LF output, password redaction |
-| `tests/formats_portable.rs` | 25 | All platforms | Built-in renderers against captured Windows output, wildcard gets |
-| `tests/macos_backend.rs` | 25 | macOS | Class registry, selection, object paths, errors, namespace, node, prompts, writes |
+| `tests/formats_portable.rs` | 28 | All platforms | Built-in renderers against captured Windows output, wildcard gets |
+| `tests/macos_backend.rs` | 27 | macOS | Class registry, selection, object paths, errors, namespace, node, prompts, writes |
 | `tests/macos_processes.rs` | 47 | macOS | Process, service, account, startup, product, and update providers, and their methods |
 | `tests/macos_storage_network.rs` | 6 | macOS | Logical disk, volume, disk drive, partition, network adapter, and configuration |
 | `tests/macos_xslt.rs` | 17 | macOS | Custom stylesheets, parameters, refusals, write block, network and entity isolation |
@@ -363,14 +386,15 @@ The test files below contain these `#[test]` functions in this revision.
 | `src/backend/macos/providers/mapping_tests.rs` | 4 | macOS | Fixed nonempty disk/partition/interface/DHCP/DNS snapshots with exact expected typed records |
 | `src/backend/macos/providers/operating_system.rs` (unit tests) | 6 | macOS | All four power methods, force preservation, flag validation, fake privilege denial, and result shape through injected adapters |
 | `src/backend/macos/sys/power_tests.rs` | 8 | macOS | Exact ordinary versus forced operation selection, zero action calls when privilege is denied, command status/error mapping, and no forced fallback |
-| `tests/wsman_protocol.rs` | 51 | Unix (3 on macOS only) | Enumerate, pull, release, get, invoke, faults, typing, object paths, nested reference keys, routing, port validation, stale connections, timeouts |
+| `tests/remote_fidelity.rs` | 28 | All platforms | Bytes measured on classic WMIC: failed nodes in a list, fail-fast text, `CALL` on a node list, `RAWXML` and `XML` with a failed node, `/RECORD` with a node list, the method name, the invalid namespace, an unknown alias with a password |
+| `tests/wsman_protocol.rs` | 58 | Unix (3 on macOS only) | Enumerate, pull, release, get, invoke, faults, typing, object paths, nested reference keys, routing, port validation, stale connections, timeouts |
 | `tests/wsman_transport.rs` | 27 | Unix | NTLM vectors from MS-NLMP 4.2.4, loopback server with a real handshake, sealing, framing variants, chunked HTTP, unsealed-reply refusal, wrong password, closed connections |
-| `src/backend/wsman/**` (unit tests) | 32 | Unix | Value conversion, fault precedence, parsing limits, path quoting, record building, envelopes, timeouts, the port variable |
+| `src/backend/wsman/**` (unit tests) | 34 | Unix | Value conversion, fault precedence, parsing limits, path quoting, record building, envelopes, timeouts, the port variable |
 | `src/platform/unix/console.rs` (unit tests) | 4 | Unix | Signal handler, inherited dispositions, terminal restore |
 | `src/alias/predicate.rs` (unit tests) | 6 | All platforms | WHERE literal coercion and comparison types |
-| Total | 292 | | |
+| Total | 334 | | |
 
-The five `tests/macos_*.rs` files hold 107 of the 292 tests listed here. The remote-node suites run on every Unix platform. Unix and Windows-specific suites have explicit platform gates. At the earlier commit b2755a9, `cargo test --locked` reported 311 passed and 0 failed on the Mac mini, and 189 passed, 0 failed, 33 ignored on Windows.
+The five `tests/macos_*.rs` files hold 109 of the 334 tests listed here. The remote-node suites run on every Unix platform. Unix and Windows-specific suites have explicit platform gates. At the earlier commit b2755a9, `cargo test --locked` reported 311 passed and 0 failed on the Mac mini, and 189 passed, 0 failed, 33 ignored on Windows. With the remote-node fixes of 2026-10-17, `cargo test --locked` reports 503 passed and 0 failed on the Mac mini, and 231 passed, 0 failed, 34 ignored on Windows.
 
 The earlier follow-up passed 327 tests on Apple Silicon, including 12 executable tests and four fixed-snapshot mapping tests. [Review evidence](research/evidence/2026-10-16/macos-pr-review.json) records that baseline. The shutdown fix passes 340 tests: it adds 14 injected tests and replaces the prior native privilege/invalid-flag test, so all power behavior is tested through fakes, independently of the test runner's real user ID. [Shutdown fix evidence](research/evidence/2026-10-16/macos-shutdown-fix.json) records the fresh checks and remaining acceptance limits.
 
@@ -379,6 +403,12 @@ Windows CI now separately runs all 12 tests in `formats_msxml_parity` with `--ig
 The tests that read the live system assert structure and internal consistency. Examples: the process table contains the test process, the root file system is a logical disk, volumes have unique devices, and network configurations follow the adapters.
 
 Required system providers must return instances on the supported macOS runners. Disk/partition and adapter tests reject empty results, and every adapter requires a configuration. The four explicitly unpopulated hardware classes remain allowed to be empty; other optional providers can be empty when no corresponding data exists. Fixed input snapshots additionally verify disk ownership/geometry/type, physical and virtual links, IPv4/IPv6 addressing, DHCP, DNS, missing values, and disconnected interfaces independently of live hardware availability.
+
+### Remote node measurement
+
+The remote-node behavior was compared with classic WMIC on a reference host: Windows 11 Enterprise Evaluation build 26200.9168, `WMIC.exe` version 10.0.26100.8457, SHA-256 `7C7F386BB7C70263FD835DC58791B6DD73FC6617C27751B5503DBA8D0CDDA690`. The first series ran 20 cases against one Windows Server 2025 node: queries, formats, methods, errors, failed logons, an unreachable node, a node list, and the password prompt. Before the fixes, 8 cases matched, 1 case matched after the typed address was substituted, and 11 differed. A second series of 15 cases (E1 to E15, 39 runs) measured node lists with failed nodes, fail-fast, `/RECORD`, `CALL` on a node list, the method name in the `Executing` line, projections, and the namespace switch.
+
+After the fixes, the release build ran on a Mac mini against the lab node and against unreachable addresses (base commit 0d0d8c9 with the uncommitted fixes, binary SHA-256 `3454fd84ae99ab9ffb1f79587865d769cc739c7a3bfed244faa2c043068a44b1`). Of the 20 first-series cases, 17 ran again and match on text and on the low byte of the status. Case 9 did not run again. Case 19 (password in `RAWXML`) and case 20 (password on a pipe) differ by design, as listed in [Known differences from Windows](#known-differences-from-windows). Of the second series, 14 of the 15 cases match. Case E11 (a projection that names system properties) differs: classic WMIC printed empty `__PATH`, `__NAMESPACE`, and `__SERVER`, a `Handle` line, and no system property when only `__PROPERTY_COUNT` was named. The build does not model that. Line endings, the file encoding of a redirect, and the exit-code width differ in every case. They are listed in [Known differences from Windows](#known-differences-from-windows) with the timing of an unreachable node. The [measurement record](research/evidence/2026-10-17/remote-node-measurement.json) lists every case with the classic bytes, the result after the fixes, and the cases that are not modeled.
 
 ### Remote node evidence
 
@@ -425,7 +455,11 @@ The same commands run through the Windows build against `/node:127.0.0.1` print 
   - Large enumerations. The longest output that a live run counted had 67 lines.
   - Enumeration context expiry. Only fixture replies test the restart after an expired context.
   - `SET`, `CREATE`, and `DELETE` over WinRM. The build does not implement them.
-  - More than one node in one command. The code runs the nodes in turn through the dispatcher. No live run uses a node list.
+  - The `/RECORD` file of a command that asks for the password. The file holds one more `RECORD` element with the text `Enter the password :`. Classic WMIC was measured only with the password in the command line.
+  - A node list with two reachable remote nodes. The live runs combine one reachable node with unreachable addresses.
+  - `__DERIVATION` of the classes `CIM_System` and `CIM_Service`. Only the chain of `CIM_OperatingSystem` and `CIM_Process` was measured on classic WMIC.
+  - The prompt of `/INTERACTIVE:ON` names the method as typed for an alias verb without a verb type, and as the verb defines it for a verb type 0. Classic prompt casing was not measured.
+  - The list format of a projection that names `__RELPATH` or `__PATH`. Classic WMIC printed the key `Handle=4` and empty `__PATH`, `__NAMESPACE`, and `__SERVER` for `process where ProcessId=4`. The build prints neither.
 - The clipboard outside a graphical session.
 - The `sudo` path that selects the invoking user's launchd domain. A unit test covers the selection only.
 - Arguments that are not valid UTF-8.
