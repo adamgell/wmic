@@ -1,0 +1,11 @@
+
+Translates the output using values from Table <table name>
+USAGE:
+
+/TRANSLATE:<table name>
+
+The following translate table(s) are available:
+
+NoComma
+BasicXml
+

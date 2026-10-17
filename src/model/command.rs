@@ -44,6 +44,9 @@ pub enum SwitchValue {
 
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
 pub struct Modifier {
+    /// Most switch handlers accept either prefix; EVERY's nested REPEAT does not.
+    #[serde(default)]
+    pub prefix: Option<u16>,
     #[serde(default)]
     pub raw_value: Option<WideText>,
     pub name: WideText,

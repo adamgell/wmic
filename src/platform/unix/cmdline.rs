@@ -7,6 +7,7 @@ const QUOTE: u16 = b'"' as u16;
 const APOSTROPHE: u16 = b'\'' as u16;
 const BACKSLASH: u16 = b'\\' as u16;
 const SLASH: u16 = b'/' as u16;
+const HYPHEN: u16 = b'-' as u16;
 const COLON: u16 = b':' as u16;
 
 /// Non-UTF-8 bytes become U+FFFD.
@@ -36,20 +37,38 @@ pub fn command_line(args: &[Vec<u16>]) -> WideText {
 }
 
 /// Keeps every argument a single parser token without changing arguments the shell already shaped.
-/// A switch keeps its `/name:` prefix verbatim so that only the value is quoted.
+/// Path switches quote slash-containing values; other switches retain native
+/// adjacent-switch syntax. A switch prefix stays outside any added quotes.
 pub fn quote_argument(arg: &[u16]) -> Vec<u16> {
     if arg.is_empty() {
         return vec![QUOTE, QUOTE];
     }
-    if !arg.iter().any(|u| matches!(u, 9 | 10 | 13 | 32)) || is_single_token(arg) {
+    let switch_colon = if matches!(arg[0], SLASH | HYPHEN) {
+        arg.iter().position(|u| *u == COLON).filter(|&colon| {
+            !arg[..colon]
+                .iter()
+                .any(|u| matches!(u, 9 | 10 | 13 | 32 | 34 | 39))
+        })
+    } else {
+        None
+    };
+    let path_needs_quotes = switch_colon.is_some_and(|colon| {
+        let name = WideText(arg[1..colon].to_vec());
+        let value = &arg[colon + 1..];
+        let explicitly_quoted =
+            value.len() >= 2 && matches!(value[0], QUOTE | APOSTROPHE) && is_single_token(value);
+        ["output", "append", "record", "format"]
+            .iter()
+            .any(|name_text| name.eq_cli(name_text))
+            && value.contains(&SLASH)
+            && !explicitly_quoted
+    });
+    if !path_needs_quotes
+        && (!arg.iter().any(|u| matches!(u, 9 | 10 | 13 | 32)) || is_single_token(arg))
+    {
         return arg.to_vec();
     }
-    if arg[0] == SLASH
-        && let Some(colon) = arg.iter().position(|u| *u == COLON)
-        && !arg[..colon]
-            .iter()
-            .any(|u| matches!(u, 9 | 10 | 13 | 32 | 34 | 39))
-    {
+    if let Some(colon) = switch_colon {
         let mut out = arg[..=colon].to_vec();
         out.extend(quote_value(&arg[colon + 1..]));
         return out;

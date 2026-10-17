@@ -145,12 +145,7 @@ fn method_help(out: &mut WideText, alias: &AliasDefinition, command: &ParsedComm
     let mut verbs: Vec<_> = alias
         .verbs
         .iter()
-        .filter(|v| {
-            command
-                .method
-                .as_ref()
-                .is_none_or(|n| n.eq_ignore_case(&v.name))
-        })
+        .filter(|v| command.method.as_ref().is_none_or(|n| n.eq_cli(&v.name)))
         .collect();
     verbs.sort_by_key(|v| &v.name);
     for verb in verbs {
@@ -325,6 +320,15 @@ pub fn render_help(req: HelpRequest<'_>) -> Result<RenderedOutput, RenderError> 
                 .aliases
                 .find(name)
                 .ok_or_else(|| RenderError::new("Alias not found."))?;
+            if c.verb == Verb::Call
+                && let Some(method) = &c.method
+                && !alias.verbs.iter().any(|v| method.eq_cli(&v.name))
+            {
+                return Err(RenderError::status(
+                    0xABFD,
+                    format!("{method} - Invalid alias verb."),
+                ));
+            }
             if !c.verb_explicit {
                 let name = alias.friendly_name.to_ascii_uppercase();
                 line(&mut out, "");

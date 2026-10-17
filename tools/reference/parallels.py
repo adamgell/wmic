@@ -14,6 +14,7 @@ import subprocess
 import tempfile
 import threading
 import time
+import unicodedata
 from contextlib import contextmanager
 
 
@@ -40,7 +41,19 @@ def _guest_lock(vm):
                 fcntl.flock(handle, fcntl.LOCK_UN)
 
 
+def _contains_credentials(text: str) -> bool:
+    """Reject native-equivalent credential switches, including overlapping prefixes."""
+    # Conservative host-side guard: native CompareStringW also ignores some
+    # characters (e.g. soft hyphen) that NFKC alone preserves.
+    for match in re.finditer(r'(?=[/-]([^\s:]*)\s*:)', text):
+        folded = unicodedata.normalize('NFKD', match[1]).casefold()
+        if ''.join(ch for ch in folded if ch.isascii()) == 'password':
+            return True
+    return False
+
+
 def validate_manifest(manifest: dict, allow_writes: bool = False) -> None:
+    """Validate capture IDs, credential privacy and explicit write selection."""
     cases = manifest.get("cases")
     if not isinstance(cases, list) or not cases:
         raise ValueError("manifest must contain cases")
@@ -53,15 +66,16 @@ def validate_manifest(manifest: dict, allow_writes: bool = False) -> None:
         if "stdin_base64" in case:
             stdin = base64.b64decode(case["stdin_base64"], validate=True)
             texts = [stdin.decode('latin1')]
+            texts.append(stdin.decode('utf-8', errors='replace'))
             if len(stdin) % 2 == 0:
                 texts.append(stdin.decode('utf-16le', errors='surrogatepass'))
-            if any(re.search(r"(?i)/password\s*:", text) for text in texts):
+            if any(_contains_credentials(text) for text in texts):
                 raise ValueError("credential commands must not be persisted in stdin captures")
         arguments = case.get("arguments", "")
         if "arguments_utf16_base64" in case:
             raw = base64.b64decode(case["arguments_utf16_base64"], validate=True)
             arguments = raw.decode("utf-16le", errors="surrogatepass")
-        if re.search(r"(?i)/password\s*:", arguments):
+        if _contains_credentials(arguments):
             raise ValueError("credential arguments must not be persisted in captures")
         if case.get("operation", "read_only") != "read_only" and not allow_writes:
             raise ValueError("controlled write case requires explicit selection")

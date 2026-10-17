@@ -1,0 +1,17 @@
+NAMESPACE             : root\cimv2
+ROLE                  : root\cli
+NODE(S)               : DESKTOP-N4H9E7R
+IMPLEVEL              : IMPERSONATE
+[AUTHORITY            : N/A]
+AUTHLEVEL             : PKTPRIVACY
+LOCALE                : ms_409x
+PRIVILEGES            : ENABLE
+TRACE                 : OFF
+RECORD                : N/A
+INTERACTIVE           : OFF
+FAILFAST              : OFF
+OUTPUT                : STDOUT
+APPEND                : STDOUT
+USER                  : N/A
+AGGREGATE             : ON
+

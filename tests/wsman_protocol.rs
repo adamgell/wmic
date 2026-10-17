@@ -1048,6 +1048,7 @@ impl Confirmation for Answer {
 
 fn interactive(mut r: ResolvedRequest) -> ResolvedRequest {
     r.modifiers.push(Modifier {
+        prefix: None,
         raw_value: None,
         name: wide("interactive"),
         value: SwitchValue::Missing,

@@ -1,0 +1,7 @@
+Call			[ In/Out ]Params&type			Status
+====			=====================			======
+GetOwner                [OUT]Domain(STRING)                 	(null)         
+
+			[OUT]User(STRING)                   	
+
+

@@ -310,7 +310,7 @@ impl AliasStore {
             let mut method = command.method.clone();
             if !command.verb_explicit
                 && let Some(last) = pos.last()
-                && a.verbs.iter().any(|v| last.eq_ignore_case(&v.name))
+                && a.verbs.iter().any(|v| last.eq_cli(&v.name))
             {
                 method = pos.pop();
                 req.verb = Verb::Call;
@@ -369,7 +369,7 @@ impl AliasStore {
             if let Some(f) = a
                 .formats
                 .iter()
-                .find(|f| f.name.eq_ignore_ascii_case(&view))
+                .find(|f| WideText::from(view.as_str()).eq_cli(&f.name))
             {
                 req.display = f
                     .properties
@@ -382,11 +382,17 @@ impl AliasStore {
                     })
                     .collect();
                 req.format = f.format.as_deref().map(Into::into);
+            } else if command.verb == Verb::List && command.view.is_some() && !command.help {
+                return Err(error(
+                    0xACB3,
+                    "Invalid format specified (or) format not applicable for this alias.",
+                    None,
+                ));
             }
             if req.verb == Verb::Call
                 && let Some(m) = &method
             {
-                if let Some(v) = a.verbs.iter().find(|v| m.eq_ignore_case(&v.name)) {
+                if let Some(v) = a.verbs.iter().find(|v| m.eq_cli(&v.name)) {
                     if v.verb_type == Some(2) {
                         let d = DerivedCommand {
                             template: v.derivation.as_str().into(),
@@ -408,7 +414,13 @@ impl AliasStore {
                             },
                         );
                     }
-                    req.method = Some(v.derivation.as_str().into());
+                    // CLI verb matching ignores width, but WMI method names
+                    // still go through the provider's identifier lookup.
+                    req.method = Some(if m.eq_ignore_case(&v.name) {
+                        v.derivation.as_str().into()
+                    } else {
+                        m.clone()
+                    });
                     req.method_echo = Some(if v.verb_type == Some(0) {
                         v.name.as_str().into()
                     } else {

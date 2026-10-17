@@ -1,0 +1,96 @@
+{
+  "schema_version": 1,
+  "merged_pr": 6,
+  "baseline_commit": "0bb50c5b574ee2521edca57665a8d47bed08701e",
+  "passes_completed": 25,
+  "new_cases": 237,
+  "controller_cases": 99,
+  "product_patch_sha256": "edbab18b5d8550931ded8a23ad551141df556d1f5ae12a6d379235c5ae87af55",
+  "patch_definition": "git diff 0bb50c5b574ee2521edca57665a8d47bed08701e --binary -- src",
+  "raw_harness_sha256": "2761eb02c08d8deff71a956fa41717e839242a71b585811dcd38d85f30f0514f",
+  "reference_mode": "Explicit compatible retained captures; pinned original hashes and full profile/invocation/integrity gates enforced",
+  "targets": {
+    "aarch64-pc-windows-msvc": {
+      "report": "aarch64-pc-windows-msvc.json",
+      "sha256": "967bcd260d2e64618a26f4dfaab51c12bf8aa168e736aa2e7bc21f1a427b0702",
+      "candidate_sha256": "1b3af05e4e09f9149e0d042b7fb8f5065c6eebe906d52d6e74c25f61ef8fa19c",
+      "matched": 237,
+      "total": 237,
+      "strict_gate_status": 0,
+      "qualification": "native ARM64"
+    },
+    "x86_64-pc-windows-msvc": {
+      "report": "x86_64-pc-windows-msvc.json",
+      "sha256": "e5d736c0c4e3609c23b2612aa142437178fc1de4ad53a7a91a878bc32de62c1b",
+      "candidate_sha256": "aa1e3ef00591e8db2a2454e4be7cfb2f0ce126fe9748a0cdfde3e336da4a87fe",
+      "matched": 237,
+      "total": 237,
+      "strict_gate_status": 0,
+      "qualification": "emulated AMD64; cross-architecture comparison against ARM64 original"
+    },
+    "i686-pc-windows-msvc": {
+      "report": "i686-pc-windows-msvc.json",
+      "sha256": "3f21f7f8cd3234fe1730cedeeeeb237a4d492839fc041957a22c34af31710206",
+      "candidate_sha256": "fc869128debb35a70b6feb06714bae388d2063d82d2a43388f1dd1d392702996",
+      "matched": 237,
+      "total": 237,
+      "strict_gate_status": 0,
+      "qualification": "emulated x86 against x86 original"
+    }
+  },
+  "checks": {
+    "macos_rust": {
+      "passed": 414,
+      "log_sha256": "9cdf8749afe965c6ceff88ea145e2edf1bb198cc00b38ee4691d2b6b9dfe5206"
+    },
+    "reference_python": {
+      "passed": 55,
+      "log_sha256": "5bab69020255ebf011a4c9a76283c3edd8090950624cde8e2834dfe209f1afad"
+    },
+    "release_python": {
+      "passed": 11,
+      "log_sha256": "42aeb5ff6c73dcfa5aebc3ebcb6bce2c2c691c4768e57cd0e6e53502c3a342be"
+    },
+    "macos_clippy": {
+      "passed": true,
+      "log_sha256": "711946dba96746e71b3613e98ae4a1fce6300d048d1a4c14712b454e86c6f1f6"
+    },
+    "windows_clippy_all_three": {
+      "passed": true,
+      "log_sha256": "cdd396fbf85c0aa15148bb23b2e41e463992df48380d9b1e57540c05b1edc1ac"
+    },
+    "windows_release_builds_all_three": {
+      "passed": true,
+      "log_sha256": "cb2c5ad39869c9650af13ff7aff738fb6411df47b5033bc9e71af80e62852fa9"
+    },
+    "native_arm64_rust_oracle_tests": {
+      "passed": 2,
+      "controller_invocations": 99,
+      "actual_cli_invocations": 99,
+      "identity": "native-tests.json",
+      "identity_sha256": "eece5c1b366ccf8c05c09e2f8e81752e79fcd2b90006805ae26f2761583b928d",
+      "log": "native-tests.bin",
+      "log_sha256": "2ccbbc3c20c19d36dc4044f9fe596002bb1266f3cd58c3b5ac73adc4e1ac28d6"
+    },
+    "formatting": {
+      "passed": true
+    }
+  },
+  "full_arm64": {
+    "report": "aarch64-pc-windows-msvc-full.json",
+    "sha256": "e41bbd773edf688ab09cabddee989e7677b17e5722ece26fba285febf79e730c",
+    "completed": true,
+    "total": 2085,
+    "matched": 2082,
+    "strict_gate_status": 1,
+    "differences": [
+      "connection/trace",
+      "schema/os-default",
+      "schema/os-get-default"
+    ]
+  },
+  "review": {
+    "independent_review": "No remaining actionable findings after malformed-input, credential-privacy, ASSOC-help and aggregate-output fixes",
+    "github_ci": "Tracked on the new pull request; local results are recorded separately"
+  }
+}

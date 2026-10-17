@@ -1,0 +1,5 @@
+Call			[ In/Out ]Params&type			Status
+====			=====================			======
+GetOwnerSid             [OUT]Sid(STRING)                    	(null)         
+
+
