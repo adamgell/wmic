@@ -5,7 +5,7 @@ from pathlib import Path
 from parallels import capture,write_capture,validate_manifest
 from native_tests import stage_artifact
 from compare import compare_cases
-SUITES=['reference','format','schema','connection','method','help','interactive','fallback','write-help','switch-help','more-help','class-verb-help','alias','syntax','type','node-file','compatibility']
+SUITES=['reference','format','schema','connection','method','help','interactive','fallback','write-help','switch-help','more-help','class-verb-help','alias','syntax','type','node-file','compatibility','switch-values']
 FOLDERS={'reference':'reference','format':'format-reference','schema':'schema-reference','connection':'connection-reference','method':'method-reference','help':'help-reference','interactive':'interactive-reference'}
 PROFILE_KEYS=('computer','identity','culture','ui_culture','ansi_codepage','oem_codepage','console_output_codepage','directory','launcher_architecture','launch_api','output_mode')
 REFERENCES={'arm64':(r'C:\Windows\System32\wbem\WMIC.exe','2EF794C4940AFEA56C6D6D3B9BC9E66965BC7333E79C5DCB2DEF3C0E36F0834C'),'x86':(r'C:\Windows\SysWOW64\wbem\WMIC.exe','4AFE43FF64AD20475D75D9816A269FC03E10C492033B67E60C9886F3512E900E')}

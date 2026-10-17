@@ -109,7 +109,7 @@ fn logical_disks_list_the_root_file_system() {
 fn logical_disk_selection_by_condition_and_path() {
     assert!(!objects("logicaldisk where \"DriveType=3\" get DeviceID").is_empty());
     assert!(
-        objects("logicaldisk where \"DriveType=4\" get DeviceID")
+        objects("logicaldisk where \"DriveType=4\" get DeviceID,ProviderName")
             .iter()
             .all(|d| { text(d, "ProviderName").is_some() })
     );
