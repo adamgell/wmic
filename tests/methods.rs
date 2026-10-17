@@ -121,6 +121,215 @@ fn duplicate_and_unknown_parameters_fail_before_invocation() {
         assert!(bind_method(&method(), &args).is_err());
     }
 }
+
+#[test]
+/// Pin the native error codes and the first failing name in UTF-16 order.
+fn named_method_errors_distinguish_unknown_names_from_output_parameters() {
+    let schema = MethodSchema {
+        name: wide("GetOwner"),
+        input: vec![],
+        output: vec![parameter("User", 8, 0), parameter("Domain", 8, 1)],
+        is_static: false,
+        qualifiers: vec![],
+    };
+    for (args, code, message) in [
+        (
+            vec!["Unknown=1"],
+            0xB0AB,
+            "Unknown - Not a parameter of the verb or method.",
+        ),
+        (
+            vec!["User=x", "Unknown=1"],
+            0xB0AB,
+            "Unknown - Not a parameter of the verb or method.",
+        ),
+        (
+            vec!["User=x", "Domain=y"],
+            0xADE5,
+            "Domain - Not a input parameter.",
+        ),
+        (
+            vec!["alpha=1", "Beta=2"],
+            0xB0AB,
+            "Beta - Not a parameter of the verb or method.",
+        ),
+        (vec!["\"User\"=x"], 0xADE5, "User - Not a input parameter."),
+        (
+            vec!["\"\"=1"],
+            0xB0AB,
+            " - Not a parameter of the verb or method.",
+        ),
+        (
+            vec!["\"Unknown=1\""],
+            0xADE6,
+            "Verb Or Method has no input parameters.",
+        ),
+        (
+            vec![r#""Unknown\\"=1"#],
+            0xADE6,
+            "Verb Or Method has no input parameters.",
+        ),
+        (
+            vec!["Unknown[1]=x"],
+            0xB0AB,
+            "Unknown[1] - Not a parameter of the verb or method.",
+        ),
+        (
+            vec!["{Unknown=1}"],
+            0xB0AB,
+            "{Unknown - Not a parameter of the verb or method.",
+        ),
+        (
+            vec!["\"Unknown,Name\"=1"],
+            0xADE6,
+            "Verb Or Method has no input parameters.",
+        ),
+    ] {
+        let args: Vec<_> = args.into_iter().map(wide).collect();
+        let error = bind_method(&schema, &args).unwrap_err();
+        assert_eq!(error.code, code, "{args:?}: {error:?}");
+        assert_eq!(error.message, wide(message), "{args:?}");
+    }
+}
+
+#[test]
+/// Ensure invalid arguments beat help, empty selections and raw WMI name failures.
+fn alias_named_parameter_errors_precede_help_and_provider_execution() {
+    use wmic_compat::{
+        backend::{Management, ResolvedRequest},
+        render::OutputError,
+        session::{OutputSink, OutputStream, Session},
+    };
+    struct NoProvider;
+    impl Management for NoProvider {
+        /// Catch accidental provider execution before the argument diagnostic is returned.
+        fn execute(&mut self, _: &ResolvedRequest) -> Result<ManagementResult, ManagementError> {
+            panic!("invalid alias parameters must never execute a provider")
+        }
+    }
+    #[derive(Default)]
+    struct Sink(WideText);
+    impl OutputSink for Sink {
+        /// Require empty stdout and retain the complete stderr diagnostic.
+        fn write(&mut self, stream: OutputStream, text: &WideText) -> Result<(), OutputError> {
+            if stream == OutputStream::Stdout {
+                assert!(text.0.is_empty());
+            } else {
+                self.0.0.extend(&text.0);
+            }
+            Ok(())
+        }
+    }
+    for command in [
+        "process where ProcessId=0 call GetOwner Unknown=1",
+        "process where ProcessId=0 call ＧｅｔＯｗｎｅｒ Unknown=1",
+        "process where ProcessId=0 call GetOwner User=x Unknown=1 /?",
+        "process where ProcessId=4294967295 call GetOwner Unknown = 1",
+    ] {
+        let mut sink = Sink::default();
+        let outcome = Session::new(wide("HOST")).unwrap().execute(
+            &wide(command),
+            EntryMode::Interactive,
+            &mut NoProvider,
+            &mut sink,
+        );
+        assert_eq!(outcome.exit_status, 0xB0AB, "{command}");
+        assert_eq!(
+            sink.0,
+            wide("Unknown - Not a parameter of the verb or method.\r\r\n"),
+            "{command}"
+        );
+    }
+}
+
+#[test]
+/// Separate accepted assignment whitespace from a missing value before another name.
+fn named_method_arguments_allow_spaces_around_equals_and_reject_missing_values() {
+    use wmic_compat::parse::parse_command;
+    for line in ["Unknown=1", "Unknown =1", "Unknown= 1", "Unknown = 1"] {
+        let command = parse_command(
+            &wide(&format!("process call GetOwner {line}")),
+            EntryMode::Interactive,
+        )
+        .unwrap();
+        assert_eq!(command.raw_arguments, vec![wide("Unknown=1")], "{line}");
+    }
+    for line in [
+        "Unknown=",
+        "Unknown=1 User=",
+        "User= Unknown=1",
+        "User= Unknown =1",
+        "User= Unknown = 1",
+        "Unknown= =1",
+    ] {
+        assert_eq!(
+            parse_command(
+                &wide(&format!("process call GetOwner {line}")),
+                EntryMode::Interactive
+            )
+            .unwrap_err()
+            .code,
+            0xADDC,
+            "{line}"
+        );
+    }
+}
+
+#[test]
+/// Keep positional-format errors distinct from malformed named-list errors.
+fn malformed_named_method_tokens_keep_native_lexical_errors() {
+    use wmic_compat::parse::parse_command;
+    for (tail, code) in [
+        ("Unknown(1)=x", 0xB7CE),
+        ("Unknown=a=b", 0xADDC),
+        ("Unknown,=1", 0xB7CE),
+        ("User,Unknown=x", 0xB7CE),
+    ] {
+        let line = format!("process call GetOwner {tail}");
+        assert_eq!(
+            parse_command(&wide(&line), EntryMode::Interactive)
+                .unwrap_err()
+                .code,
+            code,
+            "{line}"
+        );
+    }
+}
+
+#[test]
+/// Exercise valid arrays and quoted delimiters through both parsing and typed binding.
+fn method_assignment_parsing_preserves_arrays_and_quoted_equals_values() {
+    let schema = MethodSchema {
+        name: wide("Sample"),
+        input: vec![parameter("Values", 0x2008, 0), parameter("Text", 8, 1)],
+        output: vec![],
+        is_static: true,
+        qualifiers: vec![],
+    };
+    for tail in [
+        r#"{"a=b","x,y"},"c=d""#,
+        r#"Values={"a=b","x,y"} Text="c=d""#,
+        r#"Values = {"a=b", "x,y"} Text = "c=d""#,
+    ] {
+        let parsed = wmic_compat::parse::parse_command(
+            &wide(&format!("process call Sample {tail}")),
+            EntryMode::Interactive,
+        )
+        .unwrap();
+        let bound = bind_method(&schema, &parsed.raw_arguments).unwrap();
+        assert_eq!(bound.len(), 2, "{tail}");
+        assert_eq!(
+            bound[0].value,
+            CimValue::Array(vec![
+                CimValue::String(wide("a=b")),
+                CimValue::String(wide("x,y")),
+            ]),
+            "{tail}"
+        );
+        assert_eq!(bound[1].value, CimValue::String(wide("c=d")), "{tail}");
+    }
+}
+
 #[test]
 fn resolved_method_retains_quote_semantics() {
     use wmic_compat::{

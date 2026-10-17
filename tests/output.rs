@@ -242,3 +242,43 @@ fn malformed_password_never_reaches_stderr_or_the_complete_record() {
         fs::remove_dir_all(dir).unwrap();
     }
 }
+
+#[test]
+/// Check the entire RECORD file and both output streams for synthetic credential text.
+fn credential_looking_method_parameter_names_and_values_are_not_recorded() {
+    use wmic_compat::backend::{Management, ResolvedRequest};
+    struct NoProvider;
+    impl Management for NoProvider {
+        /// Keep credential-redaction probes independent of a live provider.
+        fn execute(&mut self, _: &ResolvedRequest) -> Result<ManagementResult, ManagementError> {
+            panic!("invalid method parameters must never execute a provider")
+        }
+    }
+    for args in [
+        r#""/password:DO_NOT_LOG_TEST_SECRET"=1"#,
+        r#""-Ｐａｓｓｗｏｒｄ:DO_NOT_LOG_TEST_SECRET"=1"#,
+        r#"Unknown="/password:DO_NOT_LOG_TEST_SECRET""#,
+    ] {
+        let dir = directory();
+        let record = dir.join("record.xml");
+        let mut session = Session::new("HOST".into()).unwrap();
+        session.settings.record = Some(record.to_str().unwrap().into());
+        let mut sink = RoutedOutput::new(Capture::default());
+        let command = format!("process call GetOwner {args}");
+        let outcome = session.execute(
+            &command.as_str().into(),
+            EntryMode::Interactive,
+            &mut NoProvider,
+            &mut sink,
+        );
+        assert_eq!(outcome.exit_status, 0xB0AB, "{command}");
+        let text: Vec<_> = sink.inner.0.iter().flat_map(|(_, s)| s.0.clone()).collect();
+        assert!(!String::from_utf16_lossy(&text).contains("DO_NOT_LOG_TEST_SECRET"));
+        assert!(
+            !fs::read_to_string(record)
+                .unwrap()
+                .contains("DO_NOT_LOG_TEST_SECRET")
+        );
+        fs::remove_dir_all(dir).unwrap();
+    }
+}

@@ -5,13 +5,14 @@ from pathlib import Path
 from parallels import capture,write_capture,validate_manifest
 from native_tests import stage_artifact
 from compare import compare_cases
-SUITES=['reference','format','schema','connection','method','help','interactive','fallback','write-help','switch-help','more-help','class-verb-help','alias','syntax','type','node-file','compatibility','switch-values','rea-25']
+SUITES=['reference','format','schema','connection','method','help','interactive','fallback','write-help','switch-help','more-help','class-verb-help','alias','syntax','type','node-file','compatibility','switch-values','rea-25','method-arguments']
 FOLDERS={'reference':'reference','format':'format-reference','schema':'schema-reference','connection':'connection-reference','method':'method-reference','help':'help-reference','interactive':'interactive-reference'}
 PROFILE_KEYS=('computer','identity','culture','ui_culture','ansi_codepage','oem_codepage','console_output_codepage','directory','launcher_architecture','launch_api','output_mode')
 REFERENCES={'arm64':(r'C:\Windows\System32\wbem\WMIC.exe','2EF794C4940AFEA56C6D6D3B9BC9E66965BC7333E79C5DCB2DEF3C0E36F0834C'),'x86':(r'C:\Windows\SysWOW64\wbem\WMIC.exe','4AFE43FF64AD20475D75D9816A269FC03E10C492033B67E60C9886F3512E900E')}
 
 
 def compare_suite(manifest,expected,actual,expected_root=None,actual_root=None):
+    """Validate capture identity and inventory before comparing exact streams and statuses."""
     validate_manifest(manifest)
     wanted={c['id']:c for c in manifest['cases']}
     indexes=[]
@@ -39,6 +40,7 @@ def compare_suite(manifest,expected,actual,expected_root=None,actual_root=None):
 
 
 def report_status(report):
+    """Return the strict comparison status, rejecting incomplete or inconsistent reports."""
     suites=report.get('suites')
     if not isinstance(suites,dict) or not suites:raise ValueError('report has no suites')
     requested=report.get('requested_suites')
@@ -54,6 +56,7 @@ def report_status(report):
 
 
 def run(vm,target,binary,out,fixtures,suites,reference_dir=None):
+    """Stage a hash-pinned candidate and persist each selected comparison before continuing."""
     if out.exists():raise ValueError('use a fresh output directory')
     path,sha=stage_artifact(vm,binary)
     out.mkdir(parents=True)
@@ -84,6 +87,7 @@ def run(vm,target,binary,out,fixtures,suites,reference_dir=None):
 
 
 def main():
+    """Run selected suites or validate a saved report using the same strict exit-code gate."""
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--check-report',type=Path);parser.add_argument('--vm');parser.add_argument('--target',choices=['aarch64-pc-windows-msvc','x86_64-pc-windows-msvc','i686-pc-windows-msvc']);parser.add_argument('--binary',type=Path);parser.add_argument('--out',type=Path);parser.add_argument('--fixtures',type=Path,default=Path('tests/fixtures'));parser.add_argument('--suite',action='append',choices=SUITES);parser.add_argument('--reference-dir',type=Path)
     args=parser.parse_args()

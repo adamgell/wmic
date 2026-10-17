@@ -56,6 +56,7 @@ pub fn parse_command(raw: &WideText, mode: EntryMode) -> Result<ParsedCommand, P
         error
     })
 }
+/// Parse raw UTF-16 grammar while retaining CALL quotes for later type conversion.
 fn parse_command_inner(raw: &WideText, mode: EntryMode) -> Result<ParsedCommand, ParseError> {
     let units = command_units(raw, mode)?;
     let spans = lex::command_tokens(units)?;
@@ -265,36 +266,14 @@ fn parse_command_inner(raw: &WideText, mode: EntryMode) -> Result<ParsedCommand,
             if i < body_end {
                 command.method = Some(unquote(&units[spans[i].clone()]));
                 if i + 1 < body_end {
-                    command.arguments = lex::split_commas(
+                    command.raw_arguments = super::call::arguments(
                         &units[spans[i + 1].start..spans[body_end - 1].end],
-                        true,
-                    );
-                    command.raw_arguments = lex::split_commas(
-                        &units[spans[i + 1].start..spans[body_end - 1].end],
-                        false,
-                    );
-                    let first = &units[spans[i + 1].clone()];
-                    let named = first
+                    )?;
+                    command.arguments = command
+                        .raw_arguments
                         .iter()
-                        .position(|u| *u == 61)
-                        .is_some_and(|at| !first[..at].iter().any(|u| matches!(u, 34 | 39)));
-                    if named {
-                        let args: Vec<_> = spans[i + 1..body_end]
-                            .iter()
-                            .map(|span| WideText(units[span.clone()].to_vec()))
-                            .collect();
-                        if args.iter().any(|arg| {
-                            !arg.0.contains(&61) || lex::split_commas(&arg.0, false).len() != 1
-                        }) {
-                            return Err(ParseError::new(
-                                0xADDC,
-                                "Invalid named parameter list.\r\r\nHint: <named param list> ::= <named param> | <named param> <named param list> where <named param> ::= <param name>=<param value>",
-                                None,
-                            ));
-                        }
-                        command.arguments = args.clone();
-                        command.raw_arguments = args;
-                    }
+                        .map(|arg| unquote(&arg.0))
+                        .collect();
                 }
             }
         }
