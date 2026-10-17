@@ -2,6 +2,25 @@
 
 This document describes the macOS build of `wmic`. It states what the build does, how to use it, and what evidence supports each claim. The evidence differs from the Windows build. See [Verification](#verification) and [Not verified](#not-verified).
 
+## Documentation map
+
+| Start here | What it covers |
+| --- | --- |
+| [Getting started](macos/getting-started.md) | Build, optional installation, first queries, help, and troubleshooting |
+| [Command cookbook](macos/cookbook.md) | Hardware, storage, networking, processes, apps, accounts, filters, paths, and formats |
+| [Scripting guide](macos/scripting.md) | zsh/Bash quoting, exit codes, method results, encodings, JSON, sessions, and automation |
+| [Runnable examples](../examples/macos/README.md) | A read-only inventory script, JSON summary, an owned-process lifecycle, and a session file |
+| This reference | The complete class/provider table, value mappings, methods, and acceptance limits |
+
+For a first query from a source checkout:
+
+```sh
+cargo build --locked --release
+./target/release/wmic os get Caption,Version /value
+```
+
+The commands in the guides use `wmic` after you put the executable on PATH. Replace it with `./target/release/wmic` to use the checkout directly. Ordinary queries need neither root nor Python.
+
 ## Scope
 
 The macOS build runs the same parser, help, alias set, formats, and session logic as the Windows build. It does not use WMI. A backend answers each query from macOS system interfaces: sysctl, Mach, libproc, IOKit, Core Foundation, SystemConfiguration, `getfsstat`, `getifaddrs`, directory tables, and property lists. The only subprocess that a query starts is `/bin/launchctl`, for the `Win32_Service` class. The `Win32_Process` `Create` method also starts the program that the caller names.
@@ -24,10 +43,10 @@ No macOS package or signed release exists. Build the program from source.
 
 ## Build
 
-The repository pins Rust 1.98.1 in `rust-toolchain.toml`. The build needs the Xcode Command Line Tools. It does not need Homebrew or pkg-config.
+Use Rust 1.98.1 or later, as declared by `rust-version` in `Cargo.toml`. The repository does not pin a toolchain with `rust-toolchain.toml`. The build needs the Xcode Command Line Tools. It does not need Homebrew or pkg-config. See [Getting started](macos/getting-started.md) for prerequisites and optional installation.
 
 ```sh
-cargo build --release
+cargo build --locked --release
 ```
 
 The executable is `target/release/wmic`. The build links the system `libxml2` and `libxslt` libraries and the IOKit, CoreFoundation, and SystemConfiguration frameworks.
@@ -41,7 +60,7 @@ Run `wmic` with the same commands as classic WMIC.
 ```sh
 wmic os get Caption,Version
 wmic os where "Caption like '%macOS%'" get Caption /format:csv
-wmic process where "Name='sleep'" call terminate
+wmic process where "ProcessId=$$" call GetOwner
 ```
 
 Run `wmic` without arguments to open the interactive prompt. Use `/INTERACTIVE:ON` to turn on confirmation prompts. The prompts use the Windows text.
@@ -77,6 +96,7 @@ Examples: `0x80041010` exits with 16. `0x80041002` exits with 2. `0x80070005` ex
 | Standard output and standard error | UTF-8. Line endings are LF. A lone CR stays unchanged. |
 | `/OUTPUT` file, and a new `/APPEND` file | UTF-16LE with a byte order mark. Line endings are CRLF. |
 | `/APPEND` to an existing file that starts with a UTF-16LE byte order mark | UTF-16LE. |
+| `/APPEND` to an existing file that starts with a UTF-8 byte order mark | UTF-16LE append, retaining the original prefix/content; no transcoding of existing bytes. |
 | `/APPEND` to an existing file that does not start with a byte order mark | UTF-8 with CRLF line endings. |
 | `/RECORD` file | UTF-8. |
 | `/OUTPUT:CLIPBOARD` and `/APPEND:CLIPBOARD` | Text sent to `/usr/bin/pbcopy` with LF line endings. |
