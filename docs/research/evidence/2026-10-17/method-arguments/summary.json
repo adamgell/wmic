@@ -1,0 +1,692 @@
+{
+  "schema_version": 1,
+  "baseline_commit": "3e1e1f66229d9797023ae3d3197c46c7a1971418",
+  "scope": "Malformed CALL method-argument diagnostics and precedence; read-only probes only",
+  "patches": {
+    "fix_source": {
+      "sha256": "b5cbcaacfac6144792257e3415866c7ff090cd69f114222b03e6e718870d6515",
+      "command": "git diff 3e1e1f66229d9797023ae3d3197c46c7a1971418 --binary -- src"
+    },
+    "regression_tests": {
+      "sha256": "bed31cd1f58ca24f9dbe408d13c0cb6016d93790c88d0e59a4a7470ef1d4d632",
+      "command": "git diff 3e1e1f66229d9797023ae3d3197c46c7a1971418 --binary -- tests"
+    },
+    "reference_tools": {
+      "sha256": "5219c2771d4b8b10d02f93468255a9789f7d9711d8eac9df981caaca86fc4e35",
+      "command": "git diff 3e1e1f66229d9797023ae3d3197c46c7a1971418 --binary -- tools/reference"
+    }
+  },
+  "fixtures": {
+    "method_arguments": 106,
+    "portable_control_oracles": 64,
+    "total_committed_cases": 2191,
+    "manifest_sha256": "a98f18ee92e9626581db5e12f24cdf9bfe3fdb5687f50c3f6f4cad16564df0dc",
+    "reference_capture_sha256": "60a20fe0d59fccbac1f851c808dd7acdb67fc1f09dd892fec4201d68e35412c6"
+  },
+  "targets": {
+    "aarch64-pc-windows-msvc": {
+      "candidate_sha256": "9ef0a708cc1fa208ce7f6ef89b919437c51c305d36ea94af4d9fbfb4231e692e",
+      "reference_profile": {
+        "role": "reference",
+        "executable": "C:\\Windows\\System32\\wbem\\WMIC.exe",
+        "executable_sha256": "2EF794C4940AFEA56C6D6D3B9BC9E66965BC7333E79C5DCB2DEF3C0E36F0834C",
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "signature": "Valid",
+        "computer": "DESKTOP-N4H9E7R",
+        "identity": "NT AUTHORITY\\SYSTEM",
+        "launcher_architecture": "ARM64",
+        "culture": "en-US",
+        "ui_culture": "en-US",
+        "ansi_codepage": 1252,
+        "oem_codepage": 437,
+        "console_output_codepage": 437,
+        "directory": "C:\\",
+        "launch_api": "CreateProcessW",
+        "output_mode": "native pipes"
+      },
+      "cross_architecture": false,
+      "reference_reuse": "explicit matching-profile hash-pinned captures",
+      "matched": 2188,
+      "total": 2191,
+      "strict_exit_status": 1,
+      "corpus": {
+        "method-arguments": {
+          "matched": 106,
+          "total": 106,
+          "differences": {}
+        },
+        "reference": {
+          "matched": 23,
+          "total": 23,
+          "differences": {}
+        },
+        "format": {
+          "matched": 42,
+          "total": 42,
+          "differences": {}
+        },
+        "schema": {
+          "matched": 29,
+          "total": 31,
+          "differences": {
+            "os-default": [
+              "os-default: stdout: 2607 != 2607 bytes; first difference at 1728"
+            ],
+            "os-get-default": [
+              "os-get-default: stdout: 2607 != 2607 bytes; first difference at 1728"
+            ]
+          }
+        },
+        "connection": {
+          "matched": 12,
+          "total": 13,
+          "differences": {
+            "trace": [
+              "trace: stderr: 22113 != 89 bytes; first difference at 0"
+            ]
+          }
+        },
+        "method": {
+          "matched": 13,
+          "total": 13,
+          "differences": {}
+        },
+        "help": {
+          "matched": 344,
+          "total": 344,
+          "differences": {}
+        },
+        "interactive": {
+          "matched": 46,
+          "total": 46,
+          "differences": {}
+        },
+        "fallback": {
+          "matched": 11,
+          "total": 11,
+          "differences": {}
+        },
+        "write-help": {
+          "matched": 243,
+          "total": 243,
+          "differences": {}
+        },
+        "switch-help": {
+          "matched": 9,
+          "total": 9,
+          "differences": {}
+        },
+        "more-help": {
+          "matched": 10,
+          "total": 10,
+          "differences": {}
+        },
+        "class-verb-help": {
+          "matched": 8,
+          "total": 8,
+          "differences": {}
+        },
+        "alias": {
+          "matched": 4,
+          "total": 4,
+          "differences": {}
+        },
+        "syntax": {
+          "matched": 19,
+          "total": 19,
+          "differences": {}
+        },
+        "type": {
+          "matched": 2,
+          "total": 2,
+          "differences": {}
+        },
+        "node-file": {
+          "matched": 2,
+          "total": 2,
+          "differences": {}
+        },
+        "compatibility": {
+          "matched": 742,
+          "total": 742,
+          "differences": {}
+        },
+        "switch-values": {
+          "matched": 286,
+          "total": 286,
+          "differences": {}
+        },
+        "rea-25": {
+          "matched": 237,
+          "total": 237,
+          "differences": {}
+        }
+      },
+      "report_sha256": "ada8f17965dc2ca402b16a3e39faf67edc2b3111b3eb31ef7d6cd8da0eea697c",
+      "captures": {
+        "method-arguments": {
+          "reference_capture_sha256": "60a20fe0d59fccbac1f851c808dd7acdb67fc1f09dd892fec4201d68e35412c6",
+          "candidate_capture_sha256": "00ed880a54d15fbc8e981888ce09201780b85027ab9390f1d08a2bd1a46b8f0c"
+        },
+        "reference": {
+          "reference_capture_sha256": "4e459e1c67ce4f85ca88ff0dec2e323fad076b5978b451318d48ee8b2768c134",
+          "candidate_capture_sha256": "ffe7ba0afa5c1bd4c5f91cf57a7913c4772f50a3c3965a5bbe40e480b9d92748"
+        },
+        "format": {
+          "reference_capture_sha256": "3fe029abbbb7abdff13fae4b039b05faeec8a52ba09aaafe50f05c63eee33176",
+          "candidate_capture_sha256": "eeffe90c7deffa64014cb4de586f432df83d51f9f6e710847e3760b7727cb9f0"
+        },
+        "schema": {
+          "reference_capture_sha256": "7c3ed5f6a3f70859e1840605509eefc38c5120cd50fa70413fdbf2e67752a8c6",
+          "candidate_capture_sha256": "d76506b537335fce4370580ab7134c9d5e66ee7aa38e3fe494032bb4a4f5504e"
+        },
+        "connection": {
+          "reference_capture_sha256": "692734070ffe889e29e9e678ef984703088f480c3d6ad96f571458c830252cf4",
+          "candidate_capture_sha256": "f125e3995dcbf238059a30ae9d03673e74e6c9bbf0fad77bbc9f109157acaa20"
+        },
+        "method": {
+          "reference_capture_sha256": "3646d85421e2ba0f4a6c183020685454f4eacc6e71826de8c8f3655bcaa376ba",
+          "candidate_capture_sha256": "8e386cc62fdea24929e592ef1653a0c5929bcb12a772262732edf0e08bc7c00a"
+        },
+        "help": {
+          "reference_capture_sha256": "90e969b473c53fdabf06313a71ac17d51fdeefb54bec3e48351b1238ace0a6dc",
+          "candidate_capture_sha256": "ce33d5be43d4956a6d7fc0e8604c2163e6b351cfd31879bc7e3bb52b9e559e9a"
+        },
+        "interactive": {
+          "reference_capture_sha256": "e7db151f1e87908cf1f278716b49a9d7177c5821cd938b89ad66f53228ba235c",
+          "candidate_capture_sha256": "f231f96a91599b3d637862a92bd1f9f1b4d27d0540253a97eab886a1eec8d9fe"
+        },
+        "fallback": {
+          "reference_capture_sha256": "24cc4b6a95d246bc60ef5ee42b959e619a45c6c07dea9b31d9c6eed1687d087f",
+          "candidate_capture_sha256": "0ac6d296d1306821ca77efeefeb02733968228a77980fde41bb6450101fd7b1c"
+        },
+        "write-help": {
+          "reference_capture_sha256": "dc167db4086ea892825044a53fe139117ea50299769f6fd8e161e59c3ba61c93",
+          "candidate_capture_sha256": "386c9c3b5db7c12fa931c3f92f7f0a6cf0275fdf1ee702df23622e90332ace42"
+        },
+        "switch-help": {
+          "reference_capture_sha256": "df13d37d5ae6ad510b69211d5bc1275980cfcb8963662581ea29a4c9d9822a8b",
+          "candidate_capture_sha256": "acb2a6b507bea9cc17a66fe4923dd5b5bbce625b803c94bb71a0355096450d74"
+        },
+        "more-help": {
+          "reference_capture_sha256": "c047fc474f50ec99ba4e72c31e3993a21d2d197081f852a32c611a2349d912ef",
+          "candidate_capture_sha256": "efece896c1ea7002cd7eb40e2c0b723f3978cd3677c02331d95f396f8dc784f9"
+        },
+        "class-verb-help": {
+          "reference_capture_sha256": "5c3b8d263291734b6dd69c468f47c88ea8d83ce2dd31f18e617cce5fd6684f32",
+          "candidate_capture_sha256": "20bc9aad233e649adb3b6e24521020b6ec5bafae7be8bea767e3d05c55686231"
+        },
+        "alias": {
+          "reference_capture_sha256": "33df0b5e8d22ca72bf48379240037e1f1767d86beb053f6d0cd6815ee78023b7",
+          "candidate_capture_sha256": "fc825ccccbbf2947eb7466eb6f1d12529e06342f9637cf17a0343e1843e16d23"
+        },
+        "syntax": {
+          "reference_capture_sha256": "3f1b9021b58d1a8e4f37671fc42944271b9b32ca42698de94b25c3deaff720ff",
+          "candidate_capture_sha256": "da5bf58d39add7982a27cba2b5c67d9b642fab9a2759dd26df43877f5f244b5b"
+        },
+        "type": {
+          "reference_capture_sha256": "c2f2dc61d1ae26ad894395e07eb853673aff203e19d9c404fdeaed5a28569ddf",
+          "candidate_capture_sha256": "ffdf65fbb3511c4f0dda7d4366195e5081459676c7d61623e55d523f7b7fb9ee"
+        },
+        "node-file": {
+          "reference_capture_sha256": "89b7cfac6527b62bb2f11da7da45694a589e546574200720d086c7a020f6f33e",
+          "candidate_capture_sha256": "ae28124b89b941af5ea573dbaece019c9049173a63dbf5b75a7ea60cefb8f962"
+        },
+        "compatibility": {
+          "reference_capture_sha256": "f4abb927f14af5ba9b38d8e9c5cf7bff599d35ebfc8112fde91f2455f2928d71",
+          "candidate_capture_sha256": "7e3a295349ebc519e135cead2c1e2d1f293951eda0e0af50ccb7be18fc3746f5"
+        },
+        "switch-values": {
+          "reference_capture_sha256": "24bdcec201c1826418f6672be55166310f2cb2ce24f8affa274c2021acf0f1f4",
+          "candidate_capture_sha256": "d45d4b5c2964c0413326a9707253547aff2b3c8aa9dc03b6080c15a55668fe1c"
+        },
+        "rea-25": {
+          "reference_capture_sha256": "f7310b870715e0706c1ec486566f38f3d2056bb57283755d77ea65bc50a8f2f4",
+          "candidate_capture_sha256": "aeebd0a171ee468697eb100b38936050b3e78f5ec4716d94cff5f667729cb8db"
+        }
+      }
+    },
+    "x86_64-pc-windows-msvc": {
+      "candidate_sha256": "4eb08c4d0f119f48a1550d004def2eed6b4139f8c7e6a719be005c565775a2ff",
+      "reference_profile": {
+        "role": "reference",
+        "executable": "C:\\Windows\\System32\\wbem\\WMIC.exe",
+        "executable_sha256": "2EF794C4940AFEA56C6D6D3B9BC9E66965BC7333E79C5DCB2DEF3C0E36F0834C",
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "signature": "Valid",
+        "computer": "DESKTOP-N4H9E7R",
+        "identity": "NT AUTHORITY\\SYSTEM",
+        "launcher_architecture": "ARM64",
+        "culture": "en-US",
+        "ui_culture": "en-US",
+        "ansi_codepage": 1252,
+        "oem_codepage": 437,
+        "console_output_codepage": 437,
+        "directory": "C:\\",
+        "launch_api": "CreateProcessW",
+        "output_mode": "native pipes"
+      },
+      "cross_architecture": true,
+      "reference_reuse": "explicit matching-profile hash-pinned captures",
+      "matched": 360,
+      "total": 360,
+      "strict_exit_status": 0,
+      "corpus": {
+        "method-arguments": {
+          "matched": 106,
+          "total": 106,
+          "differences": {}
+        },
+        "alias": {
+          "matched": 4,
+          "total": 4,
+          "differences": {}
+        },
+        "method": {
+          "matched": 13,
+          "total": 13,
+          "differences": {}
+        },
+        "rea-25": {
+          "matched": 237,
+          "total": 237,
+          "differences": {}
+        }
+      },
+      "report_sha256": "e81e45bbb49ecb8fd116e56702006dbcbd9a6f1f18077d6502159896cf60a22d",
+      "captures": {
+        "method-arguments": {
+          "reference_capture_sha256": "60a20fe0d59fccbac1f851c808dd7acdb67fc1f09dd892fec4201d68e35412c6",
+          "candidate_capture_sha256": "b6a2fe0a73b918604a4fc921770337c4a8d16d17b05fd366e924c48a88133d5f"
+        },
+        "alias": {
+          "reference_capture_sha256": "33df0b5e8d22ca72bf48379240037e1f1767d86beb053f6d0cd6815ee78023b7",
+          "candidate_capture_sha256": "917c318c4bc5a1475a57a3bea3b4ee6918b4533794af2915ab9e328bede62222"
+        },
+        "method": {
+          "reference_capture_sha256": "3646d85421e2ba0f4a6c183020685454f4eacc6e71826de8c8f3655bcaa376ba",
+          "candidate_capture_sha256": "f6c998a0180241d8cb50eb6b4b39680f171efa0262c68a9853ff2bd09f713872"
+        },
+        "rea-25": {
+          "reference_capture_sha256": "f7310b870715e0706c1ec486566f38f3d2056bb57283755d77ea65bc50a8f2f4",
+          "candidate_capture_sha256": "3799cb45c929699c09887172c01d0e98bb9318779fc0444b8ec120fbf9905ab3"
+        }
+      }
+    },
+    "i686-pc-windows-msvc": {
+      "candidate_sha256": "994228fc02fbccaf74471c30dd148e27004811b1fc05d31368bd3ef087f22708",
+      "reference_profile": {
+        "role": "reference",
+        "executable": "C:\\Windows\\SysWOW64\\wbem\\WMIC.exe",
+        "executable_sha256": "4AFE43FF64AD20475D75D9816A269FC03E10C492033B67E60C9886F3512E900E",
+        "version": "10.0.26100.1 (WinBuild.160101.0800)",
+        "signature": "Valid",
+        "computer": "DESKTOP-N4H9E7R",
+        "identity": "NT AUTHORITY\\SYSTEM",
+        "launcher_architecture": "ARM64",
+        "culture": "en-US",
+        "ui_culture": "en-US",
+        "ansi_codepage": 1252,
+        "oem_codepage": 437,
+        "console_output_codepage": 437,
+        "directory": "C:\\",
+        "launch_api": "CreateProcessW",
+        "output_mode": "native pipes"
+      },
+      "cross_architecture": false,
+      "reference_reuse": "fresh original capture",
+      "matched": 360,
+      "total": 360,
+      "strict_exit_status": 0,
+      "corpus": {
+        "method-arguments": {
+          "matched": 106,
+          "total": 106,
+          "differences": {}
+        },
+        "alias": {
+          "matched": 4,
+          "total": 4,
+          "differences": {}
+        },
+        "method": {
+          "matched": 13,
+          "total": 13,
+          "differences": {}
+        },
+        "rea-25": {
+          "matched": 237,
+          "total": 237,
+          "differences": {}
+        }
+      },
+      "report_sha256": "7523c34bcae6788458f4730c49c05ef5f8a3ee6e64f5ac96cb1483446e7fc68e",
+      "captures": {
+        "method-arguments": {
+          "reference_capture_sha256": "c1c045922b72d23a34578b692062b90e2e77a2e6d4a413b0dcdefed4b64f7d9e",
+          "candidate_capture_sha256": "33a04cf08329fdea25049168d2cd4f8298ac788c4b299f22ae0bc739fc9f93f8"
+        },
+        "alias": {
+          "reference_capture_sha256": "a59f56cf7ff4d4c11440ae7721785863fe7109c1318f0e7172d5b58349c4b602",
+          "candidate_capture_sha256": "056aba4331403942ddddbe1b40f572d7d9f92ecfd4966c0ff6ca93092b6a0ced"
+        },
+        "method": {
+          "reference_capture_sha256": "6ab6e619fb14ecb84ffb6043afe98780578e19eb31ae50be99e3240991b00393",
+          "candidate_capture_sha256": "c5e09e482aa3c2583853ab61faae7993f58afb51856a822005c87d58289b6d84"
+        },
+        "rea-25": {
+          "reference_capture_sha256": "47673133a990c5fa486b7feedc4349ffbf44c76db1faf38530e62f0f5836be2c",
+          "candidate_capture_sha256": "5edcce75adb4080ee3f879613ee61b33593aa694f3771e61077b2b3d56993985"
+        }
+      }
+    }
+  },
+  "local_checks": {
+    "rust_tests_passed": 425,
+    "python_reference_tests_passed": 56,
+    "python_release_tests_passed": 11,
+    "rustfmt": "passed",
+    "macos_clippy": "passed",
+    "windows_clippy_all_three_targets": "passed",
+    "windows_release_build_all_three_targets": "passed",
+    "independent_review": "No actionable findings after corrections; targeted Rust tests and fixture checks independently passed."
+  },
+  "local_log_sha256": {
+    "python-reference-final.log": "738850015a81862c674bd201329be8e3ab0a674c514cd3c4363019b1ea3775ea",
+    "windows-build-final.log": "ff2038ac91edf1b98267dbe00031400213415e4cddc916087957f0da0ef7bc98",
+    "mac-tests.log": "ac813e9346617e789347ea1efdc8d8fa35ebeffa0ffdfa54ace99b090b245346",
+    "fmt.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "rust-red.log": "1f2697b3e35789ca08c2ae24f470777539d2fc722d20db67615eff654ac70826",
+    "boundary-red.log": "8b6f83e8228a5d7f591a30f2ea6dfe43991ba3e49dcb07bb2f2117cada5e06a8",
+    "mac-clippy.log": "fb3a78563925e52eeba30dcbf83f511e2ff386357baf3a4e0f2a5a48f4018612",
+    "native-final.log": "b863594a91e8ba15d81c38d108c23a73bc70c8f96cadaf2728211036f50381d0",
+    "review-red.log": "bb2616a9583e4b1d4e7b7fe9a6155f0dbeef0fb8345d9375c95b20024fc80ef8",
+    "windows-clippy-final.log": "fb3a78563925e52eeba30dcbf83f511e2ff386357baf3a4e0f2a5a48f4018612",
+    "python-release-final.log": "e557b11989d228f8c1c20b43810731f71916f1206201e74546fa03164d1b850f"
+  },
+  "exploratory_exclusions": [
+    {
+      "arguments": "path Win32_Process where \"ProcessId=0\" call WmicCompatMissingMethod Unknown=1",
+      "reference_status": 44028,
+      "baseline_candidate_status": 44029,
+      "baseline_candidate_sha256": "1C486C968C0D0C67CB8591BFDA6E4DE0BF349CE27AE069F766519F197020D210",
+      "differences": [
+        "path-missing-unknown: exit_status: 44028 != 44029",
+        "path-missing-unknown: stderr: 50 != 48 bytes; first difference at 34"
+      ],
+      "local_capture": "before-arm64",
+      "counted_as_pass": false
+    },
+    {
+      "arguments": "path Win32_Process where \"ProcessId=0\" call WmicCompatMissingMethod User=\"test\"",
+      "reference_status": 44028,
+      "baseline_candidate_status": 44029,
+      "baseline_candidate_sha256": "1C486C968C0D0C67CB8591BFDA6E4DE0BF349CE27AE069F766519F197020D210",
+      "differences": [
+        "path-missing-out: exit_status: 44028 != 44029",
+        "path-missing-out: stderr: 50 != 48 bytes; first difference at 34"
+      ],
+      "local_capture": "before-arm64",
+      "counted_as_pass": false
+    },
+    {
+      "arguments": "path Win32_Process where \"ProcessId=0\" call WmicCompatMissingMethod \"Unknown=1\"",
+      "reference_status": 44028,
+      "baseline_candidate_status": 44029,
+      "baseline_candidate_sha256": "1C486C968C0D0C67CB8591BFDA6E4DE0BF349CE27AE069F766519F197020D210",
+      "differences": [
+        "path-missing-quoted: exit_status: 44028 != 44029",
+        "path-missing-quoted: stderr: 50 != 48 bytes; first difference at 34"
+      ],
+      "local_capture": "before-arm64",
+      "counted_as_pass": false
+    },
+    {
+      "arguments": "path Win32_Process where \"ProcessId=0\" call WmicCompatMissingMethod Unknown=1 User=x",
+      "reference_status": 44028,
+      "baseline_candidate_status": 44029,
+      "baseline_candidate_sha256": "1C486C968C0D0C67CB8591BFDA6E4DE0BF349CE27AE069F766519F197020D210",
+      "differences": [
+        "path-missing-unknown-first: exit_status: 44028 != 44029",
+        "path-missing-unknown-first: stderr: 50 != 48 bytes; first difference at 34"
+      ],
+      "local_capture": "before-arm64",
+      "counted_as_pass": false
+    },
+    {
+      "arguments": "path Win32_Process where \"ProcessId=0\" call WmicCompatMissingMethod User=x Unknown=1",
+      "reference_status": 44028,
+      "baseline_candidate_status": 44029,
+      "baseline_candidate_sha256": "1C486C968C0D0C67CB8591BFDA6E4DE0BF349CE27AE069F766519F197020D210",
+      "differences": [
+        "path-missing-out-first: exit_status: 44028 != 44029",
+        "path-missing-out-first: stderr: 50 != 48 bytes; first difference at 34"
+      ],
+      "local_capture": "before-arm64",
+      "counted_as_pass": false
+    },
+    {
+      "arguments": "class Win32_Process where \"ProcessId=0\" call GetOwner Unknown=1",
+      "reference_status": 44205,
+      "baseline_candidate_status": 44517,
+      "baseline_candidate_sha256": "1C486C968C0D0C67CB8591BFDA6E4DE0BF349CE27AE069F766519F197020D210",
+      "differences": [
+        "class-ascii-unknown: exit_status: 44205 != 44517",
+        "class-ascii-unknown: stderr: 16 != 35 bytes; first difference at 0"
+      ],
+      "local_capture": "before-arm64",
+      "counted_as_pass": false
+    },
+    {
+      "arguments": "class Win32_Process where \"ProcessId=0\" call GetOwner User=\"test\"",
+      "reference_status": 44205,
+      "baseline_candidate_status": 44517,
+      "baseline_candidate_sha256": "1C486C968C0D0C67CB8591BFDA6E4DE0BF349CE27AE069F766519F197020D210",
+      "differences": [
+        "class-ascii-out: exit_status: 44205 != 44517",
+        "class-ascii-out: stderr: 16 != 32 bytes; first difference at 0"
+      ],
+      "local_capture": "before-arm64",
+      "counted_as_pass": false
+    },
+    {
+      "arguments": "class Win32_Process where \"ProcessId=0\" call GetOwner \"Unknown=1\"",
+      "reference_status": 44205,
+      "baseline_candidate_status": 44517,
+      "baseline_candidate_sha256": "1C486C968C0D0C67CB8591BFDA6E4DE0BF349CE27AE069F766519F197020D210",
+      "differences": [
+        "class-ascii-quoted: exit_status: 44205 != 44517",
+        "class-ascii-quoted: stderr: 16 != 36 bytes; first difference at 0"
+      ],
+      "local_capture": "before-arm64",
+      "counted_as_pass": false
+    },
+    {
+      "arguments": "class Win32_Process where \"ProcessId=0\" call GetOwner Unknown=1 User=x",
+      "reference_status": 44205,
+      "baseline_candidate_status": 44517,
+      "baseline_candidate_sha256": "1C486C968C0D0C67CB8591BFDA6E4DE0BF349CE27AE069F766519F197020D210",
+      "differences": [
+        "class-ascii-unknown-first: exit_status: 44205 != 44517",
+        "class-ascii-unknown-first: stderr: 16 != 35 bytes; first difference at 0"
+      ],
+      "local_capture": "before-arm64",
+      "counted_as_pass": false
+    },
+    {
+      "arguments": "class Win32_Process where \"ProcessId=0\" call GetOwner User=x Unknown=1",
+      "reference_status": 44205,
+      "baseline_candidate_status": 44517,
+      "baseline_candidate_sha256": "1C486C968C0D0C67CB8591BFDA6E4DE0BF349CE27AE069F766519F197020D210",
+      "differences": [
+        "class-ascii-out-first: exit_status: 44205 != 44517",
+        "class-ascii-out-first: stderr: 16 != 32 bytes; first difference at 0"
+      ],
+      "local_capture": "before-arm64",
+      "counted_as_pass": false
+    },
+    {
+      "arguments": "class Win32_Process where \"ProcessId=0\" call \uff27\uff45\uff54\uff2f\uff57\uff4e\uff45\uff52 Unknown=1",
+      "reference_status": 44205,
+      "baseline_candidate_status": 44517,
+      "baseline_candidate_sha256": "1C486C968C0D0C67CB8591BFDA6E4DE0BF349CE27AE069F766519F197020D210",
+      "differences": [
+        "class-wide-unknown: exit_status: 44205 != 44517",
+        "class-wide-unknown: stderr: 16 != 35 bytes; first difference at 0"
+      ],
+      "local_capture": "before-arm64",
+      "counted_as_pass": false
+    },
+    {
+      "arguments": "class Win32_Process where \"ProcessId=0\" call \uff27\uff45\uff54\uff2f\uff57\uff4e\uff45\uff52 User=\"test\"",
+      "reference_status": 44205,
+      "baseline_candidate_status": 44517,
+      "baseline_candidate_sha256": "1C486C968C0D0C67CB8591BFDA6E4DE0BF349CE27AE069F766519F197020D210",
+      "differences": [
+        "class-wide-out: exit_status: 44205 != 44517",
+        "class-wide-out: stderr: 16 != 32 bytes; first difference at 0"
+      ],
+      "local_capture": "before-arm64",
+      "counted_as_pass": false
+    },
+    {
+      "arguments": "class Win32_Process where \"ProcessId=0\" call \uff27\uff45\uff54\uff2f\uff57\uff4e\uff45\uff52 \"Unknown=1\"",
+      "reference_status": 44205,
+      "baseline_candidate_status": 44517,
+      "baseline_candidate_sha256": "1C486C968C0D0C67CB8591BFDA6E4DE0BF349CE27AE069F766519F197020D210",
+      "differences": [
+        "class-wide-quoted: exit_status: 44205 != 44517",
+        "class-wide-quoted: stderr: 16 != 36 bytes; first difference at 0"
+      ],
+      "local_capture": "before-arm64",
+      "counted_as_pass": false
+    },
+    {
+      "arguments": "class Win32_Process where \"ProcessId=0\" call \uff27\uff45\uff54\uff2f\uff57\uff4e\uff45\uff52 Unknown=1 User=x",
+      "reference_status": 44205,
+      "baseline_candidate_status": 44517,
+      "baseline_candidate_sha256": "1C486C968C0D0C67CB8591BFDA6E4DE0BF349CE27AE069F766519F197020D210",
+      "differences": [
+        "class-wide-unknown-first: exit_status: 44205 != 44517",
+        "class-wide-unknown-first: stderr: 16 != 35 bytes; first difference at 0"
+      ],
+      "local_capture": "before-arm64",
+      "counted_as_pass": false
+    },
+    {
+      "arguments": "class Win32_Process where \"ProcessId=0\" call \uff27\uff45\uff54\uff2f\uff57\uff4e\uff45\uff52 User=x Unknown=1",
+      "reference_status": 44205,
+      "baseline_candidate_status": 44517,
+      "baseline_candidate_sha256": "1C486C968C0D0C67CB8591BFDA6E4DE0BF349CE27AE069F766519F197020D210",
+      "differences": [
+        "class-wide-out-first: exit_status: 44205 != 44517",
+        "class-wide-out-first: stderr: 16 != 32 bytes; first difference at 0"
+      ],
+      "local_capture": "before-arm64",
+      "counted_as_pass": false
+    },
+    {
+      "arguments": "class Win32_Process where \"ProcessId=0\" call WmicCompatMissingMethod Unknown=1",
+      "reference_status": 44205,
+      "baseline_candidate_status": 44029,
+      "baseline_candidate_sha256": "1C486C968C0D0C67CB8591BFDA6E4DE0BF349CE27AE069F766519F197020D210",
+      "differences": [
+        "class-missing-unknown: exit_status: 44205 != 44029",
+        "class-missing-unknown: stderr: 16 != 48 bytes; first difference at 0"
+      ],
+      "local_capture": "before-arm64",
+      "counted_as_pass": false
+    },
+    {
+      "arguments": "class Win32_Process where \"ProcessId=0\" call WmicCompatMissingMethod User=\"test\"",
+      "reference_status": 44205,
+      "baseline_candidate_status": 44029,
+      "baseline_candidate_sha256": "1C486C968C0D0C67CB8591BFDA6E4DE0BF349CE27AE069F766519F197020D210",
+      "differences": [
+        "class-missing-out: exit_status: 44205 != 44029",
+        "class-missing-out: stderr: 16 != 48 bytes; first difference at 0"
+      ],
+      "local_capture": "before-arm64",
+      "counted_as_pass": false
+    },
+    {
+      "arguments": "class Win32_Process where \"ProcessId=0\" call WmicCompatMissingMethod \"Unknown=1\"",
+      "reference_status": 44205,
+      "baseline_candidate_status": 44029,
+      "baseline_candidate_sha256": "1C486C968C0D0C67CB8591BFDA6E4DE0BF349CE27AE069F766519F197020D210",
+      "differences": [
+        "class-missing-quoted: exit_status: 44205 != 44029",
+        "class-missing-quoted: stderr: 16 != 48 bytes; first difference at 0"
+      ],
+      "local_capture": "before-arm64",
+      "counted_as_pass": false
+    },
+    {
+      "arguments": "class Win32_Process where \"ProcessId=0\" call WmicCompatMissingMethod Unknown=1 User=x",
+      "reference_status": 44205,
+      "baseline_candidate_status": 44029,
+      "baseline_candidate_sha256": "1C486C968C0D0C67CB8591BFDA6E4DE0BF349CE27AE069F766519F197020D210",
+      "differences": [
+        "class-missing-unknown-first: exit_status: 44205 != 44029",
+        "class-missing-unknown-first: stderr: 16 != 48 bytes; first difference at 0"
+      ],
+      "local_capture": "before-arm64",
+      "counted_as_pass": false
+    },
+    {
+      "arguments": "class Win32_Process where \"ProcessId=0\" call WmicCompatMissingMethod User=x Unknown=1",
+      "reference_status": 44205,
+      "baseline_candidate_status": 44029,
+      "baseline_candidate_sha256": "1C486C968C0D0C67CB8591BFDA6E4DE0BF349CE27AE069F766519F197020D210",
+      "differences": [
+        "class-missing-out-first: exit_status: 44205 != 44029",
+        "class-missing-out-first: stderr: 16 != 48 bytes; first difference at 0"
+      ],
+      "local_capture": "before-arm64",
+      "counted_as_pass": false
+    },
+    {
+      "arguments": "process where \"ProcessId=0\" call GetOwner User=x Unknown=1 /value",
+      "reference_status": 45227,
+      "baseline_candidate_status": 44124,
+      "baseline_candidate_sha256": "1C486C968C0D0C67CB8591BFDA6E4DE0BF349CE27AE069F766519F197020D210",
+      "differences": [
+        "extra-18: exit_status: 45227 != 44124",
+        "extra-18: stderr: 51 != 35 bytes; first difference at 2"
+      ],
+      "local_capture": "before-arm64",
+      "counted_as_pass": false
+    },
+    {
+      "arguments": "process where \"ProcessId=0\" call GetOwner Unknown=1 /interactive:on",
+      "reference_status": 45227,
+      "baseline_candidate_status": 44124,
+      "baseline_candidate_sha256": "1C486C968C0D0C67CB8591BFDA6E4DE0BF349CE27AE069F766519F197020D210",
+      "differences": [
+        "extra-19: exit_status: 45227 != 44124",
+        "extra-19: stderr: 51 != 35 bytes; first difference at 2"
+      ],
+      "local_capture": "before-arm64",
+      "counted_as_pass": false
+    },
+    {
+      "arguments": "process where ProcessId=0 call GetOwner \"Unknown\\\"=1",
+      "reference_status": 44518,
+      "baseline_candidate_status": 44029,
+      "baseline_candidate_sha256": "E0BE487EED1050CDDC9FCB986CE7EE11EEC5F6487DFC658921EFF2B4E09BB941",
+      "differences": [
+        "review-1: exit_status: 44518 != 44029",
+        "review-1: stderr: 42 != 37 bytes; first difference at 0"
+      ],
+      "local_capture": "review-arm64",
+      "counted_as_pass": false
+    }
+  ],
+  "limitations": [
+    "Native ARM64 execution; x64 and x86 candidates use Windows emulation. x64 compares with the ARM64 original; x86 with the x86 original.",
+    "Full 2191-case run measured on ARM64 only; x64 and x86 measure the 360-case method-arguments/alias/method/rea-25 regression selection.",
+    "The full ARM64 strict gate returns 1 for the two changing OS queries and implementation-specific TRACE transcript. No known-difference allowlist changes the gate.",
+    "The 23 excluded exploratory differences are earlier observations with the recorded baseline candidates, outside the final selected diagnostics; they are not counted as passing or remeasured on the final candidates.",
+    "One Windows version, locale and SYSTEM profile. No remote endpoint or destructive/provider-specific method acceptance is claimed."
+  ]
+}

@@ -139,7 +139,16 @@ pub(super) fn execute(
                 r,
             )
         })?;
-    let bound = bind_method(method, &r.arguments).map_err(|e| input_error(e, r))?;
+    crate::backend::methods::validate_named_arguments(
+        &r.arguments,
+        method
+            .input
+            .iter()
+            .map(|p| (p.name.clone(), true))
+            .chain(method.output.iter().map(|p| (p.name.clone(), false))),
+    )
+    .map_err(crate::backend::methods::input_error)
+    .map_err(|e| input_error(e, r))?;
     let targets = if method.is_static || r.class_mode {
         vec![r.class_name.clone()]
     } else {
@@ -162,6 +171,7 @@ pub(super) fn execute(
         )
     }
     .map_err(|e| failure(e, r, "schema"))?;
+    let bound = bind_method(method, &r.arguments).map_err(|e| input_error(e, r))?;
     let input = signature
         .map(|s| unsafe { s.SpawnInstance(0) })
         .transpose()

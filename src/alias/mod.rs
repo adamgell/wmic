@@ -291,6 +291,7 @@ impl AliasStore {
             let a = self
                 .find(name)
                 .ok_or_else(|| error(0xAC67, "Alias not found.", Some(name.clone())))?;
+            self.validate_method_arguments(command)?;
             if let Some(ns) = &a.connection.namespace {
                 req.connection.namespace = ns.as_str().into();
             }
@@ -440,6 +441,50 @@ impl AliasStore {
             }
         }
         Ok(ResolvedCommand::Management(Box::new(req)))
+    }
+
+    /// Alias parameter metadata is checked before help or provider method lookup.
+    pub(crate) fn validate_method_arguments(
+        &self,
+        command: &ParsedCommand,
+    ) -> Result<(), ResolveError> {
+        if command.verb != Verb::Call {
+            return Ok(());
+        }
+        let (Some(Target::Alias(alias)), Some(method)) = (&command.target, &command.method) else {
+            return Ok(());
+        };
+        let Some(verb) = self
+            .find(alias)
+            .and_then(|a| a.verbs.iter().find(|v| method.eq_cli(&v.name)))
+        else {
+            return Ok(());
+        };
+        let args = if command.raw_arguments.is_empty() {
+            &command.arguments
+        } else {
+            &command.raw_arguments
+        };
+        crate::backend::methods::validate_named_arguments(
+            args,
+            verb.parameters.iter().filter_map(|p| {
+                let name = p.para_id.as_deref()?;
+                let flag = |flag: &str| {
+                    p.qualifiers.iter().any(|q| {
+                        q.name.eq_ignore_ascii_case(flag)
+                            && q.qualifier_value
+                                .iter()
+                                .any(|v| v.eq_ignore_ascii_case("true"))
+                    })
+                };
+                Some((name.into(), flag("in") || !flag("out")))
+            }),
+        )
+        .map_err(|e| ResolveError {
+            code: e.code,
+            message: e.message,
+            token: e.token,
+        })
     }
 }
 fn target_class(target: &str) -> WideText {

@@ -20,7 +20,7 @@ process and records `state=timeout`, `exit_status=null`. Completed processes
 retain their complete unsigned Windows exit status. Base64 protects all bytes
 while they cross Parallels' terminal transport.
 
-See [the testing guide](../../docs/testing.md) for the 2,085-case corpus, strict exit codes, all-three-target execution, and controlled runner.
+See [the testing guide](../../docs/testing.md) for the 2,191-case corpus, strict exit codes, all-three-target execution, and controlled runner.
 
 Saved stream hashes are verified before comparisons. Comparisons use only
 normalization rules explicitly declared by the reference case. The rules replace the raw XML root `COMMAND` element's volatile `STARTTIME`
