@@ -180,11 +180,15 @@ The providers implement these methods. The list matches `implemented_methods` in
 | `Win32_Service` | `StartService` | Runs `launchctl kickstart` for a loaded job. Runs `launchctl bootstrap` with the job property list for a job that is not loaded. | 0 success. 10 already running. 14 disabled and not loaded. 2 access denied. 6 and 8 from `launchctl` failures. 21 no such label. |
 | `Win32_Service` | `StopService` | Runs `launchctl bootout` for a job with `KeepAlive`. Runs `launchctl kill SIGTERM` for other jobs. | 0 success. 6 not running. 2 access denied. 8 other failure. 21 no such label. |
 | `Win32_Service` | `ChangeStartMode` | Runs `launchctl disable` for `Disabled`. Runs `launchctl enable` for the values `Auto`, `Automatic`, `Boot`, `System`, and `Manual` on a disabled job. On an enabled job, launchd cannot switch between `Auto` and `Manual`. | 0 success, or the job already has the requested kind. 1 the job is enabled and has the other kind. 21 unknown mode or no such label. 2 access denied. 6 and 8 from `launchctl` failures. |
-| `Win32_OperatingSystem` | `Reboot` | Calls `reboot(2)` with the restart flag. | 0 success. 5 not root. 8 other failure. |
-| `Win32_OperatingSystem` | `Shutdown` | Calls `reboot(2)` with the halt flag. | 0 success. 5 not root. 8 other failure. |
-| `Win32_OperatingSystem` | `Win32Shutdown`, `Win32ShutdownTracker` | Reads `Flags`. The values 1 and 8 halt. The value 2 restarts. Bit 4 (force) is accepted with them. | 0 success. 87 other flag values. 5 not root. 8 other failure. |
+| `Win32_OperatingSystem` | `Reboot` | Runs `/sbin/shutdown -r now` without a shell, using the ordinary launchd shutdown path. | 0 request accepted. 5 privilege denied. 8 other failure. |
+| `Win32_OperatingSystem` | `Shutdown` | Runs `/sbin/shutdown -h now` without a shell, using the ordinary launchd shutdown path. | 0 request accepted. 5 privilege denied. 8 other failure. |
+| `Win32_OperatingSystem` | `Win32Shutdown`, `Win32ShutdownTracker` | Reads `Flags`. Values 1 and 8 use ordinary shutdown; 2 uses ordinary restart. Explicit force values 5 and 12 call `reboot(2)` with `RB_HALT`; 6 uses `RB_AUTOBOOT`. | 0 request accepted. 87 other flag values. 5 privilege denied. 8 other failure. |
 
 Each method call is subject to the privilege rules in the class table. A call on a service in the `system` domain without root returns 2. The operating-system methods return 5 without root and do nothing.
+
+The power implementation follows Apple's local `reboot(2)` and `shutdown(8)` manuals, recorded in the [shutdown fix evidence](research/evidence/2026-10-16/macos-shutdown-fix.json). Ordinary requests let `shutdown(8)` notify launchd; they never fall back to a forced operation. An OS permission error (`EPERM` or `EACCES`) returns 5. Other command start/wait failures, nonzero exits, and signal termination return 8. A zero result means the request was accepted, not that shutdown completed; the system may terminate this process before it returns an output record.
+
+This is an administrative shutdown path. Apple's `shutdown(8)` manual describes SIGTERM followed by SIGKILL after an indeterminate interval, giving programs time to flush data and exit. It does not promise the Finder or Apple-menu shutdown interaction, unsaved-document prompts, or application cancellation. Explicit force bypasses that application termination sequence and may lose unsaved data; filesystem syncing remains enabled in the kernel. No real shutdown, restart, or forced kernel call has been exercised for acceptance.
 
 ## Known differences from Windows
 
@@ -216,18 +220,20 @@ The test files below contain these `#[test]` functions in this revision.
 | `tests/platform_unix.rs` | 22 | Unix | Argument quoting, switch values, exit-status mapping, node name, LF output, password redaction |
 | `tests/formats_portable.rs` | 25 | All platforms | Built-in renderers against captured Windows output, wildcard gets |
 | `tests/macos_backend.rs` | 25 | macOS | Class registry, selection, object paths, errors, namespace, node, prompts, writes |
-| `tests/macos_processes.rs` | 48 | macOS | Process, service, account, startup, product, and update providers, and their methods |
+| `tests/macos_processes.rs` | 47 | macOS | Process, service, account, startup, product, and update providers, and their methods |
 | `tests/macos_storage_network.rs` | 6 | macOS | Logical disk, volume, disk drive, partition, network adapter, and configuration |
 | `tests/macos_xslt.rs` | 17 | macOS | Custom stylesheets, parameters, refusals, write block, network and entity isolation |
 | `tests/macos_cli.rs` | 12 | macOS | Built executable, real argv, UTF-8 streams, POSIX status, empty selections, spaced UTF-16 output/append files, redirected interactive recovery/EOF, credential redaction, full paths |
 | `src/backend/macos/providers/mapping_tests.rs` | 4 | macOS | Fixed nonempty disk/partition/interface/DHCP/DNS snapshots with exact expected typed records |
+| `src/backend/macos/providers/operating_system.rs` (unit tests) | 6 | macOS | All four power methods, force preservation, flag validation, fake privilege denial, and result shape through injected adapters |
+| `src/backend/macos/sys/power_tests.rs` | 8 | macOS | Exact ordinary versus forced operation selection, zero action calls when privilege is denied, command status/error mapping, and no forced fallback |
 | `src/platform/unix/console.rs` (unit tests) | 4 | Unix | Signal handler, inherited dispositions, terminal restore |
 | `src/alias/predicate.rs` (unit tests) | 6 | All platforms | WHERE literal coercion and comparison types |
-| Total | 169 | | |
+| Total | 182 | | |
 
-The five `tests/macos_*.rs` files hold 108 of the 169 tests. Unix and Windows-specific suites have explicit platform gates. At the earlier commit b2755a9, `cargo test --locked` reported 311 passed and 0 failed on the Mac mini, and 189 passed, 0 failed, 33 ignored on Windows.
+The five `tests/macos_*.rs` files hold 107 of the 182 tests listed here. Unix and Windows-specific suites have explicit platform gates. At the earlier commit b2755a9, `cargo test --locked` reported 311 passed and 0 failed on the Mac mini, and 189 passed, 0 failed, 33 ignored on Windows.
 
-Fresh local verification of this follow-up passes 327 tests on Apple Silicon, including 12 executable tests and four fixed-snapshot mapping tests. [Review evidence](research/evidence/2026-10-16/macos-pr-review.json) records the bounded checks and outstanding acceptance.
+The earlier follow-up passed 327 tests on Apple Silicon, including 12 executable tests and four fixed-snapshot mapping tests. [Review evidence](research/evidence/2026-10-16/macos-pr-review.json) records that baseline. The shutdown fix passes 340 tests: it adds 14 injected tests and replaces the prior native privilege/invalid-flag test, so all power behavior is tested through fakes, independently of the test runner's real user ID. [Shutdown fix evidence](research/evidence/2026-10-16/macos-shutdown-fix.json) records the fresh checks and remaining acceptance limits.
 
 Windows CI now separately runs all 12 tests in `formats_msxml_parity` with `--ignored --test-threads=1`. This targeted invocation enables the captured/generated-value differential gate against MSXML6 without enabling unrelated ignored tests that need a Windows reference share. The macOS CLI suite launches the actual Cargo-built executable with bounded child lifetimes and uses only owned temporary files. It does not invoke power or service-control methods.
 
@@ -239,7 +245,7 @@ Required system providers must return instances on the supported macOS runners. 
 
 - Intel Macs. The code has separate values for x86_64. They have not run.
 - macOS versions before 15. Manual runs on macOS 15 are unverified.
-- The root path of the `Win32_OperatingSystem` shutdown methods.
+- Real ordinary or forced `Win32_OperatingSystem` shutdown/restart effects. Injected tests cover the privileged route and result mapping, but no native power action or GUI shutdown interaction has been exercised.
 - Experimental service control. The `StartService`, `StopService`, and `ChangeStartMode` methods have no real test-owned launchd lifecycle acceptance. Only parsing and command construction have tests.
 - Remote nodes.
 - The clipboard outside a graphical session.

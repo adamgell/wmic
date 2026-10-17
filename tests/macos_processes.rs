@@ -743,20 +743,8 @@ fn set_priority_maps_windows_classes_to_nice_values() {
     stop_child(pid);
 }
 
-#[test]
-fn shutdown_methods_validate_flags_and_privilege() {
-    let call = |text: &str| return_value(&invoke(&format!("os call {text}"))[0]);
-    assert_eq!(call("win32shutdown 3"), 87);
-    assert_eq!(call("win32shutdown 16"), 87);
-    assert_eq!(call("win32shutdown 0"), 87);
-    if !is_root() {
-        assert_eq!(call("reboot"), 5);
-        assert_eq!(call("shutdown"), 5);
-        assert_eq!(call("win32shutdown 1"), 5);
-        assert_eq!(call("win32shutdown 6"), 5);
-        assert_eq!(call("win32shutdown 8"), 5);
-    }
-}
+// Power methods, including invalid flags and privilege denial, use injected adapters in
+// operating_system::power_tests. Never invoke Native power operations from this suite.
 
 #[test]
 fn services_are_listed_with_launchd_state() {

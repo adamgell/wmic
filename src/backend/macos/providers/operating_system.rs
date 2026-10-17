@@ -27,16 +27,20 @@ pub(super) fn os_name() -> Option<String> {
 
 /// Power action named by `Win32Shutdown` flags: 1 shut down, 2 reboot, 8 power off, plus the
 /// force bit 4.
-fn flag_action(flags: Option<i128>) -> Option<power::Action> {
+fn flag_action(flags: Option<i128>) -> Option<power::Request> {
     let flags = flags?;
     if flags & !0xF != 0 {
         return None;
     }
-    match flags & !4 {
-        1 | 8 => Some(power::Action::Halt),
-        2 => Some(power::Action::Restart),
-        _ => None,
-    }
+    let action = match flags & !4 {
+        1 | 8 => power::Action::Halt,
+        2 => power::Action::Restart,
+        _ => return None,
+    };
+    Some(power::Request {
+        action,
+        force: flags & 4 != 0,
+    })
 }
 
 fn architecture() -> &'static str {
@@ -70,6 +74,40 @@ fn locale_code(language: &str, region: &str) -> Option<&'static str> {
     })
 }
 
+impl OperatingSystem {
+    fn call_with_power(
+        &self,
+        ctx: &Context,
+        call: &MethodCall<'_>,
+        runtime: &impl power::Runtime,
+    ) -> Result<MethodOutput, ManagementError> {
+        let action = match call
+            .method
+            .name
+            .to_string_lossy()
+            .to_ascii_lowercase()
+            .as_str()
+        {
+            "reboot" => Some(power::Request {
+                action: power::Action::Restart,
+                force: false,
+            }),
+            "shutdown" => Some(power::Request {
+                action: power::Action::Halt,
+                force: false,
+            }),
+            "win32shutdown" | "win32shutdowntracker" => {
+                flag_action(integer_argument(call, "Flags"))
+            }
+            _ => return Err(ctx.not_supported("method")),
+        };
+        let Some(action) = action else {
+            return Ok(code(87));
+        };
+        Ok(code(power::request(action, runtime)))
+    }
+}
+
 impl ClassProvider for OperatingSystem {
     fn class(&self) -> &'static str {
         "Win32_OperatingSystem"
@@ -85,27 +123,7 @@ impl ClassProvider for OperatingSystem {
     }
 
     fn call(&self, ctx: &Context, call: &MethodCall<'_>) -> Result<MethodOutput, ManagementError> {
-        let action = match call
-            .method
-            .name
-            .to_string_lossy()
-            .to_ascii_lowercase()
-            .as_str()
-        {
-            "reboot" => Some(power::Action::Restart),
-            "shutdown" => Some(power::Action::Halt),
-            "win32shutdown" | "win32shutdowntracker" => {
-                flag_action(integer_argument(call, "Flags"))
-            }
-            _ => return Err(ctx.not_supported("method")),
-        };
-        let Some(action) = action else {
-            return Ok(code(87));
-        };
-        if !power::is_root() {
-            return Ok(code(5));
-        }
-        Ok(code(power::request(action)))
+        self.call_with_power(ctx, call, &power::Native)
     }
 
     fn instances(&self, ctx: &Context) -> Result<Vec<Record>, ManagementError> {
@@ -187,5 +205,170 @@ impl ClassProvider for OperatingSystem {
                 .set("NumberOfUsers", users::distinct_user_count())
                 .build(),
         ])
+    }
+}
+
+#[cfg(test)]
+mod power_tests {
+    use super::*;
+    use crate::{
+        backend::macos::{
+            provider::registry,
+            sys::power::tests::{Call, FakeRuntime},
+        },
+        model::{CimValue, Property, WideText},
+    };
+
+    fn invoke(method: &str, flags: Option<CimValue>, runtime: &FakeRuntime) -> MethodOutput {
+        let entry = registry().get("Win32_OperatingSystem").unwrap();
+        let method = entry
+            .info
+            .schema
+            .methods
+            .iter()
+            .find(|schema| schema.name.eq_ignore_case(method))
+            .unwrap();
+        let path: WideText = "Win32_OperatingSystem".into();
+        let input: Vec<_> = flags
+            .into_iter()
+            .map(|value| Property {
+                name: "Flags".into(),
+                value,
+                cim_type: 19,
+                system: false,
+                qualifiers: vec![],
+            })
+            .collect();
+        OperatingSystem
+            .call_with_power(
+                &Context::unrestricted(),
+                &MethodCall {
+                    method,
+                    path: &path,
+                    instance: None,
+                    input: &input,
+                },
+                runtime,
+            )
+            .unwrap()
+    }
+
+    fn assert_code(output: MethodOutput, expected: u32) {
+        assert_eq!(output.return_value, Some(CimValue::Uint32(expected)));
+        assert!(output.out_parameters.is_empty());
+    }
+
+    #[test]
+    fn force_flag_is_not_discarded() {
+        for (normal, forced) in [(1, 5), (2, 6), (8, 12)] {
+            assert_ne!(
+                flag_action(Some(normal)),
+                flag_action(Some(forced)),
+                "force bit must change the power request for flags {forced}"
+            );
+        }
+    }
+
+    #[test]
+    fn reboot_and_shutdown_default_to_ordinary_requests() {
+        for (method, flag) in [("Reboot", "-r"), ("Shutdown", "-h")] {
+            let runtime = FakeRuntime::new(true);
+            assert_code(invoke(method, None, &runtime), 0);
+            assert_eq!(runtime.privilege_checks.get(), 1);
+            assert_eq!(
+                *runtime.calls.borrow(),
+                [Call::Shutdown(
+                    "/sbin/shutdown".into(),
+                    vec![flag.into(), "now".into()]
+                )]
+            );
+        }
+    }
+
+    #[test]
+    fn shutdown_flags_select_exact_ordinary_or_forced_operation() {
+        for method in ["Win32Shutdown", "Win32ShutdownTracker"] {
+            for (flags, operation) in [
+                (
+                    1,
+                    Call::Shutdown("/sbin/shutdown".into(), vec!["-h".into(), "now".into()]),
+                ),
+                (
+                    2,
+                    Call::Shutdown("/sbin/shutdown".into(), vec!["-r".into(), "now".into()]),
+                ),
+                (
+                    8,
+                    Call::Shutdown("/sbin/shutdown".into(), vec!["-h".into(), "now".into()]),
+                ),
+                (5, Call::Force(8)),
+                (6, Call::Force(0)),
+                (12, Call::Force(8)),
+            ] {
+                let runtime = FakeRuntime::new(true);
+                assert_code(invoke(method, Some(CimValue::Uint32(flags)), &runtime), 0);
+                assert_eq!(runtime.privilege_checks.get(), 1);
+                assert_eq!(
+                    *runtime.calls.borrow(),
+                    [operation],
+                    "{method} flags {flags}"
+                );
+            }
+        }
+    }
+
+    #[test]
+    fn all_power_methods_deny_fake_unprivileged_caller_without_actions() {
+        for method in ["Reboot", "Shutdown"] {
+            let runtime = FakeRuntime::new(false);
+            assert_code(invoke(method, None, &runtime), 5);
+            assert_eq!(runtime.privilege_checks.get(), 1);
+            assert!(runtime.calls.borrow().is_empty());
+        }
+        for method in ["Win32Shutdown", "Win32ShutdownTracker"] {
+            for flags in [1, 2, 8, 5, 6, 12] {
+                let runtime = FakeRuntime::new(false);
+                assert_code(invoke(method, Some(CimValue::Uint32(flags)), &runtime), 5);
+                assert_eq!(runtime.privilege_checks.get(), 1);
+                assert!(runtime.calls.borrow().is_empty());
+            }
+        }
+    }
+
+    #[test]
+    fn invalid_flags_return_87_before_privilege_check_or_any_action() {
+        let invalid = [
+            None,
+            Some(CimValue::Null),
+            Some(CimValue::String("1".into())),
+            Some(CimValue::Boolean(true)),
+            Some(CimValue::Sint64(-1)),
+            Some(CimValue::Uint64(u64::MAX)),
+        ];
+        for method in ["Win32Shutdown", "Win32ShutdownTracker"] {
+            for root in [false, true] {
+                for flags in invalid.iter().cloned().chain(
+                    [0, 3, 4, 7, 9, 10, 11, 13, 14, 15, 16, u32::MAX]
+                        .map(|flags| Some(CimValue::Uint32(flags))),
+                ) {
+                    let runtime = FakeRuntime::new(root);
+                    assert_code(invoke(method, flags, &runtime), 87);
+                    assert_eq!(runtime.privilege_checks.get(), 0);
+                    assert!(runtime.calls.borrow().is_empty());
+                }
+            }
+        }
+    }
+
+    #[test]
+    fn action_failures_keep_the_existing_method_output_shape() {
+        for (error, expected) in [(libc::EPERM, 5), (libc::EIO, 8)] {
+            let mut runtime = FakeRuntime::new(true);
+            runtime.error = Some(error);
+            assert_code(invoke("Reboot", None, &runtime), expected);
+        }
+        let mut runtime = FakeRuntime::new(true);
+        runtime.exit_status = 1 << 8;
+        assert_code(invoke("Shutdown", None, &runtime), 8);
     }
 }
