@@ -5,6 +5,54 @@ use crate::{
     backend::{ResolvedRequest, keyword},
     model::{CimValue, ManagementError, Property, Record, Verb, WideText},
 };
+use std::borrow::Cow;
+
+/// Validate a qualified target before interpreting its class or key list.
+/// Splitting the server first keeps dotted hosts and IPv6 colons out of key parsing.
+pub(super) fn relative_request(
+    request: &ResolvedRequest,
+) -> Result<Cow<'_, ResolvedRequest>, ManagementError> {
+    let path = request
+        .instance_path
+        .as_ref()
+        .unwrap_or(&request.class_name);
+    let text = path.to_string_lossy();
+    let invalid = || error::invalid_object_path(&request.connection.node);
+    let (server, rest) = if let Some(rest) = text.strip_prefix("\\\\") {
+        let (server, rest) = rest.split_once('\\').ok_or_else(invalid)?;
+        if server.is_empty() {
+            return Err(invalid());
+        }
+        (Some(server), rest)
+    } else {
+        (None, text.as_str())
+    };
+    let qualified = server.is_some()
+        || rest.split_once(':').is_some_and(|(prefix, _)| {
+            prefix.contains('\\') && !prefix.contains(['=', '.', '\'', '"'])
+        });
+    if !qualified {
+        return Ok(Cow::Borrowed(request));
+    }
+    let (namespace, relative) = rest.split_once(':').ok_or_else(invalid)?;
+    if let Some(server) = server
+        && !super::sys::host::is_local_node(server)
+    {
+        return Err(error::rpc_unavailable(&server.into()));
+    }
+    if !super::served_namespace(&namespace.into()) {
+        return Err(error::invalid_namespace(&request.connection.node));
+    }
+    let class = relative
+        .split(['.', '='])
+        .next()
+        .filter(|class| !class.is_empty())
+        .ok_or_else(invalid)?;
+    let mut normalized = request.clone();
+    normalized.class_name = class.into();
+    normalized.instance_path = relative.contains(['.', '=']).then(|| relative.into());
+    Ok(Cow::Owned(normalized))
+}
 
 /// Property names the command asks for; empty means all of them.
 fn projection(request: &ResolvedRequest) -> Vec<String> {

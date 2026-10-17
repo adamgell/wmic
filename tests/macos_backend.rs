@@ -127,6 +127,28 @@ fn every_registered_class_returns_typed_flagged_records() {
     for entry in registry().entries() {
         let class = &entry.info.name;
         let records = objects(&format!("path {class} get"));
+        if wmic_compat::backend::macos::providers::EMPTY_CLASSES.contains(&class.as_str()) {
+            assert!(records.is_empty(), "{class} is explicitly unpopulated");
+        }
+        if [
+            "Win32_OperatingSystem",
+            "Win32_Processor",
+            "Win32_ComputerSystem",
+            "Win32_Process",
+            "Win32_LogicalDisk",
+            "Win32_Volume",
+            "Win32_DiskDrive",
+            "Win32_DiskPartition",
+            "Win32_NetworkAdapter",
+            "Win32_NetworkAdapterConfiguration",
+        ]
+        .contains(&class.as_str())
+        {
+            assert!(
+                !records.is_empty(),
+                "required provider {class} returned no instances"
+            );
+        }
         for record in records {
             assert_eq!(&record.class.to_string_lossy(), class);
             let path = record.path.as_ref().unwrap().to_string_lossy();

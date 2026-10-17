@@ -55,6 +55,8 @@ A POSIX exit code has 8 bits and a WMIC status has 32 bits. Status 0 stays 0. A 
 
 Standard output and standard error are UTF-8 with LF line endings. Without root, some values of other users' processes are empty. Service start and stop in the system domain, and reboot and shutdown, need root.
 
+macOS service control (`StartService`, `StopService`, and `ChangeStartMode`) is experimental. Its command construction has unit tests, but a real test-owned LaunchAgent lifecycle has not been verified. Treat it as unverified until start, stop, KeepAlive, enable/disable, subsequent inventory and cleanup all have live acceptance coverage.
+
 ## Behavior
 
 This section describes the Windows build. The [macOS guide](https://github.com/adamgell/wmic/blob/main/docs/macos.md) lists the macOS differences.

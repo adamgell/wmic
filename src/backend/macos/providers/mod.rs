@@ -8,6 +8,8 @@ pub mod empty;
 mod group;
 mod hardware;
 mod logical_disk;
+#[cfg(test)]
+mod mapping_tests;
 mod method;
 mod network_adapter;
 mod network_adapter_configuration;

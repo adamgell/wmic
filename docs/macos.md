@@ -18,6 +18,8 @@ The macOS build does not support these operations:
 
 The local machine is `.`, `localhost`, `127.0.0.1`, `::1`, and the host name of the machine, with or without its domain suffix.
 
+Full instance paths such as `\\.\root\cimv2:Win32_OperatingSystem=@` and paths using the local host name are validated before class lookup and key selection. A full path cannot bypass the local-node or `root\cimv2` restrictions. Namespace-qualified paths preserve colons inside quoted key values.
+
 No macOS package or signed release exists. Build the program from source.
 
 ## Build
@@ -167,6 +169,8 @@ Run the command as root to read the values that the "Privileges" column names.
 
 The providers implement these methods. The list matches `implemented_methods` in the code. Every other method in the class schema returns `Not supported` (0x8004100C).
 
+**Service control is experimental.** `StartService`, `StopService`, and `ChangeStartMode` are implemented and have mocked command-construction tests, but their successful launchd effects are unverified. Support requires a uniquely named, test-owned LaunchAgent lifecycle that verifies bootstrap/start, stop including KeepAlive, disable/enable, subsequent inventory state, and cleanup. The ordinary test suite does not change real launchd jobs.
+
 | Class | Method | Action | `ReturnValue` |
 | --- | --- | --- | --- |
 | `Win32_Process` | `Create` | Starts the program in `CommandLine` with `posix_spawnp`. No shell runs. The new process starts in a new session. Its standard streams use `/dev/null`. `CurrentDirectory` sets the working directory. A relative program path resolves against the working directory of `wmic`. The out parameter `ProcessId` holds the new process id. `wmic` reaps the child when it exits. | 0 success. 21 empty command line. 9 program or directory not found. 2 access denied. 8 other failure. |
@@ -205,7 +209,7 @@ The evidence for the macOS build differs from the Windows evidence in [compatibi
 
 The CI workflow defines a `macos` job for the runners `macos-15` and `macos-26`. The job runs `cargo fmt --check`, `cargo clippy --locked --all-targets -- -D warnings`, `cargo build --locked --release`, and `cargo test --locked`.
 
-The test files below contain these `#[test]` functions as of commit b2755a9.
+The test files below contain these `#[test]` functions in this revision.
 
 | File | Tests | Runs on | Checks |
 | --- | ---: | --- | --- |
@@ -215,20 +219,28 @@ The test files below contain these `#[test]` functions as of commit b2755a9.
 | `tests/macos_processes.rs` | 48 | macOS | Process, service, account, startup, product, and update providers, and their methods |
 | `tests/macos_storage_network.rs` | 6 | macOS | Logical disk, volume, disk drive, partition, network adapter, and configuration |
 | `tests/macos_xslt.rs` | 17 | macOS | Custom stylesheets, parameters, refusals, write block, network and entity isolation |
+| `tests/macos_cli.rs` | 12 | macOS | Built executable, real argv, UTF-8 streams, POSIX status, empty selections, spaced UTF-16 output/append files, redirected interactive recovery/EOF, credential redaction, full paths |
+| `src/backend/macos/providers/mapping_tests.rs` | 4 | macOS | Fixed nonempty disk/partition/interface/DHCP/DNS snapshots with exact expected typed records |
 | `src/platform/unix/console.rs` (unit tests) | 4 | Unix | Signal handler, inherited dispositions, terminal restore |
 | `src/alias/predicate.rs` (unit tests) | 6 | All platforms | WHERE literal coercion and comparison types |
-| Total | 153 | | |
+| Total | 169 | | |
 
-The four `tests/macos_*.rs` files hold 96 of the 153 tests. The other files in `tests/` have no platform gate. They run in the same `cargo test` command. At commit b2755a9, `cargo test --locked` reported 311 passed and 0 failed on the Mac mini, and 189 passed, 0 failed, 33 ignored on Windows. The ignored tests need native Windows COM or a Windows reference share.
+The five `tests/macos_*.rs` files hold 108 of the 169 tests. Unix and Windows-specific suites have explicit platform gates. At the earlier commit b2755a9, `cargo test --locked` reported 311 passed and 0 failed on the Mac mini, and 189 passed, 0 failed, 33 ignored on Windows.
+
+Fresh local verification of this follow-up passes 327 tests on Apple Silicon, including 12 executable tests and four fixed-snapshot mapping tests. [Review evidence](research/evidence/2026-10-16/macos-pr-review.json) records the bounded checks and outstanding acceptance.
+
+Windows CI now separately runs all 12 tests in `formats_msxml_parity` with `--ignored --test-threads=1`. This targeted invocation enables the captured/generated-value differential gate against MSXML6 without enabling unrelated ignored tests that need a Windows reference share. The macOS CLI suite launches the actual Cargo-built executable with bounded child lifetimes and uses only owned temporary files. It does not invoke power or service-control methods.
 
 The tests that read the live system assert structure and internal consistency. Examples: the process table contains the test process, the root file system is a logical disk, volumes have unique devices, and network configurations follow the adapters.
+
+Required system providers must return instances on the supported macOS runners. Disk/partition and adapter tests reject empty results, and every adapter requires a configuration. The four explicitly unpopulated hardware classes remain allowed to be empty; other optional providers can be empty when no corresponding data exists. Fixed input snapshots additionally verify disk ownership/geometry/type, physical and virtual links, IPv4/IPv6 addressing, DHCP, DNS, missing values, and disconnected interfaces independently of live hardware availability.
 
 ## Not verified
 
 - Intel Macs. The code has separate values for x86_64. They have not run.
 - macOS versions before 15. Manual runs on macOS 15 are unverified.
 - The root path of the `Win32_OperatingSystem` shutdown methods.
-- Service control. The `StartService`, `StopService`, and `ChangeStartMode` methods were not run against a real launchd job during development. Only parsing and command construction have tests.
+- Experimental service control. The `StartService`, `StopService`, and `ChangeStartMode` methods have no real test-owned launchd lifecycle acceptance. Only parsing and command construction have tests.
 - Remote nodes.
 - The clipboard outside a graphical session.
 - The `sudo` path that selects the invoking user's launchd domain. A unit test covers the selection only.

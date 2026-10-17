@@ -34,51 +34,55 @@ impl ClassProvider for DiskDrive {
     }
 
     fn instances(&self, ctx: &Context) -> Result<Vec<Record>, ManagementError> {
-        let records = disks::physical_disks()
-            .iter()
-            .map(|disk| {
-                let device = format!("/dev/{}", disk.bsd_name);
-                let sectors = disk
-                    .size
-                    .zip(disk.block_size)
-                    .filter(|(_, block)| *block > 0)
-                    .map(|(size, block)| size / block);
-                let (codes, names) = capabilities(disk);
-                let media = if disk.removable {
-                    "Removable Media"
-                } else {
-                    "Fixed hard disk media"
-                };
-                ctx.record("Win32_DiskDrive")
-                    .set("DeviceID", device.as_str())
-                    .set("Name", device.as_str())
-                    .set("Index", disk.number)
-                    .set("Caption", disk.model.as_deref())
-                    .set("Model", disk.model.as_deref())
-                    .set("SerialNumber", disk.serial_number.as_deref())
-                    .set("FirmwareRevision", disk.firmware.as_deref())
-                    .set(
-                        "Manufacturer",
-                        disk.vendor.as_deref().unwrap_or("(Standard disk drives)"),
-                    )
-                    .set("Size", disk.size)
-                    .set("BytesPerSector", disk.block_size)
-                    .set("TotalSectors", sectors)
-                    .set("Partitions", disk.partitions.len() as u32)
-                    .set("InterfaceType", interface_type(disk))
-                    .set("MediaType", media)
-                    .set("MediaLoaded", true)
-                    .set("Capabilities", codes)
-                    .set("CapabilityDescriptions", names)
-                    .set("Description", "Disk drive")
-                    .set("ConfigManagerErrorCode", 0u32)
-                    .set("ConfigManagerUserConfig", false)
-                    .set("CreationClassName", "Win32_DiskDrive")
-                    .set("SystemCreationClassName", "Win32_ComputerSystem")
-                    .set("SystemName", ctx.server())
-                    .build()
-            })
-            .collect();
-        Ok(records)
+        Ok(records(ctx, &disks::physical_disks()))
     }
+}
+
+/// Map a disk snapshot without reading IORegistry.
+pub(super) fn records(ctx: &Context, disks: &[Disk]) -> Vec<Record> {
+    disks
+        .iter()
+        .map(|disk| {
+            let device = format!("/dev/{}", disk.bsd_name);
+            let sectors = disk
+                .size
+                .zip(disk.block_size)
+                .filter(|(_, block)| *block > 0)
+                .map(|(size, block)| size / block);
+            let (codes, names) = capabilities(disk);
+            let media = if disk.removable {
+                "Removable Media"
+            } else {
+                "Fixed hard disk media"
+            };
+            ctx.record("Win32_DiskDrive")
+                .set("DeviceID", device.as_str())
+                .set("Name", device.as_str())
+                .set("Index", disk.number)
+                .set("Caption", disk.model.as_deref())
+                .set("Model", disk.model.as_deref())
+                .set("SerialNumber", disk.serial_number.as_deref())
+                .set("FirmwareRevision", disk.firmware.as_deref())
+                .set(
+                    "Manufacturer",
+                    disk.vendor.as_deref().unwrap_or("(Standard disk drives)"),
+                )
+                .set("Size", disk.size)
+                .set("BytesPerSector", disk.block_size)
+                .set("TotalSectors", sectors)
+                .set("Partitions", disk.partitions.len() as u32)
+                .set("InterfaceType", interface_type(disk))
+                .set("MediaType", media)
+                .set("MediaLoaded", true)
+                .set("Capabilities", codes)
+                .set("CapabilityDescriptions", names)
+                .set("Description", "Disk drive")
+                .set("ConfigManagerErrorCode", 0u32)
+                .set("ConfigManagerUserConfig", false)
+                .set("CreationClassName", "Win32_DiskDrive")
+                .set("SystemCreationClassName", "Win32_ComputerSystem")
+                .set("SystemName", ctx.server())
+                .build()
+        })
+        .collect()
 }

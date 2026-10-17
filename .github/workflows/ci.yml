@@ -41,6 +41,9 @@ jobs:
       - run: cargo build --locked --release --target ${{ matrix.target }}
       - if: matrix.target == 'x86_64-pc-windows-msvc'
         run: cargo test --locked
+      - name: Portable renderer parity against Windows MSXML6
+        if: matrix.target == 'x86_64-pc-windows-msvc'
+        run: cargo test --locked --test formats_msxml_parity -- --ignored --test-threads=1
       - if: matrix.target == 'x86_64-pc-windows-msvc'
         uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
         with:

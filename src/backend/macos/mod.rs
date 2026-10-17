@@ -57,6 +57,8 @@ impl MacManagement {
         request: &ResolvedRequest,
         confirmation: Option<&mut dyn Confirmation>,
     ) -> Result<ManagementResult, ManagementError> {
+        let relative = query::relative_request(request)?;
+        let request = relative.as_ref();
         let node = &request.connection.node;
         if error::interrupted() {
             return Err(error::cancelled(node, None));

@@ -151,6 +151,14 @@ fn volumes_have_unique_devices_and_a_boot_volume() {
 fn disk_drives_and_partitions_agree() {
     let drives = objects("diskdrive get *");
     let partitions = objects("partition get *");
+    assert!(
+        !drives.is_empty(),
+        "supported macOS runners must expose a system disk"
+    );
+    assert!(
+        !partitions.is_empty(),
+        "the system disk must expose its partition map"
+    );
     for drive in &drives {
         let id = text(drive, "DeviceID").unwrap();
         assert!(id.starts_with("/dev/disk"), "{id}");
@@ -204,6 +212,10 @@ fn disk_drives_and_partitions_agree() {
 #[test]
 fn network_adapters_are_numbered_and_formatted() {
     let adapters = objects("nic get *");
+    assert!(
+        !adapters.is_empty(),
+        "supported macOS runners must expose a network adapter"
+    );
     let mut seen = HashSet::new();
     for adapter in &adapters {
         let index = number(adapter, "InterfaceIndex").unwrap();
@@ -258,6 +270,12 @@ fn network_adapters_are_numbered_and_formatted() {
 fn network_configurations_follow_the_adapters() {
     let adapters = objects("nic get *");
     let configurations = objects("nicconfig get *");
+    assert!(!adapters.is_empty(), "no network adapters returned");
+    assert_eq!(
+        configurations.len(),
+        adapters.len(),
+        "one configuration is required for every adapter"
+    );
     let mut paired = 0;
     for configuration in &configurations {
         let index = number(configuration, "InterfaceIndex");
@@ -266,7 +284,7 @@ fn network_configurations_follow_the_adapters() {
             .iter()
             .find(|a| number(a, "InterfaceIndex") == index)
         else {
-            continue;
+            panic!("configuration {index:?} has no matching adapter");
         };
         paired += 1;
         assert_eq!(number(adapter, "Index"), number(configuration, "Index"));
@@ -306,9 +324,10 @@ fn network_configurations_follow_the_adapters() {
             Some(false)
         );
     }
-    assert!(
-        paired > 0 || adapters.is_empty() || configurations.is_empty(),
-        "no adapter matched a configuration"
+    assert_eq!(
+        paired,
+        adapters.len(),
+        "every adapter needs a matching configuration"
     );
     for configuration in objects("nicconfig where IPEnabled=TRUE get Index,IPEnabled") {
         assert_eq!(flag(&configuration, "IPEnabled"), Some(true));

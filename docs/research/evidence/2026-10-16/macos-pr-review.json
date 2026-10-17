@@ -1,0 +1,19 @@
+{
+  "base_commit": "c593f71d9c8d91d8cb48ddab8023768851eed75e",
+  "captured_utc": "2026-10-17T00:15:22.479060+00:00",
+  "platform": "Darwin",
+  "architecture": "arm64",
+  "native_rust_tests_passed": 327,
+  "cli_tests_passed": 12,
+  "fixed_snapshot_mapping_tests_passed": 4,
+  "reference_python_tests_passed": 24,
+  "release_python_tests_passed": 11,
+  "fmt": "pass",
+  "clippy": "pass",
+  "actionlint": "pass",
+  "independent_review": "No remaining Critical or Important findings in this follow-up delta. General CLASS suffix validation matches existing behavior and is outside this PATH fix.",
+  "windows_ci_parity_gate": "Explicitly runs all 12 formats_msxml_parity tests with --ignored, target x64 only. Hosted results are reported by GitHub.",
+  "service_control_status": "experimental; real LaunchAgent lifecycle not exercised",
+  "shutdown_bug": "Still unresolved; no power action performed. See PR1 issuecomment-6227099904.",
+  "rust_test_log_sha256": "089e43ceeac1d9e61fcf12a4a98d60bd0b921487d6861a9b8adcd2768b9df8c4"
+}

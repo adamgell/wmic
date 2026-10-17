@@ -1,5 +1,9 @@
 use crate::{
-    backend::macos::{context::Context, provider::ClassProvider, sys::disks},
+    backend::macos::{
+        context::Context,
+        provider::ClassProvider,
+        sys::disks::{self, Disk},
+    },
     model::{ManagementError, Record},
 };
 
@@ -24,40 +28,45 @@ impl ClassProvider for DiskPartition {
     }
 
     fn instances(&self, ctx: &Context) -> Result<Vec<Record>, ManagementError> {
-        let mut records = vec![];
-        for disk in disks::physical_disks() {
-            for partition in &disk.partitions {
-                let index = partition.slot.saturating_sub(1);
-                let name = format!("Disk #{}, Partition #{index}", disk.number);
-                let kind = partition.content.as_deref().map(partition_type);
-                let blocks = partition
-                    .size
-                    .zip(partition.block_size)
-                    .filter(|(_, block)| *block > 0)
-                    .map(|(size, block)| size / block);
-                let bootable = (kind.as_deref() == Some("EFI")).then_some(true);
-                records.push(
-                    ctx.record("Win32_DiskPartition")
-                        .set("DeviceID", name.as_str())
-                        .set("Name", name.as_str())
-                        .set("Caption", name.as_str())
-                        .set("Description", name.as_str())
-                        .set("Index", index)
-                        .set("DiskIndex", disk.number)
-                        .set("Size", partition.size)
-                        .set("StartingOffset", partition.offset)
-                        .set("BlockSize", partition.block_size)
-                        .set("NumberOfBlocks", blocks)
-                        .set("Type", kind)
-                        .set("Bootable", bootable)
-                        .set("PrimaryPartition", true)
-                        .set("CreationClassName", "Win32_DiskPartition")
-                        .set("SystemCreationClassName", "Win32_ComputerSystem")
-                        .set("SystemName", ctx.server())
-                        .build(),
-                );
-            }
-        }
-        Ok(records)
+        Ok(records(ctx, &disks::physical_disks()))
     }
+}
+
+/// Map partitions from the same explicit disk snapshot.
+pub(super) fn records(ctx: &Context, disks: &[Disk]) -> Vec<Record> {
+    let mut records = vec![];
+    for disk in disks {
+        for partition in &disk.partitions {
+            let index = partition.slot.saturating_sub(1);
+            let name = format!("Disk #{}, Partition #{index}", disk.number);
+            let kind = partition.content.as_deref().map(partition_type);
+            let blocks = partition
+                .size
+                .zip(partition.block_size)
+                .filter(|(_, block)| *block > 0)
+                .map(|(size, block)| size / block);
+            let bootable = (kind.as_deref() == Some("EFI")).then_some(true);
+            records.push(
+                ctx.record("Win32_DiskPartition")
+                    .set("DeviceID", name.as_str())
+                    .set("Name", name.as_str())
+                    .set("Caption", name.as_str())
+                    .set("Description", name.as_str())
+                    .set("Index", index)
+                    .set("DiskIndex", disk.number)
+                    .set("Size", partition.size)
+                    .set("StartingOffset", partition.offset)
+                    .set("BlockSize", partition.block_size)
+                    .set("NumberOfBlocks", blocks)
+                    .set("Type", kind)
+                    .set("Bootable", bootable)
+                    .set("PrimaryPartition", true)
+                    .set("CreationClassName", "Win32_DiskPartition")
+                    .set("SystemCreationClassName", "Win32_ComputerSystem")
+                    .set("SystemName", ctx.server())
+                    .build(),
+            );
+        }
+    }
+    records
 }
