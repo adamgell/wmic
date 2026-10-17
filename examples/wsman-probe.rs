@@ -1,7 +1,9 @@
 //! Probe for a WinRM listener.
 //!
-//! `wsman-probe HOST PORT [DOMAIN\]USER` reads the password from standard input, authenticates with
-//! NTLM, posts an Identify request and prints the decrypted reply.
+//! `wsman-probe HOST PORT [DOMAIN\]USER [AUTHORITY]` reads the password from standard input,
+//! authenticates with Kerberos or NTLM as `wmic` would with `/AUTHORITY:<AUTHORITY>`, posts an
+//! Identify request and prints the mechanism, the scheme the service answered with, and the
+//! decrypted reply. `WMIC_WSMAN_CONNECT` applies.
 //! `wsman-probe --challenge HOST PORT` sends only the NTLM negotiate message and prints the parsed
 //! challenge; no credential is involved.
 //! `WMIC_WSMAN_SCHEME=https` and `WMIC_WSMAN_CA_FILE` apply as they do for `wmic`.
@@ -22,10 +24,8 @@ mod probe {
     use std::io::BufRead;
     use wmic_compat::backend::SecretWide;
     use wmic_compat::backend::wsman::transport::http::HttpConnection;
-    use wmic_compat::backend::wsman::transport::{
-        NtlmHttpTransport, base64, negotiate_token, ntlm,
-    };
-    use wmic_compat::backend::wsman::{Endpoint, Tls, Transport, listener};
+    use wmic_compat::backend::wsman::transport::{self, base64, negotiate_token, ntlm};
+    use wmic_compat::backend::wsman::{Authority, Endpoint, Listener, listener};
 
     const IDENTIFY: &str = "<s:Envelope xmlns:s=\"http://www.w3.org/2003/05/soap-envelope\" xmlns:wsmid=\"http://schemas.dmtf.org/wbem/wsman/identity/1/wsmanidentity.xsd\"><s:Header/><s:Body><wsmid:Identify/></s:Body></s:Envelope>";
 
@@ -33,9 +33,10 @@ mod probe {
         let args: Vec<String> = std::env::args().skip(1).collect();
         let result = match args.iter().map(String::as_str).collect::<Vec<_>>().as_slice() {
             ["--challenge", host, port] => challenge(host, port),
-            [host, port, user] => identify(host, port, user),
+            [host, port, user] => identify(host, port, user, ""),
+            [host, port, user, authority] => identify(host, port, user, authority),
             _ => Err(
-                "usage: wsman-probe HOST PORT [DOMAIN\\]USER   (password on stdin)\n       wsman-probe --challenge HOST PORT"
+                "usage: wsman-probe HOST PORT [DOMAIN\\]USER [AUTHORITY]   (password on stdin)\n       wsman-probe --challenge HOST PORT"
                     .into(),
             ),
         };
@@ -52,15 +53,15 @@ mod probe {
         text.parse().map_err(|_| format!("bad port: {text}"))
     }
 
-    fn tls_settings() -> Result<Option<Tls>, String> {
-        listener()
-            .map(|settings| settings.tls())
-            .map_err(|e| e.to_string())
+    fn settings() -> Result<Listener, String> {
+        listener().map_err(|e| e.to_string())
     }
 
     fn challenge(host: &str, port: &str) -> Result<(), String> {
-        let tls = tls_settings()?;
-        let mut connection = HttpConnection::connect(host, port_of(port)?, tls.as_ref())
+        let settings = settings()?;
+        let tls = settings.tls();
+        let connect = settings.connect.as_deref();
+        let mut connection = HttpConnection::connect(host, port_of(port)?, connect, tls.as_ref())
             .map_err(|e| e.to_string())?;
         let plain = connection
             .post(
@@ -75,7 +76,7 @@ mod probe {
             plain.headers_named("WWW-Authenticate").collect::<Vec<_>>(),
             plain.header("Connection")
         );
-        let mut connection = HttpConnection::connect(host, port_of(port)?, tls.as_ref())
+        let mut connection = HttpConnection::connect(host, port_of(port)?, connect, tls.as_ref())
             .map_err(|e| e.to_string())?;
         let negotiate = ntlm::negotiate_message();
         let header = format!("Negotiate {}", base64::encode(&negotiate));
@@ -120,7 +121,7 @@ mod probe {
         Ok(())
     }
 
-    fn identify(host: &str, port: &str, account: &str) -> Result<(), String> {
+    fn identify(host: &str, port: &str, account: &str, authority: &str) -> Result<(), String> {
         let (domain, user) = account.split_once('\\').unwrap_or(("", account));
         let mut password = String::new();
         std::io::stdin()
@@ -128,16 +129,20 @@ mod probe {
             .read_line(&mut password)
             .map_err(|e| e.to_string())?;
         let password = password.trim_end_matches(['\r', '\n']);
+        let settings = settings()?;
         let endpoint = Endpoint {
             host: host.into(),
+            connect: settings.connect.clone(),
             port: port_of(port)?,
             user: user.into(),
             domain: domain.into(),
             password: SecretWide::new(password.into()),
-            tls: tls_settings()?,
+            tls: settings.tls(),
+            authority: Authority::parse(authority),
         };
-        let mut transport = NtlmHttpTransport::connect(&endpoint).map_err(|e| e.to_string())?;
+        let mut transport = transport::connect(&endpoint).map_err(|e| e.to_string())?;
         let reply = transport.post(IDENTIFY).map_err(|e| e.to_string())?;
+        println!("authentication: {:?}", transport.authentication());
         println!("computer name: {:?}", transport.server_name());
         println!("HTTP {}", reply.status);
         println!("{}", reply.body);

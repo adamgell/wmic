@@ -1,28 +1,68 @@
 //! `multipart/encrypted` message framing (MS-WSMV 2.2.9.1.1).
 
 use super::super::TransportError;
-use super::ntlm::{SIGNATURE_LEN, Session};
+use super::ntlm::Session;
 
 pub const BOUNDARY: &str = "Encrypted Boundary";
+/// `protocol` parameter of messages sealed with NTLM under the Negotiate scheme.
+pub const SPNEGO_PROTOCOL: &str = "application/HTTP-SPNEGO-session-encrypted";
+/// `protocol` parameter of messages sealed with a Kerberos context.
+pub const KERBEROS_PROTOCOL: &str = "application/HTTP-Kerberos-session-encrypted";
+/// Content-Type of a message sealed with NTLM.
 pub const CONTENT_TYPE: &str = "multipart/encrypted;protocol=\"application/HTTP-SPNEGO-session-encrypted\";boundary=\"Encrypted Boundary\"";
+/// Bound on the signature length field. NTLM signs with 16 bytes; a Kerberos AES wrap token
+/// carries 60. The bound only stops a damaged length from running past the body.
+const MAX_SIGNATURE_LEN: usize = 4096;
+
+/// Content-Type of sealed messages for one `protocol` parameter.
+pub fn content_type(protocol: &str) -> String {
+    format!("multipart/encrypted;protocol=\"{protocol}\";boundary=\"{BOUNDARY}\"")
+}
+
+/// Message protection of one authenticated connection.
+pub trait Sealer {
+    /// `protocol` parameter of the Content-Type of sealed messages.
+    fn protocol(&self) -> &'static str;
+    /// Seals `plain`: the signature that precedes the data, and the sealed data.
+    fn seal(&mut self, plain: &[u8]) -> Result<(Vec<u8>, Vec<u8>), TransportError>;
+    /// Verifies and unseals one message.
+    fn unseal(&mut self, signature: &[u8], sealed: &[u8]) -> Result<Vec<u8>, TransportError>;
+}
+
+impl Sealer for Session {
+    fn protocol(&self) -> &'static str {
+        SPNEGO_PROTOCOL
+    }
+
+    fn seal(&mut self, plain: &[u8]) -> Result<(Vec<u8>, Vec<u8>), TransportError> {
+        let (signature, sealed) = Session::seal(self, plain);
+        Ok((signature.to_vec(), sealed))
+    }
+
+    fn unseal(&mut self, signature: &[u8], sealed: &[u8]) -> Result<Vec<u8>, TransportError> {
+        Session::unseal(self, signature, sealed)
+            .map_err(|e| TransportError::Protocol(e.to_string()))
+    }
+}
 
 fn protocol(message: &str) -> TransportError {
     TransportError::Protocol(format!("encrypted message: {message}"))
 }
 
 /// Seals `plain` and wraps it in the two-part layout the service expects.
-pub fn encrypt(session: &mut Session, plain: &[u8]) -> Vec<u8> {
-    let (signature, sealed) = session.seal(plain);
+pub fn encrypt(sealer: &mut dyn Sealer, plain: &[u8]) -> Result<Vec<u8>, TransportError> {
+    let (signature, sealed) = sealer.seal(plain)?;
     let mut out = format!(
-        "--{BOUNDARY}\r\n\tContent-Type: application/HTTP-SPNEGO-session-encrypted\r\n\tOriginalContent: type=application/soap+xml;charset=UTF-8;Length={}\r\n--{BOUNDARY}\r\n\tContent-Type: application/octet-stream\r\n",
+        "--{BOUNDARY}\r\n\tContent-Type: {}\r\n\tOriginalContent: type=application/soap+xml;charset=UTF-8;Length={}\r\n--{BOUNDARY}\r\n\tContent-Type: application/octet-stream\r\n",
+        sealer.protocol(),
         plain.len()
     )
     .into_bytes();
-    out.extend_from_slice(&(SIGNATURE_LEN as u32).to_le_bytes());
+    out.extend_from_slice(&(signature.len() as u32).to_le_bytes());
     out.extend_from_slice(&signature);
     out.extend_from_slice(&sealed);
     out.extend_from_slice(format!("--{BOUNDARY}--\r\n").as_bytes());
-    out
+    Ok(out)
 }
 
 /// Extracts the `boundary` parameter of a multipart `Content-Type` value.
@@ -94,7 +134,7 @@ fn original_length(metadata: &[u8]) -> Result<usize, TransportError> {
 /// Verifies and unseals every part of an encrypted response body and concatenates the plaintext.
 /// Accepts header lines with or without leading tabs and boundary lines with trailing blanks.
 pub fn decrypt(
-    session: &mut Session,
+    sealer: &mut dyn Sealer,
     body: &[u8],
     boundary: &str,
 ) -> Result<Vec<u8>, TransportError> {
@@ -139,18 +179,16 @@ pub fn decrypt(
             .ok_or_else(|| protocol("payload is truncated"))?;
         let signature_len =
             u32::from_le_bytes([header[0], header[1], header[2], header[3]]) as usize;
-        if signature_len != SIGNATURE_LEN {
-            return Err(protocol("signature length is not 16"));
+        if signature_len > MAX_SIGNATURE_LEN {
+            return Err(protocol("signature length is out of range"));
         }
         let signature_at = pos + 4;
-        let data_at = signature_at + SIGNATURE_LEN;
+        let data_at = signature_at + signature_len;
         let end = data_at
             .checked_add(length)
             .filter(|&end| end <= body.len())
             .ok_or_else(|| protocol("payload is shorter than OriginalContent Length"))?;
-        let plain = session
-            .unseal(&body[signature_at..data_at], &body[data_at..end])
-            .map_err(|e| TransportError::Protocol(e.to_string()))?;
+        let plain = sealer.unseal(&body[signature_at..data_at], &body[data_at..end])?;
         out.extend_from_slice(&plain);
         parts += 1;
         pos = end;

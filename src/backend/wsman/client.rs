@@ -2,10 +2,10 @@
 use super::{
     Endpoint, Response, Transport, TransportError,
     fault::{self, Fault, FaultContext, detail_properties},
-    parse::{self, Epr, RawInstance, RawItem, ReplyError},
+    parse::{self, Epr, RawInstance, RawItem, RawValue, ReplyError},
     record::{self, RecordContext},
     soap::{self, Call},
-    transport::ntlm,
+    transport::{kerberos, ntlm},
 };
 use crate::model::{
     CimValue, ManagementError, ManagementResult, MethodSchema, ObjectSet, ParameterSchema,
@@ -24,12 +24,9 @@ pub const MAX_ELEMENTS: u32 = 32;
 /// Creates the transport for an endpoint.
 pub type Connector = Box<dyn FnMut(&Endpoint) -> Result<Box<dyn Transport>, TransportError>>;
 
-/// NTLM over HTTP or HTTPS with sealed messages.
+/// Kerberos or NTLM over HTTP or HTTPS with sealed messages.
 pub fn default_connector() -> Connector {
-    Box::new(|endpoint| {
-        super::transport::NtlmHttpTransport::connect(endpoint)
-            .map(|transport| Box::new(transport) as Box<dyn Transport>)
-    })
+    Box::new(super::transport::connect)
 }
 
 /// Everything a request needs to know about the node it addresses.
@@ -141,6 +138,19 @@ fn error_for(failure: Failure, target: &Target, scope: Scope) -> ManagementError
             "query",
             "authentication failed",
         ),
+        Failure::Transport(TransportError::Kerberos(kerberos::Failure::Denied(reason))) => {
+            plain(0x80070005, "Access is denied.", "query", &reason)
+        }
+        // Classic WMIC reports a Kerberos principal the KDC does not know as an unavailable
+        // server; every Kerberos failure that leaves the account unchecked uses the same status.
+        Failure::Transport(TransportError::Kerberos(kerberos::Failure::Unavailable(reason))) => {
+            plain(
+                0x800706ba,
+                "The RPC server is unavailable.",
+                "query",
+                &reason,
+            )
+        }
         Failure::Transport(TransportError::Tls(reason)) => plain(
             0x80072f8f,
             &format!("Secure connection failed: {reason}"),
@@ -165,10 +175,10 @@ fn error_for(failure: Failure, target: &Target, scope: Scope) -> ManagementError
     }
 }
 
-/// Connections are shared by node, scheme, trust anchors and account. The password enters the
-/// key as a keyed hash, so a changed password never reuses a connection opened with another one.
-/// The scheme and the CA file are in the key so that a plain connection never serves an endpoint
-/// that asks for TLS.
+/// Connections are shared by node, connect address, scheme, trust anchors, authority and
+/// account. The password enters the key as a keyed hash, so a changed password never reuses a
+/// connection opened with another one. The scheme and the CA file are in the key so that a plain
+/// connection never serves an endpoint that asks for TLS.
 fn connection_key(endpoint: &Endpoint, salt: &[u8; 16]) -> String {
     let mut password: Vec<u8> = endpoint
         .password
@@ -185,12 +195,25 @@ fn connection_key(endpoint: &Endpoint, salt: &[u8; 16]) -> String {
         .and_then(|tls| tls.ca_file.as_ref())
         .map(|path| path.to_string_lossy().into_owned())
         .unwrap_or_default();
+    let authority = match &endpoint.authority {
+        super::Authority::Negotiate => String::new(),
+        super::Authority::Ntlm => "ntlm".into(),
+        super::Authority::Kerberos(spn) => {
+            format!("kerberos:{}", spn.as_deref().unwrap_or_default())
+        }
+    };
     let key = format!(
-        "{}\0{}\0{}\0{}\0{}\0{}\0{}",
+        "{}\0{}\0{}\0{}\0{}\0{}\0{}\0{}\0{}",
         endpoint.scheme().as_str(),
         ca_file,
         endpoint.host.to_ascii_lowercase(),
+        endpoint
+            .connect
+            .as_deref()
+            .unwrap_or_default()
+            .to_ascii_lowercase(),
         endpoint.port,
+        authority,
         endpoint.domain.to_ascii_lowercase(),
         endpoint.user.to_ascii_lowercase(),
         proof.iter().map(|b| format!("{b:02x}")).collect::<String>()
@@ -251,6 +274,40 @@ impl WsmanClient {
             self.connections.remove(&key);
         }
         outcome
+    }
+
+    /// A Kerberos logon carries no computer name, so a connection authenticated with Kerberos
+    /// reads it once from `Win32_ComputerSystem`. A failed read leaves the typed host.
+    fn learn_server_name(&mut self, target: &Target) {
+        let key = self.key(&target.endpoint);
+        let kerberos = self
+            .connections
+            .get(&key)
+            .and_then(|transport| transport.authentication())
+            .is_some_and(|authentication| authentication.mechanism == "Kerberos");
+        if !kerberos || self.names.contains_key(&key) {
+            return;
+        }
+        let cimv2 = Target {
+            namespace: "root\\cimv2".into(),
+            ..target.clone()
+        };
+        let wql = "SELECT Name FROM Win32_ComputerSystem";
+        let Ok(items) = self.enumerate_raw(&cimv2, "Win32_ComputerSystem", Some(wql), 1, Some(1))
+        else {
+            return;
+        };
+        let name = items
+            .into_iter()
+            .filter_map(|item| item.instance)
+            .flat_map(|instance| instance.fields)
+            .find_map(|field| match field.value {
+                RawValue::Text(text) if field.name.eq_ignore_ascii_case("Name") => Some(text),
+                _ => None,
+            });
+        if let Some(name) = name.filter(|name| !name.trim().is_empty()) {
+            self.names.insert(key, name);
+        }
     }
 
     /// Value of `__SERVER` for records of a node: the computer name the service reported, else
@@ -476,7 +533,9 @@ impl WsmanClient {
         wql: Option<&str>,
         scope: Scope,
     ) -> Result<Vec<Found>, ManagementError> {
-        match self.enumerate_raw(target, class, wql, MAX_ELEMENTS, None) {
+        let result = self.enumerate_raw(target, class, wql, MAX_ELEMENTS, None);
+        self.learn_server_name(target);
+        match result {
             Ok(items) => Ok(items
                 .into_iter()
                 .filter_map(|item| self.found(target, item, class))
@@ -535,6 +594,7 @@ impl WsmanClient {
                     selectors: selectors.to_vec(),
                     references: vec![],
                 };
+                self.learn_server_name(target);
                 let server = self.server_name(target);
                 let context = RecordContext {
                     server: &server,
@@ -580,6 +640,7 @@ impl WsmanClient {
             .map_err(|failure| error_for(failure, target, METHOD))?;
         let declared: &[ParameterSchema] = schema.map_or(&[], |m| m.output.as_slice());
         let mut outcome = MethodOutcome::default();
+        self.learn_server_name(target);
         let server = self.server_name(target);
         let context = RecordContext {
             server: &server,

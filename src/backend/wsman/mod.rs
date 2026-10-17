@@ -12,16 +12,52 @@ pub struct Tls {
     pub ca_file: Option<PathBuf>,
 }
 
+/// Authentication the command asks for with `/AUTHORITY`.
+#[derive(Clone, Debug, Default, PartialEq, Eq)]
+pub enum Authority {
+    /// Kerberos for a domain account when a KDC answers, else NTLM.
+    #[default]
+    Negotiate,
+    /// `/AUTHORITY:Kerberos:<spn>`: Kerberos only, for the named service principal. `None`
+    /// is the default principal `HTTP@host`.
+    Kerberos(Option<String>),
+    /// `/AUTHORITY:NTLMDOMAIN:<domain>`: NTLM only, as classic WMIC.
+    Ntlm,
+}
+
+impl Authority {
+    /// Reads an `/AUTHORITY` value without regard to case: `Kerberos` or `Kerberos:<spn>` asks
+    /// for Kerberos, `NTLMDOMAIN:<domain>` for NTLM; every other value leaves the choice to the
+    /// transport.
+    pub fn parse(text: &str) -> Self {
+        let text = text.trim();
+        match text.split_once(':') {
+            Some((scheme, spn)) if scheme.trim().eq_ignore_ascii_case("kerberos") => {
+                let spn = spn.trim();
+                Self::Kerberos((!spn.is_empty()).then(|| spn.to_owned()))
+            }
+            Some((scheme, _)) if scheme.trim().eq_ignore_ascii_case("ntlmdomain") => Self::Ntlm,
+            None if text.eq_ignore_ascii_case("kerberos") => Self::Kerberos(None),
+            _ => Self::Negotiate,
+        }
+    }
+}
+
 /// One WinRM endpoint and the account used against it.
 #[derive(Clone, Debug)]
 pub struct Endpoint {
+    /// Node as typed: the name of the service principal, the `Host` header, the TLS name and
+    /// the `__SERVER` fallback.
     pub host: String,
+    /// Address the TCP connection goes to when it is not `host`, for example a tunnel endpoint.
+    pub connect: Option<String>,
     pub port: u16,
     pub user: String,
     pub domain: String,
     pub password: SecretWide,
     /// `None` sends HTTP; `Some` runs HTTP over TLS with the server certificate validated.
     pub tls: Option<Tls>,
+    pub authority: Authority,
 }
 
 impl Endpoint {
@@ -44,8 +80,12 @@ pub struct Response {
 pub enum TransportError {
     /// TCP connection to the listener failed.
     Connect(std::io::Error),
-    /// The server rejected the credentials (HTTP 401 after the NTLM exchange).
+    /// The server rejected the credentials (HTTP 401 after the NTLM exchange or to a Kerberos
+    /// token).
     Authentication,
+    /// Kerberos ended the request: the KDC refused the account, or Kerberos was asked for and
+    /// could not be used.
+    Kerberos(transport::kerberos::Failure),
     /// The HTTP or encryption framing did not match what the service sends.
     Protocol(String),
     /// The TLS handshake failed, including a server certificate that was not accepted, or the
@@ -59,11 +99,21 @@ impl std::fmt::Display for TransportError {
         match self {
             Self::Connect(e) => write!(f, "connect: {e}"),
             Self::Authentication => write!(f, "authentication failed"),
+            Self::Kerberos(failure) => write!(f, "{failure}"),
             Self::Protocol(m) => write!(f, "protocol: {m}"),
             Self::Tls(m) => write!(f, "tls: {m}"),
             Self::Io(e) => write!(f, "io: {e}"),
         }
     }
+}
+
+/// The mechanism that authenticated a connection and the scheme the server answered with.
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct Authentication {
+    /// `Kerberos` or `NTLM`.
+    pub mechanism: &'static str,
+    /// Scheme name of the `WWW-Authenticate` header the server sent during the exchange.
+    pub server_scheme: Option<String>,
 }
 
 /// Posts one SOAP envelope to `/wsman` and returns the decrypted reply with its HTTP status.
@@ -81,11 +131,17 @@ pub trait Transport {
     fn is_reusable(&mut self) -> bool {
         true
     }
+
+    /// How the connection authenticated; known after the first successful `post`.
+    fn authentication(&self) -> Option<Authentication> {
+        None
+    }
 }
 
 pub const PORT_VARIABLE: &str = "WMIC_WSMAN_PORT";
 pub const SCHEME_VARIABLE: &str = "WMIC_WSMAN_SCHEME";
 pub const CA_FILE_VARIABLE: &str = "WMIC_WSMAN_CA_FILE";
+pub const CONNECT_VARIABLE: &str = "WMIC_WSMAN_CONNECT";
 
 /// URL scheme of the listener, which fixes the default port and whether TLS is used.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
@@ -120,6 +176,8 @@ pub enum InvalidSetting {
     /// `WMIC_WSMAN_CA_FILE` is set while the scheme is `http`, which would send the logon in
     /// plain text while the caller expects TLS.
     CaFileWithoutTls(String),
+    /// `WMIC_WSMAN_CONNECT` is empty or holds blanks, so it names no address.
+    Connect(String),
 }
 
 impl std::fmt::Display for InvalidSetting {
@@ -131,6 +189,7 @@ impl std::fmt::Display for InvalidSetting {
                 f,
                 "{CA_FILE_VARIABLE} is set to {value} but {SCHEME_VARIABLE} is not https"
             ),
+            Self::Connect(value) => write!(f, "{CONNECT_VARIABLE} is not an address: {value}"),
         }
     }
 }
@@ -142,6 +201,8 @@ pub struct Listener {
     pub port: u16,
     /// Extra trust anchors for HTTPS; `listener()` refuses it with HTTP.
     pub ca_file: Option<PathBuf>,
+    /// Address the TCP connection of every node goes to instead of the node name.
+    pub connect: Option<String>,
 }
 
 impl Listener {
@@ -163,6 +224,12 @@ pub fn port_is_set() -> bool {
 
 fn parse_port(text: &str) -> Option<u16> {
     text.trim().parse::<u16>().ok().filter(|port| *port != 0)
+}
+
+/// An address is one word: a host name or an IP address, without blanks.
+fn parse_connect(text: &str) -> Option<String> {
+    let text = text.trim();
+    (!text.is_empty() && !text.contains(char::is_whitespace)).then(|| text.to_owned())
 }
 
 fn parse_scheme(text: &str) -> Option<Scheme> {
@@ -191,14 +258,16 @@ fn setting<T>(
 }
 
 /// The listener settings from the environment: `WMIC_WSMAN_SCHEME` (default `http`),
-/// `WMIC_WSMAN_PORT` (default 5985 for `http`, 5986 for `https`) and `WMIC_WSMAN_CA_FILE`.
+/// `WMIC_WSMAN_PORT` (default 5985 for `http`, 5986 for `https`), `WMIC_WSMAN_CA_FILE` and
+/// `WMIC_WSMAN_CONNECT`.
 pub fn listener() -> Result<Listener, InvalidSetting> {
     let scheme = setting(SCHEME_VARIABLE, parse_scheme, InvalidSetting::Scheme)?;
     let port = setting(PORT_VARIABLE, parse_port, InvalidSetting::Port)?;
     let ca_file = std::env::var_os(CA_FILE_VARIABLE)
         .filter(|value| !value.is_empty())
         .map(PathBuf::from);
-    listener_of(scheme, port, ca_file)
+    let connect = setting(CONNECT_VARIABLE, parse_connect, InvalidSetting::Connect)?;
+    listener_of(scheme, port, ca_file, connect)
 }
 
 /// Combines the parsed settings; `None` is a variable that is not set.
@@ -206,6 +275,7 @@ fn listener_of(
     scheme: Option<Scheme>,
     port: Option<u16>,
     ca_file: Option<PathBuf>,
+    connect: Option<String>,
 ) -> Result<Listener, InvalidSetting> {
     let scheme = scheme.unwrap_or(Scheme::Http);
     if let Some(path) = &ca_file
@@ -219,6 +289,7 @@ fn listener_of(
         scheme,
         port: port.unwrap_or_else(|| scheme.default_port()),
         ca_file,
+        connect,
     })
 }
 
@@ -244,7 +315,10 @@ pub mod schema;
 
 #[cfg(test)]
 mod tests {
-    use super::{InvalidSetting, Listener, Scheme, Tls, listener_of, parse_port, parse_scheme};
+    use super::{
+        Authority, InvalidSetting, Listener, Scheme, Tls, listener_of, parse_connect, parse_port,
+        parse_scheme,
+    };
     use std::path::PathBuf;
 
     #[test]
@@ -270,30 +344,65 @@ mod tests {
 
     #[test]
     fn the_port_follows_the_scheme_and_a_ca_file_needs_https() {
-        let plain = listener_of(None, None, None).unwrap();
+        let plain = listener_of(None, None, None, None).unwrap();
         assert_eq!(
             (plain.scheme, plain.port, plain.tls()),
             (Scheme::Http, 5985, None)
         );
-        let secure = listener_of(Some(Scheme::Https), None, None).unwrap();
+        let secure = listener_of(Some(Scheme::Https), None, None, None).unwrap();
         assert_eq!(secure.port, 5986);
         assert_eq!(secure.tls(), Some(Tls { ca_file: None }));
-        let tunnel = listener_of(Some(Scheme::Https), Some(25986), Some("ca.pem".into())).unwrap();
+        let tunnel = listener_of(
+            Some(Scheme::Https),
+            Some(25986),
+            Some("ca.pem".into()),
+            Some("127.0.0.1".into()),
+        )
+        .unwrap();
         assert_eq!(
             tunnel,
             Listener {
                 scheme: Scheme::Https,
                 port: 25986,
                 ca_file: Some(PathBuf::from("ca.pem")),
+                connect: Some("127.0.0.1".into()),
             }
         );
         assert_eq!(
-            listener_of(None, None, Some("ca.pem".into())),
+            listener_of(None, None, Some("ca.pem".into()), None),
             Err(InvalidSetting::CaFileWithoutTls("ca.pem".into()))
         );
         assert_eq!(
-            listener_of(Some(Scheme::Http), Some(5986), Some("ca.pem".into())),
+            listener_of(Some(Scheme::Http), Some(5986), Some("ca.pem".into()), None),
             Err(InvalidSetting::CaFileWithoutTls("ca.pem".into()))
         );
+    }
+
+    #[test]
+    fn authority_values_select_the_mechanism() {
+        assert_eq!(Authority::parse("Kerberos"), Authority::Kerberos(None));
+        assert_eq!(Authority::parse(" kerberos: "), Authority::Kerberos(None));
+        assert_eq!(
+            Authority::parse("Kerberos :CONTOSO\\CM01"),
+            Authority::Kerberos(Some("CONTOSO\\CM01".into()))
+        );
+        assert_eq!(
+            Authority::parse("KERBEROS:HTTP/cm01.contoso.com"),
+            Authority::Kerberos(Some("HTTP/cm01.contoso.com".into()))
+        );
+        assert_eq!(Authority::parse("NTLMDOMAIN:CONTOSO"), Authority::Ntlm);
+        assert_eq!(Authority::parse("ntlmdomain:"), Authority::Ntlm);
+        assert_eq!(Authority::parse(""), Authority::Negotiate);
+        assert_eq!(Authority::parse("Kerberosx"), Authority::Negotiate);
+    }
+
+    #[test]
+    fn the_connect_address_is_one_word() {
+        assert_eq!(parse_connect(" 127.0.0.1 "), Some("127.0.0.1".into()));
+        assert_eq!(parse_connect("tunnel.local"), Some("tunnel.local".into()));
+        assert_eq!(parse_connect("::1"), Some("::1".into()));
+        for bad in ["", "  ", "a b", "host\tname"] {
+            assert_eq!(parse_connect(bad), None, "{bad:?}");
+        }
     }
 }

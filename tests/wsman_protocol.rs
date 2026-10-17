@@ -6,7 +6,7 @@ use wmic_compat::{
     backend::{
         Confirmation, Management, ResolvedRequest, SecretWide,
         wsman::{
-            Endpoint, Response, Transport, TransportError,
+            Authentication, Endpoint, Response, Transport, TransportError,
             client::{Target, WsmanClient, default_connector, listener_reachable},
             manage::WsmanManagement,
         },
@@ -84,6 +84,8 @@ struct Wire {
     connections: usize,
     /// Computer name the transports report after their first reply.
     server_name: Option<String>,
+    /// Mechanism the transports report as their authentication.
+    mechanism: Option<&'static str>,
     /// Number of upcoming reuse checks that find the connection closed by the peer.
     stale: usize,
 }
@@ -120,6 +122,13 @@ struct FakeTransport(Shared);
 impl Transport for FakeTransport {
     fn server_name(&self) -> Option<String> {
         self.0.borrow().server_name.clone()
+    }
+
+    fn authentication(&self) -> Option<Authentication> {
+        self.0.borrow().mechanism.map(|mechanism| Authentication {
+            mechanism,
+            server_scheme: None,
+        })
     }
 
     fn is_reusable(&mut self) -> bool {
@@ -183,6 +192,8 @@ fn endpoint(port: u16) -> Endpoint {
         domain: "AYW".into(),
         password: SecretWide::new(wide("secret")),
         tls: None,
+        connect: None,
+        authority: Default::default(),
     }
 }
 
@@ -1768,6 +1779,173 @@ fn server_is_the_computer_name_the_service_reports_for_every_kind_of_host() {
             "{host}"
         );
     }
+}
+
+const COMPUTER_SYSTEM_QUERY: &str = "SELECT Name FROM Win32_ComputerSystem";
+
+fn computer_system(name: &str) -> Reply {
+    Reply::Xml(
+        200,
+        fixture("wql-process-fragment")
+            .replace("<Name>System</Name>", &format!("<Name>{name}</Name>")),
+    )
+}
+
+fn computer_system_queries(wire: &Shared) -> usize {
+    sent(wire)
+        .iter()
+        .filter(|s| s.xml.contains(COMPUTER_SYSTEM_QUERY))
+        .count()
+}
+
+#[test]
+fn a_kerberos_connection_reads_the_computer_name_once() {
+    let w = wire();
+    w.borrow_mut().mechanism = Some("Kerberos");
+    script(
+        &w,
+        "/Enumerate",
+        None,
+        vec![
+            ok("enumerate-os"),
+            computer_system("CM01"),
+            ok("enumerate-os"),
+        ],
+    );
+    let mut backend = management(&w);
+    let mut r = remote("os get");
+    r.connection.node = wide("10.1.2.3");
+    for _ in 0..2 {
+        let records = objects(backend.execute(&r).unwrap());
+        assert_eq!(text(&records[0], "__SERVER"), "CM01");
+        assert_eq!(
+            records[0].path,
+            Some(wide("\\\\CM01\\ROOT\\CIMV2:Win32_OperatingSystem=@"))
+        );
+    }
+    assert_eq!(kinds(&w), ["Enumerate", "Enumerate", "Enumerate"]);
+    assert_eq!(computer_system_queries(&w), 1);
+    assert!(sent(&w)[1].xml.contains(COMPUTER_SYSTEM_QUERY));
+    assert_eq!(w.borrow().connections, 1);
+}
+
+#[test]
+fn a_kerberos_connection_per_endpoint_reads_its_own_computer_name() {
+    let w = wire();
+    w.borrow_mut().mechanism = Some("Kerberos");
+    script(
+        &w,
+        "/Enumerate",
+        None,
+        vec![
+            ok("enumerate-os"),
+            computer_system("CM01"),
+            ok("enumerate-os"),
+            computer_system("CM02"),
+        ],
+    );
+    let mut backend = management(&w);
+    let mut first = remote("os get");
+    first.connection.node = wide("10.1.2.3");
+    let mut second = remote("os get");
+    second.connection.node = wide("10.1.2.4");
+    let first = objects(backend.execute(&first).unwrap());
+    let second = objects(backend.execute(&second).unwrap());
+    assert_eq!(text(&first[0], "__SERVER"), "CM01");
+    assert_eq!(text(&second[0], "__SERVER"), "CM02");
+    assert_eq!(computer_system_queries(&w), 2);
+}
+
+#[test]
+fn ntlm_and_unreported_authentication_send_no_computer_name_query() {
+    for mechanism in [Some("NTLM"), None] {
+        let w = wire();
+        w.borrow_mut().mechanism = mechanism;
+        script(&w, "/Enumerate", None, vec![ok("enumerate-os")]);
+        let mut r = remote("os get");
+        r.connection.node = wide("10.1.2.3");
+        let records = objects(management(&w).execute(&r).unwrap());
+        assert_eq!(text(&records[0], "__SERVER"), "10.1.2.3", "{mechanism:?}");
+        assert_eq!(kinds(&w), ["Enumerate"], "{mechanism:?}");
+        assert_eq!(computer_system_queries(&w), 0, "{mechanism:?}");
+    }
+}
+
+#[test]
+fn a_kerberos_connection_does_not_ask_again_when_the_service_reported_a_name() {
+    let w = wire();
+    w.borrow_mut().mechanism = Some("Kerberos");
+    w.borrow_mut().server_name = Some("LABHOST".into());
+    script(
+        &w,
+        "/Enumerate",
+        None,
+        vec![ok("enumerate-os"), ok("enumerate-os")],
+    );
+    let mut backend = management(&w);
+    let mut r = remote("os get");
+    r.connection.node = wide("10.1.2.3");
+    objects(backend.execute(&r).unwrap());
+    let records = objects(backend.execute(&r).unwrap());
+    assert_eq!(text(&records[0], "__SERVER"), "LABHOST");
+    assert_eq!(computer_system_queries(&w), 0);
+}
+
+#[test]
+fn a_failed_computer_name_read_leaves_the_typed_host() {
+    let w = wire();
+    w.borrow_mut().mechanism = Some("Kerberos");
+    script(
+        &w,
+        "/Enumerate",
+        None,
+        vec![ok("enumerate-os"), fault("fault-access-denied")],
+    );
+    let mut r = remote("os get");
+    r.connection.node = wide("10.1.2.3");
+    let records = objects(management(&w).execute(&r).unwrap());
+    assert_eq!(text(&records[0], "__SERVER"), "10.1.2.3");
+    assert_eq!(computer_system_queries(&w), 1);
+}
+
+#[test]
+fn get_and_invoke_on_a_kerberos_connection_read_the_computer_name() {
+    let w = wire();
+    w.borrow_mut().mechanism = Some("Kerberos");
+    script(&w, "/Get", None, vec![ok("get-process-4")]);
+    script(&w, "/Enumerate", None, vec![computer_system("CM01")]);
+    let mut r = remote("path Win32_Process.Handle=\"4\" get Name");
+    r.connection.node = wide("10.1.2.3");
+    let records = objects(management(&w).execute(&r).unwrap());
+    assert_eq!(
+        records[0].path,
+        Some(wide("\\\\CM01\\ROOT\\CIMV2:Win32_Process.Handle=\"4\""))
+    );
+    assert_eq!(text(&records[0], "__SERVER"), "CM01");
+    assert_eq!(kinds(&w), ["Get", "Enumerate"]);
+
+    let w = wire();
+    w.borrow_mut().mechanism = Some("Kerberos");
+    script(
+        &w,
+        "/Win32_Process/GetOwner",
+        None,
+        vec![ok("invoke-getowner")],
+    );
+    script(&w, "/Enumerate", None, vec![computer_system("CM01")]);
+    let selectors = [("Handle".to_owned(), "4".to_owned())];
+    client(&w)
+        .invoke(
+            &target(),
+            "Win32_Process",
+            "GetOwner",
+            &selectors,
+            None,
+            &[],
+        )
+        .unwrap();
+    assert_eq!(kinds(&w), ["GetOwner", "Enumerate"]);
+    assert_eq!(computer_system_queries(&w), 1);
 }
 
 #[test]

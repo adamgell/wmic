@@ -125,10 +125,16 @@ fn open_socket(host: &str, port: u16) -> Result<TcpStream, TransportError> {
 }
 
 impl HttpConnection {
-    /// Opens the connection. With `tls`, the handshake runs here and the server certificate
-    /// is validated before the connection is returned.
-    pub fn connect(host: &str, port: u16, tls: Option<&Tls>) -> Result<Self, TransportError> {
-        let socket = open_socket(host, port)?;
+    /// Opens the connection to `connect`, or to `host` when `connect` is `None`. `host` names
+    /// the server in the `Host` header and, with `tls`, in the certificate check; the handshake
+    /// runs here and the server certificate is validated before the connection is returned.
+    pub fn connect(
+        host: &str,
+        port: u16,
+        connect: Option<&str>,
+        tls: Option<&Tls>,
+    ) -> Result<Self, TransportError> {
+        let socket = open_socket(connect.unwrap_or(host), port)?;
         let (stream, certificate) = match tls {
             Some(settings) => {
                 let secured = tls::connect(socket, host, settings)?;

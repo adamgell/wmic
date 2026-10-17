@@ -1,6 +1,6 @@
 //! Management backend for nodes reached over WS-Management.
 use super::{
-    Endpoint, InvalidSetting, Listener, catalog,
+    Authority, Endpoint, InvalidSetting, Listener, catalog,
     client::{Connector, Found, Target, WsmanClient, default_connector, listener_reachable},
     fault::detail_properties,
     listener,
@@ -11,7 +11,8 @@ use super::{
 use crate::{
     alias::predicate::Predicate,
     backend::{
-        Confirmation, Management, ResolvedRequest, build_query, cancellable_targets, keyword,
+        Confirmation, ConnectionOptions, Management, ResolvedRequest, build_query,
+        cancellable_targets, keyword,
         methods::{InputError, bind_method, undeclared_method},
     },
     model::{
@@ -93,6 +94,17 @@ pub fn host_of(node: &WideText) -> String {
     if host == "." { "localhost" } else { host }.to_owned()
 }
 
+/// `/AUTHORITY:Kerberos[:<spn>]` asks for Kerberos. `NTLMDOMAIN:` supplies the domain through
+/// `identity_parts`.
+fn authority_of(connection: &ConnectionOptions) -> Authority {
+    connection
+        .authority
+        .as_ref()
+        .map_or(Authority::Negotiate, |text| {
+            Authority::parse(&text.to_string_lossy())
+        })
+}
+
 /// Connection settings for a request: account from the `/user` and `/password` options.
 fn target_of(request: &ResolvedRequest, listener: &Listener) -> Target {
     let connection = &request.connection;
@@ -103,11 +115,13 @@ fn target_of(request: &ResolvedRequest, listener: &Listener) -> Target {
     Target {
         endpoint: Endpoint {
             host: host.clone(),
+            connect: listener.connect.clone(),
             port: listener.port,
             user: user.to_string_lossy(),
             domain: domain.to_string_lossy(),
             password: connection.password.clone().unwrap_or_default(),
             tls: listener.tls(),
+            authority: authority_of(connection),
         },
         namespace: if namespace.is_empty() {
             "root\\cimv2".into()
@@ -472,8 +486,10 @@ impl WsmanManagement {
 
 impl Management for WsmanManagement {
     fn reachable(&mut self, node: &WideText, timeout_ms: u32) -> bool {
-        (self.listener)()
-            .is_ok_and(|listener| listener_reachable(&host_of(node), listener.port, timeout_ms))
+        (self.listener)().is_ok_and(|listener| {
+            let host = listener.connect.clone().unwrap_or_else(|| host_of(node));
+            listener_reachable(&host, listener.port, timeout_ms)
+        })
     }
 
     fn execute(&mut self, request: &ResolvedRequest) -> Result<ManagementResult, ManagementError> {
