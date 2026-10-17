@@ -7,6 +7,17 @@ from switch_values import generate as switch_values
 from run_corpus import SUITES,FOLDERS,compare_suite
 
 class FixtureInventoryTests(unittest.TestCase):
+    def test_path_methods_retain_exact_read_only_case_inventory(self):
+        """Keep direct-target diagnostics, alias controls and native help probes in CI."""
+        fixtures=Path(__file__).resolve().parents[3]/'tests/fixtures'
+        cases=json.loads((fixtures/'path-method-cases.json').read_text())['cases']
+        self.assertEqual(len(cases),62)
+        self.assertEqual(len({c['id'] for c in cases}),62)
+        self.assertTrue(all(c['operation']=='read_only' for c in cases))
+        for name in ('path','class','alias'):
+            self.assertTrue(any(c['id']==name+'-bare' for c in cases))
+            self.assertTrue(any(c['id']==name+'-help' for c in cases))
+
     def test_method_arguments_retain_read_only_diagnostics_and_control_oracles(self):
         """Guard diagnostic coverage, provider-free selections and completed captures."""
         fixtures=Path(__file__).resolve().parents[3]/'tests/fixtures'

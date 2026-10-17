@@ -227,3 +227,109 @@ fn newly_accepted_password_spellings_are_redacted_in_success_and_failure() {
         );
     }
 }
+
+/// Missing direct methods must fail instead of returning an empty help table.
+#[test]
+fn unknown_direct_method_help_reports_the_native_class_error() {
+    use wmic_compat::{
+        alias::AliasStore,
+        render::help::{HelpRequest, render_help},
+    };
+    let aliases = AliasStore::stock().unwrap();
+    for target in ["path", "class"] {
+        for name in ["WmicCompatMissingMethod", ""] {
+            let command = parse(&format!("{target} Win32_Process call \"{name}\" /?"));
+            for methods in [
+                vec![],
+                vec![MethodSchema {
+                    name: "GetOwner".into(),
+                    input: vec![],
+                    output: vec![],
+                    is_static: false,
+                    qualifiers: vec![],
+                }],
+            ] {
+                let schema = ClassSchema {
+                    name: "Win32_Process".into(),
+                    methods,
+                    ..Default::default()
+                };
+                let error = render_help(HelpRequest {
+                    command: &command,
+                    aliases: &aliases,
+                    schema: Some(&schema),
+                })
+                .unwrap_err();
+                assert_eq!(error.code, 0xABFC, "{target}: {name}");
+                assert_eq!(
+                    error.message,
+                    WideText::from(format!("{name} - Invalid class method.")),
+                    "{target}"
+                );
+            }
+        }
+    }
+}
+
+/// Native method help recognizes CLI width equivalence without changing dispatch spelling.
+#[test]
+fn direct_method_help_recognizes_fullwidth_method_names() {
+    use wmic_compat::{
+        alias::AliasStore,
+        render::help::{HelpRequest, render_help},
+    };
+    let aliases = AliasStore::stock().unwrap();
+    let schema = ClassSchema {
+        name: "Win32_Process".into(),
+        methods: vec![MethodSchema {
+            name: "GetOwner".into(),
+            input: vec![],
+            output: vec![],
+            is_static: false,
+            qualifiers: vec![],
+        }],
+        ..Default::default()
+    };
+    for target in ["path", "class"] {
+        let command = parse(&format!("{target} Win32_Process call ＧｅｔＯｗｎｅｒ /?"));
+        let output = render_help(HelpRequest {
+            command: &command,
+            aliases: &aliases,
+            schema: Some(&schema),
+        })
+        .unwrap();
+        assert!(
+            output.stdout.to_string_lossy().contains("GetOwner"),
+            "{target}: {output:?}"
+        );
+        assert!(output.stderr.0.is_empty());
+    }
+}
+
+/// Adding a method-name diagnostic must not expose credential-looking text that help previously omitted.
+#[test]
+fn unknown_direct_method_help_withholds_credential_looking_names() {
+    use wmic_compat::{
+        alias::AliasStore,
+        render::help::{HelpRequest, render_help},
+    };
+    let aliases = AliasStore::stock().unwrap();
+    let schema = ClassSchema {
+        name: "Win32_Process".into(),
+        ..Default::default()
+    };
+    for name in [
+        "/password:DO_NOT_LOG_TEST_SECRET",
+        "-Ｐａｓｓｗｏｒｄ:DO_NOT_LOG_TEST_SECRET",
+    ] {
+        let command = parse(&format!("path Win32_Process call \"{name}\" /?"));
+        let error = render_help(HelpRequest {
+            command: &command,
+            aliases: &aliases,
+            schema: Some(&schema),
+        })
+        .unwrap_err();
+        assert_eq!(error.code, 0xABFC);
+        assert_eq!(error.message, WideText::from("Invalid class method."));
+    }
+}

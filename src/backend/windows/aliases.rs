@@ -41,11 +41,13 @@ fn value(v: &CimValue) -> Result<Value, ResolveError> {
         _ => return Err(resolve_error(0x80041008)),
     })
 }
+/// Construct direct schema queries for loading alias metadata.
 fn request(options: ConnectionOptions, class: &str) -> ResolvedRequest {
     ResolvedRequest {
         render_context: None,
         format_spec: None,
         connection: options,
+        from_alias: false,
         class_name: class.into(),
         instance_path: None,
         class_mode: false,
