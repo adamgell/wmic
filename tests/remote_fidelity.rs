@@ -224,6 +224,30 @@ fn a_failing_node_beside_a_good_node_adds_nothing_to_stdout() {
     assert_eq!(r.status, 0x800706ba);
 }
 
+/// Separate output retains the failed node's empty result before the successful table.
+#[test]
+fn aggregate_off_retains_failed_node_output_before_a_success() {
+    let r = run(
+        &mut Fake::rpc(&["NODE1"]),
+        "/aggregate:off /node:NODE1,NODE2 os get Caption",
+    );
+    assert_eq!(r.stdout, format!("{BLANK}{}", table()));
+    assert_eq!(r.stderr, format!("Node - NODE1\r\r\n{RPC_BLOCK}"));
+    assert_eq!(r.status, 0x800706ba);
+}
+
+/// A later failure keeps its own empty result instead of being hidden by earlier output.
+#[test]
+fn aggregate_off_retains_failed_node_output_after_a_success() {
+    let r = run(
+        &mut Fake::rpc(&["NODE2"]),
+        "/aggregate:off /node:NODE1,NODE2 os get Caption",
+    );
+    assert_eq!(r.stdout, format!("{}{BLANK}", table()));
+    assert_eq!(r.stderr, format!("Node - NODE2\r\r\n{RPC_BLOCK}"));
+    assert_eq!(r.status, 0x800706ba);
+}
+
 // E3, E3_rev, E3_merge.
 #[test]
 fn a_credential_error_beside_a_good_node_adds_nothing_to_stdout() {

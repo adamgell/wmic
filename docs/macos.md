@@ -292,7 +292,7 @@ For a class in the schema, a method that the class does not have returns `<name>
 | A fault without a WMI status, an HTTP error, or a reply that is not SOAP | `Generic failure` | 0x80041001 | 1 |
 
 - The connection failure keeps the text of classic WMIC so that scripts behave the same. Classic WMIC also reports an unknown principal in `/AUTHORITY:"Kerberos:<principal>"` as `The RPC server is unavailable.` (0x800706BA).
-- For `GET` and `LIST`, a failed node prints `Node - <node>` and the error on standard error. The two blank lines of an empty result go to standard output once for the whole command. They appear only when no node printed a result.
+- For `GET` and `LIST`, a failed node prints `Node - <node>` and the error on standard error. With the default aggregation, the two blank lines of an empty result go to standard output once for the whole command, only when no node printed a result. With `/AGGREGATE:OFF`, each node prints its own output, including a failed node's empty result.
 - For `CALL`, `SET`, `CREATE`, and `DELETE`, a failed node prints the error on standard error with no `Node - ` line and no blank lines. With `/FAILFAST:ON` the error is `RPC Server not available.` alone. Without it, the error is the `ERROR:` block.
 - The exit codes follow the mapping in [Exit status](#exit-status).
 - The text of a WBEM or Win32 status is the text that `IWbemStatusCodeText` returns on Windows. A status that this table lacks shows the text from the server.
@@ -306,7 +306,8 @@ For a class in the schema, a method that the class does not have returns `<name>
 
 The output follows classic WMIC:
 
-- `GET` and `LIST`: the results of the nodes that answered form one output, with the trailing blank line of the format. A failed node adds nothing to standard output. Its `Node - ` line and its message go to standard error, in node order. When every node failed, standard output holds one pair of blank lines for the whole command. The file of `/OUTPUT` then holds one line.
+- `GET` and `LIST`, with the default `/AGGREGATE:ON`: the results of the nodes that answered form one output, with the trailing blank line of the format. A failed node adds nothing to standard output. Its `Node - ` line and its message go to standard error, in node order. When every node failed, standard output holds one pair of blank lines for the whole command. The file of `/OUTPUT` then holds one line.
+- `/AGGREGATE:OFF`: each node prints its output independently, in node order. An unavailable node keeps its empty-result blank lines before or after the successful output of another node.
 - `/FORMAT:RAWXML` and `/FORMAT:XML`: one `COMMAND` document holds a `RESULTS` element for each node, in node order. A failed node has a `RESULTS` element with an `ERROR` element. Its message also goes to standard error.
 - `CALL`, `SET`, `CREATE`, `DELETE`: with two or more nodes, `Node - <node>` goes to standard output before the output of each node, also before a failed node. The error of a failed node goes to standard error.
 - `/RECORD`: a command with a node list writes one `RECORD` element. Its `TARGETNODE` lists the nodes as typed, separated by a comma and a space. Its text is the standard output of the whole command.

@@ -912,7 +912,7 @@ impl Session {
                         if one_document {
                             failed_nodes.push((node.clone(), error.clone()));
                             output.stdout = WideText::default();
-                        } else if !shows_errors {
+                        } else if settings.aggregate && !shows_errors {
                             let blank = std::mem::take(&mut output.stdout);
                             if blank_output.0.is_empty() {
                                 blank_output = blank;
