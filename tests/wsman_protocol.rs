@@ -6,7 +6,7 @@ use wmic_compat::{
     backend::{
         Confirmation, Management, ResolvedRequest, SecretWide,
         wsman::{
-            Authentication, Endpoint, Response, Transport, TransportError,
+            Authentication, Authority, Endpoint, Response, Transport, TransportError,
             client::{Target, WsmanClient, default_connector, listener_reachable},
             manage::WsmanManagement,
         },
@@ -459,6 +459,13 @@ fn a_command_without_a_projection_keeps_the_class_metadata() {
 
 /// Stdout and stderr of one command run through the session against the scripted wire.
 fn session_output(w: &Shared, command: &str) -> (String, String, u32) {
+    session_output_using(
+        &mut management(w),
+        &format!(" /node:AYW /user:AYW\\admin /password:secret {command}"),
+    )
+}
+
+fn session_output_using(backend: &mut dyn Management, command: &str) -> (String, String, u32) {
     struct Capture(String, String);
     impl OutputSink for Capture {
         fn write(&mut self, stream: OutputStream, text: &WideText) -> Result<(), OutputError> {
@@ -471,11 +478,9 @@ fn session_output(w: &Shared, command: &str) -> (String, String, u32) {
     }
     let mut capture = Capture(String::new(), String::new());
     let outcome = Session::new(wide("LOCAL")).unwrap().execute(
-        &wide(&format!(
-            " /node:AYW /user:AYW\\admin /password:secret {command}"
-        )),
+        &wide(command),
         EntryMode::Interactive,
-        &mut management(w),
+        backend,
         &mut capture,
     );
     (capture.0, capture.1, outcome.exit_status)
@@ -847,10 +852,20 @@ fn key_values_with_backslashes_keep_one_backslash_on_the_wire_and_two_in_the_pat
 }
 
 fn enumerate_reply(items: &str) -> Reply {
+    enumerate_page(items, None)
+}
+
+fn enumerate_page(items: &str, context: Option<&str>) -> Reply {
+    let end = if context.is_none() {
+        "<w:EndOfSequence/>"
+    } else {
+        ""
+    };
+    let context = context.unwrap_or_default();
     Reply::Xml(
         200,
         format!(
-            r#"<s:Envelope xmlns:s="http://www.w3.org/2003/05/soap-envelope" xmlns:a="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:n="http://schemas.xmlsoap.org/ws/2004/09/enumeration" xmlns:w="http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:cim="http://schemas.dmtf.org/wbem/wscim/1/common"><s:Body><n:EnumerateResponse><n:EnumerationContext></n:EnumerationContext><w:Items>{items}</w:Items><w:EndOfSequence/></n:EnumerateResponse></s:Body></s:Envelope>"#
+            r#"<s:Envelope xmlns:s="http://www.w3.org/2003/05/soap-envelope" xmlns:a="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:n="http://schemas.xmlsoap.org/ws/2004/09/enumeration" xmlns:w="http://schemas.dmtf.org/wbem/wsman/1/wsman.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:cim="http://schemas.dmtf.org/wbem/wscim/1/common"><s:Body><n:EnumerateResponse><n:EnumerationContext>{context}</n:EnumerationContext><w:Items>{items}</w:Items>{end}</n:EnumerateResponse></s:Body></s:Envelope>"#
         ),
     )
 }
@@ -1070,6 +1085,133 @@ fn a_failed_create_is_a_normal_reply_with_a_null_process_id() {
     };
     assert_eq!(results[0].return_value, Some(CimValue::Uint32(9)));
     assert_eq!(results[0].out_parameters[0].value, CimValue::Null);
+}
+
+fn call_selection_page() -> Reply {
+    enumerate_page(
+        &item(
+            "Win32_Process",
+            "<p:Handle>4</p:Handle><p:Name>System</p:Name>",
+            &[("Handle", "4")],
+        ),
+        Some("selection"),
+    )
+}
+
+#[test]
+fn a_failed_call_selection_drops_partial_query_records() {
+    let w = wire();
+    script(&w, "/Enumerate", None, vec![call_selection_page()]);
+    script(&w, "/Pull", None, vec![fault("fault-pull-parameters")]);
+    script(&w, "/Release", None, vec![ok("release")]);
+    let error = management(&w)
+        .execute(&remote("process call getowner"))
+        .unwrap_err();
+    assert_eq!(error.code, 0x80041001);
+    assert!(
+        error.partial.is_none(),
+        "selection records are not completed calls"
+    );
+    assert_eq!(kinds(&w), ["Enumerate", "Pull", "Release"]);
+}
+
+#[test]
+fn a_cancelled_call_selection_drops_partial_query_records() {
+    let w = wire();
+    script(&w, "/Enumerate", None, vec![call_selection_page()]);
+    script(&w, "/Release", None, vec![ok("release")]);
+    let mut backend = WsmanManagement::with_client(client(&w).with_interrupt(|| true));
+    let error = backend
+        .execute(&remote("process call getowner"))
+        .unwrap_err();
+    assert_eq!(error.code, 0xC000013A);
+    assert!(
+        error.partial.is_none(),
+        "selection records are not completed calls"
+    );
+    assert_eq!(kinds(&w), ["Enumerate", "Release"]);
+}
+
+#[test]
+fn a_failed_call_selection_prints_no_uninvoked_objects() {
+    let w = wire();
+    script(&w, "/Enumerate", None, vec![call_selection_page()]);
+    script(&w, "/Pull", None, vec![fault("fault-pull-parameters")]);
+    script(&w, "/Release", None, vec![ok("release")]);
+    let (stdout, stderr, status) = session_output(&w, "process call getowner");
+    assert_eq!(status, 0x80041001);
+    assert!(stderr.contains("Generic failure"), "{stderr}");
+    assert_eq!(stdout, "", "no method was invoked on the selected records");
+    assert_eq!(kinds(&w), ["Enumerate", "Pull", "Release"]);
+}
+
+#[test]
+fn a_later_invocation_failure_keeps_completed_method_results() {
+    let w = wire();
+    let items = ["4", "5"]
+        .map(|handle| {
+            item(
+                "Win32_Process",
+                &format!("<p:Handle>{handle}</p:Handle>"),
+                &[("Handle", handle)],
+            )
+        })
+        .concat();
+    script(&w, "/Enumerate", None, vec![enumerate_reply(&items)]);
+    script(
+        &w,
+        "/Win32_Process/GetOwner",
+        None,
+        vec![ok("invoke-getowner"), fault("fault-access-denied")],
+    );
+    let error = management(&w)
+        .execute(&remote("process call getowner"))
+        .unwrap_err();
+    assert_eq!(error.code, 0x80041003);
+    let Some(ManagementResult::Methods(results)) = error.partial.as_deref() else {
+        panic!("completed method results were lost")
+    };
+    assert_eq!(results.len(), 1);
+    assert!(
+        results[0]
+            .path
+            .to_string_lossy()
+            .ends_with("Win32_Process.Handle=\"4\"")
+    );
+    assert_eq!(results[0].return_value, Some(CimValue::Uint32(0)));
+    assert_eq!(kinds(&w), ["Enumerate", "GetOwner", "GetOwner"]);
+}
+
+#[test]
+fn ntlm_authority_domain_reaches_the_endpoint_without_a_user_domain() {
+    for authority in [
+        "NTLMDOMAIN:CONTOSO",
+        "ntlmdomain:CONTOSO",
+        "NtLmDoMaIn:CONTOSO",
+    ] {
+        let w = wire();
+        script(&w, "/Enumerate", None, vec![ok("enumerate-os")]);
+        let seen: Rc<RefCell<Vec<Endpoint>>> = Rc::default();
+        let log = seen.clone();
+        let wire = w.clone();
+        let mut backend = WsmanManagement::new(Box::new(move |endpoint| {
+            log.borrow_mut().push(endpoint.clone());
+            Ok(Box::new(FakeTransport(wire.clone())) as Box<dyn Transport>)
+        }));
+        let (stdout, stderr, status) = session_output_using(
+            &mut backend,
+            &format!(
+                r#"/node:AYW /user:LabAdmin /password:secret /authority:"{authority}" os get Caption"#
+            ),
+        );
+        assert_eq!((stderr.as_str(), status), ("", 0));
+        assert!(stdout.contains("Microsoft Windows 11 Pro"));
+        let seen = seen.borrow();
+        assert_eq!(seen.len(), 1);
+        assert_eq!(seen[0].user, "LabAdmin");
+        assert_eq!(seen[0].domain, "CONTOSO", "{authority}");
+        assert_eq!(seen[0].authority, Authority::Ntlm);
+    }
 }
 
 #[test]
