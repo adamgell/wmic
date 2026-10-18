@@ -1,5 +1,5 @@
 use super::*;
-use crate::backend::methods::{InputError, bind_method, undeclared_method};
+use crate::backend::methods::{InputError, bind_method};
 use windows::{
     Win32::System::{
         Com::{CLSCTX_INPROC_SERVER, CoCreateInstance},
@@ -129,7 +129,12 @@ pub(super) fn execute(
         .methods
         .iter()
         .find(|m| requested.eq_cli_text(&m.name))
-        .ok_or_else(|| input_error(undeclared_method(&requested, r.alias_target), r))?;
+        .ok_or_else(|| {
+            input_error(
+                crate::backend::methods::unknown_method(&requested, r.from_alias),
+                r,
+            )
+        })?;
     crate::backend::methods::validate_named_arguments(
         &r.arguments,
         method

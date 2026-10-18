@@ -623,7 +623,11 @@ impl Session {
                 configure_connection(&mut req, &settings);
                 match backend.execute(&req) {
                     Ok(ManagementResult::Schema(s)) => Some(s),
-                    Err(error) => {
+                    Err(mut error) => {
+                        // Schema lookup for CALL help retains method-call diagnostics.
+                        if parsed.verb == Verb::Call && error.operation.eq_ignore_case("query") {
+                            error.operation = "class".into();
+                        }
                         let status = error.code;
                         let node = if req.connection.node.eq_ignore_case(".") {
                             self.local_node.clone()

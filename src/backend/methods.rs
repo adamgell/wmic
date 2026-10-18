@@ -5,18 +5,6 @@ pub struct InputError {
     pub code: u32,
     pub message: WideText,
 }
-/// The error for a method the class does not declare: an alias target reports the verb, a path or
-/// class target reports the class method.
-pub fn undeclared_method(requested: &WideText, alias_target: bool) -> InputError {
-    let (code, text) = if alias_target {
-        (0xABFD, " - Invalid alias verb.")
-    } else {
-        (0xABFC, " - Invalid class method.")
-    };
-    let mut message = requested.clone();
-    message.0.extend(text.encode_utf16());
-    InputError { code, message }
-}
 fn invalid() -> InputError {
     InputError {
         code: 0x80041005,
@@ -141,6 +129,17 @@ pub fn bind_method(schema: &MethodSchema, args: &[WideText]) -> Result<Vec<Prope
     )
     .map_err(input_error)?;
     bind_parameters(schema, args, true)
+}
+
+/// Select the native unknown-method diagnostic without exposing credential-looking names.
+pub(crate) fn unknown_method(name: &WideText, from_alias: bool) -> InputError {
+    let (code, message) = if from_alias {
+        (0xABFD, "Invalid alias verb.")
+    } else {
+        (0xABFC, "Invalid class method.")
+    };
+    let safe = crate::parse::diagnostic_command_line(name, EntryMode::Interactive) == *name;
+    input_error(ParseError::new(code, message, safe.then(|| name.clone())))
 }
 
 /// Validate names in WMIC's UTF-16 map order before binding or showing method help.

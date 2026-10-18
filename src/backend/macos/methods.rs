@@ -6,15 +6,13 @@ use super::{
     query,
 };
 use crate::{
-    backend::{
-        Confirmation, ResolvedRequest, cancellable_targets,
-        methods::{bind_method, undeclared_method},
-    },
+    backend::{Confirmation, ResolvedRequest, cancellable_targets, methods::bind_method},
     model::{
         ManagementError, ManagementResult, MethodResult, OperationResult, Record, Verb, WideText,
     },
 };
 
+/// Bind known methods or report the error for the original alias or direct syntax.
 pub(super) fn call(
     request: &ResolvedRequest,
     entry: &Entry,
@@ -32,7 +30,7 @@ pub(super) fn call(
         .ok_or_else(|| {
             error::input_error(
                 &request.class_name,
-                undeclared_method(&requested, request.alias_target),
+                crate::backend::methods::unknown_method(&requested, request.from_alias),
             )
         })?;
     let input = bind_method(method, &request.arguments)

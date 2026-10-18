@@ -235,10 +235,10 @@ impl AliasStore {
                 locale: None,
                 ..Default::default()
             },
+            from_alias: matches!(target, Target::Alias(_)),
             class_name: WideText::default(),
             instance_path: None,
             class_mode: matches!(target, Target::Class(_)),
-            alias_target: matches!(target, Target::Alias(_)),
             multiple_nodes: false,
             query: None,
             selector: command.selector.clone(),

@@ -1,5 +1,9 @@
 # Compatibility status
 
+## PATH method diagnostics, 2026-10-17
+
+The [PATH method follow-up](research/path-method-diagnostics.md) corrects unknown PATH/CLASS method errors, direct method help and CALL connection-error formatting while preserving alias diagnostics. All 62 new read-only cases match Microsoft WMIC on each Windows build. The full ARM64 comparison matches 2,250/2,253 cases, retaining only the two changing OS queries and implementation-specific TRACE difference. The x64 and x86 builds each match 430/430 cases across six selected regression suites. The [validation summary](research/evidence/2026-10-17/path-method/summary.json) pins the measured source, executables and captures. ARM64 is native; x64/x86 use Windows emulation. Earlier measurements below retain their original build identities and scope.
+
 ## Twenty-five additional REA passes, 2026-10-17
 
 The [25-pass REA investigation](research/rea-25-passes.md) adds 237 read-only regression cases and retains 99 control-oracle comparisons that also launch the real CLI in Windows CI. Its [validation summary](research/evidence/2026-10-17/rea-25/summary.json) identifies the final builds, per-target focused reports, 2,085-case ARM64 corpus report, source patch and local checks. The focused suite matches all 237 cases on each supported build. The full ARM64 strict gate remains 1 for the two volatile OS-data queries and implementation-specific TRACE output. Earlier measurements below retain their own build identities and scope.

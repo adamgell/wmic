@@ -132,7 +132,17 @@ impl WindowsManagement {
         }
         let _privileges = privileges::PrivilegeGuard::new(r.connection.privileges)
             .map_err(|e| failure(e, r, "privileges"))?;
-        let svc = connect::connect(&r.connection).map_err(|e| failure(e, r, "query"))?;
+        let svc = connect::connect(&r.connection).map_err(|e| {
+            failure(
+                e,
+                r,
+                if r.verb == Verb::Call {
+                    "class"
+                } else {
+                    "query"
+                },
+            )
+        })?;
         match r.verb {
             Verb::Get | Verb::List => {
                 if r.class_mode {

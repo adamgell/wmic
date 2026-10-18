@@ -227,3 +227,77 @@ fn live_role_loader_overrides_packaged_alias_and_connection_defaults() {
     assert_eq!(out.exit_status, 0);
     assert_eq!(backend.node, Some(wide("node-a")));
 }
+
+/// CALL help reads schema, but its connection error must retain method-call presentation.
+#[test]
+fn method_help_connection_errors_do_not_acquire_query_output() {
+    use wmic_compat::{
+        backend::{Management, ResolvedRequest},
+        render::OutputError,
+        session::{OutputSink, OutputStream, Session},
+    };
+    struct FailedConnection;
+    impl Management for FailedConnection {
+        /// Model only the external connection failure, keeping session rendering real.
+        fn execute(
+            &mut self,
+            request: &ResolvedRequest,
+        ) -> Result<ManagementResult, ManagementError> {
+            assert_eq!(request.verb, Verb::Get);
+            assert!(request.class_mode);
+            assert!(request.method.is_none());
+            Err(ManagementError {
+                code: 0x8004100E,
+                target: request.class_name.clone(),
+                message: "Invalid namespace".into(),
+                operation: "query".into(),
+                extended: vec![],
+                partial: None,
+            })
+        }
+    }
+    #[derive(Default)]
+    struct Sink {
+        stdout: WideText,
+        stderr: WideText,
+    }
+    impl OutputSink for Sink {
+        /// Retain complete output on both channels, including empty-query formatting.
+        fn write(&mut self, stream: OutputStream, text: &WideText) -> Result<(), OutputError> {
+            match stream {
+                OutputStream::Stdout => self.stdout.0.extend(&text.0),
+                OutputStream::Stderr => self.stderr.0.extend(&text.0),
+            }
+            Ok(())
+        }
+    }
+    for (line, query) in [
+        ("class Win32_Process get", true),
+        ("path Win32_Process call WmicCompatMissingMethod /?", false),
+        ("class Win32_Process call WmicCompatMissingMethod /?", false),
+    ] {
+        let mut sink = Sink::default();
+        let result = Session::new(wide("HOST")).unwrap().execute(
+            &wide(line),
+            EntryMode::Interactive,
+            &mut FailedConnection,
+            &mut sink,
+        );
+        assert_eq!(result.exit_status, 0x8004100E, "{line}");
+        // Windows uses the default MOF transform; the portable fallback uses two lines.
+        let expected_stdout = if !query {
+            ""
+        } else if cfg!(windows) {
+            "\r\r\n"
+        } else {
+            "\r\r\n\r\r\n"
+        };
+        assert_eq!(sink.stdout, wide(expected_stdout), "{line}");
+        let expected = if query {
+            "Node - HOST\r\r\nERROR:\r\r\nDescription = Invalid namespace\r\r\n"
+        } else {
+            "ERROR:\r\r\nDescription = Invalid namespace\r\r\n"
+        };
+        assert_eq!(sink.stderr, wide(expected), "{line}");
+    }
+}

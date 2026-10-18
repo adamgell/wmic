@@ -578,6 +578,7 @@ fn writes_are_not_supported() {
 }
 
 #[test]
+/// Keep unknown-method, binding and unsupported-provider errors distinct.
 fn methods_bind_by_schema_and_report_shapes() {
     for command in [
         "path Win32_OperatingSystem call WmicNoSuchMethod",
@@ -856,4 +857,50 @@ fn object_paths_need_every_key_and_the_singleton_form_needs_a_singleton() {
     invalid("path Win32_Environment.Name=\"PATH\",Caption=\"x\" get Name");
     assert_eq!(objects("path Win32_OperatingSystem=@ get Caption").len(), 1);
     objects("path Win32_Environment.Name=\"WMIC_NO_SUCH\",UserName=\"x\" get Name");
+}
+
+/// Serialized requests must retain alias versus direct-target diagnostics even with an instance path.
+#[test]
+fn unknown_method_diagnostics_preserve_call_origin_after_serialization() {
+    for (text, code, suffix) in [
+        (
+            "process call WmicCompatMissingMethod",
+            0xABFD,
+            "Invalid alias verb.",
+        ),
+        (
+            "process Win32_Process.ProcessId=0 call WmicCompatMissingMethod",
+            0xABFD,
+            "Invalid alias verb.",
+        ),
+        (
+            "path Win32_Process call WmicCompatMissingMethod",
+            0xABFC,
+            "Invalid class method.",
+        ),
+        (
+            "path Win32_Process.ProcessId=0 call WmicCompatMissingMethod",
+            0xABFC,
+            "Invalid class method.",
+        ),
+        (
+            "class Win32_Process call WmicCompatMissingMethod",
+            0xABFC,
+            "Invalid class method.",
+        ),
+    ] {
+        let original = request(text);
+        let copied = serde_json::from_str(&serde_json::to_string(&original).unwrap()).unwrap();
+        let error = failure(&copied);
+        assert_eq!(
+            (error.code, operation(&error)),
+            (code, "input".into()),
+            "{text}"
+        );
+        assert_eq!(
+            error.message,
+            wide(&format!("WmicCompatMissingMethod - {suffix}")),
+            "{text}"
+        );
+    }
 }

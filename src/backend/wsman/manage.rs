@@ -13,7 +13,7 @@ use crate::{
     backend::{
         Confirmation, ConnectionOptions, Management, ResolvedRequest, build_query,
         cancellable_targets, keyword,
-        methods::{InputError, bind_method, undeclared_method},
+        methods::{InputError, bind_method},
     },
     model::{
         ClassSchema, ManagementError, ManagementResult, MethodResult, MethodSchema, ObjectSet,
@@ -405,7 +405,7 @@ impl WsmanManagement {
                 .ok_or_else(|| {
                     input_error(
                         &request.class_name,
-                        undeclared_method(&requested, request.alias_target),
+                        crate::backend::methods::unknown_method(&requested, request.from_alias),
                     )
                 })?,
             None => unknown_method(request, &requested),
