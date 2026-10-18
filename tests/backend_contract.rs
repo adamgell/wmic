@@ -143,6 +143,36 @@ mod live {
     }
     #[test]
     #[ignore = "explicit selected Windows reference guest only"]
+    fn an_undeclared_method_names_the_verb_for_an_alias_and_the_method_otherwise() {
+        for (command, code, message) in [
+            (
+                "process call nosuchmethod",
+                0xABFD,
+                "nosuchmethod - Invalid alias verb.",
+            ),
+            (
+                "path Win32_Process call nosuchmethod",
+                0xABFC,
+                "nosuchmethod - Invalid class method.",
+            ),
+            (
+                "class Win32_Process call nosuchmethod",
+                0xABFC,
+                "nosuchmethod - Invalid class method.",
+            ),
+        ] {
+            let e = WindowsManagement::new()
+                .unwrap()
+                .execute(&request(command))
+                .unwrap_err();
+            assert_eq!(
+                (e.code, e.message.to_string_lossy()),
+                (code, message.into())
+            );
+        }
+    }
+    #[test]
+    #[ignore = "explicit selected Windows reference guest only"]
     fn local_schema_retains_static_method_and_parameter_id() {
         let result = WindowsManagement::new()
             .unwrap()

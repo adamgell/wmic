@@ -1,5 +1,5 @@
 use crate::{
-    backend::macos::MacManagement,
+    backend::dispatch::Dispatcher,
     model::{EntryMode, WideText},
     platform::unix::{self, cmdline, console, output},
     session::Session,
@@ -8,7 +8,7 @@ pub fn run() -> ! {
     let raw = cmdline::command_line(&cmdline::argument_units(std::env::args_os()));
     let node: WideText = unix::local_node();
     let status = {
-        match (Session::new(node), MacManagement::new()) {
+        match (Session::new(node), Dispatcher::new()) {
             (Ok(mut session), Ok(mut backend)) => {
                 let mut sink = crate::session::RoutedOutput::new(output::NativeOutput);
                 let _interrupt = console::InterruptGuard::install();

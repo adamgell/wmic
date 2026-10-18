@@ -1,0 +1,833 @@
+{
+  "captured_utc": "2026-10-17",
+  "scope": "Remote node comparison of classic WMIC.exe with the macOS WS-Management backend, and the fixes that followed",
+  "reference": {
+    "host_os": "Windows 11 Enterprise Evaluation, build 26200.9168 (25H2)",
+    "wmic_version": "10.0.26100.8457 (WinBuild.160101.0800)",
+    "wmic_sha256": "7C7F386BB7C70263FD835DC58791B6DD73FC6617C27751B5503DBA8D0CDDA690",
+    "console_code_page": 437,
+    "target_node_os": "Windows Server 2025 Datacenter Evaluation 10.0.26100",
+    "capture": "stdout and stderr read as raw bytes from anonymous pipes; exit code is the 32-bit process exit code"
+  },
+  "macos_build": {
+    "measured_commit": "0d0d8c9",
+    "arch": "arm64",
+    "os": "macOS 26.6.2",
+    "transport": "SSH tunnel from the Mac loopback to the node WinRM listener on TCP 5985"
+  },
+  "comparison": {
+    "cases": 20,
+    "before": {
+      "same": 8,
+      "same_after_address_substitution": 1,
+      "differ": 11
+    },
+    "after": {
+      "match_on_text_and_low_byte_status": 17,
+      "not_rerun": 1,
+      "differ_by_design": 2,
+      "not_rerun_cases": [9]
+    },
+    "differ_by_design_cases": [
+      19,
+      20
+    ],
+    "rules": "Text compared after line ending and node name normalization. Status compared as the low 8 bits of the classic 32-bit code.",
+    "after_measured": "Re-measured on 2026-10-17 with the binary in measured_after.binary: 17 of the 20 cases were run again and match; case 9 was not run again; cases 19 and 20 differ by design."
+  },
+  "cases": [
+    {
+      "case": 1,
+      "command_line": "wmic /node:<server> /user:<user> /password:<pw> os get Caption,Version,CSName",
+      "classic_exit": "0x00000000",
+      "macos_low_byte_exit": 0,
+      "verdict_before": "same",
+      "verdict_after": "same",
+      "measured_after": "same on the live run (LF line ends; low byte of the status)"
+    },
+    {
+      "case": 2,
+      "command_line": "wmic /node:<server> /user:<user> /password:<pw> os get Caption /format:csv",
+      "classic_exit": "0x00000000",
+      "macos_low_byte_exit": 0,
+      "verdict_before": "not comparable (Node column echoes the typed address); identical after substitution",
+      "verdict_after": "same after address substitution",
+      "measured_after": "same on the live run (LF line ends; low byte of the status)"
+    },
+    {
+      "case": 3,
+      "command_line": "wmic /node:<server> /user:<user> /password:<pw> os get __SERVER,__PATH,__NAMESPACE /format:list",
+      "classic_exit": "0x00000000",
+      "macos_low_byte_exit": 0,
+      "verdict_before": "differs in text (class metadata of a projection)",
+      "verdict_after": "same",
+      "measured_after": "same on the live run (LF line ends; low byte of the status)"
+    },
+    {
+      "case": 4,
+      "command_line": "wmic /node:<server> /user:<user> /password:<pw> path Win32_Nope get Name",
+      "classic_exit": "0x80041002",
+      "macos_low_byte_exit": 2,
+      "verdict_before": "same",
+      "verdict_after": "same",
+      "measured_after": "same on the live run (LF line ends; low byte of the status)"
+    },
+    {
+      "case": 5,
+      "command_line": "wmic /node:<server> /user:<user> /password:<pw> nope get Name",
+      "classic_exit": "0x0000AC67",
+      "macos_low_byte_exit": 103,
+      "verdict_before": "differs in text (alias name withheld)",
+      "verdict_after": "same",
+      "measured_after": "same on the live run (LF line ends; low byte of the status)"
+    },
+    {
+      "case": 6,
+      "command_line": "wmic /node:<server> /user:<user> /password:<pw> os get Nope",
+      "classic_exit": "0x80041017",
+      "macos_low_byte_exit": 23,
+      "verdict_before": "same",
+      "verdict_after": "same",
+      "measured_after": "same on the live run (LF line ends; low byte of the status)"
+    },
+    {
+      "case": 7,
+      "command_line": "wmic /node:<server> /user:<user> /password:<pw> /namespace:\\\\root\\nosuchns path Win32_OperatingSystem get Caption",
+      "classic_exit": "0x8004100E",
+      "macos_low_byte_exit": 14,
+      "verdict_before": "differs in text (Node line and blank output)",
+      "verdict_after": "same",
+      "measured_after": "same on the live run (LF line ends; low byte of the status)"
+    },
+    {
+      "case": 8,
+      "command_line": "wmic /node:<server> /user:<user> /password:<wrong-pw> os get Caption",
+      "classic_exit": "0x80070005",
+      "macos_low_byte_exit": 5,
+      "verdict_before": "differs in text (Access denied)",
+      "verdict_after": "same",
+      "measured_after": "same on the live run (LF line ends; low byte of the status)"
+    },
+    {
+      "case": 9,
+      "command_line": "wmic /node:<server> /user:<unknown-user> /password:<pw> os get Caption",
+      "classic_exit": "0x80070005",
+      "macos_low_byte_exit": 5,
+      "verdict_before": "differs in text (Access denied)",
+      "verdict_after": "same",
+      "measured_after": "not run again; same code path as case 8"
+    },
+    {
+      "case": 10,
+      "command_line": "wmic /node:<unreachable> /user:<user> /password:<pw> os get Caption",
+      "classic_exit": "0x800706BA",
+      "macos_low_byte_exit": 186,
+      "verdict_before": "same text and status; duration differs",
+      "verdict_after": "same text and status; duration differs",
+      "measured_after": "same on the live run (LF line ends; low byte of the status)"
+    },
+    {
+      "case": 11,
+      "command_line": "wmic /node:<unreachable> /failfast:on /user:<user> /password:<pw> os get Caption",
+      "classic_exit": "0x0000ABE3",
+      "macos_low_byte_exit": 227,
+      "verdict_before": "differs in text (ERROR: and Description = lines)",
+      "verdict_after": "same text and status; duration differs",
+      "measured_after": "same on the live run (LF line ends; low byte of the status)"
+    },
+    {
+      "case": 12,
+      "command_line": "wmic /node:<server>,<unreachable> /user:<user> /password:<pw> os get Caption",
+      "classic_exit": "0x800706BA",
+      "macos_low_byte_exit": 186,
+      "verdict_before": "differs in text (two leading blank lines on standard output)",
+      "verdict_after": "same",
+      "measured_after": "same on the live run (LF line ends; low byte of the status)"
+    },
+    {
+      "case": 13,
+      "command_line": "wmic /node:<server> /user:<user> /password:<pw> process where \"Name='lsass.exe'\" call getowner",
+      "classic_exit": "0x00000000",
+      "macos_low_byte_exit": 0,
+      "verdict_before": "differs in text (GetOwner)",
+      "verdict_after": "same",
+      "measured_after": "same on the live run (LF line ends; low byte of the status)"
+    },
+    {
+      "case": 14,
+      "command_line": "wmic /node:<server> /user:<user> /password:<pw> process call create \"cmd.exe /c exit 0\"",
+      "classic_exit": "0x00000000",
+      "macos_low_byte_exit": 0,
+      "verdict_before": "same (process id differs by run)",
+      "verdict_after": "same",
+      "measured_after": "same on the live run (LF line ends; low byte of the status)"
+    },
+    {
+      "case": 15,
+      "command_line": "wmic /node:<server> /user:<user> /password:<pw> path Win32_Process.Handle=\"999999\" get Name",
+      "classic_exit": "0x00000000",
+      "macos_low_byte_exit": 0,
+      "verdict_before": "same",
+      "verdict_after": "same",
+      "measured_after": "same on the live run (LF line ends; low byte of the status)"
+    },
+    {
+      "case": 16,
+      "command_line": "wmic /node:<server> /user:<user> /password:<pw> path Win32_Process call nosuchmethod",
+      "classic_exit": "0x0000ABFC",
+      "macos_low_byte_exit": "253 before, 252 after",
+      "verdict_before": "differs in text and status",
+      "verdict_after": "same",
+      "measured_after": "same on the live run (LF line ends; low byte of the status)"
+    },
+    {
+      "case": 17,
+      "command_line": "wmic /user:<user> /password:<pw> os get Caption",
+      "classic_exit": "0x80041064",
+      "macos_low_byte_exit": 100,
+      "verdict_before": "same (local host name in the Node line)",
+      "verdict_after": "same",
+      "measured_after": "same on the live run (LF line ends; low byte of the status)"
+    },
+    {
+      "case": 18,
+      "command_line": "wmic /node:<server> /user:<user> /password:<pw> service where \"Name='CcmExec'\" get Name,State /format:csv",
+      "classic_exit": "0x00000000",
+      "macos_low_byte_exit": 0,
+      "verdict_before": "same",
+      "verdict_after": "same",
+      "measured_after": "same on the live run (LF line ends; low byte of the status)"
+    },
+    {
+      "case": 19,
+      "command_line": "wmic /node:<server> /user:<user> /password:<pw> os get Caption /format:rawxml",
+      "classic_exit": "0x00000000",
+      "macos_low_byte_exit": 0,
+      "verdict_before": "differs in text (password in COMMANDLINE)",
+      "verdict_after": "differs by design (password redacted)",
+      "measured_after": "differs by design (password redacted); the document shape is covered by the E4 test"
+    },
+    {
+      "case": 20,
+      "command_line": "wmic /node:<server> /user:<user> os get Caption",
+      "classic_exit": "0x80070005",
+      "macos_low_byte_exit": 0,
+      "verdict_before": "differs in text and status",
+      "verdict_after": "differs by design (the build reads the pipe)",
+      "measured_after": "differs by design (the build reads the pipe)"
+    }
+  ],
+  "timing_unreachable_node_ms": {
+    "classic": {
+      "no_failfast": [
+        28684,
+        30102,
+        30145,
+        30156,
+        30162,
+        30597,
+        30139,
+        30130
+      ],
+      "failfast_on": [
+        5034,
+        5000,
+        4852,
+        4716,
+        4949,
+        5006,
+        4801,
+        4865
+      ],
+      "node_list_good_then_unreachable": 30251
+    },
+    "macos": {
+      "no_failfast": [
+        5032,
+        5033
+      ],
+      "failfast_on": [
+        5032,
+        5031
+      ],
+      "node_list_good_then_unreachable": 5043,
+      "refused_connection": [
+        14,
+        13
+      ]
+    }
+  },
+  "status_text_and_mapping": {
+    "text_source": "IWbemStatusCodeText::GetErrorCodeText(hr, 0, 0) from wmiutils.dll; the build carries a table of 180 measured WBEM and Win32 texts",
+    "translations_unavoidable": [
+      "CIM status code of an MSFT_WmiError detail to a WMI HRESULT",
+      "SOAP subcode without a status (ActionNotSupported, DestinationUnreachable, CannotProcessFilter, InvalidSelectors, TimedOut, AccessDenied) to a WMI HRESULT",
+      "WS-Management fault code 5 to 0x80070005",
+      "NTLM authentication failure and HTTP 401 to 0x80070005",
+      "TCP connect failure and connect timeout to 0x800706BA",
+      "other transport failure, malformed reply, and fault without a status to 0x80041001"
+    ],
+    "pass_throughs": [
+      "StatusCode of an __ExtendedStatus detail",
+      "HRESULT quoted in the innermost WS-Management message",
+      "status text taken from the measured table for the resulting code"
+    ],
+    "modeled_lookup": "For a single node, a path or class target whose class is unknown reports 0x80041002 (Not found) instead of 0x80041010. This models the class lookup that classic performs before the query. A command with two or more nodes does not rewrite the code.",
+    "session_codes": "Fail-fast uses the classic code 0xABE3 with the raw text; no HRESULT is rewritten."
+  },
+  "fixes": [
+    "A projection keeps __PROPERTY_COUNT as the number of non-system properties kept, with key properties the server added; __DYNASTY is empty; __DERIVATION and __SUPERCLASS are empty unless named",
+    "An unknown alias is named unless it equals the password value",
+    "Status 0x80070005 prints Access is denied.",
+    "An invalid namespace uses the connect operation: no Node line, no blank output",
+    "The method name in Executing follows the verb type of the alias verb: VerbType 0 uses the definition casing, no verb type uses the typed text; the method that runs stays the alias derivation",
+    "An unknown method on a path or class target reports Invalid class method. with status 0xABFC, also on Windows",
+    "Fail-fast prints Node - <node> and the raw text for GET, and the raw text alone for CALL; status 0xABE3",
+    "Standard output of GET and LIST is formatted once per command: the tables of the nodes that answered, or one pair of blank lines when every node failed",
+    "RAWXML and XML show a failed node as an ERROR result in the one command document",
+    "CALL, SET, CREATE and DELETE on a node list print a Node line on standard output before the output of each node",
+    "/RECORD with a node list writes one RECORD element with the node list as target and the standard output of the command as text",
+    "The namespace switch does not change an alias target",
+    "CIM_OperatingSystem derives from CIM_LogicalElement"
+  ],
+  "tests_after": {
+    "tree": "0d0d8c9 with the remote-node fixes; the gates of the later stages are in wsman-tls.json and wsman-kerberos.json",
+    "windows_passed": 231,
+    "windows_failed": 0,
+    "windows_ignored": 34,
+    "macos_passed": 503,
+    "macos_failed": 0
+  },
+  "extra_captured_utc": "2026-10-17",
+  "extra_reference": {
+    "note": "Cases E1 to E15 ran on the same reference host against the lab node, two addresses with no host, and the reference host itself. 39 runs: 24 are repeats, merged-stream forms or variants.",
+    "run_mode": "pipe: WMIC.exe started directly with stdout and stderr on separate pipes; merge: cmd.exe /s /c with 2>&1; file: cmd.exe /s /c with > file; record: /record:<file> read after the run",
+    "placeholders": {
+      "<server>": "the lab node that answers",
+      "<local>": "the reference host, named with credentials",
+      "<unreachable-1>": "an address with no host",
+      "<unreachable-2>": "a second address with no host",
+      "<user>": "the lab account",
+      "<pw>": "the lab password"
+    }
+  },
+  "extra_cases": [
+    {
+      "id": "E1",
+      "title": "Two failing nodes, fail-fast, pipe",
+      "command_line": "wmic /node:<unreachable-1>,<unreachable-2> /failfast:on /user:<user> /password:<pw> os get Caption",
+      "classic": {
+        "exit": "0x0000ABE3",
+        "stdout": "\r\r\n\r\r\n",
+        "stderr": "Node - <unreachable-1>\r\r\nRPC Server not available.\r\r\nNode - <unreachable-2>\r\r\nRPC Server not available.\r\r\n",
+        "runs": 4,
+        "outlier": "The first run took 37809 ms and exited 0x800706BA: node 2 gave the DCOM text. It did not repeat in 7 later runs."
+      },
+      "after": {
+        "how": "live: release build on the Mac",
+        "exit": 227,
+        "stdout": "\n\n",
+        "stderr": "Node - <unreachable-1>\nRPC Server not available.\nNode - <unreachable-2>\nRPC Server not available.\n",
+        "verdict": "same (LF line ends)"
+      }
+    },
+    {
+      "id": "E1_file",
+      "title": "Two failing nodes, fail-fast, stdout redirected to a file",
+      "command_line": "wmic /node:<unreachable-1>,<unreachable-2> /failfast:on /user:<user> /password:<pw> os get Caption > <file>",
+      "classic": {
+        "exit": "0x0000ABE3",
+        "stdout": "",
+        "stderr": "Node - <unreachable-1>\r\r\nRPC Server not available.\r\r\nNode - <unreachable-2>\r\r\nRPC Server not available.\r\r\n",
+        "file": "FF FE 0D 00 0A 00 (byte order mark and one CRLF, UTF-16LE)"
+      },
+      "after": {
+        "how": "test: tests/remote_fidelity.rs::two_failing_nodes_leave_one_line_in_an_output_file (/output); live: shell redirect on the Mac",
+        "exit": 227,
+        "stdout": "",
+        "stderr": "Node - <unreachable-1>\nRPC Server not available.\nNode - <unreachable-2>\nRPC Server not available.\n",
+        "verdict": "same for /OUTPUT (FF FE 0D 00 0A 00); a shell redirect on the Mac holds LF LF in UTF-8, by design"
+      }
+    },
+    {
+      "id": "E1_merge",
+      "title": "Two failing nodes, fail-fast, one pipe",
+      "command_line": "wmic /node:<unreachable-1>,<unreachable-2> /failfast:on /user:<user> /password:<pw> os get Caption 2>&1",
+      "classic": {
+        "exit": "0x0000ABE3",
+        "stdout": "Node - <unreachable-1>\r\r\nRPC Server not available.\r\r\nNode - <unreachable-2>\r\r\nRPC Server not available.\r\r\n\r\r\n\r\r\n",
+        "stderr": ""
+      },
+      "after": {
+        "how": "live: release build on the Mac",
+        "exit": 227,
+        "stdout": "Node - <unreachable-1>\nRPC Server not available.\nNode - <unreachable-2>\nRPC Server not available.\n\n\n",
+        "stderr": "",
+        "verdict": "same (LF line ends)"
+      }
+    },
+    {
+      "id": "E2",
+      "title": "Two failing nodes, DCOM timeout",
+      "command_line": "wmic /node:<unreachable-1>,<unreachable-2> /user:<user> /password:<pw> os get Caption",
+      "classic": {
+        "exit": "0x800706BA",
+        "stdout": "\r\r\n\r\r\n",
+        "stderr": "Node - <unreachable-1>\r\r\nERROR:\r\r\nDescription = The RPC server is unavailable.\r\r\nNode - <unreachable-2>\r\r\nERROR:\r\r\nDescription = The RPC server is unavailable.\r\r\n",
+        "merged_stdout": "Node - <unreachable-1>\r\r\nERROR:\r\r\nDescription = The RPC server is unavailable.\r\r\nNode - <unreachable-2>\r\r\nERROR:\r\r\nDescription = The RPC server is unavailable.\r\r\n\r\r\n\r\r\n"
+      },
+      "after": {
+        "how": "live: release build on the Mac (one pipe)",
+        "exit": "not captured",
+        "stdout": "Node - <unreachable-1>\nERROR:\nDescription = The RPC server is unavailable.\nNode - <unreachable-2>\nERROR:\nDescription = The RPC server is unavailable.\n\n\n",
+        "stderr": "",
+        "verdict": "same (LF line ends); status 0x800706BA in test: tests/remote_fidelity.rs::two_failing_nodes_without_failfast_print_one_blank_pair"
+      }
+    },
+    {
+      "id": "E3",
+      "title": "Credential error beside a good node",
+      "command_line": "wmic /node:<server>,<local> /user:<user> /password:<pw> os get Caption",
+      "classic": {
+        "exit": "0x80041064",
+        "stdout": "Caption                                              \r\r\nMicrosoft Windows Server 2025 Datacenter Evaluation  \r\r\n\r\r\n",
+        "stderr": "Node - <local>\r\r\nERROR:\r\r\nDescription = User credentials cannot be used for local connections\r\r\n",
+        "order_reversed": "same stdout, stderr and status",
+        "merged_stdout": "Node - <local>\r\r\nERROR:\r\r\nDescription = User credentials cannot be used for local connections\r\r\nCaption                                              \r\r\nMicrosoft Windows Server 2025 Datacenter Evaluation  \r\r\n\r\r\n"
+      },
+      "after": {
+        "how": "test: tests/remote_fidelity.rs::a_credential_error_beside_a_good_node_adds_nothing_to_stdout (both node orders and one pipe)",
+        "exit": "0x80041064",
+        "stdout": "Caption                                              \r\r\nMicrosoft Windows Server 2025 Datacenter Evaluation  \r\r\n\r\r\n",
+        "stderr": "Node - <local>\r\r\nERROR:\r\r\nDescription = User credentials cannot be used for local connections\r\r\n",
+        "verdict": "same"
+      }
+    },
+    {
+      "id": "E4",
+      "title": "Fail-fast failing node, RAWXML",
+      "command_line": "wmic /node:<server>,<unreachable-1> /failfast:on /user:<user> /password:<pw> os get Caption /format:rawxml",
+      "classic": {
+        "exit": "0x0000ABE3",
+        "stdout": "one COMMAND document; RESULTS NODE=\"<server>\" with the instance, then RESULTS NODE=\"<unreachable-1>\" with <ERROR><DESCRIPTION>RPC Server not available.\\r\\r\\n</DESCRIPTION>\\r\\r\\n</ERROR>",
+        "stderr": "Node - <unreachable-1>\r\r\nRPC Server not available.\r\r\n"
+      },
+      "after": {
+        "how": "test: tests/remote_fidelity.rs::rawxml_and_xml_show_the_failing_node_in_the_command_document against the measured bytes (tests/fixtures/remote-reference); live: release build on the Mac",
+        "exit": 227,
+        "stdout": "same document; COMMANDLINE shows <redacted> for the password",
+        "stderr": "Node - <unreachable-1>\nRPC Server not available.\n",
+        "verdict": "same except the redacted password"
+      }
+    },
+    {
+      "id": "E5",
+      "title": "Fail-fast failing node, XML",
+      "command_line": "wmic /node:<server>,<unreachable-1> /failfast:on /user:<user> /password:<pw> os get Caption /format:xml",
+      "classic": {
+        "exit": "0x0000ABE3",
+        "stdout": "HTML view of the same document",
+        "stderr": "Node - <unreachable-1>\r\r\nRPC Server not available.\r\r\n"
+      },
+      "after": {
+        "how": "test: tests/remote_fidelity.rs::rawxml_and_xml_show_the_failing_node_in_the_command_document; live: release build on the Mac (failing node first)",
+        "exit": 227,
+        "stdout": "same HTML view; failing node first in node order",
+        "stderr": "Node - <unreachable-1>\nRPC Server not available.\n",
+        "verdict": "same except the redacted password"
+      }
+    },
+    {
+      "id": "E6",
+      "title": "/record, failing node, then good node",
+      "command_line": "wmic /record:<file> /node:<unreachable-1>,<server> /failfast:on /user:<user> /password:<pw> os get Caption",
+      "classic": {
+        "exit": "0x0000ABE3",
+        "stdout": "Caption                                              \r\r\nMicrosoft Windows Server 2025 Datacenter Evaluation  \r\r\n\r\r\n",
+        "stderr": "Node - <unreachable-1>\r\r\nRPC Server not available.\r\r\n",
+        "record": "one RECORD; OUTPUT TARGETNODE=\"<unreachable-1>, <server>\"; CDATA holds the table with CRLF line ends and no Node line"
+      },
+      "after": {
+        "how": "test: tests/remote_fidelity.rs::a_record_of_a_node_list_holds_the_combined_output_once; live: release build on the Mac (good node first)",
+        "exit": 227,
+        "stdout": "Caption                                              \nMicrosoft Windows Server 2025 Datacenter Evaluation  \n\n",
+        "stderr": "Node - <unreachable-1>\nRPC Server not available.\n",
+        "verdict": "same structure; USER and the redacted password differ; a password prompt adds one RECORD with the prompt text"
+      }
+    },
+    {
+      "id": "E7",
+      "title": "/record, two failing nodes",
+      "command_line": "wmic /record:<file> /node:<unreachable-1>,<unreachable-2> /failfast:on /user:<user> /password:<pw> os get Caption",
+      "classic": {
+        "exit": "0x0000ABE3",
+        "stdout": "\r\r\n\r\r\n",
+        "stderr": "Node - <unreachable-1>\r\r\nRPC Server not available.\r\r\nNode - <unreachable-2>\r\r\nRPC Server not available.\r\r\n",
+        "record": "one RECORD; TARGETNODE=\"<unreachable-1>, <unreachable-2>\"; CDATA is CRLF only"
+      },
+      "after": {
+        "how": "test: tests/remote_fidelity.rs::a_record_of_failing_nodes_holds_one_blank_line; live: release build on the Mac",
+        "exit": 227,
+        "stdout": "\n\n",
+        "stderr": "Node - <unreachable-1>\nRPC Server not available.\nNode - <unreachable-2>\nRPC Server not available.\n",
+        "verdict": "same structure; USER and the redacted password differ"
+      }
+    },
+    {
+      "id": "E8",
+      "title": "Instance method, VerbType 0, lowercase",
+      "command_line": "wmic /node:<server> /user:<user> /password:<pw> sysdriver where \"Name='Beep'\" call interrogateservice",
+      "classic": {
+        "exit": "0x00000000",
+        "stdout": "Executing (\\<server>ROOTCIMV2:Win32_SystemDriver.Name=\"Beep\")->InterrogateService()\r\r\nMethod execution successful.\r\r\nOut Parameters:\r\ninstance of __PARAMETERS\r\n{\r\n\tReturnValue = 6;\r\n};\r\n",
+        "stderr": "\r\n"
+      },
+      "after": {
+        "how": "live: lab node through the tunnel",
+        "exit": 0,
+        "stdout": "Executing (\\\\<server>\\ROOT\\CIMV2:Win32_SystemDriver.Name=\"Beep\")->InterrogateService()\nMethod execution successful.\n...ReturnValue = 6;\n",
+        "stderr": "\n",
+        "verdict": "same (LF line ends)"
+      }
+    },
+    {
+      "id": "E8b",
+      "title": "Instance method, VerbType 0, uppercase",
+      "command_line": "wmic /node:<server> /user:<user> /password:<pw> sysdriver where \"Name='Beep'\" call INTERROGATESERVICE",
+      "classic": {
+        "exit": "0x00000000",
+        "stdout": "Executing (\\<server>ROOTCIMV2:Win32_SystemDriver.Name=\"Beep\")->InterrogateService()\r\r\nMethod execution successful.\r\r\nOut Parameters:\r\ninstance of __PARAMETERS\r\n{\r\n\tReturnValue = 6;\r\n};\r\n",
+        "stderr": "\r\n"
+      },
+      "after": {
+        "how": "live: lab node through the tunnel",
+        "exit": 0,
+        "stdout": "->InterrogateService()",
+        "stderr": "\n",
+        "verdict": "same"
+      }
+    },
+    {
+      "id": "E9",
+      "title": "Static method, null VerbType, lowercase",
+      "command_line": "wmic /node:<server> /user:<user> /password:<pw> service call create",
+      "classic": {
+        "exit": "0x00000000",
+        "stdout": "Executing (Win32_Service)->create()\r\r\nMethod execution successful.\r\r\nOut Parameters:\r\ninstance of __PARAMETERS\r\n{\r\n\tReturnValue = 21;\r\n};\r\n",
+        "stderr": "\r\n"
+      },
+      "after": {
+        "how": "live: lab node through the tunnel",
+        "exit": 0,
+        "stdout": "Executing (Win32_Service)->create()\n...ReturnValue = 21;\n",
+        "stderr": "\n",
+        "verdict": "same"
+      }
+    },
+    {
+      "id": "E9b",
+      "title": "Static method, null VerbType, uppercase",
+      "command_line": "wmic /node:<server> /user:<user> /password:<pw> service call CREATE",
+      "classic": {
+        "exit": "0x00000000",
+        "stdout": "Executing (Win32_Service)->CREATE()\r\r\nMethod execution successful.\r\r\nOut Parameters:\r\ninstance of __PARAMETERS\r\n{\r\n\tReturnValue = 21;\r\n};\r\n",
+        "stderr": "\r\n"
+      },
+      "after": {
+        "how": "live: lab node through the tunnel",
+        "exit": 0,
+        "stdout": "Executing (Win32_Service)->CREATE()\n",
+        "stderr": "\n",
+        "verdict": "same"
+      }
+    },
+    {
+      "id": "E10",
+      "title": "Static method create with VerbType 0, lowercase and uppercase",
+      "command_line": "wmic /node:<server> /user:<user> /password:<pw> process call create|CREATE \"cmd.exe /c exit 0\"",
+      "classic": {
+        "exit": "0x00000000",
+        "stdout": "Executing (Win32_Process)->Create()\r\r\nMethod execution successful.\r\r\nOut Parameters:\r\ninstance of __PARAMETERS\r\n{\r\n\tProcessId = <id>;\r\n\tReturnValue = 0;\r\n};\r\n",
+        "stderr": "\r\n"
+      },
+      "after": {
+        "how": "live: lab node through the tunnel",
+        "exit": 0,
+        "stdout": "Executing (Win32_Process)->Create()\n",
+        "stderr": "\n",
+        "verdict": "same for both spellings"
+      }
+    },
+    {
+      "id": "E11a",
+      "title": "Regular property with __PROPERTY_COUNT, list",
+      "command_line": "wmic /node:<server> /user:<user> /password:<pw> os get Caption,__PROPERTY_COUNT /format:list",
+      "classic": {
+        "exit": "0x00000000",
+        "stdout": "\r\r\n\r\r\nCaption=Microsoft Windows Server 2025 Datacenter Evaluation\r\r\n\r\r\n\r\r\n\r\r\n",
+        "stderr": ""
+      },
+      "after": {
+        "how": "live: lab node through the tunnel",
+        "exit": 0,
+        "stdout": "ten system properties with __PROPERTY_COUNT=1, then Caption=...",
+        "stderr": "",
+        "verdict": "differs (unmodeled): classic prints no system property"
+      }
+    },
+    {
+      "id": "E11b",
+      "title": "Projection with system properties, process",
+      "command_line": "wmic /node:<server> /user:<user> /password:<pw> process where ProcessId=4 get Name,__PROPERTY_COUNT,__RELPATH,__DERIVATION,__SUPERCLASS,__DYNASTY /format:list",
+      "classic": {
+        "exit": "0x00000000",
+        "stdout": "ten system properties with empty __PATH, __NAMESPACE and __SERVER, __PROPERTY_COUNT=2, __DYNASTY empty, then Handle=4 and Name=System",
+        "stderr": ""
+      },
+      "after": {
+        "how": "live: lab node through the tunnel",
+        "exit": 0,
+        "stdout": "__PATH, __NAMESPACE and __SERVER filled; __DERIVATION={\"CIM_Process\",\"CIM_LogicalElement\",\"CIM_ManagedSystemElement\"}; __PROPERTY_COUNT=2; __DYNASTY empty; __SUPERCLASS=CIM_Process; Name=System; no Handle line",
+        "stderr": "",
+        "verdict": "differs in the empty __PATH, __NAMESPACE and __SERVER and in the Handle line (unmodeled); the counted and derived values are the same"
+      }
+    },
+    {
+      "id": "E12a",
+      "title": "System properties only",
+      "command_line": "wmic /node:<server> /user:<user> /password:<pw> os get __SERVER,__DERIVATION,__SUPERCLASS,__DYNASTY /format:list",
+      "classic": {
+        "exit": "0x00000000",
+        "stdout": "ten system properties; __DERIVATION={\"CIM_OperatingSystem\",\"CIM_LogicalElement\",\"CIM_ManagedSystemElement\"}; __PROPERTY_COUNT=0; __DYNASTY empty; __SUPERCLASS=CIM_OperatingSystem",
+        "stderr": ""
+      },
+      "after": {
+        "how": "live: lab node through the tunnel",
+        "exit": 0,
+        "stdout": "the same ten lines with the same values",
+        "stderr": "",
+        "verdict": "same (LF line ends)"
+      }
+    },
+    {
+      "id": "E12b",
+      "title": "FULL view",
+      "command_line": "wmic /node:<server> /user:<user> /password:<pw> os list full",
+      "classic": {
+        "exit": "0x80041017",
+        "stdout": "\r\r\n\r\r\n\r\r\n",
+        "stderr": "Node - <server>\r\r\nERROR:\r\r\nDescription = Invalid query\r\r\n"
+      },
+      "after": {
+        "how": "live: lab node through the tunnel; test: tests/remote_fidelity.rs::a_failing_list_view_prints_the_list_blank_lines",
+        "exit": 23,
+        "stdout": "\n\n\n",
+        "stderr": "Node - 127.0.0.1\nERROR:\nDescription = Invalid query\n",
+        "verdict": "same (LF line ends)"
+      }
+    },
+    {
+      "id": "E12c",
+      "title": "QuantumLength",
+      "command_line": "wmic /node:<server> /user:<user> /password:<pw> os get QuantumLength",
+      "classic": {
+        "exit": "0x80041017",
+        "stdout": "\r\r\n\r\r\n",
+        "stderr": "Node - <server>\r\r\nERROR:\r\r\nDescription = Invalid query\r\r\n"
+      },
+      "after": {
+        "how": "live: lab node through the tunnel",
+        "exit": 23,
+        "stdout": "\n\n",
+        "stderr": "Node - 127.0.0.1\nERROR:\nDescription = Invalid query\n",
+        "verdict": "same (LF line ends)"
+      }
+    },
+    {
+      "id": "E12d",
+      "title": "QuantumType",
+      "command_line": "wmic /node:<server> /user:<user> /password:<pw> os get QuantumType",
+      "classic": {
+        "exit": "0x80041017",
+        "stdout": "\r\r\n\r\r\n",
+        "stderr": "Node - <server>\r\r\nERROR:\r\r\nDescription = Invalid query\r\r\n"
+      },
+      "after": {
+        "how": "live: lab node through the tunnel",
+        "exit": 23,
+        "stdout": "\n\n",
+        "stderr": "Node - 127.0.0.1\nERROR:\nDescription = Invalid query\n",
+        "verdict": "same (LF line ends)"
+      }
+    },
+    {
+      "id": "E13",
+      "title": "CALL on a node list, fail-fast",
+      "command_line": "wmic /node:<server>,<unreachable-1> /failfast:on /user:<user> /password:<pw> process where \"Name='lsass.exe'\" call getowner",
+      "classic": {
+        "exit": "0x0000ABE3",
+        "stdout": "Node - <server>\r\r\nExecuting (\\<server>ROOTCIMV2:Win32_Process.Handle=\"<handle>\")->getowner()\r\r\nMethod execution successful.\r\r\nOut Parameters:\r\ninstance of __PARAMETERS\r\n{\r\n\tDomain = \"NT AUTHORITY\";\r\n\tReturnValue = 0;\r\n\tUser = \"SYSTEM\";\r\n};\r\nNode - <unreachable-1>\r\r\n",
+        "stderr": "\r\nRPC Server not available.\r\r\n",
+        "reversed_order": "stdout: Node line of the failing node, Node line of the good node and the block; stderr: the fail-fast text, then CRLF",
+        "one_pipe": "the block, CRLF, the Node line of the failing node, the fail-fast text"
+      },
+      "after": {
+        "how": "test: tests/remote_fidelity.rs::call_on_a_node_list_names_each_node_on_stdout, test: tests/remote_fidelity.rs::call_on_a_node_list_keeps_the_node_order; live: release build on the Mac (both orders)",
+        "exit": 227,
+        "stdout": "Node - 127.0.0.1\nExecuting (...)->getowner()\n...};\nNode - <unreachable-1>\n",
+        "stderr": "RPC Server not available.\n",
+        "verdict": "same (LF line ends)"
+      }
+    },
+    {
+      "id": "E13c",
+      "title": "CALL on a node list, DCOM timeout",
+      "command_line": "wmic /node:<server>,<unreachable-1> /user:<user> /password:<pw> process where \"Name='lsass.exe'\" call getowner",
+      "classic": {
+        "exit": "0x800706BA",
+        "stdout": "Node - <server>\r\r\nExecuting (\\<server>ROOTCIMV2:Win32_Process.Handle=\"<handle>\")->getowner()\r\r\nMethod execution successful.\r\r\nOut Parameters:\r\ninstance of __PARAMETERS\r\n{\r\n\tDomain = \"NT AUTHORITY\";\r\n\tReturnValue = 0;\r\n\tUser = \"SYSTEM\";\r\n};\r\nNode - <unreachable-1>\r\r\n",
+        "stderr": "\r\nERROR:\r\r\nDescription = The RPC server is unavailable.\r\r\n"
+      },
+      "after": {
+        "how": "test: tests/remote_fidelity.rs::call_on_a_node_list_without_failfast_prints_the_error_block_on_stderr; live: release build on the Mac",
+        "exit": 186,
+        "stdout": "Node - 127.0.0.1\nExecuting (...)->getowner()\n...};\nNode - <unreachable-1>\n",
+        "stderr": "\nERROR:\nDescription = The RPC server is unavailable.\n",
+        "verdict": "same (LF line ends)"
+      }
+    },
+    {
+      "id": "E13d",
+      "title": "Instance method, null VerbType, uppercase",
+      "command_line": "wmic /node:<server> /user:<user> /password:<pw> process where \"Name='lsass.exe'\" call GETOWNER",
+      "classic": {
+        "exit": "0x00000000",
+        "stdout": "Executing (\\<server>ROOTCIMV2:Win32_Process.Handle=\"<handle>\")->GETOWNER()\r\r\nMethod execution successful.\r\r\nOut Parameters:\r\ninstance of __PARAMETERS\r\n{\r\n\tDomain = \"NT AUTHORITY\";\r\n\tReturnValue = 0;\r\n\tUser = \"SYSTEM\";\r\n};\r\n",
+        "stderr": "\r\n"
+      },
+      "after": {
+        "how": "live: lab node through the tunnel",
+        "exit": 0,
+        "stdout": "Executing (...)->GETOWNER()\n",
+        "stderr": "\n",
+        "verdict": "same"
+      }
+    },
+    {
+      "id": "E14",
+      "title": "CALL, one unreachable node, fail-fast",
+      "command_line": "wmic /node:<unreachable-1> /failfast:on /user:<user> /password:<pw> process call create \"cmd.exe /c exit 0\"",
+      "classic": {
+        "exit": "0x0000ABE3",
+        "stdout": "",
+        "stderr": "RPC Server not available.\r\r\n"
+      },
+      "after": {
+        "how": "test: tests/remote_fidelity.rs::call_on_one_failfast_node_prints_the_raw_text_on_stderr_only; live: release build on the Mac",
+        "exit": 227,
+        "stdout": "",
+        "stderr": "RPC Server not available.\n",
+        "verdict": "same (LF line ends)"
+      }
+    },
+    {
+      "id": "E14b",
+      "title": "CALL, two unreachable nodes, fail-fast",
+      "command_line": "wmic /node:<unreachable-1>,<unreachable-2> /failfast:on /user:<user> /password:<pw> process call create \"cmd.exe /c exit 0\"",
+      "classic": {
+        "exit": "0x0000ABE3",
+        "stdout": "Node - <unreachable-1>\r\r\nNode - <unreachable-2>\r\r\n",
+        "stderr": "RPC Server not available.\r\r\nRPC Server not available.\r\r\n"
+      },
+      "after": {
+        "how": "test: tests/remote_fidelity.rs::call_on_two_failfast_nodes_names_both_on_stdout; live: release build on the Mac",
+        "exit": 227,
+        "stdout": "Node - <unreachable-1>\nNode - <unreachable-2>\n",
+        "stderr": "RPC Server not available.\nRPC Server not available.\n",
+        "verdict": "same (LF line ends)"
+      }
+    },
+    {
+      "id": "E14c",
+      "title": "CALL, one unreachable node, DCOM timeout",
+      "command_line": "wmic /node:<unreachable-1> /user:<user> /password:<pw> process call create \"cmd.exe /c exit 0\"",
+      "classic": {
+        "exit": "0x800706BA",
+        "stdout": "",
+        "stderr": "ERROR:\r\r\nDescription = The RPC server is unavailable.\r\r\n"
+      },
+      "after": {
+        "how": "test: tests/remote_fidelity.rs::call_on_one_unreachable_node_prints_the_error_block_without_a_node_line; live: release build on the Mac",
+        "exit": 186,
+        "stdout": "",
+        "stderr": "ERROR:\nDescription = The RPC server is unavailable.\n",
+        "verdict": "same (LF line ends)"
+      }
+    },
+    {
+      "id": "E15",
+      "title": "Alias target with a bad namespace",
+      "command_line": "wmic /node:<server> /user:<user> /password:<pw> /namespace:\\\\root\\nosuchns os get Caption",
+      "classic": {
+        "exit": "0x00000000",
+        "stdout": "Caption                                              \r\r\nMicrosoft Windows Server 2025 Datacenter Evaluation  \r\r\n\r\r\n",
+        "stderr": ""
+      },
+      "after": {
+        "how": "live: lab node through the tunnel; tests/wsman_protocol.rs::the_namespace_switch_does_not_change_an_alias_target; tests/macos_backend.rs::an_alias_keeps_its_own_namespace_beside_the_namespace_switch",
+        "exit": 0,
+        "stdout": "Caption                                              \nMicrosoft Windows Server 2025 Datacenter Evaluation  \n\n",
+        "stderr": "",
+        "verdict": "same (LF line ends)"
+      }
+    }
+  ],
+  "measured_after": {
+    "date_utc": "2026-10-17",
+    "base_commit": "0d0d8c9",
+    "working_tree": "uncommitted changes on top of the base commit",
+    "binary": {
+      "host": "Mac mini, arm64, macOS 26.6.2",
+      "build": "cargo build --release --locked",
+      "sha256": "3454fd84ae99ab9ffb1f79587865d769cc739c7a3bfed244faa2c043068a44b1"
+    },
+    "method": "The release binary ran on the Mac. Reachable-node cases ran through lab-run.ps1 (SSH tunnel to the node WinRM listener on TCP 5985). Cases with unreachable nodes ran on the Mac with /user:x /password:y. Stdout and stderr were read as separate files. The Mac writes LF where classic writes the sequence in the classic columns.",
+    "original_cases": {
+      "live and same": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18
+      ],
+      "not run again": {
+        "9": "same code path as case 8",
+        "19": "password redaction by design; the document is covered by the E4 test",
+        "20": "differs by design (the build reads the pipe)"
+      },
+      "note": "In the lab runs the password comes from the pipe, so case 5 prints the alias name, as case c05 of the measurement did."
+    },
+    "extra_cases": "The verdict of each of E1 to E15 is in extra_cases[].after.verdict.",
+    "unmodeled": [
+      "E11b: classic printed empty __PATH, __NAMESPACE and __SERVER for process where ProcessId=4, and a Handle=4 line. The cause is unknown. The build prints the three values and no Handle line.",
+      "E11a: classic printed no system property when __PROPERTY_COUNT is the only system property named beside a regular property. The build prints the ten system properties.",
+      "E1_pipe_r1: one of eight runs of the two-node fail-fast case took 37809 ms and gave the DCOM text for the second node. The build gives the fail-fast text for both nodes, as the other seven runs did.",
+      "The prompt casing of /INTERACTIVE:ON for a method is not measured.",
+      "__DERIVATION of CIM_System and CIM_Service is not measured.",
+      "A write verb (SET, CREATE, DELETE) on a node list was not measured. The build prints the Node line like CALL.",
+      "A connection error other than 0x800706BA and 0xABE3 for CALL was not measured. The build uses the CALL layout for every connection error."
+    ]
+  }
+}

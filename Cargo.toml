@@ -19,6 +19,16 @@ windows = { version = "0.62.2", features = ["Win32_Foundation", "Win32_Data_Xml_
 [target.'cfg(unix)'.dependencies]
 libc = "0.2"
 
+[target.'cfg(not(windows))'.dependencies]
+md4 = "0.10"
+md-5 = "0.10"
+hmac = "0.12"
+rc4 = "0.1"
+ring = "0.17"
+roxmltree = "0.21"
+rustls = { version = "0.23", default-features = false, features = ["ring", "std", "tls12"] }
+rustls-platform-verifier = "0.7"
+
 [target.'cfg(target_os = "macos")'.dependencies]
 core-foundation = "0.10"
 io-kit-sys = "0.5"

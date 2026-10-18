@@ -55,7 +55,7 @@ pub(super) fn call(
             let mut prompt: WideText = "Execute (".into();
             prompt.0.extend(&path.0);
             prompt.0.extend(")->".encode_utf16());
-            prompt.0.extend(&method.name.0);
+            prompt.0.extend(&request.shown_method().0);
             prompt.0.extend("() (Y/N/?)? ".encode_utf16());
             let Some(c) = confirmation.as_deref_mut() else {
                 return Err(error::confirmation_unavailable(&request.class_name));

@@ -12,19 +12,27 @@ pub fn text(message: &WideText, token: Option<&WideText>) -> RenderedOutput {
         ..Default::default()
     }
 }
-pub fn management(error: &ManagementError, node: &WideText) -> RenderedOutput {
-    let query = error.operation.eq_ignore_case("query")
-        || error.operation.eq_ignore_case("enumerate")
-        || error.operation.eq_ignore_case("convert");
+/// Operations whose diagnostic starts with a Node line and follows empty query output.
+pub(super) fn names_node(operation: &WideText) -> bool {
+    operation.eq_ignore_case("query")
+        || operation.eq_ignore_case("enumerate")
+        || operation.eq_ignore_case("convert")
+        || operation.eq_ignore_case("failfast")
+}
+pub fn management(error: &ManagementError, node: &WideText, calls: bool) -> RenderedOutput {
+    let query = names_node(&error.operation) && !calls;
+    let failfast = error.operation.eq_ignore_case("failfast");
     let mut stderr = WideText::default();
     if query {
         push(&mut stderr, "Node - ");
         append(&mut stderr, node);
         push(&mut stderr, NL);
     }
-    push(&mut stderr, "ERROR:");
-    push(&mut stderr, NL);
-    push(&mut stderr, "Description = ");
+    if !failfast {
+        push(&mut stderr, "ERROR:");
+        push(&mut stderr, NL);
+        push(&mut stderr, "Description = ");
+    }
     append(&mut stderr, &error.message);
     push(&mut stderr, NL);
     RenderedOutput {

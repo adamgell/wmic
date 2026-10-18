@@ -28,17 +28,48 @@ pub struct ResolvedRequest {
     pub class_name: WideText,
     pub instance_path: Option<WideText>,
     pub class_mode: bool,
+    /// The command names two or more nodes.
+    #[serde(default)]
+    pub multiple_nodes: bool,
     pub query: Option<WideText>,
     pub selector: Option<WideText>,
     pub verb: Verb,
     pub properties: Vec<WideText>,
     pub method: Option<WideText>,
+    /// Method name shown in the `Executing` line and the confirmation prompt, when it differs
+    /// from the method that runs.
+    #[serde(default)]
+    pub method_echo: Option<WideText>,
     pub arguments: Vec<WideText>,
     pub modifiers: Vec<Modifier>,
     pub view: Option<WideText>,
     pub display: Vec<(WideText, WideText)>,
     pub format: Option<WideText>,
     pub association: Option<AssociationFilters>,
+}
+
+impl ResolvedRequest {
+    /// The method name a user sees: the echo text when set, else the method that runs.
+    pub fn shown_method(&self) -> WideText {
+        self.method_echo
+            .clone()
+            .or_else(|| self.method.clone())
+            .unwrap_or_default()
+    }
+    /// Whether the command names the properties it returns: a `get` with names, or a `list` with a
+    /// view other than FULL. A projection returns the class metadata system properties reduced.
+    pub fn projects_properties(&self) -> bool {
+        match self.verb {
+            Verb::Get => {
+                !self.properties.is_empty() && !self.properties.iter().any(|p| p.0 == [42])
+            }
+            Verb::List => self
+                .view
+                .as_ref()
+                .is_some_and(|v| !v.eq_ignore_case("full")),
+            _ => false,
+        }
+    }
 }
 
 /// A credential can be passed to COM, but cannot accidentally enter Debug/JSON output.

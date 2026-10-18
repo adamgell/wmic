@@ -16,7 +16,7 @@ pub fn error(node: &WideText, code: u32, message: &str, operation: &str) -> Mana
 }
 
 pub fn invalid_namespace(node: &WideText) -> ManagementError {
-    error(node, 0x8004100e, "Invalid namespace", "query")
+    error(node, 0x8004100e, "Invalid namespace", "connect")
 }
 
 pub fn rpc_unavailable(node: &WideText) -> ManagementError {

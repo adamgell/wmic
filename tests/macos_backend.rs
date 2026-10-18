@@ -110,6 +110,100 @@ impl Confirmation for Answer {
 }
 
 #[test]
+fn a_projection_reduces_the_class_metadata() {
+    let metadata = |command: &str| {
+        let record = objects(command).remove(0);
+        let value = |name: &str| {
+            record
+                .properties
+                .iter()
+                .find(|p| p.name.eq_ignore_case(name))
+                .unwrap()
+                .value
+                .clone()
+        };
+        (
+            value("__DERIVATION"),
+            value("__PROPERTY_COUNT"),
+            value("__DYNASTY"),
+            value("__SUPERCLASS"),
+            text(&record, "__PATH").unwrap(),
+            text(&record, "__CLASS").unwrap(),
+            record.properties.iter().filter(|p| !p.system).count(),
+        )
+    };
+    for (command, count) in [
+        ("os get Caption", 1),
+        ("path Win32_OperatingSystem get Caption", 1),
+        ("os get __SERVER,__DERIVATION", 0),
+    ] {
+        let (derivation, counted, dynasty, superclass, path, class, _) = metadata(command);
+        let named = command.contains("__DERIVATION");
+        assert_eq!(
+            matches!(&derivation, CimValue::Array(items) if !items.is_empty()),
+            named,
+            "{command}"
+        );
+        assert_eq!(counted, CimValue::Sint32(count), "{command}");
+        assert_eq!(dynasty, CimValue::String(wide("")), "{command}");
+        assert_eq!(
+            superclass,
+            CimValue::String(wide("")),
+            "{command}: only a named __SUPERCLASS is filled"
+        );
+        assert!(
+            path.ends_with(":Win32_OperatingSystem=@"),
+            "{command}: {path}"
+        );
+        assert_eq!(class, "Win32_OperatingSystem");
+    }
+    let (_, count, _, superclass, ..) = metadata("os get Caption,__SUPERCLASS");
+    assert_eq!(count, CimValue::Sint32(1));
+    assert_eq!(superclass, CimValue::String(wide("CIM_OperatingSystem")));
+    let (_, brief, ..) = metadata("os list brief");
+    assert_ne!(brief, CimValue::Sint32(0));
+    let (derivation, count, dynasty, superclass, _, _, plain) =
+        metadata("process where \"ProcessId=1\" get Name");
+    assert_eq!(derivation, CimValue::Array(vec![]));
+    assert_eq!(dynasty, CimValue::String(wide("")));
+    assert_eq!(superclass, CimValue::String(wide("")));
+    assert_eq!(plain, 1, "the projection keeps only the named properties");
+    assert_eq!(
+        count,
+        CimValue::Sint32(2),
+        "the key property Handle counts although it is not shown"
+    );
+    for command in ["os get", "os get *"] {
+        let (derivation, count, dynasty, superclass, ..) = metadata(command);
+        assert!(
+            matches!(derivation, CimValue::Array(items) if !items.is_empty()),
+            "{command}"
+        );
+        assert_ne!(count, CimValue::Sint32(0), "{command}");
+        assert_ne!(dynasty, CimValue::String(wide("")), "{command}");
+        assert_ne!(superclass, CimValue::String(wide("")), "{command}");
+    }
+}
+
+#[test]
+fn an_alias_keeps_its_own_namespace_beside_the_namespace_switch() {
+    let (status, sink) = session("HOST", r"/namespace:\\root\nosuchns os get Caption");
+    assert_eq!(status, 0);
+    assert!(sink.stdout.starts_with(b"Caption"));
+    assert!(sink.stderr.is_empty());
+    let (status, sink) = session(
+        "HOST",
+        r"/namespace:\\root\nosuchns path Win32_OperatingSystem get Caption",
+    );
+    assert_eq!(status, 0x8004100e);
+    assert!(sink.stdout.is_empty());
+    assert_eq!(
+        sink.stderr,
+        b"ERROR:\r\r\nDescription = Invalid namespace\r\r\n"
+    );
+}
+
+#[test]
 fn every_registered_class_returns_typed_flagged_records() {
     let system = [
         "__PATH",
@@ -415,7 +509,7 @@ fn namespace_must_be_root_cimv2() {
     let e = failure(&r);
     assert_eq!(
         (e.code, e.message.to_string_lossy(), operation(&e)),
-        (0x8004100e, "Invalid namespace".into(), "query".into())
+        (0x8004100e, "Invalid namespace".into(), "connect".into())
     );
 }
 
@@ -486,9 +580,21 @@ fn writes_are_not_supported() {
 #[test]
 /// Keep unknown-method, binding and unsupported-provider errors distinct.
 fn methods_bind_by_schema_and_report_shapes() {
-    let e = failure(&request("path Win32_OperatingSystem call WmicNoSuchMethod"));
-    assert_eq!((e.code, operation(&e)), (0xABFC, "input".into()));
-    assert_eq!(e.message, wide("WmicNoSuchMethod - Invalid class method."));
+    for command in [
+        "path Win32_OperatingSystem call WmicNoSuchMethod",
+        "class Win32_OperatingSystem call WmicNoSuchMethod",
+    ] {
+        let e = failure(&request(command));
+        assert_eq!(
+            (e.code, operation(&e)),
+            (0xABFC, "input".into()),
+            "{command}"
+        );
+        assert_eq!(e.message, wide("WmicNoSuchMethod - Invalid class method."));
+    }
+    let e = failure(&request("os call WmicNoSuchMethod"));
+    assert_eq!((e.code, operation(&e)), (0xABFD, "input".into()));
+    assert_eq!(e.message, wide("WmicNoSuchMethod - Invalid alias verb."));
     if unsafe { libc::geteuid() } != 0 {
         let e = failure(&request("path Win32_OperatingSystem call Reboot 1"));
         assert_eq!((e.code, operation(&e)), (0xADE6, "input".into()));

@@ -98,12 +98,13 @@ impl ClassInfo {
 
 fn parent(class: &str) -> Option<&'static str> {
     Some(match class {
-        "CIM_OperatingSystem" | "CIM_System" | "CIM_Service" => "CIM_EnabledLogicalElement",
+        "CIM_System" | "CIM_Service" => "CIM_EnabledLogicalElement",
         "CIM_EnabledLogicalElement"
         | "CIM_LogicalDevice"
         | "CIM_SoftwareElement"
         | "CIM_SystemResource"
         | "CIM_Process"
+        | "CIM_OperatingSystem"
         | "Win32_Session"
         | "Win32_Account" => "CIM_LogicalElement",
         "CIM_LogicalElement" | "CIM_PhysicalElement" => "CIM_ManagedSystemElement",

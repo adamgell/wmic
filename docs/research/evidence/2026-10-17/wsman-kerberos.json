@@ -1,0 +1,97 @@
+{
+  "base": "wsman-tls b959ee8 (pull request 9), on wsman-backend be9965a (pull request 5)",
+  "captured_utc": "2026-10-17",
+  "scope": "Kerberos authentication and Kerberos message sealing for WS-Management over HTTP (5985) and HTTPS (5986) through the GSS framework of macOS, with NTLM fallback",
+  "realm": {
+    "name": "CONTOSO.COM",
+    "kdc": "Windows Server domain controller, reached as tcp/127.0.0.1:1088 through an SSH tunnel",
+    "krb5_conf": "[libdefaults] default_realm = CONTOSO.COM, dns_lookup_kdc = false, dns_lookup_realm = false; [realms] CONTOSO.COM kdc = tcp/127.0.0.1:1088; [domain_realm] .contoso.com and contoso.com = CONTOSO.COM; selected with KRB5_CONFIG",
+    "ticket_etypes": {"krbtgt/CONTOSO.COM@CONTOSO.COM": "aes256-cts-hmac-sha1-96", "HTTP/cm01.contoso.com@CONTOSO.COM": "aes256-cts-hmac-sha1-96"},
+    "clock_difference_mac_to_kdc_seconds": 2
+  },
+  "listener": {
+    "host": "Windows Server 2025 Datacenter Evaluation 10.0.26100, domain member cm01.contoso.com",
+    "winrm_service": {"Auth/Kerberos": true, "AllowUnencrypted": false, "Auth/CbtHardeningLevel": "Relaxed; Strict for the binding runs; Auth/Kerberos false for the service-refusal runs; both restored and read back"},
+    "http": "5985 through 127.0.0.1:15986",
+    "https": "5986 through 127.0.0.1:25988, self-signed certificate CN=cm01.contoso.com, SAN DNS cm01.contoso.com, DNS CM01, IP <server>, trusted with WMIC_WSMAN_CA_FILE"
+  },
+  "client": "Mac mini, Apple M4, macOS 26.6.2, final release build of this branch, /node:cm01.contoso.com, WMIC_WSMAN_CONNECT=127.0.0.1, WMIC_WSMAN_PORT set to the tunnel port, password piped to the prompt",
+  "mechanism": {
+    "client_scheme": "Kerberos (raw RFC 4121 token from gss_init_sec_context with the Kerberos mechanism, not SPNEGO)",
+    "server_scheme": "Kerberos (HTTP 200 with a WWW-Authenticate reply token; mutual authentication completed before the first envelope)",
+    "sealing_protocol": "application/HTTP-Kerberos-session-encrypted",
+    "wrap_token": "gss_wrap returned EC 0 and RRC 0; after the 16-byte token header the encrypted part was 44 bytes longer than the plaintext (one Enumerate: plaintext 1324 bytes, token 1384 bytes); the build sent RRC 28, a 60-byte signature and a data part of the plaintext length; the service accepted it and its replies unwrapped through gss_unwrap",
+    "identify_security_profiles": ["http/spnego-kerberos", "https/spnego-kerberos"]
+  },
+  "runs": [
+    {"id": "K1", "scheme": "http", "account": "contoso\\LabAdmin", "password": "<pw>", "command": "os get Caption,CSName", "result": "one row", "exit": 0, "probe": "mechanism Kerberos, server scheme Kerberos"},
+    {"id": "K2", "scheme": "https", "account": "contoso\\LabAdmin", "password": "<pw>", "command": "os get Caption,CSName", "result": "one row", "exit": 0, "probe": "mechanism Kerberos, server scheme Kerberos"},
+    {"id": "K5", "scheme": "http and https", "account": "contoso\\LabAdmin", "password": "<pw>", "command": "os get __SERVER,__PATH /format:list", "result": "__SERVER=CM01, __PATH=\\\\CM01\\ROOT\\CIMV2:Win32_OperatingSystem=@", "exit": 0},
+    {"id": "K7", "scheme": "http", "account": "LabAdmin@CONTOSO.COM", "password": "<pw>", "command": "os get CSName", "result": "one row", "exit": 0},
+    {"id": "C1", "scheme": "http", "account": "contoso\\LabAdmin", "password": "<pw>", "then": "klist -l; /authority:Kerberos without /user and without a password, same SSH session", "result": "one row, exit 0; klist -l lists no cache of LabAdmin; the second command exits 186"},
+    {"id": "C2", "scheme": "http and https", "cache": "kinit in the same SSH session", "switches": "/authority:Kerberos, no /user, no password", "command": "os get CSName", "exit": 0},
+    {"id": "C2b", "scheme": "http", "cache": "kinit in the same SSH session", "account": "CONTOSO\\LabAdmin", "password": "empty line", "command": "os get CSName", "exit": 0},
+    {"id": "C3", "scheme": "http", "cache": "empty (new SSH session)", "switches": "/authority:Kerberos, no /user", "command": "os get CSName", "result": "The RPC server is unavailable.", "exit": 186},
+    {"id": "R1", "scheme": "http and https", "account": "contoso\\LabAdmin", "password": "wrong", "command": "os get CSName", "result": "Access is denied.", "exit": 5, "probe": "Kerberos refused the account: Preauthentication failed (-1765328360)", "kdc_security_log": "event 4771, status 0x18, one per run (3 runs)", "server_security_log": "no 4624 or 4625 with package NTLM for the account"},
+    {"id": "R6", "scheme": "http", "account": "contoso\\LabAdmin", "password": "wrong", "switches": "/authority:\"Kerberos:CONTOSO\\CM01\"", "result": "Access is denied.", "exit": 5},
+    {"id": "P1", "scheme": "http", "switches": ["/authority:\"Kerberos:CONTOSO\\CM01\"", "/authority:\"Kerberos:HTTP/cm01.contoso.com\"", "/authority:Kerberos:CM01"], "password": "<pw>", "result": "one row each", "exit": 0},
+    {"id": "P4", "scheme": "https", "switches": "/authority:Kerberos:HTTP/cm01.contoso.com@CONTOSO.COM", "password": "<pw>", "result": "one row", "exit": 0},
+    {"id": "P5", "scheme": "http", "switches": ["/authority:\"Kerberos:HTTP/wrong.contoso.com\"", "/authority:\"Kerberos:CONTOSO\\WRONGHOST\""], "password": "<pw>", "result": "The RPC server is unavailable.", "exit": 186, "probe": "Server (HTTP/wrong.contoso.com@CONTOSO.COM) unknown (-1765328377)"},
+    {"id": "N1", "scheme": "http", "account": "LabAdmin", "switches": "/authority:NTLMDOMAIN:CONTOSO", "password": "<pw>", "result": "one row", "exit": 0, "probe": "mechanism NTLM, server scheme Negotiate"},
+    {"id": "N3", "scheme": "http", "account": "contoso\\nosuchuser9", "password": "wrong", "probe": "authentication failed (the KDC does not know the client, -1765328378; NTLM follows)"},
+    {"id": "N4", "scheme": "http and https", "account": "contoso\\LabAdmin", "password": "<pw>", "kdc": "tunnel stopped", "command": "os get CSName", "result": "one row", "exit": 0, "probe": "mechanism NTLM, server scheme Negotiate"},
+    {"id": "N7", "scheme": "http", "switches": "/authority:Kerberos", "kdc": "tunnel stopped", "result": "The RPC server is unavailable.", "exit": 186, "probe": "unable to reach any KDC in realm CONTOSO.COM, tried 1 KDC (-1765328228)"},
+    {"id": "L", "scheme": "http and https", "account": "temporary local account of the host as cm01\\<name>, <name>, .\\<name>", "password": "<pw>", "command": "os get CSName", "exit": 0, "probe": "mechanism NTLM, server scheme Negotiate", "note": "account in Remote Management Users, created for the runs and removed afterward"},
+    {"id": "S1", "scheme": "http and https", "listener": "Auth/Kerberos=false", "account": "contoso\\LabAdmin", "password": "<pw>", "command": "os get CSName", "result": "one row", "exit": 0, "probe": "mechanism NTLM, server scheme Negotiate"},
+    {"id": "S4", "scheme": "http", "listener": "Auth/Kerberos=false", "switches": "/authority:Kerberos", "result": "Access is denied.", "exit": 5},
+    {"id": "B1", "scheme": "https", "cbt": "Relaxed and Strict", "switches": "/authority:Kerberos", "account": "contoso\\LabAdmin", "password": "<pw>", "result": "one row", "exit": 0},
+    {"id": "B2", "scheme": "https", "cbt": "Relaxed and Strict", "build": "separate build with flip-channel-binding.patch (last byte of the tls-server-end-point data flipped)", "switches": "/authority:Kerberos", "result": "Access is denied.", "exit": 5},
+    {"id": "B3", "scheme": "http", "cbt": "Relaxed and Strict", "build": "the same separate build", "switches": "/authority:Kerberos", "result": "one row", "exit": 0},
+    {"id": "B4", "scheme": "https", "cbt": "Relaxed and Strict", "account": "LabAdmin", "switches": "/authority:NTLMDOMAIN:CONTOSO", "password": "<pw>", "result": "one row with the normal build; Access is denied. (exit 5) with the separate build"},
+    {"id": "B5", "scheme": "http", "cbt": "Relaxed and Strict", "build": "the same separate build", "switches": "/authority:NTLMDOMAIN:CONTOSO", "result": "one row", "exit": 0}
+  ],
+  "server_events": {
+    "source": "Security log of the host, event 4624, logon type 3, source address <tunnel host>, during the matrix",
+    "kerberos": {"account": "CONTOSO.COM\\LabAdmin", "authentication_package": "Kerberos", "logon_process": "Kerberos", "count": 15},
+    "ntlm_domain_account": {"account": "CONTOSO\\LabAdmin", "authentication_package": "NTLM", "logon_process": "NtLmSsp", "count": 8},
+    "ntlm_local_account": {"account": "CM01\\<name>", "authentication_package": "NTLM", "logon_process": "NtLmSsp", "count": 9}
+  },
+  "credential_errors": {
+    "api": "gss_aapl_initial_cred with kGSSICPassword and kGSSICCreateNewCredential",
+    "cferror_code": "the GSS major status (851968, GSS_S_FAILURE, in every measured case)",
+    "cferror_user_info_keys": ["NSDescription", "kGSSMechanism", "kGSSMajorErrorCode", "kGSSMechanismOID", "kGSSMinorErrorCode"],
+    "minor_codes": {"wrong password": -1765328360, "unknown client": -1765328378, "KDC not reachable": -1765328228, "realm without a KDC entry": -1765328228, "no krb5.conf for the realm": -1765328228},
+    "credential_cache": "the password logon creates a cache of its own and gss_destroy_cred removes it; klist -l afterward lists no cache of the account; the API cache of the login session is per SSH connection"
+  },
+  "classic_wmic": {
+    "host": "Windows 11 Enterprise Evaluation 26200 reference host",
+    "target": "cm01.contoso.com over DCOM, /user:contoso\\LabAdmin /password:<pw>",
+    "runs": [
+      {"switch": "/authority:Kerberos:CONTOSO\\CM01", "result": "one row", "exit": 0},
+      {"switch": "/authority:\"Kerberos:CONTOSO\\CM01\"", "result": "one row", "exit": 0},
+      {"switch": "/authority:\"Kerberos:HTTP/cm01.contoso.com\"", "result": "one row", "exit": 0},
+      {"switch": "/authority:Kerberos:CM01", "result": "one row", "exit": 0},
+      {"switch": "/authority:Kerberos:CONTOSO\\WRONGHOST", "result": "The RPC server is unavailable.", "exit": "0x800706BA"},
+      {"switch": "/authority:\"Kerberos:HTTP/wrong.contoso.com\"", "result": "The RPC server is unavailable.", "exit": "0x800706BA"},
+      {"switch": "/authority:\"Kerberos:CONTOSO\\CM01\"", "password": "wrong", "result": "Access is denied.", "exit": "0x80070005"},
+      {"switch": "/authority:Kerberos", "password": "wrong", "result": "Invalid parameter, no Node line", "exit": "0x80041008"},
+      {"switch": "/authority:Kerberos:HTTP/wrong.contoso.com (unquoted)", "result": "Invalid Global Switch.", "exit": 44125},
+      {"note": "a password with a hyphen also printed Invalid Global Switch.: classic WMIC reads '-' as a switch prefix"}
+    ]
+  },
+  "ffi_review": {
+    "headers": "GSS.framework of the macOS 26 SDK: gssapi.h, gssapi_apple.h, gssapi_protos.h",
+    "struct_packing": "gssapi.h applies #pragma pack(push,2) only under defined(__APPLE__) with ppc, ppc64, i386 or x86_64; gss_OID_desc and gss_channel_bindings_struct are declared packed(2) on x86_64 and with the C layout on arm64",
+    "symbols": "gss_acquire_cred_with_password is exported but not declared in the public headers and is not used"
+  },
+  "re_measured_after_a_concurrent_session_conflict": {
+    "context": "a second session ran the same work on the same Mac checkout and lab at the same time; it was stopped and the two disputed facts were measured again alone",
+    "channel_binding": "a flipped Kerberos binding is refused under Relaxed and Strict (B2); the other session had reported acceptance under Strict with a build started with WMIC_BREAK_BINDING=1; that build returned a row in this measurement with Kerberos and with the KDC not configured, while a flipped binding is refused for Kerberos (B2) and for NTLM (wsman-tls.json), so its switch most likely did not change the binding",
+    "kGSSMinorErrorCode": "present in the CFError user info as a CFNumber (SInt32) for a wrong password, an unknown client and an unreachable KDC; an earlier dump in this session missed it because its output was cut to four lines"
+  },
+  "gates": {
+    "macos": {"platform": "Mac mini, Apple M4, macOS 26.6.2, rustc 1.98.1", "fmt_check": "ok", "clippy_all_targets_deny_warnings": "ok", "cargo_test_locked": {"passed": 563, "failed": 0}},
+    "linux": {"platform": "Ubuntu in WSL2, rustc 1.98.1", "fmt_check": "ok", "clippy_all_targets_deny_warnings": "ok", "cargo_test_locked": {"passed": 433, "failed": 0}},
+    "windows": {"fmt_check": "ok", "clippy_all_targets_deny_warnings": "ok", "cargo_test_locked": {"passed": 231, "failed": 0, "ignored": 34}, "dependency_tree": "Cargo.toml and Cargo.lock unchanged; no new crates"}
+  }
+}

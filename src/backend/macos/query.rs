@@ -259,6 +259,29 @@ pub(super) fn select(
         }
         records = kept;
     }
+    let keys: Vec<&str> = if info.singleton {
+        vec![]
+    } else {
+        info.keys()
+            .into_iter()
+            .map(|at| info.properties[at].name.as_str())
+            .collect()
+    };
+    let kept = |p: &Property| {
+        everything
+            || columns.iter().any(|c| p.name.eq_ignore_case(c))
+            || keys.iter().any(|k| p.name.eq_ignore_case(k))
+    };
+    if request.projects_properties() {
+        for record in &mut records {
+            let count = record
+                .properties
+                .iter()
+                .filter(|p| !p.system && kept(p))
+                .count();
+            record.project_class_metadata(&columns, count);
+        }
+    }
     if !everything {
         for record in &mut records {
             record

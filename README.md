@@ -41,13 +41,23 @@ A literal `C:\Windows\System32\wbem\WMIC.exe` call continues to use that locatio
 
 ## macOS
 
-The macOS build is `wmic`. It uses the same command parser, help, aliases, and output formats as the Windows build. It answers queries from macOS system interfaces instead of WMI. It serves 30 Win32 classes in `root\cimv2` for the local machine. `SET`, `CREATE`, `DELETE`, `ASSOC`, and remote nodes are not supported. No Microsoft WMIC exists for macOS, so data values have no reference corpus. The [macOS guide](https://github.com/adamgell/wmic/blob/main/docs/macos.md) lists the classes, methods, evidence, and unverified areas. The examples assume `wmic` is on PATH.
+The macOS build is `wmic`. It uses the same command parser, help, aliases, and output formats as the Windows build. It answers queries from macOS system interfaces instead of WMI. It serves 30 Win32 classes in `root\cimv2` for the local machine. `SET`, `CREATE`, `DELETE`, and `ASSOC` are not supported. A remote node is queried over WinRM (see below). No Microsoft WMIC exists for macOS, so data values have no reference corpus. The [macOS guide](https://github.com/adamgell/wmic/blob/main/docs/macos.md) lists the classes, methods, remote nodes, evidence, and unverified areas. The examples assume `wmic` is on PATH.
 
 ```sh
 wmic os get Caption,Version
 wmic os where "Caption like '%macOS%'" get Caption /format:csv
 wmic process where "ProcessId=$$" call GetOwner
 ```
+
+A `/node` that is not the local machine sends the request to the WinRM service on that node (WS-Management over HTTP, port 5985, or over HTTPS, port 5986, with `WMIC_WSMAN_SCHEME=https`). A local node with `/user` is refused, as on Windows, unless `WMIC_WSMAN_PORT` names a listener. The macOS build cannot speak DCOM, so the target needs WinRM enabled (`Enable-PSRemoting` or `winrm quickconfig`). Authentication is Kerberos for a domain account when a KDC answers, else NTLMv2, with message encryption in both cases; `/authority:Kerberos` uses Kerberos only and can use the ticket cache of `kinit`. Over HTTPS, the server certificate is validated against the platform trust store, plus a PEM file named by `WMIC_WSMAN_CA_FILE`, and the logon is bound to the certificate. Basic and CredSSP are not implemented. Kerberos needs the macOS GSS framework; other Unix builds use NTLMv2 only. Give the account as `/user:DOMAIN\name`, or as `/user:name /authority:NTLMDOMAIN:domain`. Without `/password:`, `wmic` reads the password from standard input.
+
+```sh
+wmic /node:server01 '/user:CONTOSO\admin' os get Caption
+```
+
+Quote the account argument so the shell keeps the backslash.
+
+The environment variable `WMIC_WSMAN_PORT` replaces the default port. The [remote nodes section](https://github.com/adamgell/wmic/blob/main/docs/macos.md#remote-nodes) of the macOS guide lists the requirements, errors, and limits. The Windows build is unchanged and uses DCOM.
 
 The shell removes quotes before `wmic` starts. `wmic` puts quotes around an argument that has white space. To pass quotes to WMIC, put the whole argument in single quotes: `wmic '/node:"a,b"' os get Caption`.
 

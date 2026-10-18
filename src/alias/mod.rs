@@ -239,6 +239,7 @@ impl AliasStore {
             class_name: WideText::default(),
             instance_path: None,
             class_mode: matches!(target, Target::Class(_)),
+            multiple_nodes: false,
             query: None,
             selector: command.selector.clone(),
             verb: if !command.verb_explicit && command.verb == Verb::List {
@@ -248,6 +249,7 @@ impl AliasStore {
             },
             properties: command.properties.clone(),
             method: command.method.clone(),
+            method_echo: None,
             arguments: if command.raw_arguments.is_empty() {
                 command.arguments.clone()
             } else {
@@ -418,6 +420,11 @@ impl AliasStore {
                     // still go through the provider's identifier lookup.
                     req.method = Some(if m.eq_ignore_case(&v.name) {
                         v.derivation.as_str().into()
+                    } else {
+                        m.clone()
+                    });
+                    req.method_echo = Some(if v.verb_type == Some(0) {
+                        v.name.as_str().into()
                     } else {
                         m.clone()
                     });
