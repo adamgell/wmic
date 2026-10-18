@@ -156,7 +156,32 @@ fn keep_columns(records: &mut [Record], request: &ResolvedRequest) {
     let columns = projection(request);
     if request.projects_properties() {
         for record in records.iter_mut() {
-            let count = record.properties.iter().filter(|p| !p.system).count();
+            let keys: Vec<String> = catalog::lookup(&record.class.to_string_lossy())
+                .map(|info| {
+                    info.keys()
+                        .into_iter()
+                        .map(|index| info.properties[index].name.clone())
+                        .collect()
+                })
+                .or_else(|| {
+                    record
+                        .path
+                        .as_ref()
+                        .and_then(|path| parse_object_path(&path.to_string_lossy()))
+                        .map(|path| path.selectors().into_iter().map(|(name, _)| name).collect())
+                })
+                .unwrap_or_default();
+            let count = record
+                .properties
+                .iter()
+                .filter(|p| {
+                    !p.system
+                        && columns
+                            .iter()
+                            .chain(&keys)
+                            .any(|name| p.name.eq_ignore_case(name))
+                })
+                .count();
             record.project_class_metadata(&columns, count);
         }
     }

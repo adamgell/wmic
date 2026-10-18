@@ -432,7 +432,7 @@ fn a_projection_fills_the_derivation_and_superclass_it_names() {
     );
     assert_eq!(superclass, CimValue::String(wide("CIM_Process")));
     assert_eq!(dynasty, CimValue::String(wide("")));
-    assert_eq!(count, CimValue::Sint32(5));
+    assert_eq!(count, CimValue::Sint32(2), "Name and the Handle key only");
 }
 
 #[test]
@@ -746,6 +746,66 @@ fn get_by_selector_builds_the_path_from_the_selectors() {
     assert_eq!(plain_names(&records[0]), ["Name"]);
     assert_eq!(text(&records[0], "Name"), "System");
     assert_eq!(text(&records[0], "__RELPATH"), "Win32_Process.Handle=\"4\"");
+}
+
+#[test]
+fn a_path_projection_counts_only_named_properties_and_keys() {
+    let w = wire();
+    script(&w, "/Get", None, vec![ok("get-process-4")]);
+    let records = objects(
+        management(&w)
+            .execute(&remote("path Win32_Process.Handle=\"4\" get nAmE"))
+            .unwrap(),
+    );
+    assert_eq!(plain_names(&records[0]), ["Name"]);
+    assert_eq!(
+        property(&records[0], "__PROPERTY_COUNT").value,
+        CimValue::Sint32(2)
+    );
+    assert_eq!(text(&records[0], "__RELPATH"), "Win32_Process.Handle=\"4\"");
+}
+
+#[test]
+fn a_path_wildcard_keeps_all_properties_and_full_class_metadata() {
+    let w = wire();
+    script(&w, "/Get", None, vec![ok("get-process-4")]);
+    let records = objects(
+        management(&w)
+            .execute(&remote("path Win32_Process.Handle=\"4\" get *"))
+            .unwrap(),
+    );
+    assert_eq!(plain_names(&records[0]).len(), 45);
+    assert_eq!(
+        property(&records[0], "__PROPERTY_COUNT").value,
+        CimValue::Sint32(45)
+    );
+    assert_eq!(text(&records[0], "__DYNASTY"), "CIM_ManagedSystemElement");
+}
+
+#[test]
+fn an_unknown_class_projection_counts_its_path_keys_without_displaying_them() {
+    let w = wire();
+    script(
+        &w,
+        "/Enumerate",
+        None,
+        vec![enumerate_reply(&item(
+            "Test_Widget",
+            "<p:Id>42</p:Id><p:Label>example</p:Label><p:Other>unused</p:Other>",
+            &[("Id", "42")],
+        ))],
+    );
+    let records = objects(
+        management(&w)
+            .execute(&remote("path Test_Widget get Label"))
+            .unwrap(),
+    );
+    assert_eq!(plain_names(&records[0]), ["Label"]);
+    assert_eq!(
+        property(&records[0], "__PROPERTY_COUNT").value,
+        CimValue::Sint32(2)
+    );
+    assert_eq!(text(&records[0], "__RELPATH"), "Test_Widget.Id=\"42\"");
 }
 
 #[test]
