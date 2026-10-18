@@ -732,6 +732,21 @@ fn an_interrupt_between_pulls_releases_and_returns_the_partial_objects() {
 }
 
 #[test]
+fn a_call_whose_selection_fails_carries_no_partial_objects() {
+    // The session renders partial Objects of a failed node as a table; a CALL has no table.
+    let w = wire();
+    script(&w, "/Enumerate", None, vec![ok("enumerate-driver-page1")]);
+    script(&w, "/Pull", None, vec![fault("fault-pull-parameters")]);
+    script(&w, "/Release", None, vec![ok("release")]);
+    let error = management(&w)
+        .execute(&remote("process where \"Handle='4'\" call getowner"))
+        .unwrap_err();
+    assert_eq!(error.code, 0x80041001);
+    assert!(error.partial.is_none());
+    assert_eq!(kinds(&w), ["Enumerate", "Pull", "Release"]);
+}
+
+#[test]
 fn get_by_selector_builds_the_path_from_the_selectors() {
     let w = wire();
     script(&w, "/Get", None, vec![ok("get-process-4")]);

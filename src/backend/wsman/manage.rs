@@ -444,7 +444,13 @@ impl WsmanManagement {
                 let mut selecting = request.clone();
                 selecting.verb = Verb::Get;
                 selecting.properties.clear();
-                self.select_found(target, &selecting)?
+                // The records enumerated before a selection failure are not method output; the
+                // session would render them as a table.
+                self.select_found(target, &selecting)
+                    .map_err(|mut e| {
+                        e.partial = None;
+                        e
+                    })?
                     .into_iter()
                     .filter_map(|f| f.record.path.map(|p| (p, f.selectors)))
                     .collect()
