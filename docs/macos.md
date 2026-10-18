@@ -296,7 +296,7 @@ For a class in the schema, a method that the class does not have returns `<name>
 - For `CALL`, `SET`, `CREATE`, and `DELETE`, a failed node prints the error on standard error with no `Node - ` line and no blank lines. With `/FAILFAST:ON` the error is `RPC Server not available.` alone. Without it, the error is the `ERROR:` block.
 - The exit codes follow the mapping in [Exit status](#exit-status).
 - The text of a WBEM or Win32 status is the text that `IWbemStatusCodeText` returns on Windows. A status that this table lacks shows the text from the server.
-- A query with named properties, or a `LIST` view other than `FULL`, returns `__DERIVATION`, `__PROPERTY_COUNT`, `__DYNASTY`, and `__SUPERCLASS` empty. `GET` without names, `GET *`, and the `FULL` view return their values.
+- A query with named properties, or a `LIST` view other than `FULL`, reduces the class metadata. `__PROPERTY_COUNT` counts the selected non-system properties plus available class keys, even when an unrequested key is hidden from the displayed columns. `__DYNASTY` is empty; `__DERIVATION` and `__SUPERCLASS` are empty unless explicitly requested. `GET` without names, `GET *`, and the `FULL` view retain the full class metadata. Explicit system-property selection still has the difference recorded as case E11 below.
 - A command with two or more nodes does not look up the class before the query. An unknown class in `PATH` then reports `Invalid class`, as in an alias query.
 - A WMI status that has no WMIC text shows the text from the server. For `Generic failure`, the server text is kept in the error record and is not printed.
 
