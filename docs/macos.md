@@ -577,6 +577,25 @@ Classic WMIC on the Windows 11 reference host, against the same host over DCOM:
 
 A concurrent run of this work on the same lab reported that the listener accepted a flipped Kerberos channel binding under `Strict`. The binding rows above were measured again alone. That run's separate build, started with its switch, returned a row in this measurement as well, with Kerberos and with the KDC not configured. A flipped binding is refused under `Strict` for Kerberos (above) and for NTLM ([HTTPS evidence](#https-evidence)), so its switch most likely did not change the binding it sent. The [Kerberos record](research/evidence/2026-10-17/wsman-kerberos.json) lists the runs.
 
+### Flat network evidence
+
+The HTTPS, channel binding and Kerberos rows above were measured again on 2026-10-17 with no SSH tunnel. The Mac mini (Apple M4, macOS 26.6.2, address `192.168.1.119`) got one route to the lab subnet through a Windows host that forwards IPv4, and `/etc/hosts` entries for the three lab names, because the lab has no DNS the Mac can reach. `traceroute` showed that host as the only hop. Every command named the host in `/node`; `WMIC_WSMAN_CONNECT` and `WMIC_WSMAN_PORT` were unset. `KRB5_CONFIG` named the domain controller by its own name as the KDC. The build was the release build of `06b7e4d` (SHA-256 `0e2c63b70393dffed8c2acf23ab3d23971f175cce6ec67c6d3d525140558e3e5`); the binding rows used a separate build with [flip-channel-binding.patch](research/evidence/2026-10-17/flip-channel-binding.patch) applied.
+
+| Host, scheme | Switches | Result |
+| --- | --- | --- |
+| Both hosts, HTTP | `/user:LabAdmin /authority:NTLMDOMAIN:CONTOSO`, `os get Caption,CSName` | One row each. Exit 0. The probe reports mechanism `NTLM`, server scheme `Negotiate`. |
+| Windows 11, HTTPS, `WMIC_WSMAN_CA_FILE` | The same | One row. Exit 0. |
+| Windows 11, HTTPS, no CA file | The same | `Secure connection failed`. Exit 143. |
+| Server, HTTP and HTTPS; Windows 11, HTTPS | `/user:contoso\LabAdmin` and the password, `os get Caption,CSName` | One row each. Exit 0. The probe reports mechanism `Kerberos`, server scheme `Kerberos` on both schemes. |
+| Server, HTTP | `os get __SERVER,__PATH /format:list` | `__SERVER=CM01`. Exit 0. |
+| Server, HTTP | `/user:contoso\LabAdmin` and a wrong password | `Access is denied.` Exit 5. |
+| Server, HTTP | `/authority:"Kerberos:CONTOSO\CM01"`, `/authority:"Kerberos:HTTP/cm01.contoso.com"`, `/authority:Kerberos:CM01` | One row each. Exit 0. |
+| Server, HTTP | `/authority:"Kerberos:HTTP/wrong.contoso.com"` | `The RPC server is unavailable.` Exit 186. |
+| Both hosts, HTTPS, `CbtHardeningLevel` `Strict` | NTLM and Kerberos as above, normal build | One row each. Exit 0. |
+| Both hosts, HTTPS, `CbtHardeningLevel` `Strict` | NTLM and Kerberos as above, separate build with the flipped binding | `Access is denied.` Exit 5. Over HTTP the same build returned one row. |
+
+The security logs recorded the Mac's own address as the source: on the server, event 4624 logon type 3 with package `Kerberos` 14 times and `NTLM` 7 times from `192.168.1.119`; on the Windows 11 host, `Kerberos` 3 times and `NTLM` 5 times; on the domain controller, 42 ticket-granting-ticket requests (4768), 19 service ticket requests (4769) and 3 pre-authentication failures (4771) from the same address. `CbtHardeningLevel` was restored to `Relaxed` on both listeners. The [flat network record](research/evidence/2026-10-17/wsman-flat-network.json) lists the runs.
+
 ## Not verified
 
 - Intel Macs. The code has separate values for x86_64. They have not run.

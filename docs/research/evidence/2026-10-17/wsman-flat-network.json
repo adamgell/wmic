@@ -1,0 +1,50 @@
+{
+  "base": "wsman-backend 06b7e4d (pull request 5)",
+  "captured_utc": "2026-10-17",
+  "scope": "The HTTPS, channel-binding and Kerberos rows of wsman-tls.json and wsman-kerberos.json measured again with no SSH tunnel: the Mac reached the lab hosts and the KDC by their own addresses",
+  "path": {
+    "client": "Mac mini, Apple M4, macOS 26.6.2, address 192.168.1.119 on the home LAN",
+    "route": "192.168.50.0/24 via 192.168.1.201 (a Windows host with IPv4 forwarding on, one hop); traceroute shows 192.168.1.201 as hop 1 and the lab hosts answer ICMP and TCP directly",
+    "names": "/etc/hosts entries for dc01, cm01 and client01 under contoso.com; the lab has no DNS reachable from the Mac",
+    "krb5_conf": "[libdefaults] default_realm = CONTOSO.COM, dns_lookup_kdc = false, dns_lookup_realm = false; [realms] CONTOSO.COM kdc = dc01.contoso.com; [domain_realm] .contoso.com and contoso.com = CONTOSO.COM; selected with KRB5_CONFIG",
+    "environment": "WMIC_WSMAN_CONNECT and WMIC_WSMAN_PORT unset; /node names the host; WMIC_WSMAN_SCHEME=https with WMIC_WSMAN_CA_FILE for the HTTPS rows"
+  },
+  "hosts": {
+    "cm01.contoso.com": "Windows Server 2025 Datacenter Evaluation, domain member, HTTP 5985 and HTTPS 5986 with its self-signed certificate (cm01.pem)",
+    "client01.contoso.com": "Windows 11 Enterprise Evaluation, domain member, HTTP 5985 and HTTPS 5986 with its self-signed certificate (client01.pem)",
+    "dc01.contoso.com": "domain controller and KDC, port 88",
+    "cbt_hardening_level": "Relaxed (default) for the relaxed and principal batches; Strict on both listeners for the strict and flip batches; restored to Relaxed and read back"
+  },
+  "builds": {
+    "normal": "release build of 06b7e4d",
+    "flipped": "the same source with flip-channel-binding.patch applied, built separately"
+  },
+  "runs": [
+    {"id": "F-N1", "host": "cm01", "scheme": "http", "switches": "/user:LabAdmin /authority:NTLMDOMAIN:CONTOSO", "command": "os get Caption,CSName", "result": "one row", "exit": 0},
+    {"id": "F-N2", "host": "client01", "scheme": "http", "switches": "/user:LabAdmin /authority:NTLMDOMAIN:CONTOSO", "command": "os get Caption,CSName", "result": "one row", "exit": 0},
+    {"id": "F-H1", "host": "client01", "scheme": "https", "ca_file": "client01.pem", "switches": "/user:LabAdmin /authority:NTLMDOMAIN:CONTOSO", "command": "os get Caption,CSName", "result": "one row", "exit": 0},
+    {"id": "F-H2", "host": "client01", "scheme": "https", "ca_file": "none", "switches": "/user:LabAdmin /authority:NTLMDOMAIN:CONTOSO", "command": "os get Caption", "result": "Secure connection failed", "exit": 143},
+    {"id": "F-K1", "host": "cm01", "scheme": "http", "switches": "/user:contoso\\LabAdmin", "command": "os get Caption,CSName", "result": "one row", "exit": 0, "probe": "mechanism Kerberos, server scheme Kerberos"},
+    {"id": "F-K2", "host": "cm01", "scheme": "https", "ca_file": "cm01.pem", "switches": "/user:contoso\\LabAdmin", "command": "os get Caption,CSName", "result": "one row", "exit": 0, "probe": "mechanism Kerberos, server scheme Kerberos"},
+    {"id": "F-K3", "host": "client01", "scheme": "https", "ca_file": "client01.pem", "switches": "/user:contoso\\LabAdmin", "command": "os get Caption,CSName", "result": "one row", "exit": 0},
+    {"id": "F-K5", "host": "cm01", "scheme": "http", "switches": "/user:contoso\\LabAdmin", "command": "os get __SERVER,__PATH /format:list", "result": "__SERVER=CM01, __PATH=\\\\CM01\\ROOT\\CIMV2:Win32_OperatingSystem=@", "exit": 0},
+    {"id": "F-R1", "host": "cm01", "scheme": "http", "switches": "/user:contoso\\LabAdmin", "password": "wrong", "command": "os get Caption", "result": "Access is denied.", "exit": 5, "probe": "Kerberos refused the account (-1765328360)"},
+    {"id": "F-P1", "host": "cm01", "scheme": "http", "switches": ["/authority:\"Kerberos:CONTOSO\\CM01\"", "/authority:\"Kerberos:HTTP/cm01.contoso.com\"", "/authority:Kerberos:CM01"], "result": "one row each", "exit": 0},
+    {"id": "F-P5", "host": "cm01", "scheme": "http", "switches": "/authority:\"Kerberos:HTTP/wrong.contoso.com\"", "result": "The RPC server is unavailable.", "exit": 186},
+    {"id": "F-P6", "host": "cm01", "scheme": "http", "switches": "/authority:Kerberos:HTTP/wrong.contoso.com (unquoted)", "result": "Invalid Global Switch.", "exit": 93, "note": "0xAC5D truncated to 8 bits by the shell; classic WMIC exits 44125"},
+    {"id": "F-N3", "host": "cm01", "scheme": "http", "switches": "/user:LabAdmin /authority:NTLMDOMAIN:CONTOSO", "kdc": "reachable", "result": "one row", "exit": 0, "probe": "mechanism NTLM, server scheme Negotiate"},
+    {"id": "F-B1", "cbt": "Strict", "host": "client01", "scheme": "https", "switches": "/user:LabAdmin /authority:NTLMDOMAIN:CONTOSO", "result": "one row", "exit": 0},
+    {"id": "F-B2", "cbt": "Strict", "host": "cm01 and client01", "scheme": "https", "switches": "/user:contoso\\LabAdmin", "result": "one row each", "exit": 0},
+    {"id": "F-B3", "cbt": "Strict", "host": "cm01", "scheme": "http", "switches": "/user:LabAdmin /authority:NTLMDOMAIN:CONTOSO", "result": "one row", "exit": 0},
+    {"id": "F-B4", "cbt": "Strict", "build": "flipped", "host": "client01", "scheme": "https", "switches": "/user:LabAdmin /authority:NTLMDOMAIN:CONTOSO", "result": "Access is denied.", "exit": 5},
+    {"id": "F-B5", "cbt": "Strict", "build": "flipped", "host": "cm01 and client01", "scheme": "https", "switches": "/user:contoso\\LabAdmin", "result": "Access is denied.", "exit": 5},
+    {"id": "F-B6", "cbt": "Strict", "build": "flipped", "host": "cm01", "scheme": "http", "switches": "/user:LabAdmin /authority:NTLMDOMAIN:CONTOSO and /user:contoso\\LabAdmin", "result": "one row each", "exit": 0}
+  ],
+  "server_events": {
+    "source": "Security logs of the hosts and the KDC, filtered to source address 192.168.1.119 (the Mac itself) during the batches",
+    "cm01_4624_type3": {"Kerberos/Kerberos": 14, "NTLM/NtLmSsp": 7},
+    "client01_4624_type3": {"Kerberos/Kerberos": 3, "NTLM/NtLmSsp": 5},
+    "dc01_kdc": {"4768": 42, "4769": 19, "4771": 3}
+  },
+  "tooling": "flat-run.ps1 (private helper): one ssh session per case, the password on the ssh stdin stream, exit code and line count recorded per case"
+}
