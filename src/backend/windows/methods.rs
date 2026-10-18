@@ -130,13 +130,8 @@ pub(super) fn execute(
         .iter()
         .find(|m| requested.eq_cli_text(&m.name))
         .ok_or_else(|| {
-            let mut msg = requested.clone();
-            msg.0.extend(" - Invalid alias verb.".encode_utf16());
             input_error(
-                InputError {
-                    code: 0xABFD,
-                    message: msg,
-                },
+                crate::backend::methods::unknown_method(&requested, r.from_alias),
                 r,
             )
         })?;

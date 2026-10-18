@@ -349,3 +349,29 @@ fn malformed_qualified_instance_suffixes_cannot_become_whole_class_queries() {
         assert!(!String::from_utf8_lossy(&result.stdout).contains("Name="));
     }
 }
+
+/// POSIX callers must receive the direct-target status and no partial help on stdout.
+#[test]
+fn unknown_method_errors_preserve_origin_through_the_macos_entry_point() {
+    for (prefix, status, message) in [
+        (vec!["path", "Win32_Process"], 252, "Invalid class method."),
+        (vec!["class", "Win32_Process"], 252, "Invalid class method."),
+        (vec!["process"], 253, "Invalid alias verb."),
+    ] {
+        for help in [false, true] {
+            let mut args = prefix.clone();
+            args.extend(["call", "WmicCompatMissingMethod"]);
+            if help {
+                args.push("/?");
+            }
+            let result = run(&args, b"");
+            assert_eq!(result.status.code(), Some(status), "{args:?}: {result:?}");
+            assert!(result.stdout.is_empty(), "{args:?}: {result:?}");
+            assert_eq!(
+                result.stderr,
+                format!("WmicCompatMissingMethod - {message}\n").as_bytes(),
+                "{args:?}"
+            );
+        }
+    }
+}

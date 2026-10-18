@@ -1,0 +1,9 @@
+Call			[ In/Out ]Params&type			Status
+====			=====================			======
+GetOwner                [OUT]Domain(string)                 	Implemented    
+
+			[OUT]ReturnValue(uint32)            	
+
+			[OUT]User(string)                   	
+
+

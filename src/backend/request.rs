@@ -22,6 +22,9 @@ pub struct ResolvedRequest {
     #[serde(default)]
     pub render_context: Option<crate::model::RenderContext>,
     pub connection: ConnectionOptions,
+    /// Preserve alias versus PATH/CLASS syntax for native method diagnostics.
+    #[serde(default)]
+    pub from_alias: bool,
     pub class_name: WideText,
     pub instance_path: Option<WideText>,
     pub class_mode: bool,

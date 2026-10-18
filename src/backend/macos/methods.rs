@@ -12,6 +12,7 @@ use crate::{
     },
 };
 
+/// Bind known methods or report the error for the original alias or direct syntax.
 pub(super) fn call(
     request: &ResolvedRequest,
     entry: &Entry,
@@ -27,14 +28,9 @@ pub(super) fn call(
         .iter()
         .find(|m| requested.eq_ignore_case(&m.name.to_string_lossy()))
         .ok_or_else(|| {
-            let mut message = requested.clone();
-            message.0.extend(" - Invalid alias verb.".encode_utf16());
             error::input_error(
                 &request.class_name,
-                crate::backend::methods::InputError {
-                    code: 0xABFD,
-                    message,
-                },
+                crate::backend::methods::unknown_method(&requested, request.from_alias),
             )
         })?;
     let input = bind_method(method, &request.arguments)

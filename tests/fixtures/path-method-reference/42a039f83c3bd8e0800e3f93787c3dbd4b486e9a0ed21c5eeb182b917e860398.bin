@@ -1,0 +1,33 @@
+
+Method execution operations.
+USAGE:
+
+CALL <method name> [<actual paramlist>]
+NOTE: <actual paramlist> ::= <actual param> | <actual param>,  <actual paramlist>
+
+The following alias verb(s)/method(s) are available:
+
+Call			[ In/Out ]Params&type			Status
+====			=====================			======
+AttachDebugger          					(null)         
+
+
+Create                  [IN ]CommandLine(STRING)            	(null)         
+
+			[IN ]CurrentDirectory(STRING)       	
+
+			[IN ]ProcessStartupInformation(OBJECT)	
+
+			[OUT]ProcessId(UINT32)              	
+
+GetOwner                [OUT]Domain(STRING)                 	(null)         
+
+			[OUT]User(STRING)                   	
+
+GetOwnerSid             [OUT]Sid(STRING)                    	(null)         
+
+SetPriority             [IN ]Priority(SINT32)               	(null)         
+
+Terminate               [IN ]Reason(UINT32)                 	(null)         
+
+

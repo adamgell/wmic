@@ -121,7 +121,7 @@ python3.12 -m unittest discover -s tools/release/tests
 pwsh -File tools/release/tests/signature-policy.Tests.ps1
 ```
 
-We compare output and exit codes with Microsoft WMIC across 2,191 command cases. Another 121 tests per Windows build cover scripts, file output, process cleanup and console behavior. The [testing guide](docs/testing.md) explains how to run them; the [compatibility report](docs/compatibility.md) records which builds were tested and what remains unverified.
+We compare output and exit codes with Microsoft WMIC across 2,253 command cases. Another 121 tests per Windows build cover scripts, file output, process cleanup and console behavior. The [testing guide](docs/testing.md) explains how to run them; the [compatibility report](docs/compatibility.md) records which builds were tested and what remains unverified.
 
 Release automation requires Python 3.11 or later; CI uses Python 3.12.
 

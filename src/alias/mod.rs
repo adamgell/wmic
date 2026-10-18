@@ -235,6 +235,7 @@ impl AliasStore {
                 locale: None,
                 ..Default::default()
             },
+            from_alias: matches!(target, Target::Alias(_)),
             class_name: WideText::default(),
             instance_path: None,
             class_mode: matches!(target, Target::Class(_)),

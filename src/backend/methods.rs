@@ -131,6 +131,17 @@ pub fn bind_method(schema: &MethodSchema, args: &[WideText]) -> Result<Vec<Prope
     bind_parameters(schema, args, true)
 }
 
+/// Select the native unknown-method diagnostic without exposing credential-looking names.
+pub(crate) fn unknown_method(name: &WideText, from_alias: bool) -> InputError {
+    let (code, message) = if from_alias {
+        (0xABFD, "Invalid alias verb.")
+    } else {
+        (0xABFC, "Invalid class method.")
+    };
+    let safe = crate::parse::diagnostic_command_line(name, EntryMode::Interactive) == *name;
+    input_error(ParseError::new(code, message, safe.then(|| name.clone())))
+}
+
 /// Validate names in WMIC's UTF-16 map order before binding or showing method help.
 pub(crate) fn validate_named_arguments(
     args: &[WideText],

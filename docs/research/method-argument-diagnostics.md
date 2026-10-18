@@ -56,3 +56,5 @@ Exploration also reproduced existing differences outside this diagnostic fix: CL
 The evidence summary retains 23 exploratory baseline differences outside the final suite. Those earlier observations were not remeasured on the final candidates.
 
 The read-only probes use GetOwner arguments and metadata. They do not invoke a power operation, inventory Win32_Product, or change accounts, services, security settings or unrelated provider objects. This work does not validate destructive method effects or general WMIC compatibility.
+
+The PATH unknown-method item is addressed by the subsequent [direct-method diagnostic fix](path-method-diagnostics.md). The earlier excluded measurements remain historical evidence.

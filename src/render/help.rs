@@ -324,10 +324,8 @@ pub fn render_help(req: HelpRequest<'_>) -> Result<RenderedOutput, RenderError> 
                 && let Some(method) = &c.method
                 && !alias.verbs.iter().any(|v| method.eq_cli(&v.name))
             {
-                return Err(RenderError::status(
-                    0xABFD,
-                    format!("{method} - Invalid alias verb."),
-                ));
+                let error = crate::backend::methods::unknown_method(method, true);
+                return Err(RenderError::status(error.code, error.message));
             }
             if !c.verb_explicit {
                 let name = alias.friendly_name.to_ascii_uppercase();
@@ -395,7 +393,7 @@ pub fn render_help(req: HelpRequest<'_>) -> Result<RenderedOutput, RenderError> 
             } else if c.verb == Verb::Delete {
                 push(&mut out, &m.delete_class)
             } else if c.verb == Verb::Call {
-                schema_method_help(&mut out, c, req.schema)
+                schema_method_help(&mut out, c, req.schema)?
             } else if c.verb == Verb::Get && c.verb_explicit {
                 push(&mut out, &m.schema_get_header);
                 push(&mut out, &m.get_footer)
@@ -416,7 +414,7 @@ pub fn render_help(req: HelpRequest<'_>) -> Result<RenderedOutput, RenderError> 
             } else if c.verb == Verb::Delete {
                 push(&mut out, &m.delete_alias)
             } else if c.verb == Verb::Call {
-                schema_method_help(&mut out, c, req.schema)
+                schema_method_help(&mut out, c, req.schema)?
             } else if c.verb_explicit && c.verb == Verb::Get {
                 schema_property_help(&mut out, c, req.schema)
             } else {
@@ -584,7 +582,18 @@ fn write_help(
     }
     line(out, "");
 }
-fn schema_method_help(out: &mut WideText, command: &ParsedCommand, schema: Option<&ClassSchema>) {
+/// Validate explicit method names before writing any direct-target help output.
+fn schema_method_help(
+    out: &mut WideText,
+    command: &ParsedCommand,
+    schema: Option<&ClassSchema>,
+) -> Result<(), RenderError> {
+    if let Some(name) = &command.method
+        && schema.is_some_and(|s| !s.methods.iter().any(|m| name.eq_cli_text(&m.name)))
+    {
+        let error = crate::backend::methods::unknown_method(name, false);
+        return Err(RenderError::status(error.code, error.message));
+    }
     let m = messages();
     if schema.is_none_or(|s| s.methods.is_empty()) && command.method.is_none() {
         push(
@@ -596,7 +605,7 @@ fn schema_method_help(out: &mut WideText, command: &ParsedCommand, schema: Optio
             "User defined verb(s) or method(s) not available for the target WMI class.",
         );
         line(out, "");
-        return;
+        return Ok(());
     }
     if command.method.is_none() {
         push(out, &m.schema_call_header)
@@ -610,7 +619,7 @@ fn schema_method_help(out: &mut WideText, command: &ParsedCommand, schema: Optio
         command
             .method
             .as_ref()
-            .is_none_or(|n| n.eq_ordinal_ignore_case(&m.name))
+            .is_none_or(|n| n.eq_cli_text(&m.name))
     }) {
         let status = method
             .qualifiers
@@ -713,4 +722,5 @@ fn schema_method_help(out: &mut WideText, command: &ParsedCommand, schema: Optio
         }
     }
     push(out, NL);
+    Ok(())
 }

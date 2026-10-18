@@ -1,0 +1,378 @@
+{
+  "schema_version": 1,
+  "cases": [
+    {
+      "id": "path-bare",
+      "arguments": "path Win32_Process call WmicCompatMissingMethod",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "path-lower",
+      "arguments": "path Win32_Process call wmiccompatmissingmethod",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "path-quoted",
+      "arguments": "path Win32_Process call \"WmicCompatMissingMethod\"",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "path-wide",
+      "arguments": "path Win32_Process call \uff37\uff4d\uff49\uff43\uff23\uff4f\uff4d\uff50\uff41\uff54\uff2d\uff49\uff53\uff53\uff49\uff4e\uff47\uff2d\uff45\uff54\uff48\uff4f\uff44",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "path-named",
+      "arguments": "path Win32_Process call WmicCompatMissingMethod Unknown=1",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "path-positional",
+      "arguments": "path Win32_Process call WmicCompatMissingMethod \"a=b\"",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "path-help",
+      "arguments": "path Win32_Process call WmicCompatMissingMethod /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "path-dash-help",
+      "arguments": "path Win32_Process call WmicCompatMissingMethod -?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "path-named-help",
+      "arguments": "path Win32_Process call WmicCompatMissingMethod Unknown=1 /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "path-empty-name",
+      "arguments": "path Win32_Process call \"\"",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "path-method-list",
+      "arguments": "path Win32_Process call /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "class-bare",
+      "arguments": "class Win32_Process call WmicCompatMissingMethod",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "class-lower",
+      "arguments": "class Win32_Process call wmiccompatmissingmethod",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "class-quoted",
+      "arguments": "class Win32_Process call \"WmicCompatMissingMethod\"",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "class-wide",
+      "arguments": "class Win32_Process call \uff37\uff4d\uff49\uff43\uff23\uff4f\uff4d\uff50\uff41\uff54\uff2d\uff49\uff53\uff53\uff49\uff4e\uff47\uff2d\uff45\uff54\uff48\uff4f\uff44",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "class-named",
+      "arguments": "class Win32_Process call WmicCompatMissingMethod Unknown=1",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "class-positional",
+      "arguments": "class Win32_Process call WmicCompatMissingMethod \"a=b\"",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "class-help",
+      "arguments": "class Win32_Process call WmicCompatMissingMethod /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "class-dash-help",
+      "arguments": "class Win32_Process call WmicCompatMissingMethod -?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "class-named-help",
+      "arguments": "class Win32_Process call WmicCompatMissingMethod Unknown=1 /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "class-empty-name",
+      "arguments": "class Win32_Process call \"\"",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "class-method-list",
+      "arguments": "class Win32_Process call /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "alias-bare",
+      "arguments": "process call WmicCompatMissingMethod",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "alias-lower",
+      "arguments": "process call wmiccompatmissingmethod",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "alias-quoted",
+      "arguments": "process call \"WmicCompatMissingMethod\"",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "alias-wide",
+      "arguments": "process call \uff37\uff4d\uff49\uff43\uff23\uff4f\uff4d\uff50\uff41\uff54\uff2d\uff49\uff53\uff53\uff49\uff4e\uff47\uff2d\uff45\uff54\uff48\uff4f\uff44",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "alias-named",
+      "arguments": "process call WmicCompatMissingMethod Unknown=1",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "alias-positional",
+      "arguments": "process call WmicCompatMissingMethod \"a=b\"",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "alias-help",
+      "arguments": "process call WmicCompatMissingMethod /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "alias-dash-help",
+      "arguments": "process call WmicCompatMissingMethod -?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "alias-named-help",
+      "arguments": "process call WmicCompatMissingMethod Unknown=1 /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "alias-empty-name",
+      "arguments": "process call \"\"",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "alias-method-list",
+      "arguments": "process call /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "instance-bare",
+      "arguments": "path Win32_Process.ProcessId=\"0\" call WmicCompatMissingMethod",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "instance-help",
+      "arguments": "path Win32_Process.ProcessId=\"0\" call WmicCompatMissingMethod /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "empty-selection-bare",
+      "arguments": "path Win32_Process where \"ProcessId=4294967295\" call WmicCompatMissingMethod",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "empty-selection-help",
+      "arguments": "path Win32_Process where \"ProcessId=4294967295\" call WmicCompatMissingMethod /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "missing-class-bare",
+      "arguments": "path WmicCompatMissingClass call WmicCompatMissingMethod",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "missing-class-help",
+      "arguments": "path WmicCompatMissingClass call WmicCompatMissingMethod /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "class-missing-class-bare",
+      "arguments": "class WmicCompatMissingClass call WmicCompatMissingMethod",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "class-missing-class-help",
+      "arguments": "class WmicCompatMissingClass call WmicCompatMissingMethod /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "path-known-name",
+      "arguments": "path Win32_Process call GetOwner Unknown=1",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "alias-known-name",
+      "arguments": "process call GetOwner Unknown=1",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "path-bad-namespace",
+      "arguments": "/namespace:\\root\\WmicCompatMissingNamespace path Win32_Process call WmicCompatMissingMethod",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "alias-bad-namespace",
+      "arguments": "/namespace:\\root\\WmicCompatMissingNamespace process call WmicCompatMissingMethod",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "class-known-name",
+      "arguments": "class Win32_Process call GetOwner Unknown=1",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "alias-instance",
+      "arguments": "process Win32_Process.ProcessId=\"0\" call WmicCompatMissingMethod",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "alias-instance-help",
+      "arguments": "process Win32_Process.ProcessId=\"0\" call WmicCompatMissingMethod /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "path-empty-schema",
+      "arguments": "path Win32_LogicalDisk call WmicCompatMissingMethod",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "path-empty-schema-help",
+      "arguments": "path Win32_LogicalDisk call WmicCompatMissingMethod /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "path-known-help",
+      "arguments": "path Win32_Process call GetOwner /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "path-known-lower-help",
+      "arguments": "path Win32_Process call getowner /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "path-known-wide-help",
+      "arguments": "path Win32_Process call \uff27\uff45\uff54\uff2f\uff57\uff4e\uff45\uff52 /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "class-known-help",
+      "arguments": "class Win32_Process call GetOwner /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "class-known-lower-help",
+      "arguments": "class Win32_Process call getowner /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "class-known-wide-help",
+      "arguments": "class Win32_Process call \uff27\uff45\uff54\uff2f\uff57\uff4e\uff45\uff52 /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "path-missing-method",
+      "arguments": "path Win32_Process call",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "class-missing-method",
+      "arguments": "class Win32_Process call",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "alias-missing-method",
+      "arguments": "process call",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "path-bad-namespace-help",
+      "arguments": "/namespace:\\root\\WmicCompatMissingNamespace path Win32_Process call WmicCompatMissingMethod /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "path-known-bad-namespace",
+      "arguments": "/namespace:\\root\\WmicCompatMissingNamespace path Win32_Process call GetOwner",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "class-schema-bad-namespace",
+      "arguments": "/namespace:\\root\\WmicCompatMissingNamespace class Win32_Process get",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    }
+  ],
+  "reference_sha256": "2EF794C4940AFEA56C6D6D3B9BC9E66965BC7333E79C5DCB2DEF3C0E36F0834C"
+}
