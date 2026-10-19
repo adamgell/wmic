@@ -1,5 +1,9 @@
 # Compatibility status
 
+## TRACE diagnostics, 2026-10-19
+
+The [TRACE follow-up](research/trace-diagnostics.md) replaces the implementation-specific request line with classic records for measured query paths. It adds 22 read-only reference cases, portable regressions and 17 actual-CLI checks in Windows CI. It covers metadata/query/formatting records, row counts, detailed WMI errors, interactive caching, OFF and streamed no-input method results. Source labels are compatibility output, not Rust locations. Earlier TRACE differences below describe historical builds. The follow-up lists the remaining unverified paths; full WMIC compatibility is not claimed.
+
 ## PATH method diagnostics, 2026-10-17
 
 The [PATH method follow-up](research/path-method-diagnostics.md) corrects unknown PATH/CLASS method errors, direct method help and CALL connection-error formatting while preserving alias diagnostics. All 62 new read-only cases match Microsoft WMIC on each Windows build. The full ARM64 comparison matches 2,250/2,253 cases, retaining only the two changing OS queries and implementation-specific TRACE difference. The x64 and x86 builds each match 430/430 cases across six selected regression suites. The [validation summary](research/evidence/2026-10-17/path-method/summary.json) pins the measured source, executables and captures. ARM64 is native; x64/x86 use Windows emulation. Earlier measurements below retain their original build identities and scope.
@@ -88,7 +92,7 @@ The following is a bounded corpus of 820 cases per candidate, not a percentage o
 | Node file inputs | 2 | 2 | 2 | 2 |
 | **Total** | **820** | **817** | **817** | **817** |
 
-`os-default` and `os-get-default` retain raw differences in changing OS memory/time/process data; stable headers and status match, but exact equality of these rows is not asserted. `connection/trace` retains an intentional stderr difference: this implementation reports its own activity instead of fabricating Microsoft's C++ trace locations/call sequence. Password redaction is another intentional difference for credential-bearing XML/record/error output; reference corpora prohibit password-bearing captures.
+`os-default` and `os-get-default` retain raw differences in changing OS memory/time/process data; stable headers and status match, but exact equality of these rows is not asserted. At this earlier baseline, `connection/trace` emitted implementation-specific diagnostics; the TRACE follow-up above supersedes that implementation. Password redaction is another intentional difference for credential-bearing XML/record/error output; reference corpora prohibit password-bearing captures.
 
 ### Controlled effects and scripts
 

@@ -1,0 +1,126 @@
+SUCCESS: IWbemLocator::ConnectServer(L"root\cli", NULL, NULL, L"ms_409", 0L, L"<null>", NULL, -)
+Line:    143 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+
+SUCCESS: CoSetProxyBlanket(-, RPC_C_AUTHN_DEFAULT, RPC_C_AUTHZ_NONE, NULL, 6, 3, -, EOAC_NONE)
+Line:    162 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+
+SUCCESS: IWbemLocator::ConnectServer(L"root\cli\ms_409", NULL, NULL, L"ms_409", 0L, L"<null>", NULL, -)
+Line:   2524 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+
+SUCCESS: CoSetProxyBlanket(-, RPC_C_AUTHN_DEFAULT, RPC_C_AUTHZ_NONE, NULL, 6,   3, -, EOAC_NONE)
+Line:   2538 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+
+SUCCESS: IWbemServices::GetObject(L"MSFT_CliAlias.FriendlyName='os'", 0, NULL, -)
+Line:    239 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+
+SUCCESS: IWbemClassObject::Get(L"Target", 0, -, 0, 0)
+Line:    258 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  Select * from Win32_OperatingSystem
+
+SUCCESS: IWbemClassObject::Get(L"PWhere", 0, -,0, 0)
+Line:    286 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  
+
+SUCCESS: IWbemClassObject::Get(L"Connection",0, -, 0, 0)
+Line:    314 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  <Embeded Object>
+
+SUCCESS: QueryInterface(IID_IWbemClassObject, -)
+Line:    330 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+
+SUCCESS: IWbemClassObject::Get(L"Namespace", 0, -,0, 0)
+Line:    430 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  ROOT\CIMV2
+
+SUCCESS: IWbemClassObject::Get(L"Locale", 0,-, 0, 0)
+Line:    460 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  ms_409
+
+SUCCESS: IWbemClassObject::Get(L"User", 0,-, 0, 0)
+Line:    491 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  <null>
+
+SUCCESS: IWbemClassObject::Get(L"Password", 0, -, 0, 0)
+Line:    524 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  <null>
+
+SUCCESS: IWbemClassObject::Get(L"Server", 0, -, 0, 0)
+Line:    556 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  .
+
+SUCCESS: IWbemClassObject::Get(L"Authority", 0, -, 0, 0)
+Line:    587 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  <null>
+
+SUCCESS: IWbemClassObject::Get(L"__RELPATH", 0,-, 0, 0)
+Line:   1943 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  MSFT_CliAlias.FriendlyName="OS"
+
+SUCCESS: IWbemServices::GetObject(L"MSFT_LocalizablePropertyValue.ObjectLocator="",PropertyName="Description",RelPath="MSFT_CliAlias.FriendlyName=\"OS\""", 0, NULL, -)
+Line:   2610 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+
+SUCCESS: IWbemClassObject::Get(L"Text", 0, -, 0, 0)
+Line:   2621 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  <Array>
+
+SUCCESS: IWbemServices::GetObject(L"MSFT_CliAlias.FriendlyName='OS'", 0, NULL, -)
+Line:   2966 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+
+SUCCESS: IWbemClassObject::Get(L"Verbs", 0, -, 0, 0)
+Line:   2977 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  <Array>
+
+SUCCESS: IWbemServices::GetObject(L"MSFT_CliAlias.FriendlyName='OS'", 0, NULL, -)
+Line:   1593 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+
+SUCCESS: IWbemClassObject::Get(L"Formats", 0,-, 0, 0)
+Line:   1605 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  <Array>
+
+SUCCESS: IWbemClassObject::Get(L"Name", 0,-, 0, 0)
+Line:   1657 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  STATUS
+
+SUCCESS: IWbemClassObject::Get(L"Name", 0,-, 0, 0)
+Line:   1657 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  FREE
+
+SUCCESS: IWbemClassObject::Get(L"Name", 0,-, 0, 0)
+Line:   1657 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  FULL
+
+SUCCESS: IWbemClassObject::Get(L"Name", 0,-, 0, 0)
+Line:   1657 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  BRIEF
+
+SUCCESS: IWbemClassObject::Get(L"Name", 0,-, 0, 0)
+Line:   1657 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  SYSTEM
+
+SUCCESS: IWbemClassObject::Get(L"Name", 0,-, 0, 0)
+Line:   1657 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  INSTANCE
+
+SUCCESS: IWbemClassObject::Get(L"Name", 0,-, 0, 0)
+Line:   1657 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  WRITEABLE
+
+SUCCESS: IWbemClassObject::Get(L"Properties", 0, -, 0, 0)
+Line:   1694 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  <Array>
+
+SUCCESS: IWbemClassObject::Get(L"Name", 0, -, 0, 0)
+Line:   1751 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  CurrentTimeZone
+
+SUCCESS: IWbemClassObject::Get(L"Derivation", 0, -, 0, 0)
+Line:   1767 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  CurrentTimeZone
+
+SUCCESS: IWbemServices::GetObject(L"MSFT_CliAlias.FriendlyName='OS'", 0, NULL, -)
+Line:   1210 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+
+SUCCESS: IWbemClassObject::Get(L"Formats", 0, -,0, 0)
+Line:   1221 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  <Array>
+

@@ -1,0 +1,177 @@
+SUCCESS: IWbemLocator::ConnectServer(L"root\cli", NULL, NULL, L"ms_409", 0L, L"<null>", NULL, -)
+Line:    143 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+
+SUCCESS: CoSetProxyBlanket(-, RPC_C_AUTHN_DEFAULT, RPC_C_AUTHZ_NONE, NULL, 6, 3, -, EOAC_NONE)
+Line:    162 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+
+SUCCESS: IWbemLocator::ConnectServer(L"root\cli\ms_409", NULL, NULL, L"ms_409", 0L, L"<null>", NULL, -)
+Line:   2524 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+
+SUCCESS: CoSetProxyBlanket(-, RPC_C_AUTHN_DEFAULT, RPC_C_AUTHZ_NONE, NULL, 6,   3, -, EOAC_NONE)
+Line:   2538 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+
+SUCCESS: IWbemServices::GetObject(L"MSFT_CliAlias.FriendlyName='process'", 0, NULL, -)
+Line:    239 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+
+SUCCESS: IWbemClassObject::Get(L"Target", 0, -, 0, 0)
+Line:    258 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  Select * from Win32_Process
+
+SUCCESS: IWbemClassObject::Get(L"PWhere", 0, -,0, 0)
+Line:    286 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  WHERE ProcessId='#'
+
+SUCCESS: IWbemClassObject::Get(L"Connection",0, -, 0, 0)
+Line:    314 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  <Embeded Object>
+
+SUCCESS: QueryInterface(IID_IWbemClassObject, -)
+Line:    330 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+
+SUCCESS: IWbemClassObject::Get(L"Namespace", 0, -,0, 0)
+Line:    430 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  ROOT\CIMV2
+
+SUCCESS: IWbemClassObject::Get(L"Locale", 0,-, 0, 0)
+Line:    460 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  ms_409
+
+SUCCESS: IWbemClassObject::Get(L"User", 0,-, 0, 0)
+Line:    491 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  <null>
+
+SUCCESS: IWbemClassObject::Get(L"Password", 0, -, 0, 0)
+Line:    524 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  <null>
+
+SUCCESS: IWbemClassObject::Get(L"Server", 0, -, 0, 0)
+Line:    556 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  .
+
+SUCCESS: IWbemClassObject::Get(L"Authority", 0, -, 0, 0)
+Line:    587 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  <null>
+
+SUCCESS: IWbemClassObject::Get(L"__RELPATH", 0,-, 0, 0)
+Line:   1943 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  MSFT_CliAlias.FriendlyName="Process"
+
+SUCCESS: IWbemServices::GetObject(L"MSFT_LocalizablePropertyValue.ObjectLocator="",PropertyName="Description",RelPath="MSFT_CliAlias.FriendlyName=\"Process\""", 0, NULL, -)
+Line:   2610 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+
+SUCCESS: IWbemClassObject::Get(L"Text", 0, -, 0, 0)
+Line:   2621 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  <Array>
+
+SUCCESS: IWbemServices::GetObject(L"MSFT_CliAlias.FriendlyName='process'", 0, NULL, -)
+Line:    682 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+
+SUCCESS: IWbemClassObject::Get(L"Verbs", 0, -, 0, 0)
+Line:    708 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  <Array>
+
+SUCCESS: IWbemClassObject::Get(L"Name", 0, -,0, 0)
+Line:    757 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  Create
+
+SUCCESS: IWbemClassObject::Get(L"Name", 0, -,0, 0)
+Line:    757 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  Terminate
+
+SUCCESS: IWbemClassObject::Get(L"Name", 0, -,0, 0)
+Line:    757 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  GetOwner
+
+SUCCESS: IWbemClassObject::Get(L"Description", 0,-, 0, 0)
+Line:   1923 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  The GetOwner method retrieves the user name and domain name under which the process is running. It returns an integer value of 0 if successful, and any other number to indicate an error.
+
+SUCCESS: IWbemClassObject::Get(L"Parameters",0, -, 0, 0)
+Line:    794 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  <Array>
+
+SUCCESS: IWbemClassObject::Get(L"VerbType", 0, -, 0, 0)
+Line:    812 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  <null>
+
+SUCCESS: IWbemClassObject::Get(L"Derivation", 0, -, 0, 0)
+Line:    838 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  GetOwner
+
+SUCCESS: IWbemClassObject::Get(L"ParaId", 0, -, 0, 0)
+Line:    902 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  Domain
+
+SUCCESS: IWbemClassObject::Get(L"Type", 0, -, 0, 0)
+Line:    917 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  STRING
+
+SUCCESS: IWbemClassObject::Get(L"Default", 0, -, 0, 0)
+Line:    933 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  <null>
+
+SUCCESS: IWbemClassObject::Get(L"Qualifiers", 0, -, 0, 0)
+Line:   2710 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  <Array>
+
+SUCCESS: IWbemClassObject::Get(L"Name", 0, -, 0, 0)
+Line:   2762 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  Out
+
+SUCCESS: IWbemClassObject::Get(L"QualifierValue", 0, -, 0, 0)
+Line:   2776 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  <Array>
+
+SUCCESS: IWbemClassObject::Get(L"ParaId", 0, -, 0, 0)
+Line:    902 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  User
+
+SUCCESS: IWbemClassObject::Get(L"Type", 0, -, 0, 0)
+Line:    917 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  STRING
+
+SUCCESS: IWbemClassObject::Get(L"Default", 0, -, 0, 0)
+Line:    933 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  <null>
+
+SUCCESS: IWbemClassObject::Get(L"Qualifiers", 0, -, 0, 0)
+Line:   2710 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  <Array>
+
+SUCCESS: IWbemClassObject::Get(L"Name", 0, -, 0, 0)
+Line:   2762 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  Out
+
+SUCCESS: IWbemClassObject::Get(L"QualifierValue", 0, -, 0, 0)
+Line:   2776 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  <Array>
+
+SUCCESS: IWbemLocator::ConnectServer(L"\\DESKTOP-N4H9E7R\ROOT\CIMV2", L"<null>", *, L"ms_409", 0L, L"<null>", NULL, -)
+Line:   2697 File: onecore\admin\wmi\wbem\tools\wmic\execengine.cpp
+
+SUCCESS: CoSetProxyBlanket(-, RPC_C_AUTHN_DEFAULT, RPC_C_AUTHZ_NONE,NULL, 6,   3, -, EOAC_NONE)
+Line:   2740 File: onecore\admin\wmi\wbem\tools\wmic\execengine.cpp
+
+SUCCESS: IWbemServices::GetObject(L"Win32_Process", 0, NULL, -)
+Line:    690 File: onecore\admin\wmi\wbem\tools\wmic\execengine.cpp
+
+SUCCESS: IWbemClassObject::GetMethod(L"GetOwner", 0, -, -)
+Line:    705 File: onecore\admin\wmi\wbem\tools\wmic\execengine.cpp
+
+SUCCESS: IWbemServices::ExecQuery(L"WQL", L"SELECT * FROM Win32_Process WHERE ProcessId=0", 0, NULL, -)
+Line:   4927 File: onecore\admin\wmi\wbem\tools\wmic\execengine.cpp
+
+SUCCESS: CoSetProxyBlanket(-, RPC_C_AUTHN_DEFAULT, RPC_C_AUTHZ_NONE, NULL, 6,   3, -, EOAC_NONE)
+Line:   4972 File: onecore\admin\wmi\wbem\tools\wmic\execengine.cpp
+
+SUCCESS: IWbemClassObject::Get(L"__PATH", 0, -, 0, 0)
+Line:   4994 File: onecore\admin\wmi\wbem\tools\wmic\execengine.cpp
+Result:  \\DESKTOP-N4H9E7R\ROOT\CIMV2:Win32_Process.Handle="0"
+
+SUCCESS: IWbemServices::ExecMethod(L"\\DESKTOP-N4H9E7R\ROOT\CIMV2:Win32_Process.Handle="0"", L"GetOwner", 0, NULL, -, -, NULL)
+Line:   2991 File: onecore\admin\wmi\wbem\tools\wmic\execengine.cpp
+
+SUCCESS: IWbemClassObject->GetObjectText(0, -)
+Line:   3057 File: onecore\admin\wmi\wbem\tools\wmic\execengine.cpp
+
+
