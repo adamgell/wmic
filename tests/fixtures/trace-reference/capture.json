@@ -463,6 +463,26 @@
         "bytes": 8011,
         "sha256": "e0c9d307b5025c8f726d521e6a91a16a0830f76185b6f7393aa686876d45d778"
       }
+    },
+    {
+      "id": "call-path",
+      "arguments_utf16_base64": "LwB0AHIAYQBjAGUAOgBvAG4AIABwAGEAdABoACAAVwBpAG4AMwAyAF8AUAByAG8AYwBlAHMAcwAgAHcAaABlAHIAZQAgACIASABhAG4AZABsAGUAPQAwACIAIABjAGEAbABsACAARwBlAHQATwB3AG4AZQByAA==",
+      "command_line_utf16_base64": "IgBDADoAXABQAHIAbwBnAHIAYQBtAEQAYQB0AGEAXABXAG0AaQBjAEMAbwBtAHAAYQB0AFwAYQByAHQAaQBmAGEAYwB0AHMAXAAyAEUARgA3ADkANABDADQAOQA0ADAAQQBGAEUAQQA1ADYAQwA2AEQANgBEADMAQgA5AEIAQwA5AEUANgA2ADkANgA1AEIAQwA3ADMAMwAzAEUANwA5AEMANQBEAEMAQgAyAEQARQBGADMAQwAwAEUAMwA2AEYAMAA4ADMANABDAFwAdwBtAGkAYwAuAGUAeABlACIAIAAvAHQAcgBhAGMAZQA6AG8AbgAgAHAAYQB0AGgAIABXAGkAbgAzADIAXwBQAHIAbwBjAGUAcwBzACAAdwBoAGUAcgBlACAAIgBIAGEAbgBkAGwAZQA9ADAAIgAgAGMAYQBsAGwAIABHAGUAdABPAHcAbgBlAHIA",
+      "state": "completed",
+      "exit_status": 0,
+      "duration_ms": 230,
+      "process_id": 6916,
+      "normalizations": [],
+      "stdout": {
+        "file": "call-path.stdout.bin",
+        "bytes": 180,
+        "sha256": "aa88b075fc7b963ad4371728a7befaf0dec294502ecb7258ae8814050bd9146e"
+      },
+      "stderr": {
+        "file": "call-path.stderr.bin",
+        "bytes": 1992,
+        "sha256": "91f901ddb8b373dd3ed29bceab343d2b8516abfd33adeccae43822685b8d52da"
+      }
     }
   ]
 }

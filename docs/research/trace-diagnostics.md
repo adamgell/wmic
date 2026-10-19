@@ -8,7 +8,7 @@ TRACE also adds the HRESULT and facility to errors and substitutes longer WMI de
 
 ## Tests and reference
 
-The [22-case manifest](../../tests/fixtures/trace-cases.json) and [raw captures](../../tests/fixtures/trace-reference/) cover alias spelling, queries, multiple projections, PATH, empty results, invalid classes/properties/namespaces, formats, help, security settings, OFF, cold/warm interactive sessions, and one/two-result `GetOwner` calls. They perform no power or configuration operations. The existing RAWXML COMMAND STARTTIME policy applies only to that stdout attribute; stderr has no normalization.
+The [23-case manifest](../../tests/fixtures/trace-cases.json) and [raw captures](../../tests/fixtures/trace-reference/) cover alias spelling, queries, multiple projections, PATH, empty results, invalid classes/properties/namespaces, formats, help, security settings, OFF, cold/warm interactive sessions, and one/two-result `GetOwner` calls. They perform no power or configuration operations. The existing RAWXML COMMAND STARTTIME policy applies only to that stdout attribute; stderr has no normalization.
 
 `cargo test --test trace` compares complete records with controlled provider outcomes. Windows CI also launches the actual CLI for 17 stable commands and compares full process status and stderr. CPU instance counts and method paths are provider-dependent and are compared on the selected reference VM. CLI readers drain both pipes concurrently and terminate/reap timed-out children. Select `--suite trace` in `tools/reference/run_corpus.py` for differential captures; see the [testing guide](../testing.md).
 

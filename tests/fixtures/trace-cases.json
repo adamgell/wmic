@@ -140,6 +140,12 @@
       "arguments": "/trace:on process where \"ProcessId=0 OR ProcessId=4\" call GetOwner",
       "operation": "read_only",
       "timeout_ms": 10000
+    },
+    {
+      "id": "call-path",
+      "arguments": "/trace:on path Win32_Process where \"Handle=0\" call GetOwner",
+      "operation": "read_only",
+      "timeout_ms": 10000
     }
   ]
 }

@@ -497,6 +497,17 @@ pub(super) fn parser(
         None,
         true,
     );
+    if request.verb == Verb::Call && result.is_ok() {
+        event(
+            &mut out,
+            "parserengine",
+            4345,
+            "IWbemClassObject::GetNames(NULL, WBEM_FLAG_ALWAYS | WBEM_FLAG_NONSYSTEM_ONLY, NULL, -)",
+            None,
+            true,
+        );
+        return out;
+    }
     let found = error.is_none_or(|e| e.code != 0x80041002 && e.code != 0x80041010);
     event(
         &mut out,

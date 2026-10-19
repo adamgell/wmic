@@ -50,7 +50,10 @@ impl Management for ReferenceResults {
         }
         if r.verb == Verb::Call {
             return Ok(ManagementResult::Methods(vec![MethodResult {
-                path: wide(r#"\\DESKTOP-N4H9E7R\ROOT\CIMV2:Win32_Process.Handle="0""#),
+                path: wide(&format!(
+                    r#"\\DESKTOP-N4H9E7R\{}:Win32_Process.Handle="0""#,
+                    r.connection.namespace
+                )),
                 return_value: Some(CimValue::Uint32(2)),
                 out_parameters: vec![],
                 text: None,
@@ -235,14 +238,15 @@ fn streamed_method_completion_keeps_its_trace() {
             }))
         }
     }
-    for (selector, fixture) in [
-        ("ProcessId=0", "call-readonly"),
-        ("ProcessId=0 OR ProcessId=4", "call-multiple"),
+    for (target, selector, fixture) in [
+        ("process", "ProcessId=0", "call-readonly"),
+        ("process", "ProcessId=0 OR ProcessId=4", "call-multiple"),
+        ("path Win32_Process", "Handle=0", "call-path"),
     ] {
         let mut sink = Sink::default();
         let outcome = Session::new(wide("DESKTOP-N4H9E7R")).unwrap().execute(
             &wide(&format!(
-                "/trace:on process where \"{selector}\" call GetOwner"
+                "/trace:on {target} where \"{selector}\" call GetOwner"
             )),
             EntryMode::Interactive,
             &mut Streamed,

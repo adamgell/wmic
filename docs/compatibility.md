@@ -2,7 +2,7 @@
 
 ## TRACE diagnostics, 2026-10-19
 
-The [TRACE follow-up](research/trace-diagnostics.md) replaces the implementation-specific request line with classic records for measured query paths. It adds 22 read-only reference cases, portable regressions and 17 actual-CLI checks in Windows CI. It covers metadata/query/formatting records, row counts, detailed WMI errors, interactive caching, OFF and streamed no-input method results. Source labels are compatibility output, not Rust locations. Earlier TRACE differences below describe historical builds. The follow-up lists the remaining unverified paths; full WMIC compatibility is not claimed.
+The [TRACE follow-up](research/trace-diagnostics.md) replaces the implementation-specific request line with classic records for measured query paths. It adds 23 read-only reference cases, portable regressions and 17 actual-CLI checks in Windows CI. It covers metadata/query/formatting records, row counts, detailed WMI errors, interactive caching, OFF and streamed no-input method results. Source labels are compatibility output, not Rust locations. Earlier TRACE differences below describe historical builds. The follow-up lists the remaining unverified paths; full WMIC compatibility is not claimed.
 
 ## PATH method diagnostics, 2026-10-17
 

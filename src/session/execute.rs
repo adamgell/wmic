@@ -833,33 +833,37 @@ impl Session {
                     break;
                 }
             }
-            let mut result =
-                if settings.failfast && !backend.reachable(&node, settings.failfast_timeout_ms) {
-                    Err(ManagementError {
-                        code: 0xABE3,
-                        target: node.clone(),
-                        message: "RPC Server not available.".into(),
-                        operation: "failfast".into(),
-                        extended: vec![],
-                        partial: None,
-                    })
-                } else {
-                    match self.aliases.virtual_query(&request, &node) {
-                        Some(result) => result,
-                        None => backend.execute_with_confirmation(
-                            &request,
-                            &mut SinkConfirmation {
-                                sink,
-                                trace: if settings.trace {
-                                    Some((&mut self.trace_state, &settings, &node))
-                                } else {
-                                    None
-                                },
-                                method_trace_started: false,
+            let mut method_trace_started = false;
+            let mut result = if settings.failfast
+                && !backend.reachable(&node, settings.failfast_timeout_ms)
+            {
+                Err(ManagementError {
+                    code: 0xABE3,
+                    target: node.clone(),
+                    message: "RPC Server not available.".into(),
+                    operation: "failfast".into(),
+                    extended: vec![],
+                    partial: None,
+                })
+            } else {
+                match self.aliases.virtual_query(&request, &node) {
+                    Some(result) => result,
+                    None => {
+                        let mut confirmation = SinkConfirmation {
+                            sink,
+                            trace: if settings.trace {
+                                Some((&mut self.trace_state, &settings, &node))
+                            } else {
+                                None
                             },
-                        ),
+                            method_trace_started: false,
+                        };
+                        let result = backend.execute_with_confirmation(&request, &mut confirmation);
+                        method_trace_started = confirmation.method_trace_started;
+                        result
                     }
-                };
+                }
+            };
             match &mut result {
                 Ok(value) => mark_node(value, &node),
                 Err(error) => {
@@ -872,7 +876,11 @@ impl Session {
                 self.trace_state
                     .execution(&request, result.as_ref(), &node, settings.trace);
             if settings.trace {
-                let mut trace = super::trace::parser(&request, result.as_ref());
+                let mut trace = if method_trace_started {
+                    WideText::default()
+                } else {
+                    super::trace::parser(&request, result.as_ref())
+                };
                 trace.0.extend(execution_trace.0);
                 if write_trace(sink, trace, &settings).is_err() {
                     status = 0x80070005;
@@ -1175,7 +1183,11 @@ impl crate::backend::Confirmation for SinkConfirmation<'_> {
             let trace = if self.method_trace_started {
                 super::trace::method_record(request, result)
             } else {
-                state.execution(request, Ok(&value), node, true)
+                let mut trace = super::trace::parser(request, Ok(&value));
+                trace
+                    .0
+                    .extend(state.execution(request, Ok(&value), node, true).0);
+                trace
             };
             self.method_trace_started = true;
             write_trace(self.sink, trace, settings).map_err(|_| ManagementError {
