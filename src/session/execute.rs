@@ -1053,15 +1053,24 @@ fn write_trace(
 }
 fn redact_trace(mut text: WideText, secret: &WideText) -> WideText {
     let replacement: Vec<_> = "<redacted>".encode_utf16().collect();
-    let mut start = 0;
-    while let Some(offset) = text.0[start..]
-        .windows(secret.0.len())
-        .position(|w| w == secret.0)
-    {
-        let at = start + offset;
-        text.0
-            .splice(at..at + secret.0.len(), replacement.iter().copied());
-        start = at + replacement.len();
+    // Diagnostic interpolation replaces unpaired UTF-16 units. Mask that
+    // representation as well as the original credential before encoding.
+    let rendered: WideText = secret.to_string_lossy().into();
+    let mut needles = vec![secret];
+    if rendered != *secret {
+        needles.push(&rendered);
+    }
+    for secret in needles {
+        let mut start = 0;
+        while let Some(offset) = text.0[start..]
+            .windows(secret.0.len())
+            .position(|w| w == secret.0)
+        {
+            let at = start + offset;
+            text.0
+                .splice(at..at + secret.0.len(), replacement.iter().copied());
+            start = at + replacement.len();
+        }
     }
     text
 }

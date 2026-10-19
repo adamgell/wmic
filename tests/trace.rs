@@ -267,6 +267,52 @@ fn trace_redacts_password_even_when_it_occurs_in_the_query() {
 }
 
 #[test]
+fn trace_redacts_lossy_utf16_rendering_of_password() {
+    let mut command = wide("/trace:on /user:tester /password:secret-");
+    command.0.push(0xd800);
+    command
+        .0
+        .extend("-suffix process where \"Name='secret-".encode_utf16());
+    command.0.push(0xd800);
+    command.0.extend("-suffix'\" get Name".encode_utf16());
+    let mut sink = Sink::default();
+    let result = Session::new(wide("LOCAL")).unwrap().execute(
+        &command,
+        EntryMode::Interactive,
+        &mut OneRow,
+        &mut sink,
+    );
+    assert_eq!(result.exit_status, 0xACB5);
+    let text = sink.0.to_string_lossy();
+    assert!(!text.contains("secret-"));
+    assert!(text.contains("Name='<redacted>'"));
+}
+
+#[test]
+fn trace_redacts_escaped_password_in_method_object_path() {
+    struct MethodPath;
+    impl Management for MethodPath {
+        fn execute(&mut self, _: &ResolvedRequest) -> Result<ManagementResult, ManagementError> {
+            Ok(ManagementResult::Methods(vec![MethodResult {
+                path: wide(r#"\\LOCAL\ROOT\CIMV2:Example.Key="secret\suffix""#),
+                return_value: None,
+                out_parameters: vec![],
+                text: None,
+            }]))
+        }
+    }
+    let mut sink = Sink::default();
+    let result = Session::new(wide("LOCAL")).unwrap().execute(
+        &wide(r#"/trace:on /user:tester /password:secret\suffix process call GetOwner"#),
+        EntryMode::Interactive,
+        &mut MethodPath,
+        &mut sink,
+    );
+    assert_eq!(result.exit_status, 0);
+    assert!(!sink.0.to_string_lossy().contains("secret"));
+}
+
+#[test]
 fn trace_output_failure_stops_before_provider_execution() {
     struct Never;
     impl Management for Never {
