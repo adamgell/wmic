@@ -47,11 +47,12 @@ impl TraceState {
         result: Result<&ManagementResult, &ManagementError>,
         node: &WideText,
         enabled: bool,
+        path_ready: bool,
     ) -> WideText {
         if enabled {
-            self.query.execution(request, result, node)
+            self.query.execution(request, result, node, path_ready)
         } else {
-            self.query.observe(request, result);
+            self.query.observe(request, result, path_ready);
             WideText::default()
         }
     }
@@ -457,6 +458,97 @@ fn method_metadata(
         }
         break;
     }
+}
+
+pub(super) fn path_preflight(
+    request: &ResolvedRequest,
+    failure: Option<crate::backend::PathPreflightStage>,
+    method_signatures: u8,
+) -> WideText {
+    use crate::backend::PathPreflightStage as Stage;
+    let mut out = WideText::default();
+    let c = &request.connection;
+    event(
+        &mut out,
+        "parserengine",
+        4244,
+        &format!(
+            "IWbemLocator::ConnectServer(L\"{}\", NULL, NULL, L\"{}\", 0L, L\"{}\", NULL, -)",
+            c.namespace,
+            c.locale.clone().unwrap_or_default(),
+            c.authority
+                .as_ref()
+                .map_or("<null>".into(), WideText::to_string_lossy)
+        ),
+        None,
+        failure != Some(Stage::Connect),
+    );
+    if failure == Some(Stage::Connect) {
+        return out;
+    }
+    event(
+        &mut out,
+        "parserengine",
+        4281,
+        &format!(
+            "CoSetProxyBlanket(-, RPC_C_AUTHN_DEFAULT, RPC_C_AUTHZ_NONE, NULL, {},   {}, -, EOAC_NONE)",
+            c.authentication, c.impersonation
+        ),
+        None,
+        failure != Some(Stage::Security),
+    );
+    if failure == Some(Stage::Security) {
+        return out;
+    }
+    if request.method.is_some() {
+        // CALL's class/method enumeration records belong only to WMIC.LOG.
+        if failure == Some(Stage::Class) {
+            return out;
+        }
+        for _ in 0..method_signatures {
+            event(
+                &mut out,
+                "parserengine",
+                4345,
+                "IWbemClassObject::GetNames(NULL, WBEM_FLAG_ALWAYS | WBEM_FLAG_NONSYSTEM_ONLY, NULL, -)",
+                None,
+                true,
+            );
+        }
+        if failure == Some(Stage::Names) {
+            event(
+                &mut out,
+                "parserengine",
+                4345,
+                "IWbemClassObject::GetNames(NULL, WBEM_FLAG_ALWAYS | WBEM_FLAG_NONSYSTEM_ONLY, NULL, -)",
+                None,
+                false,
+            );
+        }
+        return out;
+    }
+    event(
+        &mut out,
+        "parserengine",
+        3865,
+        &format!(
+            "IWbemServices::GetObject(L\"{}\", WBEM_FLAG_USE_AMENDED_QUALIFIERS, 0, NULL, -, -)",
+            request.class_name
+        ),
+        None,
+        failure != Some(Stage::Class),
+    );
+    if failure != Some(Stage::Class) {
+        event(
+            &mut out,
+            "parserengine",
+            3877,
+            "IWbemClassObject::GetNames(NULL, WBEM_FLAG_ALWAYS | WBEM_FLAG_NONSYSTEM_ONLY, NULL, -)",
+            None,
+            failure != Some(Stage::Names),
+        );
+    }
+    out
 }
 
 pub(super) fn parser(

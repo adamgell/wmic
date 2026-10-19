@@ -1,0 +1,7 @@
+SUCCESS: IWbemLocator::ConnectServer(L"root\cimv2", NULL, NULL, L"ms_409", 0L, L"<null>", NULL, -)
+Line:   4244 File: onecore\admin\wmi\wbem\tools\wmic\parserengine.cpp
+
+SUCCESS: CoSetProxyBlanket(-, RPC_C_AUTHN_DEFAULT, RPC_C_AUTHZ_NONE, NULL, 6,   3, -, EOAC_NONE)
+Line:   4281 File: onecore\admin\wmi\wbem\tools\wmic\parserengine.cpp
+
+WmicCompatMissingMethod - Invalid class method.

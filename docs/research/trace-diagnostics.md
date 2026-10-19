@@ -22,7 +22,7 @@ The executable's embedded version is 10.0.26100.5074. The MUI reports 10.0.26100
 
 FAILFAST has separate read-only zero-address rejection and successful loopback-control captures. Microsoft initializes the text source before testing reachability, retains the plain RPC error and runs the formatter, but does not connect to WMI or initialize the query context. Portable tests simulate reachability loss with tracing both on and off before a later successful query; no real network settings change.
 
-A pre-existing limitation remains for direct PATH with FAILFAST: Microsoft validates the class connection before its reachability check; the current backend checks reachability first. On the measured zero-address probe, Microsoft returns parser connection error `0x800706ba`, while the replacement rejects with `0xabe3`. The replacement avoids inventing parser/query/formatter records for a backend it never called. This path is not included in the passing TRACE matrix; correcting its execution order requires a dedicated read-only backend preflight phase.
+The [PATH/FAILFAST follow-up](path-failfast-preflight.md) corrects the preflight-order gap for measured native Windows commands. A metadata-only backend phase now runs before reachability for single-node explicit GET and CALL forms. Its 34-case suite also covers bare-GET and multiple-node exceptions, error ordering, aggregation and interactive recovery. These results are separate from the original 25-case TRACE matrix.
 
 ## Static evidence
 

@@ -1,0 +1,7 @@
+FAIL: IWbemLocator::ConnectServer(L"root\WmicTraceMissingNamespace", NULL, NULL, L"ms_409", 0L, L"<null>", NULL, -)
+Line:   4244 File: onecore\admin\wmi\wbem\tools\wmic\parserengine.cpp
+
+ERROR:
+Code = 0x8004100e
+Description = The namespace specified could not be found.
+Facility = WMI

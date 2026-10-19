@@ -390,6 +390,7 @@ impl Session {
                 &selection,
                 &mut SinkConfirmation {
                     sink,
+                    preparation: PathPreparation::Legacy,
                     trace: None,
                     method_trace_started: false,
                 },
@@ -632,6 +633,26 @@ impl Session {
                         };
                     }
                 };
+                configure_connection(&mut req, &settings);
+                let preparation = match prepare_path(&parsed, &req, &settings, backend, sink) {
+                    Ok(value) => value,
+                    Err(outcome) => return outcome,
+                };
+                if settings.trace
+                    && matches!(preparation, PathPreparation::Ready { .. })
+                    && write_trace(
+                        sink,
+                        preparation
+                            .parser(&req, Ok(&ManagementResult::Objects(ObjectSet::default()))),
+                        &settings,
+                    )
+                    .is_err()
+                {
+                    return CommandOutcome {
+                        exit_status: 0x80070005,
+                        ..Default::default()
+                    };
+                }
                 req.class_mode = true;
                 req.verb = Verb::Get;
                 req.method = None;
@@ -760,6 +781,11 @@ impl Session {
             );
         };
         configure_connection(&mut request, &settings);
+        request.multiple_nodes = settings.nodes.len() > 1;
+        let preparation = match prepare_path(&parsed, &request, &settings, backend, sink) {
+            Ok(value) => value,
+            Err(outcome) => return outcome,
+        };
         request.render_context = Some(super::presentation::context(
             &parsed,
             &settings,
@@ -852,6 +878,7 @@ impl Session {
                     None => {
                         let mut confirmation = SinkConfirmation {
                             sink,
+                            preparation,
                             trace: if settings.trace {
                                 Some((&mut self.trace_state, &settings, &node))
                             } else {
@@ -877,15 +904,20 @@ impl Session {
                 .as_ref()
                 .err()
                 .is_some_and(|e| e.operation.eq_ignore_case("failfast"));
-            aggregate_trace_allowed |= request.from_alias || !failfast_rejected;
-            let execution_trace =
-                self.trace_state
-                    .execution(&request, result.as_ref(), &node, settings.trace);
+            aggregate_trace_allowed |=
+                request.from_alias || preparation.ready() || !failfast_rejected;
+            let execution_trace = self.trace_state.execution(
+                &request,
+                result.as_ref(),
+                &node,
+                settings.trace,
+                preparation.ready(),
+            );
             if settings.trace {
                 let mut trace = if method_trace_started {
                     WideText::default()
                 } else {
-                    super::trace::parser(&request, result.as_ref())
+                    preparation.parser(&request, result.as_ref())
                 };
                 trace.0.extend(execution_trace.0);
                 if write_trace(sink, trace, &settings).is_err() {
@@ -943,6 +975,8 @@ impl Session {
             }) {
                 Ok(mut output) => {
                     let parser_failure = !request.from_alias
+                        && !preparation.ready()
+                        && !request.multiple_nodes
                         && result.as_ref().err().is_some_and(|e| {
                             matches!(e.code, 0x80041002 | 0x8004100e | 0x80041010)
                         });
@@ -987,9 +1021,13 @@ impl Session {
                 }
             }
             if settings.trace
-                && (request.from_alias || !failfast_rejected)
+                && (request.from_alias || preparation.ready() || !failfast_rejected)
+                && !(settings.aggregate && listed && preparation.ready() && !request.from_alias)
                 && result.as_ref().err().is_none_or(|e| {
-                    request.from_alias || !matches!(e.code, 0x80041002 | 0x8004100e | 0x80041010)
+                    request.from_alias
+                        || preparation.ready()
+                        || request.multiple_nodes
+                        || !matches!(e.code, 0x80041002 | 0x8004100e | 0x80041010)
                 })
             {
                 let has_rows =
@@ -1006,7 +1044,9 @@ impl Session {
                 }
             }
         }
-        if settings.aggregate && (had_objects || !combined.is_empty() || !failed_nodes.is_empty()) {
+        let aggregate_result =
+            settings.aggregate && (had_objects || !combined.is_empty() || !failed_nodes.is_empty());
+        if aggregate_result {
             let has_rows = !combined.is_empty();
             let result = ManagementResult::Objects(ObjectSet {
                 objects: combined,
@@ -1038,6 +1078,17 @@ impl Session {
             {
                 status = 0x80070005;
             }
+        }
+        if settings.trace
+            && settings.aggregate
+            && listed
+            && preparation.ready()
+            && !request.from_alias
+            && aggregate_trace_allowed
+            && !aggregate_result
+            && write_trace(sink, super::trace::formatting(&request, false), &settings).is_err()
+        {
+            status = 0x80070005;
         }
         if !stdout_written
             && !blank_output.0.is_empty()
@@ -1167,8 +1218,114 @@ fn configure_connection(request: &mut crate::backend::ResolvedRequest, settings:
     }
 }
 
+#[derive(Clone, Copy)]
+enum PathPreparation {
+    Legacy,
+    Skipped,
+    Ready { method_signatures: u8 },
+}
+impl PathPreparation {
+    fn ready(self) -> bool {
+        !matches!(self, Self::Legacy)
+    }
+    fn parser(
+        self,
+        request: &crate::backend::ResolvedRequest,
+        result: Result<&ManagementResult, &ManagementError>,
+    ) -> WideText {
+        match self {
+            Self::Legacy => super::trace::parser(request, result),
+            Self::Skipped => WideText::default(),
+            Self::Ready { method_signatures } => {
+                super::trace::path_preflight(request, None, method_signatures)
+            }
+        }
+    }
+}
+
+fn prepare_path(
+    parsed: &ParsedCommand,
+    request: &crate::backend::ResolvedRequest,
+    settings: &SessionSettings,
+    backend: &mut dyn Management,
+    sink: &mut dyn OutputSink,
+) -> Result<PathPreparation, CommandOutcome> {
+    use crate::backend::{PathPreflightOutcome, PathPreflightRequest};
+    if !matches!(parsed.target, Some(Target::Path(_))) {
+        return Ok(PathPreparation::Legacy);
+    }
+    let metadata = match parsed.verb {
+        Verb::Get => {
+            parsed.verb_explicit
+                && (!parsed.properties.is_empty()
+                    || parsed.help
+                    || parsed
+                        .modifiers
+                        .iter()
+                        .any(|m| m.scope == ModifierScope::Verb))
+        }
+        Verb::Call => true,
+        Verb::Set | Verb::Create => parsed.help,
+        _ => false,
+    };
+    // Native multi-node requests and bare/final-token GET bypass parser metadata.
+    if settings.nodes.len() > 1 || !metadata {
+        return Ok(PathPreparation::Skipped);
+    }
+    if !settings.failfast {
+        return Ok(PathPreparation::Legacy);
+    }
+    match backend.preflight_path(PathPreflightRequest {
+        connection: &request.connection,
+        class_name: &request.class_name,
+        method: request.method.as_ref(),
+    }) {
+        Ok(PathPreflightOutcome::Unsupported) => Ok(PathPreparation::Legacy),
+        Ok(PathPreflightOutcome::Ready { method_signatures }) => {
+            Ok(PathPreparation::Ready { method_signatures })
+        }
+        Err(failure) => {
+            let mut stderr = if settings.trace && failure.error.code != 0xC000013A {
+                super::trace::path_preflight(
+                    request,
+                    Some(failure.stage),
+                    failure.completed_method_signatures,
+                )
+            } else {
+                WideText::default()
+            };
+            let error = failure.error;
+            let diagnostic = if error.code == 0xC000013A {
+                WideText::default()
+            } else if error.code < 0x10000 {
+                let mut text = error.message.clone();
+                text.0.extend("\r\r\n".encode_utf16());
+                text
+            } else if settings.trace {
+                super::trace::error_diagnostic(&error, None)
+            } else {
+                let mut text: WideText = "ERROR:\r\r\nDescription = ".into();
+                text.0.extend(&error.message.0);
+                text.0.extend("\r\r\n".encode_utf16());
+                text
+            };
+            stderr.0.extend(diagnostic.0);
+            let status = if write_trace(sink, stderr, settings).is_err() {
+                0x80070005
+            } else {
+                error.code
+            };
+            Err(CommandOutcome {
+                exit_status: status,
+                ..Default::default()
+            })
+        }
+    }
+}
+
 struct SinkConfirmation<'a> {
     sink: &'a mut dyn OutputSink,
+    preparation: PathPreparation,
     trace: Option<(
         &'a mut super::trace::TraceState,
         &'a SessionSettings,
@@ -1192,10 +1349,12 @@ impl crate::backend::Confirmation for SinkConfirmation<'_> {
             let trace = if self.method_trace_started {
                 super::trace::method_record(request, result)
             } else {
-                let mut trace = super::trace::parser(request, Ok(&value));
-                trace
-                    .0
-                    .extend(state.execution(request, Ok(&value), node, true).0);
+                let mut trace = self.preparation.parser(request, Ok(&value));
+                trace.0.extend(
+                    state
+                        .execution(request, Ok(&value), node, true, self.preparation.ready())
+                        .0,
+                );
                 trace
             };
             self.method_trace_started = true;

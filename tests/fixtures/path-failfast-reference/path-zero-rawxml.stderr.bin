@@ -1,0 +1,7 @@
+FAIL: IWbemLocator::ConnectServer(L"root\cimv2", NULL, NULL, L"ms_409", 0L, L"<null>", NULL, -)
+Line:   4244 File: onecore\admin\wmi\wbem\tools\wmic\parserengine.cpp
+
+ERROR:
+Code = 0x800706ba
+Description = The RPC server is unavailable.
+Facility = Win32

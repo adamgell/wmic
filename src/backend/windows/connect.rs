@@ -5,6 +5,13 @@ use windows::{
     core::*,
 };
 pub fn connect(options: &ConnectionOptions) -> Result<IWbemServices> {
+    let service = connect_unsecured(options)?;
+    secure(&service, options)?;
+    Ok(service)
+}
+
+/// Keep connection and proxy security separate for parser diagnostics.
+pub(super) fn connect_unsecured(options: &ConnectionOptions) -> Result<IWbemServices> {
     unsafe {
         options
             .validate()
@@ -24,7 +31,7 @@ pub fn connect(options: &ConnectionOptions) -> Result<IWbemServices> {
             .as_ref()
             .map(|p| bstr(p.expose()))
             .unwrap_or_default();
-        let service = locator.ConnectServer(
+        locator.ConnectServer(
             &bstr(&ns),
             &user,
             &password,
@@ -32,9 +39,7 @@ pub fn connect(options: &ConnectionOptions) -> Result<IWbemServices> {
             0,
             &options.authority.as_ref().map(bstr).unwrap_or_default(),
             None,
-        )?;
-        secure(&service, options)?;
-        Ok(service)
+        )
     }
 }
 /// Copies Unicode credentials into RPC on each exact interface, including enumerators.

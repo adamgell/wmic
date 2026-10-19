@@ -14,7 +14,7 @@ python3.12 -m unittest discover -s tools/release/tests
 
 The Windows job additionally builds and checks all three MSVC targets and executes tests on its x64 runner. The Windows-only HTML regression test renders fixed typed data through MSXML and compares it with original WMIC captures; it does not query the runner's OS data. CI installs stable Rust, with the minimum version enforced by `Cargo.toml`.
 
-The Python suite verifies the inventory and integrity of all 2,278 committed oracle cases. It also regenerates the 742-case matrix and 286-case switch-value suite exactly and tests that the comparison gate rejects missing/duplicate/substituted cases, incompatible profiles, changed arguments, corrupted streams, invalid status types, timeouts, incomplete reports, missing console evidence, failed cleanup, and omitted owned files. Password-bearing command arguments and interactive stdin are rejected before a capture is persisted.
+The Python suite verifies the inventory and integrity of all 2,312 committed reference cases. It also regenerates the 742-case matrix and 286-case switch-value suite exactly and tests that the comparison gate rejects missing/duplicate/substituted cases, incompatible profiles, changed arguments, corrupted streams, invalid status types, timeouts, incomplete reports, missing console evidence, failed cleanup, and omitted owned files. Password-bearing command arguments and interactive stdin are rejected before a capture is persisted.
 
 ## Functional matrix
 
@@ -50,6 +50,8 @@ python3.12 tools/reference/run_corpus.py \
 Repeat with `x86_64-pc-windows-msvc` and `i686-pc-windows-msvc`, using a new output directory each time. Each run captures a fresh original by default. The x86 candidate uses the installed x86 original. On the measured ARM64 environment, the x64 candidate uses the ARM64 original, and the report explicitly labels this cross-architecture comparison.
 
 The `trace` suite adds 25 read-only cases for classic trace records, errors, formatting, cached interactive resources and no-input method results. Its portable regressions compare complete stderr; Windows CI also launches 17 stable actual-CLI cases. Select `--suite trace` for native comparisons. See [TRACE diagnostic notes](research/trace-diagnostics.md) for reference identities and unverified paths.
+
+The `path-failfast` suite adds 34 read-only cases for direct PATH metadata before reachability, parser/query errors, CALL metadata, multiple-node aggregation, bare GET and interactive recovery. Portable tests compare its diagnostics and ordering; Windows CI launches 20 stable actual-CLI cases. Select `--suite path-failfast`; see the [preflight notes](research/path-failfast-preflight.md) for the distinct metadata-only safety contract and remaining keyed-PATH gap.
 
 For the additional stable matrix alone, add `--suite compatibility`. The focused REA suite is `--suite rea-25`; the method-argument suite is `--suite method-arguments`. Select `--suite path-method` for the direct-method diagnostics. For an explicitly selected compatible prior capture, use `--reference-dir DIR`, whose children are suite names containing `capture.json` and raw streams. The runner checks the original executable hash, exact case/argument inventory, declared normalization rules, and matching machine/account/locale/code-page/launcher profiles. Cached captures remain unsuitable for volatile OS fields even when their profiles match.
 

@@ -2,7 +2,7 @@
 
 ## TRACE diagnostics, 2026-10-19
 
-The [TRACE follow-up](research/trace-diagnostics.md) replaces the implementation-specific request line with classic records for measured query paths. It adds 25 read-only reference cases, portable regressions and 17 actual-CLI checks in Windows CI. It covers metadata/query/formatting records, row counts, detailed WMI errors, interactive caching, OFF and streamed no-input method results. Source labels are compatibility output, not Rust locations. Earlier TRACE differences below describe historical builds. The follow-up lists the remaining unverified paths; full WMIC compatibility is not claimed. Direct PATH with FAILFAST retains a pre-existing preflight-order difference, documented in the TRACE notes.
+The [TRACE follow-up](research/trace-diagnostics.md) replaces the implementation-specific request line with classic records for measured query paths. It adds 25 read-only reference cases, portable regressions and 17 actual-CLI checks in Windows CI. It covers metadata/query/formatting records, row counts, detailed WMI errors, interactive caching, OFF and streamed no-input method results. Source labels are compatibility output, not Rust locations. Earlier TRACE differences below describe historical builds. The follow-up lists the remaining unverified paths; full WMIC compatibility is not claimed. The [PATH/FAILFAST follow-up](research/path-failfast-preflight.md) adds metadata-only native Windows preflight and 34 focused cases for its ordering, bypass forms and diagnostics. Keyed-PATH query construction remains a separate known gap.
 
 ## PATH method diagnostics, 2026-10-17
 
