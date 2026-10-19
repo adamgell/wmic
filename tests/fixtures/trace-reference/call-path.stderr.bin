@@ -1,0 +1,38 @@
+SUCCESS: IWbemLocator::ConnectServer(L"root\cimv2", NULL, NULL, L"ms_409", 0L, L"<null>", NULL, -)
+Line:   4244 File: onecore\admin\wmi\wbem\tools\wmic\parserengine.cpp
+
+SUCCESS: CoSetProxyBlanket(-, RPC_C_AUTHN_DEFAULT, RPC_C_AUTHZ_NONE, NULL, 6,   3, -, EOAC_NONE)
+Line:   4281 File: onecore\admin\wmi\wbem\tools\wmic\parserengine.cpp
+
+SUCCESS: IWbemClassObject::GetNames(NULL, WBEM_FLAG_ALWAYS | WBEM_FLAG_NONSYSTEM_ONLY, NULL, -)
+Line:   4345 File: onecore\admin\wmi\wbem\tools\wmic\parserengine.cpp
+
+SUCCESS: IWbemLocator::ConnectServer(L"\\DESKTOP-N4H9E7R\root\cimv2", L"<null>", *, L"ms_409", 0L, L"<null>", NULL, -)
+Line:   2697 File: onecore\admin\wmi\wbem\tools\wmic\execengine.cpp
+
+SUCCESS: CoSetProxyBlanket(-, RPC_C_AUTHN_DEFAULT, RPC_C_AUTHZ_NONE,NULL, 6,   3, -, EOAC_NONE)
+Line:   2740 File: onecore\admin\wmi\wbem\tools\wmic\execengine.cpp
+
+SUCCESS: IWbemServices::GetObject(L"Win32_Process", 0, NULL, -)
+Line:    690 File: onecore\admin\wmi\wbem\tools\wmic\execengine.cpp
+
+SUCCESS: IWbemClassObject::GetMethod(L"GetOwner", 0, -, -)
+Line:    705 File: onecore\admin\wmi\wbem\tools\wmic\execengine.cpp
+
+SUCCESS: IWbemServices::ExecQuery(L"WQL", L"SELECT * FROM Win32_Process WHERE Handle=0", 0, NULL, -)
+Line:   4927 File: onecore\admin\wmi\wbem\tools\wmic\execengine.cpp
+
+SUCCESS: CoSetProxyBlanket(-, RPC_C_AUTHN_DEFAULT, RPC_C_AUTHZ_NONE, NULL, 6,   3, -, EOAC_NONE)
+Line:   4972 File: onecore\admin\wmi\wbem\tools\wmic\execengine.cpp
+
+SUCCESS: IWbemClassObject::Get(L"__PATH", 0, -, 0, 0)
+Line:   4994 File: onecore\admin\wmi\wbem\tools\wmic\execengine.cpp
+Result:  \\DESKTOP-N4H9E7R\root\cimv2:Win32_Process.Handle="0"
+
+SUCCESS: IWbemServices::ExecMethod(L"\\DESKTOP-N4H9E7R\root\cimv2:Win32_Process.Handle="0"", L"GetOwner", 0, NULL, -, -, NULL)
+Line:   2991 File: onecore\admin\wmi\wbem\tools\wmic\execengine.cpp
+
+SUCCESS: IWbemClassObject->GetObjectText(0, -)
+Line:   3057 File: onecore\admin\wmi\wbem\tools\wmic\execengine.cpp
+
+

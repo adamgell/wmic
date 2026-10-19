@@ -7,6 +7,7 @@ mod repeat;
 pub use nodes::*;
 
 mod presentation;
+mod trace;
 
 mod output;
 #[cfg(windows)]

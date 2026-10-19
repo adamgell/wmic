@@ -1,0 +1,163 @@
+{
+  "schema_version": 1,
+  "cases": [
+    {
+      "id": "os-caption",
+      "arguments": "/trace:on os get Caption",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "os-two-value",
+      "arguments": "/trace:on os get Caption,Version /format:value",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "os-upper",
+      "arguments": "/trace:on OS get Caption",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "process",
+      "arguments": "/trace:on process where \"ProcessId=0\" get Name,ProcessId",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "cpu",
+      "arguments": "/trace:on cpu get Name",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "path-caption",
+      "arguments": "/trace:on path Win32_OperatingSystem get Caption",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "path-empty",
+      "arguments": "/trace:on path Win32_Process where \"ProcessId=4294967295\" get Name",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "path-unknown",
+      "arguments": "/trace:on path WmicTraceMissingClass get Name",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "os-invalid-property",
+      "arguments": "/trace:on os get WmicTraceMissingProperty",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "os-csv",
+      "arguments": "/trace:on os get Caption /format:csv",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "os-rawxml",
+      "arguments": "/trace:on os get Caption /format:rawxml",
+      "operation": "read_only",
+      "timeout_ms": 10000,
+      "normalizations": [
+        {
+          "stream": "stdout",
+          "kind": "wmic-command-starttime"
+        }
+      ]
+    },
+    {
+      "id": "os-list",
+      "arguments": "/trace:on os list brief",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "path-namespace",
+      "arguments": "/trace:on /namespace:root\\WmicTraceMissing path Win32_OperatingSystem get Caption",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "off",
+      "arguments": "/trace:off os get Caption",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "alias-unknown",
+      "arguments": "/trace:on WmicTraceMissingAlias get Name",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "help",
+      "arguments": "/trace:on os /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "call-readonly",
+      "arguments": "/trace:on process where \"ProcessId=0\" call GetOwner",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "auth-level",
+      "arguments": "/trace:on /authlevel:pktprivacy /implevel:impersonate os get Caption",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "explicit-dot",
+      "arguments": "/trace:on /node:. os get Caption",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "interactive-toggle",
+      "arguments": "",
+      "stdin_base64": "L3RyYWNlOm9uDQpvcyBnZXQgQ2FwdGlvbg0Kb3MgZ2V0IENhcHRpb24NCi90cmFjZTpvZmYNCm9zIGdldCBDYXB0aW9uDQpxdWl0DQo=",
+      "operation": "read_only",
+      "timeout_ms": 20000
+    },
+    {
+      "id": "interactive-warm",
+      "arguments": "",
+      "stdin_base64": "b3MgZ2V0IENhcHRpb24NCi90cmFjZTpvbg0Kb3MgZ2V0IENhcHRpb24NCnF1aXQNCg==",
+      "operation": "read_only",
+      "timeout_ms": 20000
+    },
+    {
+      "id": "call-multiple",
+      "arguments": "/trace:on process where \"ProcessId=0 OR ProcessId=4\" call GetOwner",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "call-path",
+      "arguments": "/trace:on path Win32_Process where \"Handle=0\" call GetOwner",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "failfast-alias",
+      "arguments": "/trace:on /failfast:on /node:\"0.0.0.0\" os get Caption",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "failfast-local-control",
+      "arguments": "/trace:on /failfast:on /node:\"127.0.0.2\" os get Caption",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    }
+  ]
+}

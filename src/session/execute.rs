@@ -109,6 +109,7 @@ struct ExecutionFrame {
 }
 pub struct Session {
     sequence: u32,
+    trace_state: super::trace::TraceState,
     pub settings: SessionSettings,
     pub aliases: AliasStore,
     pub local_node: WideText,
@@ -117,6 +118,7 @@ impl Session {
     pub fn new(local_node: WideText) -> Result<Self, ResolveError> {
         Ok(Self {
             sequence: 0,
+            trace_state: Default::default(),
             settings: SessionSettings::default(),
             aliases: AliasStore::stock()?,
             local_node,
@@ -384,7 +386,14 @@ impl Session {
         let mut status = 0;
         for node in nodes {
             selection.connection.node = node.clone();
-            let result = backend.execute_with_confirmation(&selection, &mut SinkConfirmation(sink));
+            let result = backend.execute_with_confirmation(
+                &selection,
+                &mut SinkConfirmation {
+                    sink,
+                    trace: None,
+                    method_trace_started: false,
+                },
+            );
             match result {
                 Ok(ManagementResult::Objects(set)) => {
                     for object in set.objects {
@@ -417,6 +426,7 @@ impl Session {
                             }
                             let mut child = Session {
                                 sequence: 0,
+                                trace_state: Default::default(),
                                 settings: SessionSettings::default(),
                                 aliases: self.aliases.clone(),
                                 local_node: self.local_node.clone(),
@@ -584,6 +594,13 @@ impl Session {
                     error.code,
                 );
             }
+        }
+        let trace = self.trace_state.alias(&parsed, &settings, &self.aliases);
+        if write_trace(sink, trace, &settings).is_err() {
+            return CommandOutcome {
+                exit_status: 0x80070005,
+                ..Default::default()
+            };
         }
         if let Err(error) = self.aliases.validate_method_arguments(&parsed) {
             return emit(
@@ -767,6 +784,7 @@ impl Session {
         let mut combined = vec![];
         let mut had_objects = false;
         let mut stdout_written = false;
+        let mut aggregate_trace_allowed = false;
         let mut blank_output = WideText::default();
         let mut failed_nodes: Vec<(WideText, ManagementError)> = vec![];
         let mut node_order: Vec<WideText> = vec![];
@@ -806,19 +824,6 @@ impl Session {
                 status = 0x80070005;
                 break;
             }
-            if settings.trace {
-                let trace = format!(
-                    "IWbemServices request: node={} namespace={} authlevel={} implevel={}\r\n",
-                    node,
-                    request.connection.namespace,
-                    request.connection.authentication,
-                    request.connection.impersonation
-                );
-                if sink.write(OutputStream::Stderr, &trace.into()).is_err() {
-                    status = 0x80070005;
-                    break;
-                }
-            }
             node_order.push(node.clone());
             if listed && acts {
                 let mut line: WideText = "Node - ".into();
@@ -829,30 +834,63 @@ impl Session {
                     break;
                 }
             }
-            let mut result =
-                if settings.failfast && !backend.reachable(&node, settings.failfast_timeout_ms) {
-                    Err(ManagementError {
-                        code: 0xABE3,
-                        target: node.clone(),
-                        message: "RPC Server not available.".into(),
-                        operation: "failfast".into(),
-                        extended: vec![],
-                        partial: None,
-                    })
-                } else {
-                    match self.aliases.virtual_query(&request, &node) {
-                        Some(result) => result,
-                        None => {
-                            backend.execute_with_confirmation(&request, &mut SinkConfirmation(sink))
-                        }
+            let mut method_trace_started = false;
+            let mut result = if settings.failfast
+                && !backend.reachable(&node, settings.failfast_timeout_ms)
+            {
+                Err(ManagementError {
+                    code: 0xABE3,
+                    target: node.clone(),
+                    message: "RPC Server not available.".into(),
+                    operation: "failfast".into(),
+                    extended: vec![],
+                    partial: None,
+                })
+            } else {
+                match self.aliases.virtual_query(&request, &node) {
+                    Some(result) => result,
+                    None => {
+                        let mut confirmation = SinkConfirmation {
+                            sink,
+                            trace: if settings.trace {
+                                Some((&mut self.trace_state, &settings, &node))
+                            } else {
+                                None
+                            },
+                            method_trace_started: false,
+                        };
+                        let result = backend.execute_with_confirmation(&request, &mut confirmation);
+                        method_trace_started = confirmation.method_trace_started;
+                        result
                     }
-                };
+                }
+            };
             match &mut result {
                 Ok(value) => mark_node(value, &node),
                 Err(error) => {
                     if let Some(value) = &mut error.partial {
                         mark_node(value, &node)
                     }
+                }
+            }
+            let failfast_rejected = result
+                .as_ref()
+                .err()
+                .is_some_and(|e| e.operation.eq_ignore_case("failfast"));
+            aggregate_trace_allowed |= request.from_alias || !failfast_rejected;
+            let execution_trace =
+                self.trace_state
+                    .execution(&request, result.as_ref(), &node, settings.trace);
+            if settings.trace {
+                let mut trace = if method_trace_started {
+                    WideText::default()
+                } else {
+                    super::trace::parser(&request, result.as_ref())
+                };
+                trace.0.extend(execution_trace.0);
+                if write_trace(sink, trace, &settings).is_err() {
+                    status = 0x80070005;
+                    break;
                 }
             }
             had_objects |= matches!(result, Ok(ManagementResult::Objects(_)));
@@ -904,6 +942,25 @@ impl Session {
                 node: &node,
             }) {
                 Ok(mut output) => {
+                    let parser_failure = !request.from_alias
+                        && result.as_ref().err().is_some_and(|e| {
+                            matches!(e.code, 0x80041002 | 0x8004100e | 0x80041010)
+                        });
+                    if settings.trace
+                        && !failfast_rejected
+                        && let Err(error) = &result
+                    {
+                        output.stderr = super::trace::error_diagnostic(
+                            error,
+                            if parser_failure { None } else { Some(&node) },
+                        );
+                        if parser_failure {
+                            output.stdout = WideText::default();
+                        }
+                        if let Some(secret) = secret_of(&settings).filter(|s| !s.0.is_empty()) {
+                            output.stderr = redact_trace(output.stderr, secret);
+                        }
+                    }
                     if let Err(error) = &result
                         && !acts
                         && error.partial.is_none()
@@ -929,8 +986,28 @@ impl Session {
                     status = emit_render_error(sink, error);
                 }
             }
+            if settings.trace
+                && (request.from_alias || !failfast_rejected)
+                && result.as_ref().err().is_none_or(|e| {
+                    request.from_alias || !matches!(e.code, 0x80041002 | 0x8004100e | 0x80041010)
+                })
+            {
+                let has_rows =
+                    matches!(&result,Ok(ManagementResult::Objects(set)) if !set.objects.is_empty());
+                if write_trace(
+                    sink,
+                    super::trace::formatting(&request, has_rows),
+                    &settings,
+                )
+                .is_err()
+                {
+                    status = 0x80070005;
+                    break;
+                }
+            }
         }
         if settings.aggregate && (had_objects || !combined.is_empty() || !failed_nodes.is_empty()) {
+            let has_rows = !combined.is_empty();
             let result = ManagementResult::Objects(ObjectSet {
                 objects: combined,
                 schema: None,
@@ -950,6 +1027,17 @@ impl Session {
                 }
                 Err(error) => status = emit_render_error(sink, error),
             }
+            if settings.trace
+                && aggregate_trace_allowed
+                && write_trace(
+                    sink,
+                    super::trace::formatting(&request, has_rows),
+                    &settings,
+                )
+                .is_err()
+            {
+                status = 0x80070005;
+            }
         }
         if !stdout_written
             && !blank_output.0.is_empty()
@@ -966,6 +1054,42 @@ impl Session {
 }
 fn secret_of(settings: &SessionSettings) -> Option<&WideText> {
     settings.password.as_ref().map(|p| p.expose())
+}
+fn write_trace(
+    sink: &mut dyn OutputSink,
+    mut text: WideText,
+    settings: &SessionSettings,
+) -> Result<(), OutputError> {
+    if text.0.is_empty() {
+        return Ok(());
+    }
+    if let Some(secret) = secret_of(settings).filter(|s| !s.0.is_empty()) {
+        text = redact_trace(text, secret);
+    }
+    sink.write(OutputStream::Stderr, &text)
+}
+fn redact_trace(mut text: WideText, secret: &WideText) -> WideText {
+    let replacement: Vec<_> = "<redacted>".encode_utf16().collect();
+    // Diagnostic interpolation replaces unpaired UTF-16 units. Mask that
+    // representation as well as the original credential before encoding.
+    let rendered: WideText = secret.to_string_lossy().into();
+    let mut needles = vec![secret];
+    if rendered != *secret {
+        needles.push(&rendered);
+    }
+    for secret in needles {
+        let mut start = 0;
+        while let Some(offset) = text.0[start..]
+            .windows(secret.0.len())
+            .position(|w| w == secret.0)
+        {
+            let at = start + offset;
+            text.0
+                .splice(at..at + secret.0.len(), replacement.iter().copied());
+            start = at + replacement.len();
+        }
+    }
+    text
 }
 fn emit_render_error(sink: &mut dyn OutputSink, error: render::RenderError) -> u32 {
     let code = error.code;
@@ -1043,7 +1167,15 @@ fn configure_connection(request: &mut crate::backend::ResolvedRequest, settings:
     }
 }
 
-struct SinkConfirmation<'a>(&'a mut dyn OutputSink);
+struct SinkConfirmation<'a> {
+    sink: &'a mut dyn OutputSink,
+    trace: Option<(
+        &'a mut super::trace::TraceState,
+        &'a SessionSettings,
+        &'a WideText,
+    )>,
+    method_trace_started: bool,
+}
 impl crate::backend::Confirmation for SinkConfirmation<'_> {
     fn streams_methods(&self) -> bool {
         true
@@ -1054,6 +1186,28 @@ impl crate::backend::Confirmation for SinkConfirmation<'_> {
         result: &MethodResult,
     ) -> Result<(), ManagementError> {
         let value = ManagementResult::Methods(vec![result.clone()]);
+        if request.arguments.is_empty()
+            && let Some((state, settings, node)) = &mut self.trace
+        {
+            let trace = if self.method_trace_started {
+                super::trace::method_record(request, result)
+            } else {
+                let mut trace = super::trace::parser(request, Ok(&value));
+                trace
+                    .0
+                    .extend(state.execution(request, Ok(&value), node, true).0);
+                trace
+            };
+            self.method_trace_started = true;
+            write_trace(self.sink, trace, settings).map_err(|_| ManagementError {
+                code: 0x80070005,
+                target: request.class_name.clone(),
+                message: "Output failed".into(),
+                operation: "input".into(),
+                extended: vec![],
+                partial: None,
+            })?;
+        }
         let output = render::render(render::RenderRequest {
             request,
             result: Ok(&value),
@@ -1067,7 +1221,7 @@ impl crate::backend::Confirmation for SinkConfirmation<'_> {
             extended: vec![],
             partial: None,
         })?;
-        let outcome = emit(self.0, output, 0);
+        let outcome = emit(self.sink, output, 0);
         if outcome.exit_status != 0 {
             return Err(ManagementError {
                 code: outcome.exit_status,
@@ -1083,13 +1237,13 @@ impl crate::backend::Confirmation for SinkConfirmation<'_> {
     fn confirm(&mut self, prompt: &WideText) -> Result<bool, ManagementError> {
         let result: Result<Option<WideText>, OutputError> = (|| {
             loop {
-                self.0.write(OutputStream::Stderr, prompt)?;
-                let answer = self.0.read_line()?;
+                self.sink.write(OutputStream::Stderr, prompt)?;
+                let answer = self.sink.read_line()?;
                 if answer
                     .as_ref()
                     .is_some_and(|a| a.trim_ascii().eq_ignore_case("?"))
                 {
-                    self.0.write(
+                    self.sink.write(
                         OutputStream::Stderr,
                         &"Invalid XSL format (or) file name.\r\r\n".into(),
                     )?;

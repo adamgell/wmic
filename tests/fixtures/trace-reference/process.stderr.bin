@@ -1,0 +1,490 @@
+SUCCESS: IWbemLocator::ConnectServer(L"root\cli", NULL, NULL, L"ms_409", 0L, L"<null>", NULL, -)
+Line:    143 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+
+SUCCESS: CoSetProxyBlanket(-, RPC_C_AUTHN_DEFAULT, RPC_C_AUTHZ_NONE, NULL, 6, 3, -, EOAC_NONE)
+Line:    162 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+
+SUCCESS: IWbemLocator::ConnectServer(L"root\cli\ms_409", NULL, NULL, L"ms_409", 0L, L"<null>", NULL, -)
+Line:   2524 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+
+SUCCESS: CoSetProxyBlanket(-, RPC_C_AUTHN_DEFAULT, RPC_C_AUTHZ_NONE, NULL, 6,   3, -, EOAC_NONE)
+Line:   2538 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+
+SUCCESS: IWbemServices::GetObject(L"MSFT_CliAlias.FriendlyName='process'", 0, NULL, -)
+Line:    239 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+
+SUCCESS: IWbemClassObject::Get(L"Target", 0, -, 0, 0)
+Line:    258 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  Select * from Win32_Process
+
+SUCCESS: IWbemClassObject::Get(L"PWhere", 0, -,0, 0)
+Line:    286 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  WHERE ProcessId='#'
+
+SUCCESS: IWbemClassObject::Get(L"Connection",0, -, 0, 0)
+Line:    314 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  <Embeded Object>
+
+SUCCESS: QueryInterface(IID_IWbemClassObject, -)
+Line:    330 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+
+SUCCESS: IWbemClassObject::Get(L"Namespace", 0, -,0, 0)
+Line:    430 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  ROOT\CIMV2
+
+SUCCESS: IWbemClassObject::Get(L"Locale", 0,-, 0, 0)
+Line:    460 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  ms_409
+
+SUCCESS: IWbemClassObject::Get(L"User", 0,-, 0, 0)
+Line:    491 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  <null>
+
+SUCCESS: IWbemClassObject::Get(L"Password", 0, -, 0, 0)
+Line:    524 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  <null>
+
+SUCCESS: IWbemClassObject::Get(L"Server", 0, -, 0, 0)
+Line:    556 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  .
+
+SUCCESS: IWbemClassObject::Get(L"Authority", 0, -, 0, 0)
+Line:    587 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  <null>
+
+SUCCESS: IWbemClassObject::Get(L"__RELPATH", 0,-, 0, 0)
+Line:   1943 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  MSFT_CliAlias.FriendlyName="Process"
+
+SUCCESS: IWbemServices::GetObject(L"MSFT_LocalizablePropertyValue.ObjectLocator="",PropertyName="Description",RelPath="MSFT_CliAlias.FriendlyName=\"Process\""", 0, NULL, -)
+Line:   2610 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+
+SUCCESS: IWbemClassObject::Get(L"Text", 0, -, 0, 0)
+Line:   2621 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  <Array>
+
+SUCCESS: IWbemServices::GetObject(L"MSFT_CliAlias.FriendlyName='process'", 0, NULL, -)
+Line:   1593 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+
+SUCCESS: IWbemClassObject::Get(L"Formats", 0,-, 0, 0)
+Line:   1605 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  <Array>
+
+SUCCESS: IWbemClassObject::Get(L"Name", 0,-, 0, 0)
+Line:   1657 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  STATUS
+
+SUCCESS: IWbemClassObject::Get(L"Name", 0,-, 0, 0)
+Line:   1657 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  MEMORY
+
+SUCCESS: IWbemClassObject::Get(L"Name", 0,-, 0, 0)
+Line:   1657 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  FULL
+
+SUCCESS: IWbemClassObject::Get(L"Properties", 0, -, 0, 0)
+Line:   1694 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  <Array>
+
+SUCCESS: IWbemClassObject::Get(L"Name", 0, -, 0, 0)
+Line:   1751 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  CommandLine
+
+SUCCESS: IWbemClassObject::Get(L"Derivation", 0, -, 0, 0)
+Line:   1767 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  CommandLine
+
+SUCCESS: IWbemClassObject::Get(L"Name", 0, -, 0, 0)
+Line:   1751 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  CSName
+
+SUCCESS: IWbemClassObject::Get(L"Derivation", 0, -, 0, 0)
+Line:   1767 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  CSName
+
+SUCCESS: IWbemClassObject::Get(L"Name", 0, -, 0, 0)
+Line:   1751 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  Description
+
+SUCCESS: IWbemClassObject::Get(L"Derivation", 0, -, 0, 0)
+Line:   1767 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  Description
+
+SUCCESS: IWbemClassObject::Get(L"Name", 0, -, 0, 0)
+Line:   1751 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  ExecutablePath
+
+SUCCESS: IWbemClassObject::Get(L"Derivation", 0, -, 0, 0)
+Line:   1767 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  ExecutablePath
+
+SUCCESS: IWbemClassObject::Get(L"Name", 0, -, 0, 0)
+Line:   1751 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  ExecutionState
+
+SUCCESS: IWbemClassObject::Get(L"Derivation", 0, -, 0, 0)
+Line:   1767 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  ExecutionState
+
+SUCCESS: IWbemClassObject::Get(L"Name", 0, -, 0, 0)
+Line:   1751 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  Handle
+
+SUCCESS: IWbemClassObject::Get(L"Derivation", 0, -, 0, 0)
+Line:   1767 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  Handle
+
+SUCCESS: IWbemClassObject::Get(L"Name", 0, -, 0, 0)
+Line:   1751 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  HandleCount
+
+SUCCESS: IWbemClassObject::Get(L"Derivation", 0, -, 0, 0)
+Line:   1767 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  HandleCount
+
+SUCCESS: IWbemClassObject::Get(L"Name", 0, -, 0, 0)
+Line:   1751 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  InstallDate
+
+SUCCESS: IWbemClassObject::Get(L"Derivation", 0, -, 0, 0)
+Line:   1767 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  InstallDate
+
+SUCCESS: IWbemClassObject::Get(L"Name", 0, -, 0, 0)
+Line:   1751 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  KernelModeTime
+
+SUCCESS: IWbemClassObject::Get(L"Derivation", 0, -, 0, 0)
+Line:   1767 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  KernelModeTime
+
+SUCCESS: IWbemClassObject::Get(L"Name", 0, -, 0, 0)
+Line:   1751 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  MaximumWorkingSetSize
+
+SUCCESS: IWbemClassObject::Get(L"Derivation", 0, -, 0, 0)
+Line:   1767 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  MaximumWorkingSetSize
+
+SUCCESS: IWbemClassObject::Get(L"Name", 0, -, 0, 0)
+Line:   1751 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  MinimumWorkingSetSize
+
+SUCCESS: IWbemClassObject::Get(L"Derivation", 0, -, 0, 0)
+Line:   1767 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  MinimumWorkingSetSize
+
+SUCCESS: IWbemClassObject::Get(L"Name", 0, -, 0, 0)
+Line:   1751 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  Name
+
+SUCCESS: IWbemClassObject::Get(L"Derivation", 0, -, 0, 0)
+Line:   1767 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  Name
+
+SUCCESS: IWbemClassObject::Get(L"Description", 0,-, 0, 0)
+Line:   1923 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  The Name property defines the label by which the object is known. When subclassed, the Name property can be overridden to be a Key property.
+
+SUCCESS: IWbemClassObject::Get(L"Qualifiers", 0, -, 0, 0)
+Line:   2710 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  <null>
+
+SUCCESS: IWbemClassObject::Get(L"Name", 0, -, 0, 0)
+Line:   1751 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  OSName
+
+SUCCESS: IWbemClassObject::Get(L"Derivation", 0, -, 0, 0)
+Line:   1767 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  OSName
+
+SUCCESS: IWbemClassObject::Get(L"Name", 0, -, 0, 0)
+Line:   1751 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  OtherOperationCount
+
+SUCCESS: IWbemClassObject::Get(L"Derivation", 0, -, 0, 0)
+Line:   1767 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  OtherOperationCount
+
+SUCCESS: IWbemClassObject::Get(L"Name", 0, -, 0, 0)
+Line:   1751 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  OtherTransferCount
+
+SUCCESS: IWbemClassObject::Get(L"Derivation", 0, -, 0, 0)
+Line:   1767 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  OtherTransferCount
+
+SUCCESS: IWbemClassObject::Get(L"Name", 0, -, 0, 0)
+Line:   1751 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  PageFaults
+
+SUCCESS: IWbemClassObject::Get(L"Derivation", 0, -, 0, 0)
+Line:   1767 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  PageFaults
+
+SUCCESS: IWbemClassObject::Get(L"Name", 0, -, 0, 0)
+Line:   1751 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  PageFileUsage
+
+SUCCESS: IWbemClassObject::Get(L"Derivation", 0, -, 0, 0)
+Line:   1767 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  PageFileUsage
+
+SUCCESS: IWbemClassObject::Get(L"Name", 0, -, 0, 0)
+Line:   1751 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  ParentProcessId
+
+SUCCESS: IWbemClassObject::Get(L"Derivation", 0, -, 0, 0)
+Line:   1767 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  ParentProcessId
+
+SUCCESS: IWbemClassObject::Get(L"Name", 0, -, 0, 0)
+Line:   1751 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  PeakPageFileUsage
+
+SUCCESS: IWbemClassObject::Get(L"Derivation", 0, -, 0, 0)
+Line:   1767 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  PeakPageFileUsage
+
+SUCCESS: IWbemClassObject::Get(L"Name", 0, -, 0, 0)
+Line:   1751 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  PeakVirtualSize
+
+SUCCESS: IWbemClassObject::Get(L"Derivation", 0, -, 0, 0)
+Line:   1767 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  PeakVirtualSize
+
+SUCCESS: IWbemClassObject::Get(L"Name", 0, -, 0, 0)
+Line:   1751 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  PeakWorkingSetSize
+
+SUCCESS: IWbemClassObject::Get(L"Derivation", 0, -, 0, 0)
+Line:   1767 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  PeakWorkingSetSize
+
+SUCCESS: IWbemClassObject::Get(L"Name", 0, -, 0, 0)
+Line:   1751 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  Priority
+
+SUCCESS: IWbemClassObject::Get(L"Derivation", 0, -, 0, 0)
+Line:   1767 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  Priority
+
+SUCCESS: IWbemClassObject::Get(L"Name", 0, -, 0, 0)
+Line:   1751 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  PrivatePageCount
+
+SUCCESS: IWbemClassObject::Get(L"Derivation", 0, -, 0, 0)
+Line:   1767 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  PrivatePageCount
+
+SUCCESS: IWbemClassObject::Get(L"Name", 0, -, 0, 0)
+Line:   1751 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  ProcessId
+
+SUCCESS: IWbemClassObject::Get(L"Derivation", 0, -, 0, 0)
+Line:   1767 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  ProcessId
+
+SUCCESS: IWbemClassObject::Get(L"Description", 0,-, 0, 0)
+Line:   1923 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  The ProcessId property contains the global process identifier that can be used to identify a process. The value is valid from the creation of the process until the process is terminated.
+
+SUCCESS: IWbemClassObject::Get(L"Qualifiers", 0, -, 0, 0)
+Line:   2710 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  <null>
+
+SUCCESS: IWbemClassObject::Get(L"Name", 0, -, 0, 0)
+Line:   1751 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  QuotaNonPagedPoolUsage
+
+SUCCESS: IWbemClassObject::Get(L"Derivation", 0, -, 0, 0)
+Line:   1767 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  QuotaNonPagedPoolUsage
+
+SUCCESS: IWbemClassObject::Get(L"Name", 0, -, 0, 0)
+Line:   1751 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  QuotaPagedPoolUsage
+
+SUCCESS: IWbemClassObject::Get(L"Derivation", 0, -, 0, 0)
+Line:   1767 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  QuotaPagedPoolUsage
+
+SUCCESS: IWbemClassObject::Get(L"Name", 0, -, 0, 0)
+Line:   1751 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  QuotaPeakNonPagedPoolUsage
+
+SUCCESS: IWbemClassObject::Get(L"Derivation", 0, -, 0, 0)
+Line:   1767 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  QuotaPeakNonPagedPoolUsage
+
+SUCCESS: IWbemClassObject::Get(L"Name", 0, -, 0, 0)
+Line:   1751 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  QuotaPeakPagedPoolUsage
+
+SUCCESS: IWbemClassObject::Get(L"Derivation", 0, -, 0, 0)
+Line:   1767 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  QuotaPeakPagedPoolUsage
+
+SUCCESS: IWbemClassObject::Get(L"Name", 0, -, 0, 0)
+Line:   1751 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  ReadOperationCount
+
+SUCCESS: IWbemClassObject::Get(L"Derivation", 0, -, 0, 0)
+Line:   1767 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  ReadOperationCount
+
+SUCCESS: IWbemClassObject::Get(L"Name", 0, -, 0, 0)
+Line:   1751 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  ReadTransferCount
+
+SUCCESS: IWbemClassObject::Get(L"Derivation", 0, -, 0, 0)
+Line:   1767 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  ReadTransferCount
+
+SUCCESS: IWbemClassObject::Get(L"Name", 0, -, 0, 0)
+Line:   1751 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  SessionId
+
+SUCCESS: IWbemClassObject::Get(L"Derivation", 0, -, 0, 0)
+Line:   1767 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  SessionId
+
+SUCCESS: IWbemClassObject::Get(L"Name", 0, -, 0, 0)
+Line:   1751 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  Status
+
+SUCCESS: IWbemClassObject::Get(L"Derivation", 0, -, 0, 0)
+Line:   1767 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  Status
+
+SUCCESS: IWbemClassObject::Get(L"Name", 0, -, 0, 0)
+Line:   1751 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  TerminationDate
+
+SUCCESS: IWbemClassObject::Get(L"Derivation", 0, -, 0, 0)
+Line:   1767 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  TerminationDate
+
+SUCCESS: IWbemClassObject::Get(L"Name", 0, -, 0, 0)
+Line:   1751 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  ThreadCount
+
+SUCCESS: IWbemClassObject::Get(L"Derivation", 0, -, 0, 0)
+Line:   1767 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  ThreadCount
+
+SUCCESS: IWbemClassObject::Get(L"Name", 0, -, 0, 0)
+Line:   1751 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  UserModeTime
+
+SUCCESS: IWbemClassObject::Get(L"Derivation", 0, -, 0, 0)
+Line:   1767 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  UserModeTime
+
+SUCCESS: IWbemClassObject::Get(L"Name", 0, -, 0, 0)
+Line:   1751 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  VirtualSize
+
+SUCCESS: IWbemClassObject::Get(L"Derivation", 0, -, 0, 0)
+Line:   1767 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  VirtualSize
+
+SUCCESS: IWbemClassObject::Get(L"Name", 0, -, 0, 0)
+Line:   1751 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  WindowsVersion
+
+SUCCESS: IWbemClassObject::Get(L"Derivation", 0, -, 0, 0)
+Line:   1767 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  WindowsVersion
+
+SUCCESS: IWbemClassObject::Get(L"Name", 0, -, 0, 0)
+Line:   1751 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  WorkingSetSize
+
+SUCCESS: IWbemClassObject::Get(L"Derivation", 0, -, 0, 0)
+Line:   1767 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  WorkingSetSize
+
+SUCCESS: IWbemClassObject::Get(L"Name", 0, -, 0, 0)
+Line:   1751 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  WriteOperationCount
+
+SUCCESS: IWbemClassObject::Get(L"Derivation", 0, -, 0, 0)
+Line:   1767 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  WriteOperationCount
+
+SUCCESS: IWbemClassObject::Get(L"Name", 0, -, 0, 0)
+Line:   1751 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  WriteTransferCount
+
+SUCCESS: IWbemClassObject::Get(L"Derivation", 0, -, 0, 0)
+Line:   1767 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+Result:  WriteTransferCount
+
+SUCCESS: CoCreateInstance(CLSID_WbemObjectTextSrc, NULL,CLSCTX_INPROC_SERVER, IID_IWbemObjectTextSrc, -)
+Line:   2787 File: onecore\admin\wmi\wbem\tools\wmic\execengine.cpp
+
+SUCCESS: IWbemLocator::ConnectServer(L"\\DESKTOP-N4H9E7R\ROOT\CIMV2", L"<null>", *, L"ms_409", 0L, L"<null>", NULL, -)
+Line:   2697 File: onecore\admin\wmi\wbem\tools\wmic\execengine.cpp
+
+SUCCESS: CoSetProxyBlanket(-, RPC_C_AUTHN_DEFAULT, RPC_C_AUTHZ_NONE,NULL, 6,   3, -, EOAC_NONE)
+Line:   2740 File: onecore\admin\wmi\wbem\tools\wmic\execengine.cpp
+
+SUCCESS: CoCreateInstanceEx(CLSID_WbemContext, NULL,CLSCTX_INPROC_SERVER, 0, 1, -)
+Line:   2838 File: onecore\admin\wmi\wbem\tools\wmic\execengine.cpp
+
+SUCCESS: IWbemServices::ExecQuery(L"WQL", L"SELECT Name, ProcessId FROM Win32_Process WHERE ProcessId=0", 0, NULL, -)
+Line:    319 File: onecore\admin\wmi\wbem\tools\wmic\execengine.cpp
+
+SUCCESS: IWbemContext::SetValue(L"ExcludeSystemProperties",0, -)
+Line:    338 File: onecore\admin\wmi\wbem\tools\wmic\execengine.cpp
+
+SUCCESS: CoSetProxyBlanket(-, RPC_C_AUTHN_DEFAULT,RPC_C_AUTHZ_NONE, NULL, 6,   3, -, EOAC_NONE)
+Line:    385 File: onecore\admin\wmi\wbem\tools\wmic\execengine.cpp
+
+SUCCESS: IEnumWbemClassObject->Next(WBEM_INFINITE, 1, -, -)
+Line:    454 File: onecore\admin\wmi\wbem\tools\wmic\execengine.cpp
+
+SUCCESS: IWbemObjectTextSrc::GetText(0, -, WMI_OBJECT_TEXT_CIM_DTD_2_0, -, -)
+Line:    473 File: onecore\admin\wmi\wbem\tools\wmic\execengine.cpp
+
+SUCCESS: IEnumWbemClassObject->Next(WBEM_INFINITE, 1, -, -)
+Line:    530 File: onecore\admin\wmi\wbem\tools\wmic\execengine.cpp
+
+SUCCESS: CoCreateInstance(CLSID_FreeThreadedDOMDocument60, NULL, CLSCTX_INPROC_SERVER, IID_IXMLDOMDocument2, -)
+Line:    197 File: onecore\admin\wmi\wbem\tools\wmic\formatengine.cpp
+
+SUCCESS: IXMLDOMDocument::loadXML(-, -)
+Line:    228 File: onecore\admin\wmi\wbem\tools\wmic\formatengine.cpp
+
+SUCCESS: CoCreateInstance(CLSID_XSLTemplate60, NULL, CLSCTX_SERVER, IID_IXSLTemplate, -)
+Line:   3240 File: onecore\admin\wmi\wbem\tools\wmic\formatengine.cpp
+
+SUCCESS: CoCreateInstance(CLSID_FreeThreadedDOMDocument60, NULL, CLSCTX_SERVER,IID_IXMLDOMDocument2, -)
+Line:   3263 File: onecore\admin\wmi\wbem\tools\wmic\formatengine.cpp
+
+SUCCESS: IXSLDOMDocument2::put_async(VARIANT_FALSE)
+Line:   3275 File: onecore\admin\wmi\wbem\tools\wmic\formatengine.cpp
+
+SUCCESS: IXSLDOMDocument2::setProperty(VARIANT_TRUE)
+Line:   3290 File: onecore\admin\wmi\wbem\tools\wmic\formatengine.cpp
+
+SUCCESS: IXSLDOMDocument2::load(L"C:\WINDOWS\system32\wbem\\texttable.xsl", -)
+Line:   3305 File: onecore\admin\wmi\wbem\tools\wmic\formatengine.cpp
+
+SUCCESS: IXSTemplate::putref_stylesheet(-)
+Line:   3319 File: onecore\admin\wmi\wbem\tools\wmic\formatengine.cpp
+
+SUCCESS: IXSTemplate::createProcessor(-)
+Line:   3331 File: onecore\admin\wmi\wbem\tools\wmic\formatengine.cpp
+
+SUCCESS: IXSProcessor::put_input(-)
+Line:   3368 File: onecore\admin\wmi\wbem\tools\wmic\formatengine.cpp
+
+SUCCESS: IXSProcessor::tranform(-)
+Line:   3409 File: onecore\admin\wmi\wbem\tools\wmic\formatengine.cpp
+
+SUCCESS: IXSProcessor::get_output(-)
+Line:   3449 File: onecore\admin\wmi\wbem\tools\wmic\formatengine.cpp
+

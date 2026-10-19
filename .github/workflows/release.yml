@@ -5,7 +5,7 @@ on:
       tag:
         description: 'Exact Cargo.toml version, prefixed with v'
         required: true
-        default: v0.1.0-dev
+        default: v0.1.0-dev.1
         type: string
 
 permissions:

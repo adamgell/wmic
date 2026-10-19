@@ -1,0 +1,16 @@
+SUCCESS: IWbemLocator::ConnectServer(L"root\cli", NULL, NULL, L"ms_409", 0L, L"<null>", NULL, -)
+Line:    143 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+
+SUCCESS: CoSetProxyBlanket(-, RPC_C_AUTHN_DEFAULT, RPC_C_AUTHZ_NONE, NULL, 6, 3, -, EOAC_NONE)
+Line:    162 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+
+SUCCESS: IWbemLocator::ConnectServer(L"root\cli\ms_409", NULL, NULL, L"ms_409", 0L, L"<null>", NULL, -)
+Line:   2524 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+
+SUCCESS: CoSetProxyBlanket(-, RPC_C_AUTHN_DEFAULT, RPC_C_AUTHZ_NONE, NULL, 6,   3, -, EOAC_NONE)
+Line:   2538 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+
+FAIL: IWbemServices::GetObject(L"MSFT_CliAlias.FriendlyName='WmicTraceMissingAlias'", 0, NULL, -)
+Line:    239 File: onecore\admin\wmi\wbem\tools\wmic\cmdalias.cpp
+
+WmicTraceMissingAlias - Alias not found.

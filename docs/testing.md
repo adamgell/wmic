@@ -14,7 +14,7 @@ python3.12 -m unittest discover -s tools/release/tests
 
 The Windows job additionally builds and checks all three MSVC targets and executes tests on its x64 runner. The Windows-only HTML regression test renders fixed typed data through MSXML and compares it with original WMIC captures; it does not query the runner's OS data. CI installs stable Rust, with the minimum version enforced by `Cargo.toml`.
 
-The Python suite verifies the inventory and integrity of all 2,253 committed oracle cases. It also regenerates the 742-case matrix and 286-case switch-value suite exactly and tests that the comparison gate rejects missing/duplicate/substituted cases, incompatible profiles, changed arguments, corrupted streams, invalid status types, timeouts, incomplete reports, missing console evidence, failed cleanup, and omitted owned files. Password-bearing command arguments and interactive stdin are rejected before a capture is persisted.
+The Python suite verifies the inventory and integrity of all 2,278 committed oracle cases. It also regenerates the 742-case matrix and 286-case switch-value suite exactly and tests that the comparison gate rejects missing/duplicate/substituted cases, incompatible profiles, changed arguments, corrupted streams, invalid status types, timeouts, incomplete reports, missing console evidence, failed cleanup, and omitted owned files. Password-bearing command arguments and interactive stdin are rejected before a capture is persisted.
 
 ## Functional matrix
 
@@ -49,11 +49,13 @@ python3.12 tools/reference/run_corpus.py \
 
 Repeat with `x86_64-pc-windows-msvc` and `i686-pc-windows-msvc`, using a new output directory each time. Each run captures a fresh original by default. The x86 candidate uses the installed x86 original. On the measured ARM64 environment, the x64 candidate uses the ARM64 original, and the report explicitly labels this cross-architecture comparison.
 
+The `trace` suite adds 25 read-only cases for classic trace records, errors, formatting, cached interactive resources and no-input method results. Its portable regressions compare complete stderr; Windows CI also launches 17 stable actual-CLI cases. Select `--suite trace` for native comparisons. See [TRACE diagnostic notes](research/trace-diagnostics.md) for reference identities and unverified paths.
+
 For the additional stable matrix alone, add `--suite compatibility`. The focused REA suite is `--suite rea-25`; the method-argument suite is `--suite method-arguments`. Select `--suite path-method` for the direct-method diagnostics. For an explicitly selected compatible prior capture, use `--reference-dir DIR`, whose children are suite names containing `capture.json` and raw streams. The runner checks the original executable hash, exact case/argument inventory, declared normalization rules, and matching machine/account/locale/code-page/launcher profiles. Cached captures remain unsuitable for volatile OS fields even when their profiles match.
 
 Exit codes are strict: **0** means all selected cases matched; **1** means completed evidence contains differences; **2** means invalid/incomplete evidence or an execution failure. `--check-report FILE` uses the same gate and requires every requested suite plus the final completion marker. A partial report cannot pass. There is no general known-difference allowlist.
 
-The complete original corpus retains three documented differences per architecture: two queries include changing OS data, and `/TRACE` uses implementation-specific diagnostics. Therefore the full strict run exits 1; the separate 742-case stable suite must match exactly. Do not turn an exit 1 into a success merely by discarding the report.
+Historical full-corpus reports recorded three differences per architecture: two changing OS queries and the earlier implementation-specific TRACE line. The TRACE follow-up replaces that line for the measured paths. Those historical counts are not results for this revision; a fresh full run is required to establish its remaining differences. Changing OS data can still make a full strict run exit 1. The separate 742-case stable suite must match exactly. Do not turn an exit 1 into success by discarding its report.
 
 Only explicitly declared XML root COMMAND STARTTIME or its HTML representation is normalized. Owned file comparisons additionally locate direct RECORD timestamps without reserializing XML; lifecycle comparisons map only the independently recorded owned PID. Other bytes, numeric values, encodings, whitespace, ordering and statuses remain strict.
 
