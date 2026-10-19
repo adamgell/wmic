@@ -45,6 +45,35 @@ fn identifier(u: u16) -> bool {
         || (48..=57).contains(&u)
         || u == 95
 }
+
+/// Classic PATH GET turns one key binding into a WQL condition. Keep literals
+/// opaque, including their quote spelling and unpaired UTF-16 units.
+fn path_get_body(r: &ResolvedRequest) -> Option<WideText> {
+    if r.from_alias || r.class_mode || r.verb != Verb::Get || r.selector.is_some() {
+        return None;
+    }
+    let path = r.instance_path.as_ref()?;
+    let end = r.class_name.0.len();
+    if path.0.get(..end)? != r.class_name.0 || path.0.get(end) != Some(&46) {
+        return None;
+    }
+    let keys = &path.0[end + 1..];
+    if !keys.contains(&61)
+        || keys.contains(&44)
+        || keys
+            .windows(2)
+            .any(|pair| pair[0] == 92 && matches!(pair[1], 34 | 39))
+    {
+        // Native rejects comma-bearing paths and does not preserve escaped
+        // quotes as WQL literals. Do not turn those forms into successful queries.
+        return None;
+    }
+    let mut body = r.class_name.clone();
+    push(&mut body, " WHERE ");
+    body.0.extend(keys);
+    Some(body)
+}
+
 pub fn build_query(r: &ResolvedRequest) -> WideText {
     let properties: Option<Vec<WideText>> = match r.verb {
         Verb::Get if !r.properties.is_empty() => Some(r.properties.clone()),
@@ -68,9 +97,8 @@ pub fn build_query(r: &ResolvedRequest) -> WideText {
         Some(q) => keyword(&q.0, "from")
             .map(|i| WideText(q.0[i + 4..].to_vec()).trim_ascii())
             .unwrap_or_else(|| r.class_name.clone()),
-        None => r
-            .instance_path
-            .clone()
+        None => path_get_body(r)
+            .or_else(|| r.instance_path.clone())
             .unwrap_or_else(|| r.class_name.clone()),
     };
     // A target's original projection is authoritative unless the command supplies one.
