@@ -1,5 +1,7 @@
+mod preflight;
 mod request;
 use crate::model::{ManagementError, ManagementResult};
+pub use preflight::*;
 pub use request::*;
 
 pub trait Confirmation {
@@ -16,6 +18,13 @@ pub trait Confirmation {
     fn confirm(&mut self, prompt: &crate::model::WideText) -> Result<bool, ManagementError>;
 }
 pub trait Management {
+    /// Validate PATH parser metadata without queries, method invocation or writes.
+    fn preflight_path(
+        &mut self,
+        _request: PathPreflightRequest<'_>,
+    ) -> Result<PathPreflightOutcome, PathPreflightError> {
+        Ok(PathPreflightOutcome::Unsupported)
+    }
     fn load_translation(
         &mut self,
         _role: &crate::model::WideText,

@@ -1,0 +1,41 @@
+SUCCESS: CoCreateInstance(CLSID_WbemObjectTextSrc, NULL,CLSCTX_INPROC_SERVER, IID_IWbemObjectTextSrc, -)
+Line:   2787 File: onecore\admin\wmi\wbem\tools\wmic\execengine.cpp
+
+Node - 0.0.0.0
+RPC Server not available.
+SUCCESS: CoCreateInstance(CLSID_FreeThreadedDOMDocument60, NULL, CLSCTX_INPROC_SERVER, IID_IXMLDOMDocument2, -)
+Line:    197 File: onecore\admin\wmi\wbem\tools\wmic\formatengine.cpp
+
+SUCCESS: IXMLDOMDocument::loadXML(-, -)
+Line:    228 File: onecore\admin\wmi\wbem\tools\wmic\formatengine.cpp
+
+SUCCESS: CoCreateInstance(CLSID_XSLTemplate60, NULL, CLSCTX_SERVER, IID_IXSLTemplate, -)
+Line:   3240 File: onecore\admin\wmi\wbem\tools\wmic\formatengine.cpp
+
+SUCCESS: CoCreateInstance(CLSID_FreeThreadedDOMDocument60, NULL, CLSCTX_SERVER,IID_IXMLDOMDocument2, -)
+Line:   3263 File: onecore\admin\wmi\wbem\tools\wmic\formatengine.cpp
+
+SUCCESS: IXSLDOMDocument2::put_async(VARIANT_FALSE)
+Line:   3275 File: onecore\admin\wmi\wbem\tools\wmic\formatengine.cpp
+
+SUCCESS: IXSLDOMDocument2::setProperty(VARIANT_TRUE)
+Line:   3290 File: onecore\admin\wmi\wbem\tools\wmic\formatengine.cpp
+
+SUCCESS: IXSLDOMDocument2::load(L"C:\WINDOWS\system32\wbem\\texttable.xsl", -)
+Line:   3305 File: onecore\admin\wmi\wbem\tools\wmic\formatengine.cpp
+
+SUCCESS: IXSTemplate::putref_stylesheet(-)
+Line:   3319 File: onecore\admin\wmi\wbem\tools\wmic\formatengine.cpp
+
+SUCCESS: IXSTemplate::createProcessor(-)
+Line:   3331 File: onecore\admin\wmi\wbem\tools\wmic\formatengine.cpp
+
+SUCCESS: IXSProcessor::put_input(-)
+Line:   3368 File: onecore\admin\wmi\wbem\tools\wmic\formatengine.cpp
+
+SUCCESS: IXSProcessor::tranform(-)
+Line:   3409 File: onecore\admin\wmi\wbem\tools\wmic\formatengine.cpp
+
+SUCCESS: IXSProcessor::get_output(-)
+Line:   3449 File: onecore\admin\wmi\wbem\tools\wmic\formatengine.cpp
+

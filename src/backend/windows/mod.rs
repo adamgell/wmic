@@ -5,6 +5,7 @@ mod connect;
 mod external;
 mod methods;
 mod ping;
+mod preflight;
 mod privileges;
 mod query;
 mod schema;
@@ -46,6 +47,14 @@ pub(crate) fn failure(
     if crate::platform::windows::console::interrupted() {
         return cancelled(r, None);
     }
+    failure_with_connection(e, &r.connection, operation)
+}
+
+pub(super) fn failure_with_connection(
+    e: windows::core::Error,
+    connection: &crate::backend::ConnectionOptions,
+    operation: &str,
+) -> ManagementError {
     let extended = unsafe {
         // Error owns IErrorInfo for this borrow; WMI errors can also expose IWbemClassObject.
         IUnknown::from_raw_borrowed(&e.as_ptr())
@@ -56,7 +65,7 @@ pub(crate) fn failure(
     };
     ManagementError {
         code: e.code().0 as u32,
-        target: r.connection.node.clone(),
+        target: connection.node.clone(),
         message: methods::status_text(e.code().0 as u32),
         operation: operation.into(),
         extended,
@@ -81,6 +90,12 @@ impl WindowsManagement {
     }
 }
 impl Management for WindowsManagement {
+    fn preflight_path(
+        &mut self,
+        request: crate::backend::PathPreflightRequest<'_>,
+    ) -> Result<crate::backend::PathPreflightOutcome, crate::backend::PathPreflightError> {
+        preflight::execute(request)
+    }
     fn load_translation(
         &mut self,
         role: &WideText,
@@ -156,7 +171,11 @@ impl WindowsManagement {
                     }
                     return Ok(ManagementResult::Schema(schema));
                 }
-                if r.query.is_none() {
+                if r.query.is_none()
+                    && !r.multiple_nodes
+                    && (!r.properties.is_empty()
+                        || r.modifiers.iter().any(|m| m.scope == ModifierScope::Verb))
+                {
                     get_object(&svc, &r.class_name).map_err(|e| failure(e, r, "class"))?;
                 }
                 query::query(&svc, r).map(ManagementResult::Objects)

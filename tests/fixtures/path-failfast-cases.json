@@ -1,0 +1,211 @@
+{
+  "schema_version": 1,
+  "timeout_seconds": 300,
+  "cases": [
+    {
+      "id": "path-zero",
+      "arguments": "/failfast:on /node:0.0.0.0 path Win32_OperatingSystem get Caption",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "path-zero-trace",
+      "arguments": "/trace:on /failfast:on /node:0.0.0.0 path Win32_OperatingSystem get Caption",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "path-zero-list",
+      "arguments": "/trace:on /failfast:on /node:0.0.0.0 path Win32_OperatingSystem list brief",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "path-zero-rawxml",
+      "arguments": "/trace:on /failfast:on /node:0.0.0.0 path Win32_OperatingSystem get Caption /format:rawxml",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "path-zero-call",
+      "arguments": "/trace:on /failfast:on /node:0.0.0.0 path Win32_OperatingSystem call WmicCompatMissingMethod",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "path-zero-help",
+      "arguments": "/trace:on /failfast:on /node:0.0.0.0 path Win32_OperatingSystem get /?",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "path-missing-class",
+      "arguments": "/failfast:on path WmicTraceMissingClass get Caption",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "path-missing-class-trace",
+      "arguments": "/trace:on /failfast:on path WmicTraceMissingClass get Caption",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "path-missing-namespace",
+      "arguments": "/trace:on /failfast:on /namespace:\\\\root\\WmicTraceMissingNamespace path Win32_OperatingSystem get Caption",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "path-loopback",
+      "arguments": "/failfast:on /node:127.0.0.2 path Win32_OperatingSystem get Caption",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "path-loopback-trace",
+      "arguments": "/trace:on /failfast:on /node:127.0.0.2 path Win32_OperatingSystem get Caption",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "path-missing-property",
+      "arguments": "/trace:on /failfast:on /node:127.0.0.2 path Win32_OperatingSystem get WmicTraceMissingProperty",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "path-zero-missing-property",
+      "arguments": "/trace:on /failfast:on /node:0.0.0.0 path Win32_OperatingSystem get WmicTraceMissingProperty",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "path-bad-first",
+      "arguments": "/trace:on /failfast:on /node:0.0.0.0,127.0.0.2 path Win32_OperatingSystem get Caption",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "path-bad-first-off",
+      "arguments": "/trace:on /aggregate:off /failfast:on /node:0.0.0.0,127.0.0.2 path Win32_OperatingSystem get Caption",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "path-good-first",
+      "arguments": "/trace:on /failfast:on /node:127.0.0.2,0.0.0.0 path Win32_OperatingSystem get Caption",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "path-good-first-off",
+      "arguments": "/trace:on /aggregate:off /failfast:on /node:127.0.0.2,0.0.0.0 path Win32_OperatingSystem get Caption",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "path-good-first-invalid-class",
+      "arguments": "/trace:on /failfast:on /node:127.0.0.2,0.0.0.0 path WmicTraceMissingClass get Caption",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "path-bad-first-invalid-class",
+      "arguments": "/trace:on /failfast:on /node:0.0.0.0,127.0.0.2 path WmicTraceMissingClass get Caption",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "path-zero-instance",
+      "arguments": "/trace:on /failfast:on /node:0.0.0.0 path Win32_Process.Handle=\"4294967295\" get Caption",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "alias-zero-control",
+      "arguments": "/trace:on /failfast:on /node:0.0.0.0 os get Caption",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "path-bare-zero",
+      "arguments": "/trace:on /failfast:on /node:0.0.0.0 path Win32_OperatingSystem",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "path-get-all-zero",
+      "arguments": "/trace:on /failfast:on /node:0.0.0.0 path Win32_OperatingSystem get",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "path-get-all-format-zero",
+      "arguments": "/trace:on /failfast:on /node:0.0.0.0 path Win32_OperatingSystem get /format:csv",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "path-missing-class-call",
+      "arguments": "/trace:on /failfast:on path WmicTraceMissingClass call WmicCompatMissingMethod",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "path-unknown-method",
+      "arguments": "/trace:on /failfast:on path Win32_OperatingSystem call WmicCompatMissingMethod",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "path-same-node-twice",
+      "arguments": "/trace:on /failfast:on /node:127.0.0.2,127.0.0.2 path Win32_OperatingSystem get Caption",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "path-bare-missing-class",
+      "arguments": "/trace:on /failfast:on path WmicTraceMissingClass",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "path-get-all-missing-class",
+      "arguments": "/trace:on /failfast:on path WmicTraceMissingClass get",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "path-readonly-method",
+      "arguments": "/trace:on /failfast:on path Win32_Process where \"ProcessId=0\" call GetOwner",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "interactive-class-failure-recovery",
+      "arguments": "",
+      "stdin_base64": "L3RyYWNlOm9uIC9mYWlsZmFzdDpvbiBwYXRoIFdtaWNUcmFjZU1pc3NpbmdDbGFzcyBnZXQgQ2FwdGlvbg0KL3RyYWNlOm9uIC9mYWlsZmFzdDpvbiBwYXRoIFdpbjMyX09wZXJhdGluZ1N5c3RlbSBnZXQgQ2FwdGlvbg0KZXhpdA0K",
+      "operation": "read_only",
+      "timeout_ms": 20000
+    },
+    {
+      "id": "path-bare-missing-class-off",
+      "arguments": "/trace:on /failfast:off path WmicTraceMissingClass",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "path-get-all-missing-class-off",
+      "arguments": "/trace:on /failfast:off path WmicTraceMissingClass get",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "path-multi-missing-class-off",
+      "arguments": "/trace:on /failfast:off /node:127.0.0.2,127.0.0.3 path WmicTraceMissingClass get Caption",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    }
+  ]
+}

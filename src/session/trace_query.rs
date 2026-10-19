@@ -20,11 +20,18 @@ fn supported(request: &ResolvedRequest) -> bool {
     matches!(request.verb, Verb::Get | Verb::List) && !request.class_mode
 }
 
-fn parser_rejected(request: &ResolvedRequest, error: Option<&ManagementError>) -> bool {
+fn parser_rejected(
+    request: &ResolvedRequest,
+    error: Option<&ManagementError>,
+    path_ready: bool,
+) -> bool {
     error.is_some_and(|e| {
         e.operation.eq_ignore_case("class")
-            || !request.from_alias && e.operation.eq_ignore_case("failfast")
-            || !request.from_alias && matches!(e.code, 0x80041002 | 0x8004100e | 0x80041010)
+            || !request.from_alias && !path_ready && e.operation.eq_ignore_case("failfast")
+            || !request.from_alias
+                && !path_ready
+                && !request.multiple_nodes
+                && matches!(e.code, 0x80041002 | 0x8004100e | 0x80041010)
     })
 }
 
@@ -64,7 +71,7 @@ fn execution(
     result: Result<&ManagementResult, &ManagementError>,
     node: &WideText,
 ) -> WideText {
-    QueryState::default().execution(request, result, node)
+    QueryState::default().execution(request, result, node, false)
 }
 
 pub(in crate::session) fn method_record(
@@ -110,9 +117,10 @@ impl QueryState {
         &mut self,
         request: &ResolvedRequest,
         result: Result<&ManagementResult, &ManagementError>,
+        path_ready: bool,
     ) {
         let error = result.err();
-        if supported(request) && !parser_rejected(request, error) {
+        if supported(request) && !parser_rejected(request, error, path_ready) {
             self.text_source = true;
             self.context |= connected(error);
         }
@@ -123,6 +131,7 @@ impl QueryState {
         request: &ResolvedRequest,
         result: Result<&ManagementResult, &ManagementError>,
         node: &WideText,
+        path_ready: bool,
     ) -> WideText {
         let mut out = WideText::default();
         let method_results = match result {
@@ -138,7 +147,7 @@ impl QueryState {
         }
         let error = result.err();
         // PATH class/namespace validation belongs to the parser and precedes execution.
-        if parser_rejected(request, error) {
+        if parser_rejected(request, error, path_ready) {
             return out;
         }
         let connection = &request.connection;
@@ -599,8 +608,8 @@ mod tests {
         let mut state = QueryState::default();
         let request = request("os get Caption");
         let objects = rows(1);
-        state.execution(&request, Ok(&objects), &"DESKTOP-N4H9E7R".into());
-        let actual = state.execution(&request, Ok(&objects), &"DESKTOP-N4H9E7R".into());
+        state.execution(&request, Ok(&objects), &"DESKTOP-N4H9E7R".into(), false);
+        let actual = state.execution(&request, Ok(&objects), &"DESKTOP-N4H9E7R".into(), false);
         let reference = std::str::from_utf8(include_bytes!(
             "../../tests/fixtures/trace-reference/interactive-toggle.stderr.bin"
         ))
@@ -627,12 +636,12 @@ mod tests {
             partial: None,
         };
         let failed = state
-            .execution(&request, Err(&failure), &"NODE".into())
+            .execution(&request, Err(&failure), &"NODE".into(), false)
             .to_string_lossy();
         assert!(failed.contains("Line:   2787 File:"));
         assert!(!failed.contains("Line:   2838 File:"));
         let recovered = state
-            .execution(&request, Ok(&rows(1)), &"NODE".into())
+            .execution(&request, Ok(&rows(1)), &"NODE".into(), false)
             .to_string_lossy();
         assert!(!recovered.contains("Line:   2787 File:"));
         assert!(recovered.contains("Line:   2838 File:"));
@@ -645,14 +654,21 @@ mod tests {
             &request("process where \"ProcessId=0\" call GetOwner"),
             Ok(&ManagementResult::Methods(vec![])),
             &"NODE".into(),
+            false,
         );
         state.execution(
             &request("class Win32_Process"),
             Ok(&rows(1)),
             &"NODE".into(),
+            false,
         );
         let query = state
-            .execution(&request("os get Caption"), Ok(&rows(1)), &"NODE".into())
+            .execution(
+                &request("os get Caption"),
+                Ok(&rows(1)),
+                &"NODE".into(),
+                false,
+            )
             .to_string_lossy();
         assert!(query.contains("Line:   2787 File:"));
         assert!(query.contains("Line:   2838 File:"));
@@ -663,9 +679,9 @@ mod tests {
         let mut state = QueryState::default();
         let request = request("os get Caption");
         let result = rows(1);
-        state.observe(&request, Ok(&result));
+        state.observe(&request, Ok(&result), false);
         let trace = state
-            .execution(&request, Ok(&result), &"NODE".into())
+            .execution(&request, Ok(&result), &"NODE".into(), false)
             .to_string_lossy();
         assert!(!trace.contains("Line:   2787 File:"));
         assert!(!trace.contains("Line:   2838 File:"));
