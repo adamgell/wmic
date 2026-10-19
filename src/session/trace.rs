@@ -199,7 +199,9 @@ impl TraceState {
             ),
             (
                 cached_server
-                    || settings.explicit_nodes && settings.nodes.iter().any(|n| !n.eq_cli(".")),
+                    || settings.explicit_nodes
+                        && !settings.failfast
+                        && settings.nodes.iter().any(|n| !n.eq_cli(".")),
                 556,
                 "Server",
                 "0, -, 0, 0",
@@ -462,7 +464,12 @@ pub(super) fn parser(
     result: Result<&ManagementResult, &ManagementError>,
 ) -> WideText {
     let mut out = WideText::default();
-    if request.from_alias {
+    if request.from_alias
+        || result
+            .as_ref()
+            .err()
+            .is_some_and(|e| e.operation.eq_ignore_case("failfast"))
+    {
         return out;
     }
     let error = result.err();

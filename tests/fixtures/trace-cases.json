@@ -146,6 +146,18 @@
       "arguments": "/trace:on path Win32_Process where \"Handle=0\" call GetOwner",
       "operation": "read_only",
       "timeout_ms": 10000
+    },
+    {
+      "id": "failfast-alias",
+      "arguments": "/trace:on /failfast:on /node:\"0.0.0.0\" os get Caption",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "failfast-local-control",
+      "arguments": "/trace:on /failfast:on /node:\"127.0.0.2\" os get Caption",
+      "operation": "read_only",
+      "timeout_ms": 10000
     }
   ]
 }

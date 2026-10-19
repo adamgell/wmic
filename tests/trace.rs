@@ -19,7 +19,14 @@ impl Management for OneRow {
 
 struct ReferenceResults;
 impl Management for ReferenceResults {
+    fn reachable(&mut self, node: &WideText, _: u32) -> bool {
+        !node.eq_cli("0.0.0.0")
+    }
     fn execute(&mut self, r: &ResolvedRequest) -> Result<ManagementResult, ManagementError> {
+        assert!(
+            !r.connection.node.eq_cli("0.0.0.0"),
+            "failfast must reject before execution"
+        );
         let failure = if r
             .connection
             .namespace
@@ -146,10 +153,13 @@ fn trace_query_errors_formats_aliases_and_help_match_native_fixtures() {
             .zip(expected.bytes())
             .position(|(a, b)| a != b);
         if actual != expected {
+            let start = at
+                .unwrap_or(actual.len().min(expected.len()))
+                .saturating_sub(80);
             differences.push(format!(
-                "{id}: diagnostic differs at {at:?}, actual {} bytes, expected {} bytes",
+                "{id}: diagnostic differs at {at:?}, actual {} bytes, expected {} bytes; actual {:?}, expected {:?}",
                 actual.len(),
-                expected.len()
+                expected.len(), actual.get(start..(start+260).min(actual.len())), expected.get(start..(start+260).min(expected.len()))
             ));
         }
     }
@@ -198,6 +208,97 @@ fn interactive_trace_caches_connections_and_honors_off() {
             sink.0.0.len(),
             expected.0.len()
         );
+    }
+}
+
+#[test]
+fn failfast_retains_only_initialized_resources_before_a_later_query() {
+    for traced in [false, true] {
+        let mut session = Session::new(wide("DESKTOP-N4H9E7R")).unwrap();
+        let mut sink = Sink::default();
+        let first = format!(
+            "/trace:{} /failfast:on /node:\"0.0.0.0\" os get Caption",
+            if traced { "on" } else { "off" }
+        );
+        assert_eq!(
+            session
+                .execute(
+                    &wide(&first),
+                    EntryMode::Interactive,
+                    &mut ReferenceResults,
+                    &mut sink
+                )
+                .exit_status,
+            0xABE3
+        );
+        let rejected = sink.0.to_string_lossy();
+        assert!(
+            !rejected.contains("Line:   2697"),
+            "no execution connection on rejection"
+        );
+        assert!(
+            !rejected.contains("Line:   2838"),
+            "query context remains cold"
+        );
+        let before = sink.0.0.len();
+        assert_eq!(
+            session
+                .execute(
+                    &wide("/trace:on /node:. os get Caption"),
+                    EntryMode::Interactive,
+                    &mut ReferenceResults,
+                    &mut sink
+                )
+                .exit_status,
+            0
+        );
+        let next = WideText(sink.0.0[before..].to_vec()).to_string_lossy();
+        assert!(
+            next.contains("Line:   2838"),
+            "first real query initializes its context"
+        );
+        assert!(
+            !next.contains("Line:   2787"),
+            "text source was initialized before failfast"
+        );
+        // The fake provider models a node becoming unreachable after selection;
+        // no real network configuration is changed to simulate that outage.
+    }
+}
+
+#[test]
+fn rejected_path_does_not_report_backend_calls_or_warm_query_state() {
+    for format in ["", " /format:rawxml"] {
+        let mut session = Session::new(wide("DESKTOP-N4H9E7R")).unwrap();
+        let mut sink = Sink::default();
+        assert_eq!(
+        session
+            .execute(
+                &wide(&format!("/trace:on /failfast:on /node:0.0.0.0 path Win32_OperatingSystem get Caption{format}")),
+                EntryMode::Interactive,
+                &mut ReferenceResults,
+                &mut sink
+            )
+            .exit_status,
+        0xABE3
+    );
+        // PATH preflight ordering remains a documented limitation; a backend
+        // rejected by this guard must not claim parser, query or formatter calls.
+        assert!(!sink.0.to_string_lossy().contains("engine.cpp"));
+        sink.0.0.clear();
+        assert_eq!(
+            session
+                .execute(
+                    &wide("/node:. path Win32_OperatingSystem get Caption"),
+                    EntryMode::Interactive,
+                    &mut ReferenceResults,
+                    &mut sink
+                )
+                .exit_status,
+            0
+        );
+        let expected = std::fs::read(fixtures().join("path-caption.stderr.bin")).unwrap();
+        assert_eq!(sink.0, captured(std::str::from_utf8(&expected).unwrap()));
     }
 }
 
@@ -358,7 +459,11 @@ fn windows_cli_matches_trace_diagnostics() {
     for case in manifest["cases"].as_array().unwrap() {
         let id = case["id"].as_str().unwrap();
         // CPU row counts and method __PATH values belong to the current provider.
-        if id == "cpu" || id.starts_with("call-") || id.starts_with("interactive-") {
+        if id == "cpu"
+            || id.starts_with("call-")
+            || id.starts_with("interactive-")
+            || id.starts_with("failfast-")
+        {
             continue;
         }
         let expected = capture["cases"]

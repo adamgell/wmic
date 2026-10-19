@@ -784,6 +784,7 @@ impl Session {
         let mut combined = vec![];
         let mut had_objects = false;
         let mut stdout_written = false;
+        let mut aggregate_trace_allowed = false;
         let mut blank_output = WideText::default();
         let mut failed_nodes: Vec<(WideText, ManagementError)> = vec![];
         let mut node_order: Vec<WideText> = vec![];
@@ -872,6 +873,11 @@ impl Session {
                     }
                 }
             }
+            let failfast_rejected = result
+                .as_ref()
+                .err()
+                .is_some_and(|e| e.operation.eq_ignore_case("failfast"));
+            aggregate_trace_allowed |= request.from_alias || !failfast_rejected;
             let execution_trace =
                 self.trace_state
                     .execution(&request, result.as_ref(), &node, settings.trace);
@@ -941,6 +947,7 @@ impl Session {
                             matches!(e.code, 0x80041002 | 0x8004100e | 0x80041010)
                         });
                     if settings.trace
+                        && !failfast_rejected
                         && let Err(error) = &result
                     {
                         output.stderr = super::trace::error_diagnostic(
@@ -980,6 +987,7 @@ impl Session {
                 }
             }
             if settings.trace
+                && (request.from_alias || !failfast_rejected)
                 && result.as_ref().err().is_none_or(|e| {
                     request.from_alias || !matches!(e.code, 0x80041002 | 0x8004100e | 0x80041010)
                 })
@@ -1020,6 +1028,7 @@ impl Session {
                 Err(error) => status = emit_render_error(sink, error),
             }
             if settings.trace
+                && aggregate_trace_allowed
                 && write_trace(
                     sink,
                     super::trace::formatting(&request, has_rows),

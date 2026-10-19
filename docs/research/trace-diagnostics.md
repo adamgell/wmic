@@ -8,9 +8,9 @@ TRACE also adds the HRESULT and facility to errors and substitutes longer WMI de
 
 ## Tests and reference
 
-The [23-case manifest](../../tests/fixtures/trace-cases.json) and [raw captures](../../tests/fixtures/trace-reference/) cover alias spelling, queries, multiple projections, PATH, empty results, invalid classes/properties/namespaces, formats, help, security settings, OFF, cold/warm interactive sessions, and one/two-result `GetOwner` calls. They perform no power or configuration operations. The existing RAWXML COMMAND STARTTIME policy applies only to that stdout attribute; stderr has no normalization.
+The [25-case manifest](../../tests/fixtures/trace-cases.json) and [raw captures](../../tests/fixtures/trace-reference/) cover alias spelling, queries, multiple projections, PATH, empty results, invalid classes/properties/namespaces, formats, help, security settings, OFF, cold/warm interactive sessions, and one/two-result `GetOwner` calls. They perform no power or configuration operations. The existing RAWXML COMMAND STARTTIME policy applies only to that stdout attribute; stderr has no normalization.
 
-`cargo test --test trace` compares complete records with controlled provider outcomes. Windows CI also launches the actual CLI for 17 stable commands and compares full process status and stderr. CPU instance counts and method paths are provider-dependent and are compared on the selected reference VM. CLI readers drain both pipes concurrently and terminate/reap timed-out children. Select `--suite trace` in `tools/reference/run_corpus.py` for differential captures; see the [testing guide](../testing.md).
+`cargo test --test trace` compares complete records with controlled provider outcomes. Windows CI also launches the actual CLI for 17 stable commands and compares full process status and stderr. CPU instance counts, method paths and FAILFAST reachability are environment-dependent and are compared on the selected reference VM. CLI readers drain both pipes concurrently and terminate/reap timed-out children. Select `--suite trace` in `tools/reference/run_corpus.py` for differential captures; see the [testing guide](../testing.md).
 
 Reference SHA256 values:
 
@@ -19,6 +19,10 @@ Reference SHA256 values:
 - English MUI: `5e3bc78af6eb1aea40c6899c452ca8701d28756bf1eb5f056207fc963cfea17b`.
 
 The executable's embedded version is 10.0.26100.5074. The MUI reports 10.0.26100.1, which runtime FileVersionInfo selects. Hashes identify the reference independently of those labels. This run staged pinned originals/MUI under ProgramData and restored missing Microsoft formatting data for testing. No original executable was installed in a system directory. Original executables, MUI files and stylesheets are excluded from the repository and packages.
+
+FAILFAST has separate read-only zero-address rejection and successful loopback-control captures. Microsoft initializes the text source before testing reachability, retains the plain RPC error and runs the formatter, but does not connect to WMI or initialize the query context. Portable tests simulate reachability loss with tracing both on and off before a later successful query; no real network settings change.
+
+A pre-existing limitation remains for direct PATH with FAILFAST: Microsoft validates the class connection before its reachability check; the current backend checks reachability first. On the measured zero-address probe, Microsoft returns parser connection error `0x800706ba`, while the replacement rejects with `0xabe3`. The replacement avoids inventing parser/query/formatter records for a backend it never called. This path is not included in the passing TRACE matrix; correcting its execution order requires a dedicated read-only backend preflight phase.
 
 ## Static evidence
 

@@ -6,7 +6,7 @@ Queries and methods run through native Windows WMI/COM. The executable does not 
 
 ### Changes since v0.1.0-dev
 
-- **Classic `/TRACE` diagnostics:** operation/result records, detailed WMI errors, actual row counts, formatting records, interactive caching and streamed no-input method results. Adds 23 reference cases and 17 actual-CLI checks in Windows CI. [Coverage and limits](https://github.com/adamgell/wmic/blob/main/docs/research/trace-diagnostics.md).
+- **Classic `/TRACE` diagnostics:** operation/result records, detailed WMI errors, actual row counts, formatting records, interactive caching and streamed no-input method results. Adds 25 reference cases and 17 actual-CLI checks in Windows CI. [Coverage and limits](https://github.com/adamgell/wmic/blob/main/docs/research/trace-diagnostics.md).
 - **macOS support:** native system providers, familiar aliases and extensive [documentation and examples](https://github.com/adamgell/wmic/blob/main/docs/macos.md). Build macOS from source; this release's downloadable executables are for Windows.
 - **Remote Windows queries from macOS/Unix:** WS-Management over HTTP/HTTPS, with NTLMv2 and macOS Kerberos support. Automated protocol tests cover authentication and message protection; live authenticated endpoint acceptance remains unverified.
 - **Compatibility fixes:** malformed method arguments, unknown PATH methods, `/AGGREGATE:OFF` and projected `__PROPERTY_COUNT`, with regression tests.
@@ -39,6 +39,6 @@ Signed builds are available for **Windows ARM64, x64, and x86**. Each executable
 
 ### Development status
 
-This is **v0.1.0-dev.1**, a development prerelease. Full classic WMIC compatibility is not claimed. The [compatibility report](https://github.com/adamgell/wmic/blob/main/docs/compatibility.md) describes the measured baseline, known differences, and unverified Windows versions, languages, hardware, remote-authentication scenarios, and provider operations. The signed release builds have separate hashes and do not expand that runtime evidence.
+This is **v0.1.0-dev.1**, a development prerelease. Full classic WMIC compatibility is not claimed. The [compatibility report](https://github.com/adamgell/wmic/blob/main/docs/compatibility.md) describes the measured baseline, known differences, and unverified Windows versions, languages, hardware, remote-authentication scenarios, and provider operations. The signed release builds have separate hashes and do not expand that runtime evidence. Direct PATH commands with `/FAILFAST` retain a known preflight-order difference; see the TRACE coverage notes.
 
 The reference VM has quarantined unsigned development builds as `Trojan:Win32/Bearfoos.A!ml`, including during this release validation, and blocks scripted XSL behavior as `Behavior:Win32/WmiFormatXslScripting.C`. These detections remain unresolved. Signing and passing compatibility tests do not establish a false positive or clear a detection.

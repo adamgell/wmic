@@ -23,16 +23,18 @@ fn supported(request: &ResolvedRequest) -> bool {
 fn parser_rejected(request: &ResolvedRequest, error: Option<&ManagementError>) -> bool {
     error.is_some_and(|e| {
         e.operation.eq_ignore_case("class")
+            || !request.from_alias && e.operation.eq_ignore_case("failfast")
             || !request.from_alias && matches!(e.code, 0x80041002 | 0x8004100e | 0x80041010)
     })
 }
 
 fn connected(error: Option<&ManagementError>) -> bool {
     !error.is_some_and(|e| {
-        matches!(
-            e.code,
-            0x800706ba | 0x8007052e | 0x80070005 | 0x80041003 | 0x8004100e
-        )
+        e.operation.eq_ignore_case("failfast")
+            || matches!(
+                e.code,
+                0x800706ba | 0x8007052e | 0x80070005 | 0x80041003 | 0x8004100e
+            )
     })
 }
 
@@ -150,6 +152,12 @@ impl QueryState {
                 None,
                 true,
             );
+        }
+        // Classic alias execution creates its text source before checking
+        // reachability, but never opens a WMI connection or query context on
+        // rejection. The formatter still handles the plain failure output.
+        if error.is_some_and(|e| e.operation.eq_ignore_case("failfast")) {
+            return out;
         }
         let connected = connected(error);
         let namespace = connection.namespace.to_string_lossy();
