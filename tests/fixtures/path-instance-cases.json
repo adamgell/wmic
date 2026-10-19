@@ -1,0 +1,110 @@
+{
+  "schema_version": 1,
+  "timeout_seconds": 240,
+  "cases": [
+    {
+      "id": "path-double",
+      "arguments": "/trace:on path Win32_Process.Handle=\"4294967295\" get Caption",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "path-double-plain",
+      "arguments": "path Win32_Process.Handle=\"4294967295\" get Caption",
+      "operation": "read_only",
+      "timeout_ms": 10000,
+      "cli_case": true
+    },
+    {
+      "id": "path-single",
+      "arguments": "/trace:on path Win32_Process.Handle='4294967295' get Caption",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "path-single-plain",
+      "arguments": "path Win32_Process.Handle='4294967295' get Caption",
+      "operation": "read_only",
+      "timeout_ms": 10000,
+      "cli_case": true
+    },
+    {
+      "id": "path-number",
+      "arguments": "/trace:on path Win32_Process.Handle=4294967295 get Caption",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "path-number-plain",
+      "arguments": "path Win32_Process.Handle=4294967295 get Caption",
+      "operation": "read_only",
+      "timeout_ms": 10000,
+      "cli_case": true
+    },
+    {
+      "id": "path-get-all",
+      "arguments": "/trace:on path Win32_Process.Handle='4294967295' get",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "path-get-all-plain",
+      "arguments": "path Win32_Process.Handle='4294967295' get",
+      "operation": "read_only",
+      "timeout_ms": 10000,
+      "cli_case": true
+    },
+    {
+      "id": "path-bare",
+      "arguments": "/trace:on path Win32_Process.Handle='4294967295'",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "path-bare-plain",
+      "arguments": "path Win32_Process.Handle='4294967295'",
+      "operation": "read_only",
+      "timeout_ms": 10000,
+      "cli_case": true
+    },
+    {
+      "id": "path-quoted-dot",
+      "arguments": "/trace:on path Win32_Environment.Name='WmicCompat.Missing' get Name",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "path-quoted-dot-plain",
+      "arguments": "path Win32_Environment.Name='WmicCompat.Missing' get Name",
+      "operation": "read_only",
+      "timeout_ms": 10000,
+      "cli_case": true
+    },
+    {
+      "id": "path-quoted-where",
+      "arguments": "/trace:on path Win32_Environment.Name='Wmic WHERE Missing' get Name",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "path-quoted-where-plain",
+      "arguments": "path Win32_Environment.Name='Wmic WHERE Missing' get Name",
+      "operation": "read_only",
+      "timeout_ms": 10000,
+      "cli_case": true
+    },
+    {
+      "id": "path-singleton",
+      "arguments": "/trace:on path Win32_OperatingSystem=@ get Caption",
+      "operation": "read_only",
+      "timeout_ms": 10000
+    },
+    {
+      "id": "path-singleton-plain",
+      "arguments": "path Win32_OperatingSystem=@ get Caption",
+      "operation": "read_only",
+      "timeout_ms": 10000,
+      "cli_case": true
+    }
+  ]
+}
